@@ -5,7 +5,7 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "dev:ext",
+      "script": "dev:vsc-markdown-studio",
       "isBackground": true,
       "presentation": {
         "reveal": "never"

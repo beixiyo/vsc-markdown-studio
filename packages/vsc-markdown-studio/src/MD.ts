@@ -2,7 +2,7 @@ import type { ToExtensionMessage, ToWebviewMessage } from 'config'
 import * as vscode from 'vscode'
 
 export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
-  public static readonly viewType = 'gemini.wysiwyg-markdown'
+  public static readonly viewType = 'markdown-studio.editor'
 
   constructor(
     private readonly context: vscode.ExtensionContext,

@@ -40,4 +40,5 @@ next-env.d.ts
 duyi-editor
 
 .turbo
-packages/ext/webview
+packages/vsc-markdown-studio/webview
+*.vsix

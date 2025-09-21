@@ -36,8 +36,6 @@
     "lint": "eslint ./src --fix"
   },
   "dependencies": {
-    "xss": "^1.0.15",
-    "marked": "^15.0.7",
     "config": "workspace:*"
   }
 }

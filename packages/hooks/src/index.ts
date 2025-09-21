@@ -20,5 +20,3 @@ export * from './useNotifyParentReady'
 export * from './useStateWithPromise'
 export * from './useTheme'
 export * from './useWorker'
-
-export * from './valtioTool'

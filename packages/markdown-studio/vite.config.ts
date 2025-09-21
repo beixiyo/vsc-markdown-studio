@@ -23,7 +23,7 @@ export default defineConfig({
   },
   base: './',
   build: {
-    outDir: '../ext/webview',
+    outDir: '../vsc-markdown-studio/webview',
   },
   server: {
     port: 5175,

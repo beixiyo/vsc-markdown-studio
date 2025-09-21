@@ -1,23 +1,32 @@
 {
-  "name": "ext",
-  "displayName": "Markdown Editor",
-  "version": "0.0.3",
-  "description": "Markdown Editor for VSCode",
+  "name": "vsc-markdown-studio",
+  "displayName": "Markdown Studio",
+  "version": "0.0.1",
+  "description": "A powerful WYSIWYG Markdown editor with Mermaid diagrams, and advanced features",
   "publisher": "CJL",
   "author": "CJL <2662442385@qq.com>",
   "license": "MIT",
-  "homepage": "https://github.com/beixiyo/vsc-md-editor",
+  "homepage": "https://github.com/beixiyo/vsc-markdown-studio",
   "repository": {
     "type": "git",
-    "url": "https://github.com/beixiyo/vsc-md-editor"
+    "url": "https://github.com/beixiyo/vsc-markdown-studio"
   },
   "categories": [
-    "Other"
+    "Visualization"
+  ],
+  "keywords": [
+    "markdown",
+    "editor",
+    "wysiwyg",
+    "mermaid",
+    "diagram",
+    "visualization",
+    "preview"
   ],
   "main": "./dist/index.js",
   "icon": "res/icon.webp",
   "files": [
-    "LICENSE.md",
+    "../../LICENSE.md",
     "dist/*",
     "res/*",
     "webview/*",
@@ -27,19 +36,19 @@
     "vscode": "^1.97.0"
   },
   "activationEvents": [
-    "onStartupFinished",
-    "onCustomEditor:gemini.wysiwyg-markdown"
+    "onCustomEditor:markdown-studio.editor"
   ],
   "contributes": {
     "customEditors": [
       {
-        "viewType": "gemini.wysiwyg-markdown",
-        "displayName": "WYSIWYG Markdown Editor",
+        "viewType": "markdown-studio.editor",
+        "displayName": "Markdown Studio Editor",
         "selector": [
           {
             "filenamePattern": "*.md"
           }
-        ]
+        ],
+        "priority": "default"
       }
     ],
     "commands": []
@@ -47,7 +56,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch --sourcemap",
-    "lint": "eslint .",
+    "lint": "eslint src --fix",
     "vscode:prepublish": "pnpm build",
     "publish": "vsce publish --no-dependencies",
     "vsix": "vsce package --no-dependencies",
@@ -59,7 +68,7 @@
     "config": "workspace:*"
   },
   "devDependencies": {
-    "@types/vscode": "^1.104.0",
+    "@types/vscode": "^1.97.0",
     "@vscode/vsce": "^3.6.0",
     "reactive-vscode": "^0.2.22",
     "tsup": "^8.5.0"

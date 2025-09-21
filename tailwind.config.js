@@ -1,5 +1,5 @@
 // @ts-check
-import * as Variable from './packages/md/src/styles/variable'
+import * as Variable from './packages/comps/src/styles/variable'
 
 /** @type {import('tailwindcss').Config} */
 export default {

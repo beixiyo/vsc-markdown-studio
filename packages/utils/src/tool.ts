@@ -1,9 +1,7 @@
 import type { ClassValue } from 'clsx'
 import { deepClone, Reg } from '@jl-org/tool'
 import { clsx } from 'clsx'
-import { marked } from 'marked'
 import { twMerge } from 'tailwind-merge'
-import xss from 'xss'
 
 /**
  * tailwindCSS 类合并
@@ -19,22 +17,6 @@ export function addTimestampParam(url: string) {
   const newUrl = new URL(url)
   newUrl.searchParams.set('__timestamp__', String(Date.now()))
   return newUrl.toString()
-}
-
-export async function mdToHTML(content: string, options: MdToHTMLOptsions = {}) {
-  const { skipXSS = false } = options
-  const renderer = new marked.Renderer()
-  const linkRenderer = renderer.link.bind(renderer)
-
-  renderer.link = (data): string => {
-    const html = linkRenderer(data)
-    return html.replace(/^<a /, '<a target="_blank" rel="noopener noreferrer" ')
-  }
-  const html = await marked(content, { renderer })
-
-  return skipXSS
-    ? html
-    : xss(html)
 }
 
 /**
@@ -132,12 +114,4 @@ export function composeBase64(base64: string) {
     return base64
   }
   return `data:image/[png];base64,${base64}`
-}
-
-type MdToHTMLOptsions = {
-  /**
-   * 是否跳过 xss 过滤
-   * @default false
-   */
-  skipXSS?: boolean
 }
