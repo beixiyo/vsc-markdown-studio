@@ -65,7 +65,6 @@ export async function runCommandsTest() {
     return { success: true }
   })
 
-  /** 注意：渐变样式命令的测试在 gradient.test.ts 中 */
 
   MDTest.logTitle('5. 检查列表命令')
   MDTest.testCase(R, '5.1 setCheckList()', () => {
@@ -95,7 +94,6 @@ export async function runCommandsTest() {
     return { hasItalic }
   }, { hasItalic: true })
 
-  /** 注意：渐变样式数据结构验证在 gradient.test.ts 中 */
 
   MDTest.printSummary(R)
 }

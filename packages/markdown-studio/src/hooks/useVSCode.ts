@@ -15,7 +15,6 @@ let lastContent = ''
  */
 export function useVSCode() {
   useEffect(() => {
-    debugger
     const handleMessage = (event: MessageEvent<ToWebviewMessage>) => {
       const message = event.data
       switch (message.type) {

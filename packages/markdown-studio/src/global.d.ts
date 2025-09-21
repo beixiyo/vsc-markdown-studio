@@ -1,18 +1,4 @@
 declare global {
-  /**
-   * 说话人类型定义
-   * 用于标识文档中不同的说话人信息
-   */
-  interface SpeakerType {
-    /** 说话人标签 */
-    label: number
-    /** 原始标签 */
-    originalLabel: number
-    /** 可选的说话人ID */
-    id?: number
-    /** 说话人姓名 */
-    name: string
-  }
 
   /**
    * MDBridge编辑器桥接接口
@@ -318,11 +304,6 @@ declare global {
       /** 将当前块设置为检查列表项 */
       setCheckList: () => void
 
-      /** 设置渐变样式 */
-      setGradientStyle: (gradientType: import('./types/gradient').GradientStyleType) => void
-
-      /** 移除渐变样式 */
-      removeGradientStyle: () => void
     }
 
     // ======================
@@ -369,7 +350,6 @@ declare global {
     __MDBridgeState?: {
       headerImageUrls?: string[]
       imageUrls?: string[]
-      speakers?: SpeakerType[]
       flowing?: boolean
     }
 

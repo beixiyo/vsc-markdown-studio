@@ -2,7 +2,6 @@ import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from './useNotify'
 import { useEffect, useRef } from 'react'
 import { loadTestTools } from '../test'
-import { getAllGradientTypes, type GradientStyleType } from '../types/gradient'
 
 export function useSetupMDBridge(
   editor: BlockNoteEditor<any, any, any> | null,
@@ -267,22 +266,6 @@ export function useSetupMDBridge(
             editor.updateBlock(currentBlock, { type: 'checkListItem' })
             notifyFns.notifyBlockTypeChanged()
           }
-        },
-        setGradientStyle: (gradientType: GradientStyleType) => {
-          /** 先移除所有其他的渐变色样式 */
-          const gradientTypes = getAllGradientTypes()
-          const stylesToRemove = gradientTypes.reduce((acc, type) => ({ ...acc, [type]: true }), {})
-          editor.removeStyles(stylesToRemove)
-
-          /** 然后设置新的渐变色样式 */
-          editor.toggleStyles({ [gradientType]: true })
-          notifyFns.notifyBlockTypeChanged()
-        },
-        removeGradientStyle: () => {
-          const gradientTypes = getAllGradientTypes()
-          const stylesToRemove = gradientTypes.reduce((acc, type) => ({ ...acc, [type]: true }), {})
-          editor.removeStyles(stylesToRemove)
-          notifyFns.notifyBlockTypeChanged()
         },
       },
 

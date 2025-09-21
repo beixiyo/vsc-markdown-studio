@@ -9,20 +9,6 @@ import {
 } from '@blocknote/react'
 import { useTheme } from 'hooks'
 import { useRef } from 'react'
-import {
-  ColorfulCandyGradient,
-  GorgeousPurpleRedGradient,
-  MetallicGradient,
-  MysticNightGradient,
-  MysticPurpleBlueGradient,
-  NaturalGreenGradient,
-  SkyBlueGradient,
-  SnowyGlacierGradient,
-  StarryNightGradient,
-  TropicalSummerGradient,
-  WarmSunshineGradient,
-} from './blocknoteExts/GradientStyles'
-import { LabelInputBlock, labelInputMenuItem } from './blocknoteExts/labelInput'
 import { MermaidBlock, mermaidMenuItem } from './blocknoteExts/mermaid'
 import { CustomFormatToolbar } from './components/CustomFormatToolbar'
 import { useNotify } from './hooks/useNotify'
@@ -39,21 +25,9 @@ export default function App() {
     blockSpecs: {
       ...defaultBlockSpecs,
       mermaid: MermaidBlock,
-      labelInput: LabelInputBlock,
     },
     styleSpecs: {
       ...defaultStyleSpecs,
-      mysticPurpleBlue: MysticPurpleBlueGradient,
-      skyBlue: SkyBlueGradient,
-      gorgeousPurpleRed: GorgeousPurpleRedGradient,
-      warmSunshine: WarmSunshineGradient,
-      naturalGreen: NaturalGreenGradient,
-      mysticNight: MysticNightGradient,
-      colorfulCandy: ColorfulCandyGradient,
-      starryNight: StarryNightGradient,
-      metallic: MetallicGradient,
-      snowyGlacier: SnowyGlacierGradient,
-      tropicalSummer: TropicalSummerGradient,
     },
   })
 
@@ -65,33 +39,17 @@ export default function App() {
         content: [
           {
             type: 'text',
-            text: '这是神秘紫蓝渐变色文字',
-            styles: { mysticPurpleBlue: true },
-          },
-        ],
-      },
-      {
-        type: 'labelInput',
-        props: {
-          label: '张三',
-        },
-        content: [
-          {
-            type: 'text',
-            text: '大家好，今天我们来讨论一下项目的进展。',
+            text: '欢迎使用 Markdown 编辑器',
             styles: {},
           },
         ],
       },
       {
-        type: 'labelInput',
-        props: {
-          label: '李四',
-        },
+        type: 'paragraph',
         content: [
           {
             type: 'text',
-            text: '好的，我这边前端部分已经完成了 80%。',
+            text: '这是一个基于 BlockNote 的标准 Markdown 编辑器，支持常见的 Markdown 语法。',
             styles: {},
           },
         ],
@@ -125,7 +83,6 @@ export default function App() {
           const items = [
             ...getDefaultReactSlashMenuItems(editor),
             mermaidMenuItem(),
-            labelInputMenuItem(),
           ] as any[]
           return filterSuggestionItems(items, query)
         } }
