@@ -1,0 +1,37 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**",
+        "src/styles/**"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "build:styles": {
+      "outputs": ["src/styles/**"]
+    },
+    "build:comp": {
+      "dependsOn": ["build:styles"]
+    }
+  },
+  "globalDependencies": [
+    "package.json",
+    "pnpm-lock.yaml",
+
+    "tsconfig.json",
+    "tsconfig.base.json",
+    "tsconfig.app.json",
+    "tsconfig.node.json",
+
+    "tailwind.config.js",
+    "postcss.config.js"
+  ]
+}

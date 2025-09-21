@@ -1,0 +1,45 @@
+{
+  "name": "md",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./index.css": "./dist/index.css",
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "run-s build:styles dev:only",
+    "dev:only": "vite",
+    "---build---": "",
+    "build": "run-s build:styles build:only",
+    "build:only": "vite build",
+    "build:styles": "node ../../scripts/autoWriteStyle.cjs",
+    "preview": "vite preview",
+    "lint": "eslint ./src --fix"
+  },
+  "dependencies": {
+    "config": "workspace:*",
+    "hooks": "workspace:*",
+    "utils": "workspace:*",
+    "@blocknote/core": "^0.38.0",
+    "@blocknote/mantine": "^0.38.0",
+    "@blocknote/react": "^0.38.0",
+    "mermaid": "^11.12.0",
+    "comps": "workspace:*"
+  }
+}

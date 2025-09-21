@@ -1,0 +1,99 @@
+/* eslint-disable no-console */
+import {
+  runBlocksTest,
+  runCommandsTest,
+  runContentTest,
+  runCursorSelectionTest,
+  runDocumentTest,
+  runEditorStateTest,
+  runEventsTest,
+  runGradientTest,
+  runHistoryOperationsTest,
+  runImgTest,
+  runLinkOperationsTest,
+  runMermaidTest,
+  runNestingMoveTest,
+  runStateSelectionHistoryTest,
+  runStylesTextLinksTest,
+  runTextOperationsTest,
+} from './index'
+
+interface TestItem {
+  label: string
+  testFn: () => Promise<void> | void
+  description: string
+}
+
+const testItems: TestItem[] = [
+  { label: '块操作', testFn: runBlocksTest, description: '测试插入、更新、删除、替换块操作' },
+  { label: '命令集合', testFn: runCommandsTest, description: '测试标题、段落、列表、样式等命令' },
+  { label: '内容设置', testFn: runContentTest, description: '测试 Markdown 内容读写功能' },
+  { label: '光标选择', testFn: runCursorSelectionTest, description: '测试光标位置和选择范围操作' },
+  { label: '文档转换', testFn: runDocumentTest, description: '测试文档获取和 HTML 转换' },
+  { label: '编辑器状态', testFn: runEditorStateTest, description: '测试聚焦、可编辑状态、空状态检查' },
+  { label: '事件回调', testFn: runEventsTest, description: '测试内容变化和选区变化监听' },
+  { label: '渐变样式', testFn: runGradientTest, description: '测试渐变文字样式的完整功能' },
+  { label: '历史操作', testFn: runHistoryOperationsTest, description: '测试撤销、重做功能' },
+  { label: '图片接口', testFn: runImgTest, description: '测试头部、底部图片设置接口' },
+  { label: '链接操作', testFn: runLinkOperationsTest, description: '测试创建链接、获取链接URL' },
+  { label: 'Mermaid 图表', testFn: runMermaidTest, description: '测试 Mermaid 图表的创建、编辑、删除功能' },
+  { label: '嵌套移动', testFn: runNestingMoveTest, description: '测试块的嵌套和上下移动操作' },
+  { label: '状态选区', testFn: runStateSelectionHistoryTest, description: '测试编辑器状态、选区和历史操作' },
+  { label: '样式链接', testFn: runStylesTextLinksTest, description: '测试文本样式和链接操作' },
+  { label: '文本操作', testFn: runTextOperationsTest, description: '测试获取选中文本、插入文本' },
+]
+
+export function TestPanel() {
+  if (!import.meta.env.DEV) {
+    return null
+  }
+
+  const handleRunTest = async (item: TestItem) => {
+    console.log(`\n🚀 开始执行测试: ${item.label}`)
+    console.log(`📝 描述: ${item.description}`)
+    try {
+      await item.testFn()
+      console.log(`✅ 测试完成: ${item.label}`)
+    }
+    catch (error) {
+      console.error(`❌ 测试失败: ${item.label}`, error)
+    }
+  }
+
+  const handleRunAllTests = async () => {
+    console.log('\n🎯 开始执行所有测试...')
+    for (const item of testItems) {
+      await handleRunTest(item)
+      /** 在测试之间添加小延迟，避免过快执行 */
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+    console.log('\n🏁 所有测试执行完毕')
+  }
+
+  return <div className="fixed right-3 top-3 z-50 flex flex-col p-3 rounded-md bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-200 dark:border-neutral-800 shadow max-w-48 max-h-[80vh]">
+    <div className="text-xs font-medium text-neutral-600 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700 pb-2 mb-2 flex-shrink-0">
+      测试面板
+    </div>
+
+    <button
+      onClick={ handleRunAllTests }
+      className="px-3 py-1.5 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium mb-2 flex-shrink-0"
+      title="依次执行所有测试"
+    >
+      🎯 全部测试
+    </button>
+
+    <div className="flex-1 overflow-y-auto space-y-1 pr-1 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-600 scrollbar-track-transparent">
+      { testItems.map(item => (
+        <button
+          key={ item.label }
+          onClick={ () => handleRunTest(item) }
+          className="w-full px-3 py-1.5 rounded text-sm bg-neutral-800 text-white dark:bg-neutral-100 dark:text-neutral-900 hover:opacity-90 transition-opacity text-left"
+          title={ item.description }
+        >
+          { item.label }
+        </button>
+      )) }
+    </div>
+  </div>
+}
