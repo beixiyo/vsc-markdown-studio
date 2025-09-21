@@ -65,7 +65,6 @@ export async function runCommandsTest() {
     return { success: true }
   })
 
-
   MDTest.logTitle('5. 检查列表命令')
   MDTest.testCase(R, '5.1 setCheckList()', () => {
     MDTest.clearContent()
@@ -93,7 +92,6 @@ export async function runCommandsTest() {
     const hasItalic = doc[0]?.content?.[0]?.styles?.italic === true
     return { hasItalic }
   }, { hasItalic: true })
-
 
   MDTest.printSummary(R)
 }

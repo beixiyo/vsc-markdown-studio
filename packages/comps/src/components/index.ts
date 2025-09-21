@@ -1,3 +1,4 @@
+export * from './Animate'
 export * from './Button'
 export * from './Dropdown'
 export * from './Loading'

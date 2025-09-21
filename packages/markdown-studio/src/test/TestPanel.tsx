@@ -1,4 +1,8 @@
 /* eslint-disable no-console */
+import { AnimateShow } from 'comps'
+import { motion } from 'framer-motion'
+import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
 import {
   runBlocksTest,
   runCommandsTest,
@@ -42,6 +46,8 @@ const testItems: TestItem[] = [
 ]
 
 export function TestPanel() {
+  const [isCollapsed, setIsCollapsed] = useState(false)
+
   if (!import.meta.env.DEV) {
     return null
   }
@@ -69,29 +75,44 @@ export function TestPanel() {
   }
 
   return <div className="fixed right-3 top-3 z-50 flex flex-col p-3 rounded-md bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-200 dark:border-neutral-800 shadow max-w-48 max-h-[80vh]">
-    <div className="text-xs font-medium text-neutral-600 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700 pb-2 mb-2 flex-shrink-0">
-      测试面板
-    </div>
-
-    <button
-      onClick={ handleRunAllTests }
-      className="px-3 py-1.5 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium mb-2 flex-shrink-0"
-      title="依次执行所有测试"
+    <div
+      className="text-xs font-medium text-neutral-600 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700 pb-2 mb-2 flex-shrink-0 flex justify-between items-center cursor-pointer"
+      onClick={ () => setIsCollapsed(!isCollapsed) }
     >
-      🎯 全部测试
-    </button>
-
-    <div className="flex-1 overflow-y-auto space-y-1 pr-1 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-600 scrollbar-track-transparent">
-      { testItems.map(item => (
-        <button
-          key={ item.label }
-          onClick={ () => handleRunTest(item) }
-          className="w-full px-3 py-1.5 rounded text-sm bg-neutral-800 text-white dark:bg-neutral-100 dark:text-neutral-900 hover:opacity-90 transition-opacity text-left"
-          title={ item.description }
-        >
-          { item.label }
-        </button>
-      )) }
+      <span>测试面板</span>
+      <motion.div
+        animate={ { rotate: isCollapsed
+          ? 0
+          : 180 } }
+        transition={ { duration: 0.2 } }
+      >
+        <ChevronDown className="h-4 w-4" />
+      </motion.div>
     </div>
+
+    <AnimateShow show={ !isCollapsed }>
+      <div className="pt-2">
+        <button
+          onClick={ handleRunAllTests }
+          className="px-3 py-1.5 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium mb-2 flex-shrink-0 w-full"
+          title="依次执行所有测试"
+        >
+          🎯 全部测试
+        </button>
+
+        <div className="flex-1 overflow-y-auto space-y-1 pr-1 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-600 scrollbar-track-transparent">
+          { testItems.map(item => (
+            <button
+              key={ item.label }
+              onClick={ () => handleRunTest(item) }
+              className="w-full px-3 py-1.5 rounded text-sm bg-neutral-800 text-white dark:bg-neutral-100 dark:text-neutral-900 hover:opacity-90 transition-opacity text-left"
+              title={ item.description }
+            >
+              { item.label }
+            </button>
+          )) }
+        </div>
+      </div>
+    </AnimateShow>
   </div>
 }
