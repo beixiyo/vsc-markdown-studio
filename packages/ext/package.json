@@ -1,15 +1,15 @@
 {
-  "name": "lsp-mcp",
-  "displayName": "LSP MCP",
+  "name": "ext",
+  "displayName": "Markdown Editor",
   "version": "0.0.3",
-  "description": "LSP MCP Server for VSCode",
+  "description": "Markdown Editor for VSCode",
   "publisher": "CJL",
   "author": "CJL <2662442385@qq.com>",
   "license": "MIT",
-  "homepage": "https://github.com/beixiyo/vsc-lsp-mcp",
+  "homepage": "https://github.com/beixiyo/vsc-md-editor",
   "repository": {
     "type": "git",
-    "url": "https://github.com/beixiyo/vsc-lsp-mcp"
+    "url": "https://github.com/beixiyo/vsc-md-editor"
   },
   "categories": [
     "Other"
@@ -20,6 +20,7 @@
     "LICENSE.md",
     "dist/*",
     "res/*",
+    "webview/*",
     "CHANGELOG.md"
   ],
   "engines": {
@@ -41,50 +42,26 @@
         ]
       }
     ],
-    "commands": [],
-    "configuration": {
-      "type": "object",
-      "title": "LSP MCP Server Configuration",
-      "properties": {
-        "lsp-mcp.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable or disable the LSP MCP server."
-        },
-        "lsp-mcp.port": {
-          "type": "number",
-          "default": 9527,
-          "description": "Port for the LSP MCP server."
-        },
-        "lsp-mcp.maxRetries": {
-          "type": "number",
-          "default": 10,
-          "description": "Maximum number of port retry attempts when the default port is occupied."
-        }
-      }
-    }
+    "commands": []
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch --sourcemap",
-    "prepare": "nr update",
-    "update": "vscode-ext-gen --output src/generated/meta.ts",
     "lint": "eslint .",
-    "vscode:prepublish": "nr build",
+    "vscode:prepublish": "pnpm build",
     "publish": "vsce publish --no-dependencies",
     "vsix": "vsce package --no-dependencies",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && nr publish"
+    "release": "pnpm publish"
+  },
+  "dependencies": {
+    "config": "workspace:*"
   },
   "devDependencies": {
-    "@antfu/ni": "^23.3.1",
-    "@types/vscode": "^1.97.0",
-    "@vscode/vsce": "^3.2.2",
-    "bumpp": "^10.0.3",
-    "tsup": "^8.5.0",
-    "esno": "^4.8.0",
-    "reactive-vscode": "^0.2.10",
-    "vscode-ext-gen": "^1.0.0"
+    "@types/vscode": "^1.104.0",
+    "@vscode/vsce": "^3.6.0",
+    "reactive-vscode": "^0.2.22",
+    "tsup": "^8.5.0"
   }
 }

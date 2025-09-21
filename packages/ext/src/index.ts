@@ -1,5 +1,5 @@
-import * as vscode from 'vscode'
 import { defineExtension } from 'reactive-vscode'
+import * as vscode from 'vscode'
 import { MarkdownEditorProvider } from './MD'
 
 const { activate, deactivate } = defineExtension(async (context) => {

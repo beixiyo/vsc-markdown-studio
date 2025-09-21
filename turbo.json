@@ -5,8 +5,6 @@
       "dependsOn": ["^build"],
       "outputs": [
         "dist/**",
-        ".next/**",
-        "!.next/cache/**",
         "src/styles/**"
       ]
     },

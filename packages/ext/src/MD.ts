@@ -57,8 +57,7 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
   }
 
   private async loadWebview(webviewPanel: vscode.WebviewPanel) {
-    // const webviewRootUri = vscode.Uri.joinPath(this.context.extensionUri, 'src', 'webview')
-    const webviewRootUri = vscode.Uri.joinPath(this.context.extensionUri, 'src', 'dist')
+    const webviewRootUri = vscode.Uri.joinPath(this.context.extensionUri, 'webview')
     const indexPath = vscode.Uri.joinPath(webviewRootUri, 'index.html')
 
     const { webview } = webviewPanel
@@ -76,7 +75,7 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 
     webviewPanel.webview.options = {
       enableScripts: true,
-      localResourceRoots: [vscode.Uri.joinPath(this.context.extensionUri, 'src', 'dist')],
+      localResourceRoots: [webviewRootUri],
     }
     webviewPanel.webview.html = html
   }

@@ -39,5 +39,5 @@ yarn-error.log*
 next-env.d.ts
 duyi-editor
 
-# turborepo
 .turbo
+packages/ext/webview
