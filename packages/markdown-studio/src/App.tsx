@@ -478,7 +478,6 @@ export default function App() {
 }
 
 function getSidebarSize(width: number) {
-  console.log('width', width)
   if (width < 1024) {
     return 200
   }

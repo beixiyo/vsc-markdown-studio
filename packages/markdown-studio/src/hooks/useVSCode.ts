@@ -9,6 +9,7 @@ const vscode = typeof acquireVsCodeApi === 'function'
     }
 
 let lastContent = ''
+let isUpdatingFromExtension = false
 
 /**
  * 用于处理 webview 和 VS Code 扩展之间通信的自定义 React Hook
@@ -21,8 +22,13 @@ export function useVSCode() {
         case 'init':
         case 'update':
           if (message.content !== lastContent) {
+            isUpdatingFromExtension = true
             window.MDBridge?.setMarkdown(message.content)
             lastContent = message.content
+            /** 延迟重置标志，确保 onChange 回调不会触发 */
+            setTimeout(() => {
+              isUpdatingFromExtension = false
+            }, 100)
           }
           break
       }
@@ -31,6 +37,11 @@ export function useVSCode() {
     window.addEventListener('message', handleMessage)
 
     window.MDBridge?.onChange(() => {
+      /** 如果正在从扩展更新内容，则跳过发送 change 消息 */
+      if (isUpdatingFromExtension) {
+        return
+      }
+
       const newContent = window.MDBridge?.getMarkdown() || ''
       if (newContent !== lastContent) {
         lastContent = newContent
