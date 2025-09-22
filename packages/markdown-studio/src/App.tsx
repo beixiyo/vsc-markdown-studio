@@ -1,7 +1,7 @@
 import { BlockNoteSchema, defaultBlockSpecs, defaultStyleSpecs } from '@blocknote/core'
 import { useCreateBlockNote } from '@blocknote/react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useTheme } from 'hooks'
+import { Animate, Resizable } from 'comps'
+import { useResizeObserver, useTheme } from 'hooks'
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { cn } from 'utils'
@@ -20,6 +20,9 @@ import '@blocknote/mantine/style.css'
 export default function App() {
   useTheme()
 
+  // ======================
+  // * Editor
+  // ======================
   const schema = BlockNoteSchema.create({
     blockSpecs: {
       ...defaultBlockSpecs,
@@ -409,7 +412,11 @@ export default function App() {
   useSetupMDBridge(editor, notifyFns)
   useVSCode()
 
-  /** 侧栏状态管理 */
+  // ======================
+  // * Sidebar
+  // ======================
+  const [size, setSize] = useState({ width: 0, height: 0 })
+
   const [sidebarVisible, setSidebarVisible] = useState(true)
   const { tocSections, currentBlockId, scrollToBlock } = useToc(editor)
 
@@ -420,38 +427,38 @@ export default function App() {
     scrollToBlock(blockId)
   }
 
-  return (
-    <div className="w-full h-screen bg-neutral-50 dark:bg-neutral-900 flex relative overflow-hidden" ref={ editorElRef }>
-      {/* Editor */ }
-      <Editor editor={ editor } className="flex-1 min-w-0" />
+  useResizeObserver([editorElRef], (entry: ResizeObserverEntry) => {
+    setSize({ width: entry.contentRect.width, height: entry.contentRect.height })
+  })
 
-      {/* Sidebar */ }
-      <AnimatePresence>
-        { sidebarVisible && (
-          <motion.div
-            className="w-80 h-full flex-shrink-0 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
-            initial={ { x: '100%' } }
-            animate={ { x: 0 } }
-            exit={ { x: '100%' } }
-            transition={ { duration: 0.3, ease: 'easeInOut' } }
-          >
-            <TocSidebar
-              tocSections={ tocSections }
-              currentBlockId={ currentBlockId }
-              onItemClick={ handleTocItemClick }
-              className="h-full"
-            />
-          </motion.div>
-        ) }
-      </AnimatePresence>
+  return (
+    <div className="w-full h-screen bg-neutral-50 dark:bg-neutral-900 relative overflow-hidden" ref={ editorElRef }>
+
+      <Resizable
+        fixedPanel="second"
+        initialSize={ getSidebarSize(size.width) }
+      >
+        {/* Editor */ }
+        <Editor editor={ editor } className="h-full" />
+
+        {/* Sidebar */ }
+        {
+          sidebarVisible && <TocSidebar
+            tocSections={ tocSections }
+            currentBlockId={ currentBlockId }
+            onItemClick={ handleTocItemClick }
+            className="h-full"
+          />
+        }
+      </Resizable>
 
       {/* Floating Toggle Button */ }
       <button
         onClick={ () => setSidebarVisible(!sidebarVisible) }
         className={ cn(
-          'absolute top-1/2 -translate-y-1/2 p-2 rounded-l-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-r-0 border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out',
+          'absolute top-1/2 -translate-y-1/2 p-2 rounded-l-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-r-0 border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out z-10',
           sidebarVisible
-            ? 'right-80'
+            ? 'right-0'
             : 'right-0',
         ) }
         title={ sidebarVisible
@@ -468,4 +475,20 @@ export default function App() {
       <TestPanel />
     </div>
   )
+}
+
+function getSidebarSize(width: number) {
+  console.log('width', width)
+  if (width < 1024) {
+    return 200
+  }
+  else if (width < 1280) {
+    return 250
+  }
+  else if (width < 1440) {
+    return 300
+  }
+  else {
+    return 350
+  }
 }

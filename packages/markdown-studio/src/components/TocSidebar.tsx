@@ -59,7 +59,6 @@ export const TocSidebar = memo<TocSidebarProps>(({
           : null }
         onClick={ onItemClick }
         accordion={ false }
-        defaultExpanded={ tocSections.map(section => section.name) }
         className="flex-1 overflow-y-auto"
         itemClassName="border-b border-gray-100 dark:border-gray-700 last:border-b-0"
         sectionHeaderClassName="truncate text-sm font-medium text-gray-700 dark:text-gray-300"
