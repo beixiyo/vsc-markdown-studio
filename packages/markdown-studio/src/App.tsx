@@ -15,6 +15,7 @@ import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
 import { useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
 import { TestPanel } from './test/TestPanel'
+import { LabelInputBlock } from './blocknoteExts/labelInput'
 
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
@@ -28,6 +29,7 @@ export default function App() {
   const schema = BlockNoteSchema.create().extend({
     blockSpecs: {
       mermaid: MermaidBlock(),
+      labelInput: LabelInputBlock(),
       codeBlock: createCodeBlockSpec(codeBlockOptions),
     },
   })

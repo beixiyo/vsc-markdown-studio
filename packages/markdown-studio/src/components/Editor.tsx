@@ -11,6 +11,7 @@ import { memo } from 'react'
 import { cn } from 'utils'
 import { mermaidMenuItem } from '../blocknoteExts/mermaid'
 import { CustomFormatToolbar } from './CustomFormatToolbar'
+import { labelInputMenuItem } from '@/blocknoteExts/labelInput'
 
 export const Editor = memo<EditorProps>((props) => {
   const {
@@ -21,7 +22,7 @@ export const Editor = memo<EditorProps>((props) => {
 
   return <div
     className={ cn(
-      'h-full bg-white dark:bg-neutral-900 overflow-y-auto',
+      'h-full bg-white dark:bg-[#1F1F1F] overflow-y-auto',
       className,
     ) }
     style={ style }
@@ -40,11 +41,11 @@ export const Editor = memo<EditorProps>((props) => {
       <SuggestionMenuController
         triggerCharacter="/"
         getItems={ async (query: string) => {
-          const items = [
+          return filterSuggestionItems([
             ...getDefaultReactSlashMenuItems(editor),
+            labelInputMenuItem(),
             mermaidMenuItem(),
-          ] as any[]
-          return filterSuggestionItems(items, query)
+          ], query) as any[]
         } }
       />
 
