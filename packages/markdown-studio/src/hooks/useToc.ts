@@ -87,60 +87,9 @@ export function useToc(editor: BlockNoteEditor<any, any, any> | null) {
 
   /** 跳转到指定块 */
   const scrollToBlock = useCallback((blockId: string) => {
-    if (!editor)
-      return
-
-    try {
-      /** 使用 BlockNote 的 API 跳转到指定块 */
-      editor.setTextCursorPosition(blockId, 'start')
-      setCurrentBlockId(blockId)
-
-      /** 确保编辑器获得焦点 */
-      editor.focus()
-
-      /** 尝试多种方法滚动到该块 */
-      setTimeout(() => {
-        /** 方法1: 查找 BlockNote 的块元素 */
-        let blockElement = document.querySelector(`[data-node-type="heading"][data-id="${blockId}"]`)
-
-        /** 方法2: 如果没找到，尝试查找包含该块ID的元素 */
-        if (!blockElement) {
-          blockElement = document.querySelector(`[data-id="${blockId}"]`)
-        }
-
-        /** 方法3: 查找所有标题元素，通过文本内容匹配 */
-        if (!blockElement) {
-          const allHeadings = document.querySelectorAll('[data-node-type="heading"]')
-          const blocks = editor.document
-          const targetBlock = blocks.find(block => block.id === blockId)
-
-          if (targetBlock) {
-            const targetText = targetBlock.content?.map((c: any) => c.text).join('') || ''
-            for (const heading of allHeadings) {
-              if (heading.textContent?.includes(targetText)) {
-                blockElement = heading
-                break
-              }
-            }
-          }
-        }
-
-        if (blockElement) {
-          blockElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest',
-          })
-        }
-        else {
-          console.warn('未找到目标块元素:', blockId)
-        }
-      }, 150)
-    }
-    catch (error) {
-      console.warn('跳转到块失败:', error)
-    }
-  }, [editor])
+    setCurrentBlockId(blockId)
+    window.MDBridge?.scrollToBlock(blockId)
+  }, [])
 
   /** 监听编辑器内容变化 */
   useEffect(() => {

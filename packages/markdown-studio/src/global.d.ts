@@ -106,6 +106,12 @@ declare global {
      */
     replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: any[]) => { insertedBlocks: any[]; removedBlocks: any[] }
 
+    /**
+     * 跳转到指定块
+     * @param blockId 块ID
+     */
+    scrollToBlock: (blockId: string) => void
+
     // ======================
     // * Text operations
     // ======================

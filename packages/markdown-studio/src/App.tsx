@@ -1,6 +1,6 @@
 import { BlockNoteSchema, defaultBlockSpecs, defaultStyleSpecs } from '@blocknote/core'
 import { useCreateBlockNote } from '@blocknote/react'
-import { Animate, Resizable } from 'comps'
+import { Resizable } from 'comps'
 import { useResizeObserver, useTheme } from 'hooks'
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useRef, useState } from 'react'

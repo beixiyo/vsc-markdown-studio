@@ -156,6 +156,25 @@ export function useSetupMDBridge(
         return editor.replaceBlocks(blockIdsToRemove, blocksToInsert)
       },
 
+      scrollToBlock: (blockId: string) => {
+        try {
+          editor.setTextCursorPosition(blockId, 'start')
+
+          /** 确保编辑器获得焦点 */
+          editor.focus()
+
+          /** 查找目标块元素 - BlockNote 使用 ProseMirror 的 DOM 结构 */
+          const blockElement = document.querySelector(`[data-id="${blockId}"]`)
+
+          if (blockElement) {
+            blockElement.scrollIntoView()
+          }
+        }
+        catch (error) {
+          console.warn('跳转到块失败:', error)
+        }
+      },
+
       // ======================
       // * Text operations
       // ======================
