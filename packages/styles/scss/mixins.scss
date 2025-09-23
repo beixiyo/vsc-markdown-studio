@@ -78,31 +78,3 @@ $triangle-dir-map: (
     @content;
   }
 }
-
-
-/* arco 组件的打印样式 */
-@mixin print-table {
-  :deep(td.arco-table-td[rowspan]) {
-    border-bottom-color: #fff !important;
-  }
-
-  :deep(.arco-table-td) {
-    border-color: #424242 !important;
-  }
-
-  :deep(.arco-table-th) {
-    border-color: #424242 !important;
-  }
-
-  :deep(.arco-table-footer) {
-    border-color: #424242 !important;
-  }
-
-  :deep(.arco-table-border .arco-table-scroll-y) {
-    border-color: #424242 !important;
-  }
-
-  :deep(.arco-table-body) {
-    min-height: auto;
-  }
-}

@@ -26,11 +26,6 @@ $themeMap: (
   }
 }
 
-/** 获取主题色 */
-@function getTheme($themeKey) {
-  @return map-get($curTheme, $themeKey);
-}
-
 /**
  * 示例
  * .container {

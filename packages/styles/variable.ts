@@ -1,5 +1,5 @@
 /** 主色调 */
-export const primaryColor = '#2F2F2F'
+export const primaryColor = '#292F37'
 /** 浅色文字 */
 export const lightTextColor = '#C4C4C6'
 

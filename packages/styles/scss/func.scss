@@ -17,3 +17,8 @@
 @function _pxToVh($px, $designSize: 1080px) {
   @return math.div($px, $designSize) * 100vh;
 }
+
+/** 获取主题色 */
+@function getTheme($themeKey) {
+  @return map-get($curTheme, $themeKey);
+}
