@@ -1,5 +1,5 @@
 // 1. 导入样式
-import './styles/css/index.css'
+import 'styles/index.css'
 
 // 2. 导出组件
 export * from './components/index'

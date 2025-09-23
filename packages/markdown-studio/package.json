@@ -57,6 +57,7 @@
     "@blocknote/react": "^0.39.1",
     "@blocknote/code-block": "^0.39.1",
     "mermaid": "^11.12.0",
-    "comps": "workspace:*"
+    "comps": "workspace:*",
+    "styles": "workspace:*"
   }
 }
