@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import {
+  runBlockDetectionTest,
   runBlocksTest,
   runCommandsTest,
   runContentTest,
@@ -29,6 +30,7 @@ interface TestItem {
 
 const testItems: TestItem[] = [
   { label: '块操作', testFn: runBlocksTest, description: '测试插入、更新、删除、替换块操作' },
+  { label: '块检测', testFn: runBlockDetectionTest, description: '测试鼠标悬浮、位置检测等新功能' },
   { label: '命令集合', testFn: runCommandsTest, description: '测试标题、段落、列表、样式等命令' },
   { label: '内容设置', testFn: runContentTest, description: '测试 Markdown 内容读写功能' },
   { label: '光标选择', testFn: runCursorSelectionTest, description: '测试光标位置和选择范围操作' },

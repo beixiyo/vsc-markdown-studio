@@ -210,6 +210,81 @@ export function useSetupMDBridge(
       },
 
       // ======================
+      // * Block detection
+      // ======================
+      getBlockAtPosition: (x: number, y: number) => {
+        try {
+          const element = document.elementFromPoint(x, y)
+          if (!element)
+            return null
+
+          const blockElement = element.closest('[data-id]')
+          if (!blockElement)
+            return null
+
+          const blockId = blockElement.getAttribute('data-id')
+          if (!blockId)
+            return null
+
+          return editor.document.find(block => block.id === blockId) || null
+        }
+        catch (error) {
+          console.warn('获取鼠标位置块失败:', error)
+          return null
+        }
+      },
+
+      getBlockFromElement: (element: Element) => {
+        try {
+          const blockElement = element.closest('[data-id]')
+          if (!blockElement)
+            return null
+
+          const blockId = blockElement.getAttribute('data-id')
+          if (!blockId)
+            return null
+
+          return editor.document.find(block => block.id === blockId) || null
+        }
+        catch (error) {
+          console.warn('从元素获取块失败:', error)
+          return null
+        }
+      },
+
+      onBlockHover: (callback: (block: any | null) => void) => {
+        let lastHoveredBlockId: string | null = null
+
+        const handleMouseMove = (event: MouseEvent) => {
+          const blockElement = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-id]')
+
+          if (blockElement) {
+            const blockId = blockElement.getAttribute('data-id')
+
+            /** 只有当悬浮的块发生变化时才触发回调 */
+            if (blockId !== lastHoveredBlockId) {
+              lastHoveredBlockId = blockId
+              const block = editor.document.find(block => block.id === blockId) || null
+              callback(block)
+            }
+          }
+          else if (lastHoveredBlockId !== null) {
+            /** 鼠标移出编辑器区域 */
+            lastHoveredBlockId = null
+            callback(null)
+          }
+        }
+
+        /** 添加事件监听器 */
+        document.addEventListener('mousemove', handleMouseMove)
+
+        /** 返回取消监听的函数 */
+        return () => {
+          document.removeEventListener('mousemove', handleMouseMove)
+        }
+      },
+
+      // ======================
       // * Editor state
       // ======================
       focus: () => editor.focus(),

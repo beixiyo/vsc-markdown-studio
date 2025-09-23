@@ -205,6 +205,28 @@ declare global {
      */
     setSelection: (startBlockId: string, endBlockId: string) => void
 
+    /**
+     * 根据鼠标位置获取对应的块
+     * @param x 鼠标X坐标
+     * @param y 鼠标Y坐标
+     * @returns 鼠标位置对应的块信息，如果没有找到则返回null
+     */
+    getBlockAtPosition: (x: number, y: number) => any | null
+
+    /**
+     * 根据DOM元素获取对应的块
+     * @param element DOM元素
+     * @returns 对应的块信息，如果没有找到则返回null
+     */
+    getBlockFromElement: (element: Element) => any | null
+
+    /**
+     * 添加鼠标悬浮监听器
+     * @param callback 悬浮回调函数，参数为块信息
+     * @returns 取消监听的函数
+     */
+    onBlockHover: (callback: (block: any | null) => void) => () => void
+
     // ======================
     // * Editor state
     // ======================

@@ -5,6 +5,7 @@
  * - 兼容同步/异步用例
  */
 
+export { runBlockDetectionTest } from './block-detection.test'
 export { runBlocksTest } from './blocks.test'
 export { runCommandsTest } from './commands.test'
 export { runContentTest } from './content.test'
