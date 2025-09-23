@@ -1,4 +1,9 @@
-import { BlockNoteSchema, defaultBlockSpecs, defaultStyleSpecs } from '@blocknote/core'
+/**
+ * @link https://www.blocknotejs.org/docs/features/custom-schemas/custom-blocks
+ */
+
+import { codeBlockOptions } from '@blocknote/code-block'
+import { BlockNoteSchema, createCodeBlockSpec } from '@blocknote/core'
 import { useCreateBlockNote } from '@blocknote/react'
 import { Resizable } from 'comps'
 import { useResizeObserver, useTheme } from 'hooks'
@@ -20,13 +25,10 @@ export default function App() {
   // ======================
   // * Editor
   // ======================
-  const schema = BlockNoteSchema.create({
+  const schema = BlockNoteSchema.create().extend({
     blockSpecs: {
-      ...defaultBlockSpecs,
-      mermaid: MermaidBlock,
-    },
-    styleSpecs: {
-      ...defaultStyleSpecs,
+      mermaid: MermaidBlock(),
+      codeBlock: createCodeBlockSpec(codeBlockOptions),
     },
   })
 

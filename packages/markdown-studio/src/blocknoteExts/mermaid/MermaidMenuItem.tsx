@@ -1,4 +1,5 @@
 import type { MermaidBlockNoteEditor, MermaidMenuItemConfig } from './types'
+import { Workflow } from 'lucide-react'
 
 /**
  * 生成一个 Slash 菜单项，用于插入 Mermaid 块
@@ -25,7 +26,7 @@ export function mermaidMenuItem(): MermaidMenuItemConfig {
     },
     aliases: ['mermaid', 'diagram', 'chart', '图表', '流程图'],
     group: 'Media-Code',
-    icon: <div className="text-xl">📊</div>,
+    icon: <Workflow className="w-5 h-5" />,
     hint: '插入 Mermaid 图表',
   }
 }

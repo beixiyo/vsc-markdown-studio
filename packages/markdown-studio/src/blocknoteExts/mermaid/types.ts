@@ -41,15 +41,6 @@ export type MermaidBlock = BlockFromConfig<MermaidBlockConfig, InlineContentSche
 export type MermaidBlockNoteEditor = BlockNoteEditor<MermaidBlockSchema, InlineContentSchema, StyleSchema>
 
 /**
- * Mermaid 渲染器组件的 Props
- */
-export interface MermaidRendererProps {
-  block: MermaidBlock
-  editor: MermaidBlockNoteEditor
-  contentRef: (node: HTMLElement | null) => void
-}
-
-/**
  * Mermaid 菜单项配置
  */
 export interface MermaidMenuItemConfig {

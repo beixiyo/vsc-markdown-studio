@@ -52,9 +52,10 @@
     "config": "workspace:*",
     "hooks": "workspace:*",
     "utils": "workspace:*",
-    "@blocknote/core": "^0.38.0",
-    "@blocknote/mantine": "^0.38.0",
-    "@blocknote/react": "^0.38.0",
+    "@blocknote/core": "^0.39.1",
+    "@blocknote/mantine": "^0.39.1",
+    "@blocknote/react": "^0.39.1",
+    "@blocknote/code-block": "^0.39.1",
     "mermaid": "^11.12.0",
     "comps": "workspace:*"
   }
