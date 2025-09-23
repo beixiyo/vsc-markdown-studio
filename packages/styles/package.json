@@ -7,7 +7,7 @@
   "module": "./css/index.css",
   "exports": {
     "./index.css": "./css/index.css",
-    "./scss.scss": "./scss/index.scss",
+    "./index.scss": "./scss/index.scss",
     "./variable.ts": "./variable.ts"
   },
   "files": [
