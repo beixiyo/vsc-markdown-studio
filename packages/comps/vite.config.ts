@@ -17,10 +17,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      // workspace 包路径别名
-      'hooks': fileURLToPath(new URL('../hooks/src', import.meta.url)),
-      'utils': fileURLToPath(new URL('../utils/src', import.meta.url)),
-      'config': fileURLToPath(new URL('../config/src', import.meta.url)),
     },
   },
   css: {

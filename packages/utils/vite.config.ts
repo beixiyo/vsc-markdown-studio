@@ -9,8 +9,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      // workspace 包路径别名
-      'config': fileURLToPath(new URL('../config/src', import.meta.url)),
     },
   },
 
