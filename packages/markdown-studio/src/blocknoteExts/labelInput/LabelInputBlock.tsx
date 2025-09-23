@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { defaultProps } from '@blocknote/core'
 import { createReactBlockSpec } from '@blocknote/react'
+import { useCallback, useEffect } from 'react'
 import { cn } from 'utils'
 import { notifyNative } from '@/utils'
 
@@ -30,8 +31,8 @@ export const LabelInputBlock = createReactBlockSpec(
 
       return (
         <div className="label-input-block">
-          <div className="label-input-label">{ block.props.label }</div>
-          <div className="label-input-content">{ text }</div>
+          <div className="label-input-label">{ block.props.label || '标签' }</div>
+          <div className="label-input-content">{ text || '在此输入对话内容...' }</div>
         </div>
       )
     },
@@ -69,12 +70,17 @@ export const LabelInputBlock = createReactBlockSpec(
         }
       }, [block, editor])
 
-      /** 初始化内容 */
+      /** 初始化内容 - 如果内容为空，设置默认占位符 */
       useEffect(() => {
         const text = block.content
           .filter(item => item.type === 'text')
           .map(item => (item as any).text)
           .join('')
+
+        /**
+         * 如果内容为空，可以在这里设置默认内容
+         * 注意：这里只是获取内容，实际的初始化在 insertBlocks 时处理
+         */
       }, [block.content])
 
       return (
@@ -106,7 +112,7 @@ export const LabelInputBlock = createReactBlockSpec(
           <div className="p-4">
             <div
               ref={ contentRef }
-              className="min-h-[40px] outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 rounded-md transition-all cursor-text whitespace-pre-wrap empty:before:content-[attr(data-placeholder)] empty:before:text-neutral-400 empty:before:pointer-events-none"
+              className="outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 rounded-md transition-all cursor-text whitespace-pre-wrap empty:before:content-[attr(data-placeholder)] empty:before:text-neutral-400 empty:before:pointer-events-none"
               data-placeholder="在此输入对话内容..."
             />
           </div>

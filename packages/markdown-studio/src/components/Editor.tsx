@@ -9,9 +9,9 @@ import {
 } from '@blocknote/react'
 import { memo } from 'react'
 import { cn } from 'utils'
+import { labelInputMenuItem } from '@/blocknoteExts/labelInput'
 import { mermaidMenuItem } from '../blocknoteExts/mermaid'
 import { CustomFormatToolbar } from './CustomFormatToolbar'
-import { labelInputMenuItem } from '@/blocknoteExts/labelInput'
 
 export const Editor = memo<EditorProps>((props) => {
   const {

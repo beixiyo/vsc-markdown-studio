@@ -1,4 +1,5 @@
 import type { LabelInputBlockNoteEditor, LabelInputMenuItemConfig } from './types'
+import { Tag } from 'lucide-react'
 
 /**
  * LabelInput 菜单项
@@ -9,7 +10,10 @@ export function labelInputMenuItem(): LabelInputMenuItemConfig {
     title: '标签输入块',
     onItemClick: (editor: LabelInputBlockNoteEditor) => {
       const selected = editor.getTextCursorPosition().block
-      editor.insertBlocks(
+
+      /** 替换当前块为 LabelInput 块 */
+      editor.replaceBlocks(
+        [selected],
         [
           {
             type: 'labelInput' as const,
@@ -25,13 +29,11 @@ export function labelInputMenuItem(): LabelInputMenuItemConfig {
             ],
           },
         ],
-        selected,
-        'after',
       )
     },
     aliases: ['label', 'labelInput', 'labelBlock'],
     group: '对话',
-    icon: <div className="text-xl">🎤</div>,
+    icon: <Tag className="w-5 h-5" />,
     hint: '创建标签输入块，标识标签',
   }
 }

@@ -14,6 +14,7 @@ import {
   runEventsTest,
   runHistoryOperationsTest,
   runImgTest,
+  runLabelInputTest,
   runLinkOperationsTest,
   runMermaidTest,
   runNestingMoveTest,
@@ -39,6 +40,7 @@ const testItems: TestItem[] = [
   { label: '事件回调', testFn: runEventsTest, description: '测试内容变化和选区变化监听' },
   { label: '历史操作', testFn: runHistoryOperationsTest, description: '测试撤销、重做功能' },
   { label: '图片接口', testFn: runImgTest, description: '测试头部、底部图片设置接口' },
+  { label: 'LabelInput 块', testFn: runLabelInputTest, description: '测试 LabelInput 块的创建、编辑、删除功能' },
   { label: '链接操作', testFn: runLinkOperationsTest, description: '测试创建链接、获取链接URL' },
   { label: 'Mermaid 图表', testFn: runMermaidTest, description: '测试 Mermaid 图表的创建、编辑、删除功能' },
   { label: '嵌套移动', testFn: runNestingMoveTest, description: '测试块的嵌套和上下移动操作' },
@@ -76,7 +78,7 @@ export function TestPanel() {
     console.log('\n🏁 所有测试执行完毕')
   }
 
-  return <div className="fixed right-3 top-3 z-50 flex flex-col p-3 rounded-md bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-200 dark:border-neutral-800 shadow max-w-48 max-h-[80vh]">
+  return <div className="fixed right-3 top-3 z-50 flex flex-col p-3 rounded-md bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-200 dark:border-neutral-800 shadow max-w-48 max-h-[80vh] overflow-y-auto">
     <div
       className="text-xs font-medium text-neutral-600 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700 pb-2 mb-2 flex-shrink-0 flex justify-between items-center cursor-pointer"
       onClick={ () => setIsCollapsed(!isCollapsed) }
