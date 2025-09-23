@@ -134,25 +134,76 @@ declare global {
 
     /**
      * 为选中内容添加样式
-     * @param styles 样式对象，如 { bold: true, italic: true }
+     * @example
+     * ```ts
+     * // 基础样式
+     * window.MDBridge.addStyles({ bold: true, italic: true })
+     *
+     * // 渐变样式
+     * window.MDBridge.addStyles({ gradientStyles: 'mysticNight' })
+     *
+     * // 组合样式
+     * window.MDBridge.addStyles({
+     *   bold: true,
+     *   gradientStyles: 'skyBlue'
+     * })
+     * ```
+     *
+     * @param styles 样式对象，支持以下属性：
+     * - `bold`: 粗体样式
+     * - `italic`: 斜体样式
+     * - `underline`: 下划线样式
+     * - `strike`: 删除线样式
+     * - `code`: 行内代码样式
+     * - `gradientStyles`: 渐变样式，可选值：
+     *   - `'mysticPurpleBlue'`: 神秘紫蓝
+     *   - `'skyBlue'`: 天空蓝
+     *   - `'gorgeousPurpleRed'`: 瑰丽紫红
+     *   - `'warmSunshine'`: 温暖阳光
+     *   - `'naturalGreen'`: 自然绿意
+     *   - `'mysticNight'`: 神秘暗夜
+     *   - `'colorfulCandy'`: 多彩糖果
+     *   - `'starryNight'`: 星空夜幕
+     *   - `'metallic'`: 金属质感
+     *   - `'snowyGlacier'`: 雪山冰川
+     *   - `'tropicalSummer'`: 热带夏日
      */
     addStyles: (styles: any) => void
 
     /**
      * 移除选中内容的样式
-     * @param styles 要移除的样式对象
+     * @example
+     * ```ts
+     * // 移除粗体和渐变样式
+     * window.MDBridge.removeStyles({
+     *   bold: true,
+     *   gradientStyles: 'mysticNight'
+     * })
+     * ```
+     * @param styles 要移除的样式对象，属性与 addStyles 相同
      */
     removeStyles: (styles: any) => void
 
     /**
      * 切换选中内容的样式
-     * @param styles 要切换的样式对象
+     * @example
+     * ```ts
+     * // 切换渐变样式（如果已应用则移除，未应用则添加）
+     * window.MDBridge.toggleStyles({ gradientStyles: 'skyBlue' })
+     * ```
+     * @param styles 要切换的样式对象，属性与 addStyles 相同
      */
     toggleStyles: (styles: any) => void
 
     /**
      * 获取当前激活的样式
-     * @returns 当前样式对象
+     * @example
+     * ```ts
+     * const styles = window.MDBridge.getActiveStyles()
+     * console.log(styles.gradientStyles) // 'mysticNight' 或 undefined
+     * console.log(styles.bold) // true 或 false
+     * ```
+     * @returns 当前样式对象，包含所有激活的样式属性
      */
     getActiveStyles: () => any
 

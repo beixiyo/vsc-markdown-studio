@@ -85,9 +85,11 @@ export function TestPanel() {
     >
       <span>测试面板</span>
       <motion.div
-        animate={ { rotate: isCollapsed
-          ? 0
-          : 180 } }
+        animate={ {
+          rotate: isCollapsed
+            ? 0
+            : 180
+        } }
         transition={ { duration: 0.2 } }
       >
         <ChevronDown className="h-4 w-4" />

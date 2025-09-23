@@ -1,5 +1,6 @@
 import type { BlockNoteEditor } from '@blocknote/core'
-import type { CallbackManager, useNotify } from './types'
+import type { CallbackManager } from './types'
+import type { useNotify } from '../useNotify'
 
 /**
  * 创建鼠标移动事件处理器

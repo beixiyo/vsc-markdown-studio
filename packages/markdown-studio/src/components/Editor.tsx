@@ -5,13 +5,17 @@ import {
   FormattingToolbarController,
   getDefaultReactSlashMenuItems,
   GridSuggestionMenuController,
+  SideMenu,
+  SideMenuController,
   SuggestionMenuController,
+  type DragHandleMenuProps,
 } from '@blocknote/react'
 import { memo } from 'react'
 import { cn } from 'utils'
 import { labelInputMenuItem } from '@/blocknoteExts/labelInput'
 import { mermaidMenuItem } from '../blocknoteExts/mermaid'
 import { CustomFormatToolbar } from './CustomFormatToolbar'
+import { CustomDragHandleMenu } from './CustomDragHandleMenu'
 
 export const Editor = memo<EditorProps>((props) => {
   const {
@@ -33,7 +37,14 @@ export const Editor = memo<EditorProps>((props) => {
       emojiPicker={ false }
       slashMenu={ false }
       formattingToolbar={ false }
+      sideMenu={ false }
     >
+      <SideMenuController
+        sideMenu={ sideMenuProps => <SideMenu
+          { ...sideMenuProps }
+          dragHandleMenu={ CustomDragHandleMenu } />
+        }
+      />
       <FormattingToolbarController
         formattingToolbar={ CustomFormatToolbar }
       />

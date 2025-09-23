@@ -4,8 +4,8 @@ import type { BlockIdManager, ImageBlock } from './types'
 /**
  * 将 URL 数组解析为图片块
  */
-export async function parseImagesToBlocks(urls: string[]): Promise<ImageBlock[]> {
-  const imageBlocks = urls.map(u => ({
+export function parseImagesToBlocks(urls: string[]): ImageBlock[] {
+  const imageBlocks: ImageBlock[] = urls.map(u => ({
     type: 'image',
     props: {
       url: u,

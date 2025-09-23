@@ -131,6 +131,9 @@ importers:
       config:
         specifier: workspace:*
         version: link:../config
+      styles:
+        specifier: workspace:*
+        version: link:../styles
 
   packages/markdown-studio:
     dependencies:

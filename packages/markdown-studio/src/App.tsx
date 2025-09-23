@@ -10,6 +10,7 @@ import { useResizeObserver, useTheme } from 'hooks'
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { cn } from 'utils'
+import { GradientStyles } from './blocknoteExts/gradientStyles/GradientStyles'
 import { LabelInputBlock } from './blocknoteExts/labelInput'
 import { MermaidBlock } from './blocknoteExts/mermaid'
 import { Editor } from './components/Editor'
@@ -32,6 +33,9 @@ export default function App() {
       labelInput: LabelInputBlock(),
       codeBlock: createCodeBlockSpec(codeBlockOptions),
     },
+    styleSpecs: {
+      gradientStyles: GradientStyles,
+    },
   })
 
   const editor = useCreateBlockNote({
@@ -48,7 +52,7 @@ export default function App() {
   // ======================
   const [size, setSize] = useState({ width: 0, height: 0 })
 
-  const [sidebarVisible, setSidebarVisible] = useState(true)
+  const [sidebarVisible, setSidebarVisible] = useState(false)
   const { tocSections, currentBlockId, scrollToBlock } = useToc(editor)
 
   /** 处理侧栏项目点击 */
