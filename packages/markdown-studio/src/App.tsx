@@ -40,6 +40,30 @@ export default function App() {
 
   const editor = useCreateBlockNote({
     schema,
+    pasteHandler: ({ event, editor, defaultPasteHandler }) => {
+      /** 检查剪贴板是否包含纯文本 */
+      if (event.clipboardData?.types.includes('text/plain')) {
+        /** 获取纯文本内容 */
+        const plainText = event.clipboardData.getData('text/plain')
+
+        /**
+         * 将双换行符替换为两个段落分隔符，将单换行符替换为 Markdown 硬换行符
+         * 这是一个更精细的处理，以区分段落与行内换行
+         */
+        const markdown = plainText
+          .replace(/\n\n/g, '\n\n') // 保留双换行，作为段落分隔
+          .replace(/(?<!\n)\n(?!\n)/g, '  \n') // 将单换行转换为 Markdown 硬换行符
+
+        /** 将转换后的 Markdown 粘贴到编辑器 */
+        editor.pasteMarkdown(markdown)
+
+        /** 告知 Blocknote 粘贴事件已处理 */
+        return true
+      }
+
+      /** 如果不是纯文本，回退到默认的粘贴处理程序 */
+      return defaultPasteHandler()
+    },
   })
 
   const editorElRef = useRef<HTMLDivElement>(null)
