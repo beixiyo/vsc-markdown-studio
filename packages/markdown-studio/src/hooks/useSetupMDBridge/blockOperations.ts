@@ -84,17 +84,17 @@ export function getParentHeading(editor: BlockNoteEditor<any, any, any>, blockId
       return null
     }
 
-    // 从当前块向前遍历，查找最近的标题块
+    /** 从当前块向前遍历，查找最近的标题块 */
     for (let i = currentBlockIndex - 1; i >= 0; i--) {
       const block = document[i]
 
-      // 检查是否为标题块 (h1, h2, h3, h4, h5, h6)
+      /** 检查是否为标题块 (h1, h2, h3, h4, h5, h6) */
       if (block.type === 'heading') {
         return {
           block,
           level: block.props?.level || 1,
           text: getBlockText(block),
-          index: i
+          index: i,
         }
       }
     }

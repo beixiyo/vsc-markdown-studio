@@ -120,7 +120,7 @@ export interface MDBridge {
    * @param blocksToInsert 要插入的新块数组
    * @returns 包含插入和删除块的结果对象
    */
-  replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: any[]) => { insertedBlocks: any[]; removedBlocks: any[] }
+  replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: any[]) => { insertedBlocks: any[], removedBlocks: any[] }
 
   /**
    * 跳转到指定块
@@ -222,8 +222,6 @@ export interface MDBridge {
    * @returns 当前样式对象，包含所有激活的样式属性
    */
   getActiveStyles: () => any
-
-
 
   // ======================
   // * Links

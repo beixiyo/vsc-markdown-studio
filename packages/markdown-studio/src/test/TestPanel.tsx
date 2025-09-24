@@ -72,7 +72,7 @@ export function TestPanel() {
       if (error instanceof Error) {
         // Log the detailed message from the error object.
         console.log(error.message) // Using console.log to avoid the scary red error icon for the details themselves.
-      } 
+      }
       else {
         console.error('发生未知错误:', error)
       }
@@ -96,7 +96,7 @@ export function TestPanel() {
 
     if (allTestsPassed) {
       console.log('\n🏁 所有测试模块均已成功执行完毕！')
-    } 
+    }
     else {
       console.log('\n🏁 测试执行已中止。')
     }

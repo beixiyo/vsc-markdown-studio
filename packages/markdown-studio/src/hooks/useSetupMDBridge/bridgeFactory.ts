@@ -1,11 +1,11 @@
 import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
+import type { SpeakerType } from '@/types/BlocknoteExt'
+import type { MDBridge } from '@/types/MDBridge'
 import { getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
 import { createCommands } from './commands'
 import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
-import type { MDBridge } from '@/types/MDBridge'
-import type { SpeakerType } from '@/types/BlocknoteExt'
 
 /**
  * 创建 MDBridge 对象

@@ -24,7 +24,6 @@ export { runStateSelectionHistoryTest } from './state-selection-history.test'
 export { runStylesTextLinksTest } from './styles-text-links.test'
 export { runTextOperationsTest } from './text-operations.test'
 
-
 export function loadTestTools() {
   function createResults(): TestResults {
     return { total: 0, passed: 0, failed: 0, errors: [] }
@@ -172,8 +171,7 @@ export function loadTestTools() {
     waitForBridge,
     testCase,
     asyncTestCase,
-    printSummary,
-    finalizeTest, // Add this
+    finalizeTest,
     clearContent,
     std: {
       waitForMDBridge: (timeoutMs?: number) => waitForBridge(w => !!w.MDBridge, timeoutMs),
