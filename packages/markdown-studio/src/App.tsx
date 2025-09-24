@@ -15,7 +15,7 @@ import { LabelInputBlock } from './blocknoteExts/labelInput'
 import { MermaidBlock } from './blocknoteExts/mermaid'
 import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
-import { useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
+import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
 import { TestPanel } from './test/TestPanel'
 
 import '@blocknote/core/fonts/inter.css'
@@ -44,8 +44,10 @@ export default function App() {
 
   const editorElRef = useRef<HTMLDivElement>(null)
   const notifyFns = useNotify(editor, editorElRef)
+
   useSetupMDBridge(editor, notifyFns)
   useVSCode()
+  useHoverSection(editor)
 
   // ======================
   // * Sidebar

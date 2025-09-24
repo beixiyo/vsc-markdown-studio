@@ -3,7 +3,7 @@ import type { BlockNoteEditor } from '@blocknote/core'
 /**
  * 滚动到指定块
  */
-export function scrollToBlock(editor: BlockNoteEditor<any, any, any>, blockId: string) {
+export function scrollToBlock(editor: BlockNoteEditor, blockId: string) {
   try {
     editor.setTextCursorPosition(blockId, 'start')
 
@@ -25,7 +25,7 @@ export function scrollToBlock(editor: BlockNoteEditor<any, any, any>, blockId: s
 /**
  * 获取鼠标位置对应的块
  */
-export function getBlockAtPosition(editor: BlockNoteEditor<any, any, any>, x: number, y: number) {
+export function getBlockAtPosition(editor: BlockNoteEditor, x: number, y: number) {
   try {
     const element = document.elementFromPoint(x, y)
     if (!element)
@@ -50,7 +50,7 @@ export function getBlockAtPosition(editor: BlockNoteEditor<any, any, any>, x: nu
 /**
  * 从 DOM 元素获取对应的块
  */
-export function getBlockFromElement(editor: BlockNoteEditor<any, any, any>, element: Element) {
+export function getBlockFromElement(editor: BlockNoteEditor, element: Element) {
   try {
     const blockElement = element.closest('[data-id]')
     if (!blockElement)
@@ -74,10 +74,10 @@ export function getBlockFromElement(editor: BlockNoteEditor<any, any, any>, elem
  * @param blockId 目标块 ID
  * @returns 上级标题块，如果没有找到则返回 null
  */
-export function getParentHeading(editor: BlockNoteEditor<any, any, any>, blockId: string) {
+export function getParentHeading(editor: BlockNoteEditor, blockId: string) {
   try {
-    const document = editor.document
-    const currentBlockIndex = document.findIndex(block => block.id === blockId)
+    const docs = editor.document
+    const currentBlockIndex = docs.findIndex(block => block.id === blockId)
 
     if (currentBlockIndex === -1) {
       console.warn('未找到指定的块:', blockId)
@@ -86,7 +86,7 @@ export function getParentHeading(editor: BlockNoteEditor<any, any, any>, blockId
 
     /** 从当前块向前遍历，查找最近的标题块 */
     for (let i = currentBlockIndex - 1; i >= 0; i--) {
-      const block = document[i]
+      const block = docs[i]
 
       /** 检查是否为标题块 (h1, h2, h3, h4, h5, h6) */
       if (block.type === 'heading') {

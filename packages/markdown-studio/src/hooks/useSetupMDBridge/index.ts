@@ -65,6 +65,7 @@ export function useSetupMDBridge(
     const editorOnSelectionChangeUnsubscribe = editor.onSelectionChange(handleSelectionChange)
 
     return () => {
+      // @ts-ignore
       window.MDBridge = null
       bridgeRef.current = null
 

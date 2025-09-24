@@ -4,6 +4,7 @@ import type { BlockIdManager, CallbackManager } from './types'
 import type { SpeakerType } from '@/types/BlocknoteExt'
 import type { MDBridge } from '@/types/MDBridge'
 import { getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
+import { groupBlockByHeading } from './blockSections'
 import { createCommands } from './commands'
 import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
 
@@ -29,7 +30,7 @@ export function createMDBridge(
       const blocks = editor.tryParseHTMLToBlocks(html)
       editor.replaceBlocks(editor.document.map(block => block.id), blocks)
     },
-    getMarkdown: () => editor.blocksToMarkdownLossy(),
+    getMarkdown: blocks => editor.blocksToMarkdownLossy(blocks),
     setMarkdown: async (markdown: string) => {
       const blocks = await editor.tryParseMarkdownToBlocks(markdown)
       editor.replaceBlocks(editor.document.map(block => block.id), blocks)
@@ -184,6 +185,8 @@ export function createMDBridge(
      * @returns 上级标题信息，包含块对象、级别、文本内容和索引
      */
     getParentHeading: (blockId: string) => getParentHeading(editor, blockId),
+
+    groupBlockByHeading: (editor, blockId) => groupBlockByHeading(editor, blockId),
 
     onBlockHover: (callback: (block: any | null) => void) => {
       callbackManager.onBlockHoverCallbacks.add(callback)

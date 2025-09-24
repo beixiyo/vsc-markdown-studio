@@ -1,3 +1,4 @@
+export * from './useHoverSection'
 export * from './useNotify'
 export * from './useSetupMDBridge'
 export * from './useToc'

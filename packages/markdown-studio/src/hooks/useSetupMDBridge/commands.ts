@@ -1,10 +1,11 @@
 import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
+import type { MDBridge } from '@/types/MDBridge'
 
 /**
  * 创建命令对象
  */
-export function createCommands(editor: BlockNoteEditor<any, any, any>, notifyFns: ReturnType<typeof useNotify>) {
+export function createCommands(editor: BlockNoteEditor, notifyFns: ReturnType<typeof useNotify>): MDBridge['command'] {
   return {
     setHeading: (level: 1 | 2 | 3) => {
       const currentBlock = editor.getTextCursorPosition().block
@@ -38,10 +39,29 @@ export function createCommands(editor: BlockNoteEditor<any, any, any>, notifyFns
       editor.toggleStyles({ bold: true })
       notifyFns.notifyBlockTypeChanged()
     },
+    unsetBold: () => {
+      editor.toggleStyles({ bold: false })
+      notifyFns.notifyBlockTypeChanged()
+    },
+
     setItalic: () => {
       editor.toggleStyles({ italic: true })
       notifyFns.notifyBlockTypeChanged()
     },
+    unsetItalic: () => {
+      editor.toggleStyles({ italic: false })
+      notifyFns.notifyBlockTypeChanged()
+    },
+
+    setUnderline: () => {
+      editor.toggleStyles({ underline: true })
+      notifyFns.notifyBlockTypeChanged()
+    },
+    unsetUnderline: () => {
+      editor.toggleStyles({ underline: false })
+      notifyFns.notifyBlockTypeChanged()
+    },
+
     setCheckList: () => {
       const currentBlock = editor.getTextCursorPosition().block
       if (currentBlock) {

@@ -1,14 +1,15 @@
 import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { CallbackManager } from './types'
+import { throttle } from '@jl-org/tool'
 
 /**
  * 创建鼠标移动事件处理器
  */
-export function createMouseMoveHandler(editor: BlockNoteEditor<any, any, any>, callbackManager: CallbackManager) {
+export function createMouseMoveHandler(editor: BlockNoteEditor, callbackManager: CallbackManager) {
   let lastHoveredBlockId: string | null = null
 
-  return (event: MouseEvent) => {
+  const hanlderMouseMove = (event: MouseEvent) => {
     const blockElement = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-id]')
 
     if (blockElement) {
@@ -27,6 +28,8 @@ export function createMouseMoveHandler(editor: BlockNoteEditor<any, any, any>, c
       callbackManager.onBlockHoverCallbacks.forEach(callback => callback(null))
     }
   }
+
+  return throttle(hanlderMouseMove, 16, { makeSureNotToMissTask: true })
 }
 
 /**

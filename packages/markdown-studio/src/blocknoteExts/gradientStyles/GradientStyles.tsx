@@ -1,3 +1,7 @@
+/**
+ * @link https://www.blocknotejs.org/docs/features/custom-schemas/custom-styles
+ */
+
 import { createReactStyleSpec } from '@blocknote/react'
 import { gradientStylesMap, type GradientStyleType } from './constans'
 

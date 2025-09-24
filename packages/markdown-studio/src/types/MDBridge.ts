@@ -1,4 +1,5 @@
-import type { ParentHeadingInfo, SpeakerType } from './BlocknoteExt'
+import type { BlockNoteEditor, PartialBlock } from '@blocknote/core'
+import type { DocumentSection, ParentHeadingInfo, SpeakerType } from './BlocknoteExt'
 
 /**
  * MDBridge编辑器桥接接口
@@ -49,7 +50,7 @@ export interface MDBridge {
    * 获取文档的Markdown格式内容
    * @returns Markdown字符串
    */
-  getMarkdown: () => string
+  getMarkdown: (blocks?: PartialBlock<any, any, any>[] | undefined) => string
 
   /**
    * 通过Markdown设置文档内容（异步）
@@ -301,6 +302,16 @@ export interface MDBridge {
   getParentHeading: (blockId: string) => ParentHeadingInfo | null
 
   /**
+   * 根据块和最后一个块，将块分组，如果块是标题，则将块分组
+   * @param blocks 所有块
+   * @returns 分组后的块数组
+   */
+  groupBlockByHeading: (
+    editor: BlockNoteEditor<any, any, any>,
+    blockId: string
+  ) => DocumentSection
+
+  /**
    * 添加鼠标悬浮监听器
    * @param callback 悬浮回调函数，参数为块信息
    * @returns 取消监听的函数
@@ -405,9 +416,15 @@ export interface MDBridge {
 
     /** 切换选中文本的粗体样式 */
     setBold: () => void
+    unsetBold: () => void
 
     /** 切换选中文本的斜体样式 */
     setItalic: () => void
+    unsetItalic: () => void
+
+    /** 切换选中文本的删除线样式 */
+    setUnderline: () => void
+    unsetUnderline: () => void
 
     /** 将当前块设置为检查列表项 */
     setCheckList: () => void

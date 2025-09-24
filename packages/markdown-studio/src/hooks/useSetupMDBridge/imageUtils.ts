@@ -20,7 +20,7 @@ export function parseImagesToBlocks(urls: string[]): ImageBlock[] {
 /**
  * 在文档顶部插入块
  */
-export async function insertAtTop(editor: BlockNoteEditor<any, any, any>, blocks: any[], blockIdManager: BlockIdManager) {
+export async function insertAtTop(editor: BlockNoteEditor, blocks: any[], blockIdManager: BlockIdManager) {
   /** 移除之前的头部图片块 */
   if (blockIdManager.headerBlockIds.length)
     editor.removeBlocks([...blockIdManager.headerBlockIds])
@@ -44,7 +44,7 @@ export async function insertAtTop(editor: BlockNoteEditor<any, any, any>, blocks
 /**
  * 在文档底部插入块
  */
-export async function insertAtBottom(editor: BlockNoteEditor<any, any, any>, blocks: any[], blockIdManager: BlockIdManager) {
+export async function insertAtBottom(editor: BlockNoteEditor, blocks: any[], blockIdManager: BlockIdManager) {
   /** 移除之前的底部图片块 */
   if (blockIdManager.bottomBlockIds.length)
     editor.removeBlocks([...blockIdManager.bottomBlockIds])
@@ -67,7 +67,7 @@ export async function insertAtBottom(editor: BlockNoteEditor<any, any, any>, blo
 /**
  * 插入元素到当前光标位置
  */
-export async function appendElements(editor: BlockNoteEditor<any, any, any>, blocks: any[]) {
+export async function appendElements(editor: BlockNoteEditor, blocks: any[]) {
   const currentBlock = editor.getTextCursorPosition().block
   if (currentBlock) {
     editor.insertBlocks(blocks, currentBlock.id, 'after')

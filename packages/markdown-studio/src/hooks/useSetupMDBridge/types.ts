@@ -29,7 +29,7 @@ export type BlockIdManager = {
  * useSetupMDBridge Hook 的参数类型
  */
 export type UseSetupMDBridgeParams = {
-  editor: BlockNoteEditor<any, any, any> | null
+  editor: BlockNoteEditor | null
   notifyFns: ReturnType<typeof useNotify>
 }
 
