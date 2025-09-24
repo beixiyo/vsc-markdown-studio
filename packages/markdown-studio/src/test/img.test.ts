@@ -5,7 +5,7 @@
  */
 
 export async function runImgTest() {
-  if (!MDTest) {
+  if (!MDTest || !MDBridge) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
   }
@@ -17,14 +17,14 @@ export async function runImgTest() {
   /** 先添加一些基础内容，这样头部和底部图片的效果更明显 */
   MDTest.logTitle('0. 准备测试内容')
   MDTest.testCase(R, '0.1 添加基础内容', () => {
-    MDBridge!.setContent([
+    MDBridge.setContent([
       { type: 'heading', content: '图片测试文档', props: { level: 1 } },
       { type: 'paragraph', content: '这是一个用于测试图片插入功能的文档。' },
       { type: 'paragraph', content: '我们将测试头部图片、内容图片和底部图片的插入。' },
       { type: 'heading', content: '测试内容区域', props: { level: 2 } },
       { type: 'paragraph', content: '这里是文档的主要内容部分。' },
     ])
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     return { hasContent: doc.length > 0 }
   }, { hasContent: true })
 
@@ -34,7 +34,7 @@ export async function runImgTest() {
       'https://picsum.photos/seed/header1/600/300',
       'https://picsum.photos/seed/header2/600/300',
     ]
-    MDBridge!.setHeaderImagesWithURL(urls)
+    MDBridge.setHeaderImagesWithURL(urls)
     return {
       headerCount: window.__MDBridgeState?.headerImageUrls?.length || 0,
       first: window.__MDBridgeState?.headerImageUrls?.[0]?.includes('header1') || false,
@@ -48,7 +48,7 @@ export async function runImgTest() {
       'https://picsum.photos/seed/bottom2/300/300',
       'https://picsum.photos/seed/bottom3/300/300',
     ]
-    MDBridge!.setImagesWithURL(urls)
+    MDBridge.setImagesWithURL(urls)
     return {
       count: window.__MDBridgeState?.imageUrls?.length || 0,
       has2: (window.__MDBridgeState?.imageUrls?.[1] || '').includes('bottom2'),
@@ -60,7 +60,7 @@ export async function runImgTest() {
     const urls = [
       'https://picsum.photos/seed/local1/300/300',
     ]
-    MDBridge!.setFooterImagesWithURL(urls)
+    MDBridge.setFooterImagesWithURL(urls)
     return {
       count: window.__MDBridgeState?.imageUrls?.length || 0,
       first: window.__MDBridgeState?.imageUrls?.[0]?.includes('local1') || false,
@@ -69,7 +69,7 @@ export async function runImgTest() {
 
   MDTest.logTitle('4. 验证最终状态')
   MDTest.testCase(R, '4.1 检查文档和图片状态', () => {
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     const state = window.__MDBridgeState
     return {
       docLength: doc.length,
@@ -79,7 +79,7 @@ export async function runImgTest() {
     }
   })
 
-  MDTest.printSummary(R)
+  MDTest.finalizeTest(R)
 }
 
 /** 挂载到全局对象，方便在 Console 中调用 */

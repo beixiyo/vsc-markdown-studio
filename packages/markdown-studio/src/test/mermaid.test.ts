@@ -5,7 +5,7 @@
  */
 
 export async function runMermaidTest() {
-  if (!MDTest) {
+  if (!MDTest || !MDBridge) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
   }
@@ -17,7 +17,7 @@ export async function runMermaidTest() {
   MDTest.logTitle('1. Mermaid 块创建测试')
   MDTest.testCase(R, '1.1 创建基础 Mermaid 块', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([
+    MDBridge.setContent([
       {
         type: 'mermaid',
         props: {
@@ -25,7 +25,7 @@ export async function runMermaidTest() {
         },
       },
     ])
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     const mermaidBlock = doc.find((block: any) => block.type === 'mermaid')
     return {
       hasMermaidBlock: !!mermaidBlock,
@@ -45,7 +45,7 @@ export async function runMermaidTest() {
     C-->>B: 返回结果
     B-->>A: 响应数据`
 
-    MDBridge!.setContent([
+    MDBridge.setContent([
       {
         type: 'mermaid',
         props: {
@@ -53,7 +53,7 @@ export async function runMermaidTest() {
         },
       },
     ])
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     const mermaidBlock = doc.find((block: any) => block.type === 'mermaid')
     return {
       hasSequenceDiagram: mermaidBlock?.props?.diagram?.includes('sequenceDiagram'),
@@ -64,7 +64,7 @@ export async function runMermaidTest() {
   MDTest.logTitle('2. Mermaid 块更新测试')
   MDTest.testCase(R, '2.1 更新 Mermaid 代码', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([
+    MDBridge.setContent([
       {
         type: 'mermaid',
         props: {
@@ -72,17 +72,17 @@ export async function runMermaidTest() {
         },
       },
     ])
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     const mermaidId = doc[0].id
 
-    MDBridge!.updateBlock(mermaidId, {
+    MDBridge.updateBlock(mermaidId, {
       type: 'mermaid',
       props: {
         diagram: 'graph LR\n    X --> Y\n    Y --> Z',
       },
     })
 
-    const updatedDoc = MDBridge!.getDocument()
+    const updatedDoc = MDBridge.getDocument()
     const updatedBlock = updatedDoc.find((block: any) => block.id === mermaidId)
     return {
       updated: updatedBlock?.props?.diagram?.includes('graph LR'),
@@ -93,7 +93,7 @@ export async function runMermaidTest() {
   MDTest.logTitle('3. Mermaid 块删除测试')
   MDTest.testCase(R, '3.1 删除 Mermaid 块', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([
+    MDBridge.setContent([
       { type: 'paragraph', content: '前一段' },
       {
         type: 'mermaid',
@@ -104,13 +104,13 @@ export async function runMermaidTest() {
       { type: 'paragraph', content: '后一段' },
     ])
 
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     const mermaidBlock = doc.find((block: any) => block.type === 'mermaid')
     const initialLength = doc.length
 
-    MDBridge!.removeBlocks([mermaidBlock.id])
+    MDBridge.removeBlocks([mermaidBlock.id])
 
-    const finalDoc = MDBridge!.getDocument()
+    const finalDoc = MDBridge.getDocument()
     const hasMermaidAfter = finalDoc.some((block: any) => block.type === 'mermaid')
 
     return {
@@ -122,7 +122,7 @@ export async function runMermaidTest() {
   MDTest.logTitle('4. Mermaid 块替换测试')
   MDTest.testCase(R, '4.1 替换 Mermaid 块为段落', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([
+    MDBridge.setContent([
       {
         type: 'mermaid',
         props: {
@@ -131,14 +131,14 @@ export async function runMermaidTest() {
       },
     ])
 
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     const mermaidId = doc[0].id
 
-    MDBridge!.replaceBlocks([mermaidId], [
+    MDBridge.replaceBlocks([mermaidId], [
       { type: 'paragraph', content: '替换后的段落' },
     ])
 
-    const finalDoc = MDBridge!.getDocument()
+    const finalDoc = MDBridge.getDocument()
     const hasParagraph = finalDoc.some((block: any) => block.type === 'paragraph')
     const hasMermaid = finalDoc.some((block: any) => block.type === 'mermaid')
     const paragraphBlock = finalDoc.find((block: any) => block.type === 'paragraph')
@@ -152,7 +152,7 @@ export async function runMermaidTest() {
   MDTest.logTitle('5. Mermaid 块验证测试')
   MDTest.testCase(R, '5.1 验证 Mermaid 块结构', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([
+    MDBridge.setContent([
       {
         type: 'mermaid',
         props: {
@@ -161,7 +161,7 @@ export async function runMermaidTest() {
       },
     ])
 
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     const mermaidBlock = doc[0]
 
     return {
@@ -172,7 +172,7 @@ export async function runMermaidTest() {
     }
   }, { hasType: true, hasProps: true, hasCode: true, codeNotEmpty: true })
 
-  MDTest.printSummary(R)
+  MDTest.finalizeTest(R)
 }
 
 /** 挂载到全局对象，方便在 Console 中调用 */

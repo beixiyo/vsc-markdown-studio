@@ -151,6 +151,19 @@ export function loadTestTools() {
     }
   }
 
+  function finalizeTest(results: TestResults) {
+    if (results.failed > 0) {
+      // On failure, throw an error with details and DO NOT print summary here.
+      const errorDetails = results.errors.map((err, i) => `${i + 1}. ${err}`).join('\n')
+      const summary = `总测试数: ${results.total}, 通过: ${results.passed}, 失败: ${results.failed}`
+      throw new Error(`\n📊 测试结果汇总\n==================================================\n${summary}\n\n❌ 错误详情:\n${errorDetails}`)
+    }
+    else {
+      // On success, print the summary.
+      printSummary(results)
+    }
+  }
+
   const TestKit = {
     createResults,
     deepEqual,
@@ -160,6 +173,7 @@ export function loadTestTools() {
     testCase,
     asyncTestCase,
     printSummary,
+    finalizeTest, // Add this
     clearContent,
     std: {
       waitForMDBridge: (timeoutMs?: number) => waitForBridge(w => !!w.MDBridge, timeoutMs),

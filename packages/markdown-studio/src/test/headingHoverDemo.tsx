@@ -34,10 +34,10 @@ export function HeadingHoverDemo() {
 
     if (isListening) {
       // 注册 onBlockHover 回调
-      unsubscribe = MDBridge!.onBlockHover((block) => {
+      unsubscribe = MDBridge.onBlockHover((block) => {
         if (block) {
           // 获取当前块的上级标题
-          const parentHeading = MDBridge!.getParentHeading(block.id)
+          const parentHeading = MDBridge.getParentHeading(block.id)
 
           if (parentHeading) {
             setCurrentHeading({
@@ -144,9 +144,9 @@ export function useHeadingHover() {
       return
     }
 
-    const unsubscribe = MDBridge!.onBlockHover((block) => {
+    const unsubscribe = MDBridge.onBlockHover((block) => {
       if (block) {
-        const parentHeading = MDBridge!.getParentHeading(block.id)
+        const parentHeading = MDBridge.getParentHeading(block.id)
 
         if (parentHeading) {
           setCurrentHeading({

@@ -5,7 +5,7 @@
  */
 
 export async function runEditorStateTest() {
-  if (!MDTest) {
+  if (!MDTest || !MDBridge) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
   }
@@ -18,13 +18,13 @@ export async function runEditorStateTest() {
 
   MDTest.testCase(R, 'focus() - 聚焦编辑器', () => {
     MDTest.clearContent()
-    MDBridge!.focus()
+    MDBridge.focus()
     return { success: true }
   }, { success: true })
 
   MDTest.testCase(R, 'isEditable() - 检查是否可编辑', () => {
     MDTest.clearContent()
-    const isEditable = MDBridge!.isEditable()
+    const isEditable = MDBridge.isEditable()
     return {
       isBoolean: typeof isEditable === 'boolean',
     }
@@ -32,10 +32,10 @@ export async function runEditorStateTest() {
 
   MDTest.testCase(R, 'setEditable() - 设置可编辑状态', () => {
     MDTest.clearContent()
-    MDBridge!.setEditable(false)
-    const isEditable1 = MDBridge!.isEditable()
-    MDBridge!.setEditable(true)
-    const isEditable2 = MDBridge!.isEditable()
+    MDBridge.setEditable(false)
+    const isEditable1 = MDBridge.isEditable()
+    MDBridge.setEditable(true)
+    const isEditable2 = MDBridge.isEditable()
     return {
       canSetFalse: isEditable1 === false,
       canSetTrue: isEditable2 === true,
@@ -44,16 +44,16 @@ export async function runEditorStateTest() {
 
   MDTest.testCase(R, 'isEmpty() - 检查是否为空', () => {
     MDTest.clearContent()
-    const isEmpty1 = MDBridge!.isEmpty()
-    MDBridge!.setContent([{ type: 'paragraph', content: '测试' }])
-    const isEmpty2 = MDBridge!.isEmpty()
+    const isEmpty1 = MDBridge.isEmpty()
+    MDBridge.setContent([{ type: 'paragraph', content: '测试' }])
+    const isEmpty2 = MDBridge.isEmpty()
     return {
       isEmptyWhenEmpty: isEmpty1 === true,
       isNotEmptyWhenHasContent: isEmpty2 === false,
     }
   }, { isEmptyWhenEmpty: true, isNotEmptyWhenHasContent: true })
 
-  MDTest.printSummary(R)
+  MDTest.finalizeTest(R)
 }
 
 /** 挂载到全局对象，方便在 Console 中调用 */

@@ -58,26 +58,48 @@ export function TestPanel() {
     return null
   }
 
-  const handleRunTest = async (item: TestItem) => {
+  const handleRunTest = async (item: TestItem): Promise<boolean> => {
     console.log(`\n🚀 开始执行测试: ${item.label}`)
     console.log(`📝 描述: ${item.description}`)
     try {
       await item.testFn()
-      console.log(`✅ 测试完成: ${item.label}`)
+      // If testFn completes, it means it passed and finalizeTest has printed the success summary.
+      return true
     }
     catch (error) {
-      console.error(`❌ 测试失败: ${item.label}`, error)
+      // The error from finalizeTest is caught here and contains failure details.
+      console.error(`❌ 测试模块 [${item.label}] 失败。`)
+      if (error instanceof Error) {
+        // Log the detailed message from the error object.
+        console.log(error.message) // Using console.log to avoid the scary red error icon for the details themselves.
+      } 
+      else {
+        console.error('发生未知错误:', error)
+      }
+      return false
     }
   }
 
   const handleRunAllTests = async () => {
     console.log('\n🎯 开始执行所有测试...')
+    let allTestsPassed = true
     for (const item of testItems) {
-      await handleRunTest(item)
+      const success = await handleRunTest(item)
+      if (!success) {
+        allTestsPassed = false
+        console.error(`\n🛑 测试执行因 "${item.label}" 失败而中止。`)
+        break
+      }
       /** 在测试之间添加小延迟，避免过快执行 */
       await new Promise(resolve => setTimeout(resolve, 500))
     }
-    console.log('\n🏁 所有测试执行完毕')
+
+    if (allTestsPassed) {
+      console.log('\n🏁 所有测试模块均已成功执行完毕！')
+    } 
+    else {
+      console.log('\n🏁 测试执行已中止。')
+    }
   }
 
   return <div className="fixed right-3 top-3 z-50 flex flex-col p-3 rounded-md bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-200 dark:border-neutral-800 shadow max-w-48 max-h-[80vh] overflow-y-auto">

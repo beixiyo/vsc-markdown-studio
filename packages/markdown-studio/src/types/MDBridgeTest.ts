@@ -18,6 +18,7 @@ export interface MDTest {
   testCase: (results: { total: number; passed: number; failed: number; errors: string[] }, name: string, fn: () => any, expected?: any) => void
   asyncTestCase: (results: { total: number; passed: number; failed: number; errors: string[] }, name: string, fn: () => Promise<any>, expected?: any) => Promise<void>
   printSummary: (results: { total: number; passed: number; failed: number; errors: string[] }) => void
+  finalizeTest: (results: { total: number; passed: number; failed: number; errors: string[] }) => void
   clearContent: () => void
   std: {
     waitForMDBridge: (timeoutMs?: number) => Promise<boolean>

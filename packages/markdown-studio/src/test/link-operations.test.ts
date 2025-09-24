@@ -5,7 +5,7 @@
  */
 
 export async function runLinkOperationsTest() {
-  if (!MDTest) {
+  if (!MDTest || !MDBridge) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
   }
@@ -18,21 +18,21 @@ export async function runLinkOperationsTest() {
 
   MDTest.testCase(R, 'createLink() - 创建链接', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([{
+    MDBridge.setContent([{
       type: 'paragraph',
       content: [{ type: 'text', text: '测试文本' }],
     }])
 
     /** 选中文本，然后创建链接 */
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     if (doc.length > 0) {
-      MDBridge!.setTextCursorPosition(doc[0].id, 'start')
+      MDBridge.setTextCursorPosition(doc[0].id, 'start')
     }
 
-    MDBridge!.createLink('https://example.com', '链接文本')
+    MDBridge.createLink('https://example.com', '链接文本')
 
     /** 验证链接是否创建成功 */
-    const updatedDoc = MDBridge!.getDocument()
+    const updatedDoc = MDBridge.getDocument()
     const hasLink = updatedDoc[0]?.content?.some((c: any) => c.type === 'link')
 
     console.log('🔍 调试信息:')
@@ -45,7 +45,7 @@ export async function runLinkOperationsTest() {
   MDTest.testCase(R, 'getSelectedLinkUrl() - 获取选中链接URL', () => {
     MDTest.clearContent()
     /** 创建包含链接的段落 */
-    MDBridge!.setContent([{
+    MDBridge.setContent([{
       type: 'paragraph',
       content: [
         { type: 'text', text: '测试文本 ' },
@@ -59,13 +59,13 @@ export async function runLinkOperationsTest() {
     }])
 
     /** 选中链接文本 */
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     if (doc.length > 0) {
       /** 设置光标到链接位置 */
-      MDBridge!.setTextCursorPosition(doc[0].id, 'start')
+      MDBridge.setTextCursorPosition(doc[0].id, 'start')
     }
 
-    const linkUrl = MDBridge!.getSelectedLinkUrl()
+    const linkUrl = MDBridge.getSelectedLinkUrl()
     console.log('🔍 调试信息:')
     console.log('- 文档内容:', doc)
     console.log('- 链接URL:', linkUrl)
@@ -76,7 +76,7 @@ export async function runLinkOperationsTest() {
     }
   }, { hasUrl: true })
 
-  MDTest.printSummary(R)
+  MDTest.finalizeTest(R)
 }
 
 /** 挂载到全局对象，方便在 Console 中调用 */

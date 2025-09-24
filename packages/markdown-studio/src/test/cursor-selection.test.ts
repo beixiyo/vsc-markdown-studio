@@ -5,7 +5,7 @@
  */
 
 export async function runCursorSelectionTest() {
-  if (!MDTest) {
+  if (!MDTest || !MDBridge) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
   }
@@ -18,8 +18,8 @@ export async function runCursorSelectionTest() {
 
   MDTest.testCase(R, 'getTextCursorPosition() - 获取光标位置', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([{ type: 'paragraph', content: '测试文本' }])
-    const cursorPos = MDBridge!.getTextCursorPosition()
+    MDBridge.setContent([{ type: 'paragraph', content: '测试文本' }])
+    const cursorPos = MDBridge.getTextCursorPosition()
     return {
       hasPosition: cursorPos && typeof cursorPos === 'object',
     }
@@ -27,10 +27,10 @@ export async function runCursorSelectionTest() {
 
   MDTest.testCase(R, 'setTextCursorPosition() - 设置光标位置', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([{ type: 'paragraph', content: '测试文本' }])
-    const doc = MDBridge!.getDocument()
+    MDBridge.setContent([{ type: 'paragraph', content: '测试文本' }])
+    const doc = MDBridge.getDocument()
     if (doc.length > 0) {
-      MDBridge!.setTextCursorPosition(doc[0].id, 'start')
+      MDBridge.setTextCursorPosition(doc[0].id, 'start')
       return { success: true }
     }
     return { success: false }
@@ -38,8 +38,8 @@ export async function runCursorSelectionTest() {
 
   MDTest.testCase(R, 'getSelection() - 获取选择范围', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([{ type: 'paragraph', content: '测试文本' }])
-    const selection = MDBridge!.getSelection()
+    MDBridge.setContent([{ type: 'paragraph', content: '测试文本' }])
+    const selection = MDBridge.getSelection()
     return {
       hasSelection: selection === null || typeof selection === 'object',
     }
@@ -47,19 +47,19 @@ export async function runCursorSelectionTest() {
 
   MDTest.testCase(R, 'setSelection() - 设置选择范围', () => {
     MDTest.clearContent()
-    MDBridge!.setContent([
+    MDBridge.setContent([
       { type: 'paragraph', content: '第一段' },
       { type: 'paragraph', content: '第二段' },
     ])
-    const doc = MDBridge!.getDocument()
+    const doc = MDBridge.getDocument()
     if (doc.length >= 2) {
-      MDBridge!.setSelection(doc[0].id, doc[1].id)
+      MDBridge.setSelection(doc[0].id, doc[1].id)
       return { success: true }
     }
     return { success: false }
   }, { success: true })
 
-  MDTest.printSummary(R)
+  MDTest.finalizeTest(R)
 }
 
 /** 挂载到全局对象，方便在 Console 中调用 */

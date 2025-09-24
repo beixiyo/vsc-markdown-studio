@@ -3,27 +3,27 @@
  */
 
 export async function runHeadingHoverTest() {
-  if (!MDTest) {
+  if (!MDTest || !MDBridge) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
   }
 
-  const results = MDTest.createResults()
+  const R = MDTest.createResults()
 
   MDTest.logTitle('标题悬浮监听功能测试')
 
   // 测试 : 检查 getParentHeading 方法是否存在
-  MDTest.testCase(results, 'getParentHeading 方法存在性检查', () => {
+  MDTest.testCase(R, 'getParentHeading 方法存在性检查', () => {
     return typeof MDBridge?.getParentHeading === 'function'
   }, true)
 
   // 测试 : 检查 onBlockHover 方法是否存在
-  MDTest.testCase(results, 'onBlockHover 方法存在性检查', () => {
+  MDTest.testCase(R, 'onBlockHover 方法存在性检查', () => {
     return typeof MDBridge?.onBlockHover === 'function'
   }, true)
 
   // 测试 : 测试 onBlockHover 注册和取消
-  MDTest.testCase(results, 'onBlockHover 注册和取消测试', () => {
+  MDTest.testCase(R, 'onBlockHover 注册和取消测试', () => {
     if (!MDBridge) return false
 
     let callbackCalled = false
@@ -41,7 +41,7 @@ export async function runHeadingHoverTest() {
   }, true)
 
   // 测试 : 测试 getParentHeading 对无效 blockId 的处理
-  MDTest.testCase(results, 'getParentHeading 无效 blockId 处理', () => {
+  MDTest.testCase(R, 'getParentHeading 无效 blockId 处理', () => {
     if (!MDBridge) return false
 
     const result = MDBridge.getParentHeading('invalid-block-id')
@@ -49,7 +49,7 @@ export async function runHeadingHoverTest() {
   }, true)
 
   // 测试 : 创建测试内容并测试标题获取
-  MDTest.asyncTestCase(results, '标题获取功能测试', async () => {
+  MDTest.asyncTestCase(R, '标题获取功能测试', async () => {
     if (!MDBridge) return false
 
     // 创建测试内容
@@ -105,7 +105,7 @@ export async function runHeadingHoverTest() {
   }, true)
 
   // 测试 : 测试标题块的上级标题（应该返回 null）
-  MDTest.asyncTestCase(results, '标题块上级标题测试', async () => {
+  MDTest.asyncTestCase(R, '标题块上级标题测试', async () => {
     if (!MDBridge) return false
 
     const document = MDBridge.getDocument()
@@ -117,5 +117,5 @@ export async function runHeadingHoverTest() {
     return parentHeading === null
   }, true)
 
-  MDTest.printSummary(results)
+  MDTest.finalizeTest(R)
 }
