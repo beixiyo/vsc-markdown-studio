@@ -19,23 +19,13 @@ export async function runLabelInputTest() {
   MDTest.logTitle('1. LabelInput 块创建测试')
   MDTest.testCase(R, '1.1 创建基础 LabelInput 块', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([
-      {
-        type: 'labelInput',
-        props: {
-          label: '测试说话人',
-        },
-        content: [
-          {
-            type: 'text',
-            text: '这是一条测试消息',
-            styles: {},
-          },
-        ],
-      },
-    ])
+    const speaker = {
+      name: '测试说话人',
+      content: '这是一条测试消息'
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker)
     const doc = window.MDBridge!.getDocument()
-    const labelInputBlock = doc.find((block: any) => block.type === 'labelInput')
+    const labelInputBlock = doc.find((block: any) => block.id === blockId)
     return {
       hasLabelInputBlock: !!labelInputBlock,
       hasLabel: labelInputBlock?.props?.label === '测试说话人',
@@ -45,21 +35,13 @@ export async function runLabelInputTest() {
 
   MDTest.testCase(R, '1.2 创建带默认标签的 LabelInput 块', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([
-      {
-        type: 'labelInput',
-        props: {},
-        content: [
-          {
-            type: 'text',
-            text: '默认标签测试',
-            styles: {},
-          },
-        ],
-      },
-    ])
+    const speaker = {
+      name: '标签',
+      content: '默认标签测试'
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker)
     const doc = window.MDBridge!.getDocument()
-    const labelInputBlock = doc.find((block: any) => block.type === 'labelInput')
+    const labelInputBlock = doc.find((block: any) => block.id === blockId)
     return {
       hasDefaultLabel: labelInputBlock?.props?.label === '标签',
       hasContent: labelInputBlock?.content?.[0]?.text === '默认标签测试',
@@ -69,40 +51,23 @@ export async function runLabelInputTest() {
   MDTest.logTitle('2. LabelInput 块更新测试')
   MDTest.testCase(R, '2.1 更新 LabelInput 标签', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([
-      {
-        type: 'labelInput',
-        props: {
-          label: '原始标签',
-        },
-        content: [
-          {
-            type: 'text',
-            text: '原始内容',
-            styles: {},
-          },
-        ],
-      },
-    ])
-    const doc = window.MDBridge!.getDocument()
-    const labelInputId = doc[0].id
+    // 先创建一个块
+    const speaker1 = {
+      name: '原始标签',
+      content: '原始内容'
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker1)
 
-    window.MDBridge!.updateBlock(labelInputId, {
-      type: 'labelInput',
-      props: {
-        label: '更新后的标签',
-      },
-      content: [
-        {
-          type: 'text',
-          text: '更新后的内容',
-          styles: {},
-        },
-      ],
-    })
+    // 然后更新这个块
+    const speaker2 = {
+      blockId: blockId,
+      name: '更新后的标签',
+      content: '更新后的内容'
+    }
+    const updatedBlockId = window.MDBridge!.setSpeaker(speaker2)
 
     const updatedDoc = window.MDBridge!.getDocument()
-    const updatedBlock = updatedDoc.find((block: any) => block.id === labelInputId)
+    const updatedBlock = updatedDoc.find((block: any) => block.id === updatedBlockId)
     return {
       labelUpdated: updatedBlock?.props?.label === '更新后的标签',
       contentUpdated: updatedBlock?.content?.[0]?.text === '更新后的内容',
@@ -112,29 +77,23 @@ export async function runLabelInputTest() {
   MDTest.logTitle('3. LabelInput 块删除测试')
   MDTest.testCase(R, '3.1 删除 LabelInput 块', () => {
     MDTest.clearContent()
+    // 先创建段落
     window.MDBridge!.setContent([
       { type: 'paragraph', content: '前一段' },
-      {
-        type: 'labelInput',
-        props: {
-          label: '要删除的标签',
-        },
-        content: [
-          {
-            type: 'text',
-            text: '要删除的内容',
-            styles: {},
-          },
-        ],
-      },
       { type: 'paragraph', content: '后一段' },
     ])
 
+    // 使用 setSpeaker 创建 LabelInput 块
+    const speaker = {
+      name: '要删除的标签',
+      content: '要删除的内容'
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker)
+
     const doc = window.MDBridge!.getDocument()
-    const labelInputBlock = doc.find((block: any) => block.type === 'labelInput')
     const initialLength = doc.length
 
-    window.MDBridge!.removeBlocks([labelInputBlock.id])
+    window.MDBridge!.removeBlocks([blockId])
 
     const finalDoc = window.MDBridge!.getDocument()
     const hasLabelInputAfter = finalDoc.some((block: any) => block.type === 'labelInput')
@@ -148,33 +107,33 @@ export async function runLabelInputTest() {
   MDTest.logTitle('4. LabelInput 块替换测试')
   MDTest.testCase(R, '4.1 替换 LabelInput 块为段落', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([
+    // 使用 setSpeaker 创建 LabelInput 块
+    const speaker = {
+      name: '要替换的标签',
+      content: '要替换的内容'
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker)
+
+    window.MDBridge!.replaceBlocks([blockId], [
       {
-        type: 'labelInput',
-        props: {
-          label: '要替换的标签',
-        },
+        type: 'paragraph',
         content: [
           {
             type: 'text',
-            text: '要替换的内容',
-            styles: {},
-          },
-        ],
+            text: '替换后的段落',
+            styles: {}
+          }
+        ]
       },
-    ])
-
-    const doc = window.MDBridge!.getDocument()
-    const labelInputId = doc[0].id
-
-    window.MDBridge!.replaceBlocks([labelInputId], [
-      { type: 'paragraph', content: '替换后的段落' },
     ])
 
     const finalDoc = window.MDBridge!.getDocument()
     const hasParagraph = finalDoc.some((block: any) => block.type === 'paragraph')
     const hasLabelInput = finalDoc.some((block: any) => block.type === 'labelInput')
-    const paragraphBlock = finalDoc.find((block: any) => block.type === 'paragraph')
+    // 找到有内容的段落块（替换后创建的）
+    const paragraphBlock = finalDoc.find((block: any) =>
+      block.type === 'paragraph' && block.content?.length > 0 && block.content[0]?.text === '替换后的段落'
+    )
 
     return {
       replaced: hasParagraph && !hasLabelInput,
@@ -185,24 +144,14 @@ export async function runLabelInputTest() {
   MDTest.logTitle('5. LabelInput 块验证测试')
   MDTest.testCase(R, '5.1 验证 LabelInput 块结构', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([
-      {
-        type: 'labelInput',
-        props: {
-          label: '结构验证标签',
-        },
-        content: [
-          {
-            type: 'text',
-            text: '结构验证内容',
-            styles: {},
-          },
-        ],
-      },
-    ])
+    const speaker = {
+      name: '结构验证标签',
+      content: '结构验证内容'
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker)
 
     const doc = window.MDBridge!.getDocument()
-    const labelInputBlock = doc[0]
+    const labelInputBlock = doc.find((block: any) => block.id === blockId)
 
     return {
       hasType: labelInputBlock.type === 'labelInput',
@@ -213,48 +162,109 @@ export async function runLabelInputTest() {
     }
   }, { hasType: true, hasProps: true, hasLabel: true, hasContent: true, contentNotEmpty: true })
 
-  MDTest.logTitle('6. LabelInput 块内容测试')
-  MDTest.testCase(R, '6.1 测试空内容处理', () => {
+  MDTest.logTitle('6. setSpeaker 接口测试')
+  MDTest.testCase(R, '6.1 使用 setSpeaker 创建新块', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([
-      {
-        type: 'labelInput',
-        props: {
-          label: '空内容测试',
-        },
-        content: [],
-      },
-    ])
+    const speaker = {
+      name: '张三',
+      content: '你好，我是张三'
+    }
+
+    const blockId = window.MDBridge!.setSpeaker(speaker)
 
     const doc = window.MDBridge!.getDocument()
-    const labelInputBlock = doc[0]
+    const labelInputBlock = doc.find((block: any) => block.id === blockId)
 
     return {
-      hasEmptyContent: labelInputBlock.content?.length === 0,
+      hasBlockId: !!blockId,
+      hasLabelInputBlock: !!labelInputBlock,
+      blockType: labelInputBlock?.type,
+      blockLabel: labelInputBlock?.props?.label,
+      blockContent: labelInputBlock?.content?.[0]?.text,
+    }
+  }, {
+    hasBlockId: true,
+    hasLabelInputBlock: true,
+    blockType: 'labelInput',
+    blockLabel: '张三',
+    blockContent: '你好，我是张三'
+  })
+
+  MDTest.testCase(R, '6.2 使用 setSpeaker 更新现有块', () => {
+    MDTest.clearContent()
+    // 先创建一个块
+    const speaker1 = {
+      name: '李四',
+      content: '我是李四'
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker1)
+
+    // 然后更新这个块
+    const speaker2 = {
+      blockId: blockId,
+      name: '王五',
+      content: '我是王五，更新后的内容'
+    }
+    const updatedBlockId = window.MDBridge!.setSpeaker(speaker2)
+
+    const doc = window.MDBridge!.getDocument()
+    const labelInputBlock = doc.find((block: any) => block.id === updatedBlockId)
+
+    return {
+      sameBlockId: blockId === updatedBlockId,
+      blockLabel: labelInputBlock?.props?.label,
+      blockContent: labelInputBlock?.content?.[0]?.text,
+    }
+  }, {
+    sameBlockId: true,
+    blockLabel: '王五',
+    blockContent: '我是王五，更新后的内容'
+  })
+
+  MDTest.testCase(R, '6.3 setSpeaker 错误处理', () => {
+    const invalidResult1 = window.MDBridge!.setSpeaker(null as any)
+    const invalidResult2 = window.MDBridge!.setSpeaker({} as any)
+    const invalidResult3 = window.MDBridge!.setSpeaker({ name: '', content: 'test' } as any)
+
+    return {
+      nullResult: invalidResult1,
+      emptyObjectResult: invalidResult2,
+      emptyNameResult: invalidResult3,
+    }
+  }, {
+    nullResult: '',
+    emptyObjectResult: '',
+    emptyNameResult: ''
+  })
+
+  MDTest.logTitle('7. LabelInput 块内容测试')
+  MDTest.testCase(R, '7.1 测试空内容处理', () => {
+    MDTest.clearContent()
+    const speaker = {
+      name: '空内容测试',
+      content: ''
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker)
+
+    const doc = window.MDBridge!.getDocument()
+    const labelInputBlock = doc.find((block: any) => block.id === blockId)
+
+    return {
+      hasEmptyContent: labelInputBlock.content?.length === 0 || labelInputBlock.content?.[0]?.text === '',
       hasLabel: labelInputBlock.props?.label === '空内容测试',
     }
   }, { hasEmptyContent: true, hasLabel: true })
 
-  MDTest.testCase(R, '6.2 测试多行内容', () => {
+  MDTest.testCase(R, '7.2 测试多行内容', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([
-      {
-        type: 'labelInput',
-        props: {
-          label: '多行内容测试',
-        },
-        content: [
-          {
-            type: 'text',
-            text: '第一行内容\n第二行内容\n第三行内容',
-            styles: {},
-          },
-        ],
-      },
-    ])
+    const speaker = {
+      name: '多行内容测试',
+      content: '第一行内容\n第二行内容\n第三行内容'
+    }
+    const blockId = window.MDBridge!.setSpeaker(speaker)
 
     const doc = window.MDBridge!.getDocument()
-    const labelInputBlock = doc[0]
+    const labelInputBlock = doc.find((block: any) => block.id === blockId)
     const content = labelInputBlock.content?.[0]?.text
 
     return {

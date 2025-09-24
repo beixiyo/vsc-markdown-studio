@@ -8,7 +8,6 @@ import {
   SideMenu,
   SideMenuController,
   SuggestionMenuController,
-  type DragHandleMenuProps,
 } from '@blocknote/react'
 import { memo } from 'react'
 import { cn } from 'utils'

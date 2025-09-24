@@ -50,7 +50,7 @@ const testItems: TestItem[] = [
 ]
 
 export function TestPanel() {
-  const [isCollapsed, setIsCollapsed] = useState(true)
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   if (!import.meta.env.DEV) {
     return null

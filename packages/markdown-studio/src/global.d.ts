@@ -1,6 +1,18 @@
 declare global {
 
   /**
+   * 说话人类型定义
+   */
+  interface SpeakerType {
+    /** 说话人唯一标识 */
+    blockId?: string
+    /** 说话人显示名称 */
+    name: string
+    /** 内容字符串 */
+    content: string
+  }
+
+  /**
    * MDBridge编辑器桥接接口
    * 用于在webview中操作BlockNote编辑器，提供完整的编辑器API访问
    * 通过 window.MDBridge 全局访问
@@ -69,6 +81,22 @@ declare global {
 
     /** 通过URL设置头部图片 */
     setHeaderImagesWithURL: (imageUrls: string[]) => void
+
+    // ======================
+    // * Speaker operations
+    // ======================
+
+    /**
+     * 设置说话人列表，blockId 可选，传递则为修改对应 ID 的内容
+     * @param speakers 说话人数组
+     * @returns 设置后的块 ID
+     *
+     * @example
+     * ```ts
+     * window.MDBridge.setSpeaker({ blockId: '1', name: '张三', content: '你好' })
+     * ```
+     */
+    setSpeaker: (speakers: SpeakerType) => string
 
     // ======================
     // * Block operations
@@ -430,6 +458,7 @@ declare global {
       headerImageUrls?: string[]
       imageUrls?: string[]
       flowing?: boolean
+      speakers?: SpeakerType[]
     }
 
     /** 统一测试工具（在 Console 使用） */

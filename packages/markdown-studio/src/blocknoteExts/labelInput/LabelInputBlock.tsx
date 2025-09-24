@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { defaultProps } from '@blocknote/core'
 import { createReactBlockSpec } from '@blocknote/react'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { cn } from 'utils'
 import { notifyNative } from '@/utils'
 
@@ -16,6 +16,10 @@ export const LabelInputBlock = createReactBlockSpec(
       /** 标签文本 */
       label: {
         default: '标签',
+        type: 'string',
+      },
+      content: {
+        default: '在此输入对话内容...',
         type: 'string',
       },
       textAlignment: defaultProps.textAlignment,
@@ -69,19 +73,6 @@ export const LabelInputBlock = createReactBlockSpec(
           })
         }
       }, [block, editor])
-
-      /** 初始化内容 - 如果内容为空，设置默认占位符 */
-      useEffect(() => {
-        const text = block.content
-          .filter(item => item.type === 'text')
-          .map(item => (item as any).text)
-          .join('')
-
-        /**
-         * 如果内容为空，可以在这里设置默认内容
-         * 注意：这里只是获取内容，实际的初始化在 insertBlocks 时处理
-         */
-      }, [block.content])
 
       return (
         <div
