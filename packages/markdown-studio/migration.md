@@ -36,7 +36,7 @@ interface MilkdownBridge {
 
 ## 迁移范围总览
 
-- **全局对象重命名**：`window.MilkdownBridge` → `window.MDBridge`
+- **全局对象重命名**：`MilkdownBridge` → `MDBridge`
 - **内容设置接口语义化**：`setContent` → 按内容类型选择 `setContent` / `setHTML` / `setMarkdown`
 - **图片接口重命名与职责明确**：
   - 旧：`setImages`、`setImagesWithURL`、`setHeaderImagesWithURL`
@@ -51,47 +51,47 @@ interface MilkdownBridge {
 ### 1. 全局对象重命名
 ```ts
 // 旧
-window.MilkdownBridge?.setContent('# Hello')
+MilkdownBridge?.setContent('# Hello')
 // 新  
-window.MDBridge?.setMarkdown('# Hello')
+MDBridge?.setMarkdown('# Hello')
 ```
 
 ### 2. 内容设置按类型拆分
 ```ts
 // Markdown 内容
-window.MDBridge?.setMarkdown('# Hello World')
+MDBridge?.setMarkdown('# Hello World')
 
 // HTML 内容  
-window.MDBridge?.setHTML('<h1>Hello World</h1>')
+MDBridge?.setHTML('<h1>Hello World</h1>')
 
 // 块数组
-window.MDBridge?.setContent([{ id: '1', type: 'paragraph', content: 'Hi' }])
+MDBridge?.setContent([{ id: '1', type: 'paragraph', content: 'Hi' }])
 ```
 
 ### 3. 图片接口重命名
 ```ts
 // 旧
-window.MilkdownBridge?.setImages(['url1', 'url2'])
+MilkdownBridge?.setImages(['url1', 'url2'])
 // 新
-window.MDBridge?.setImagesWithURL(['url1', 'url2'])
-window.MDBridge?.setHeaderImagesWithURL(['header.png'])
-window.MDBridge?.setFooterImagesWithURL(['footer.png']) // 新增
+MDBridge?.setImagesWithURL(['url1', 'url2'])
+MDBridge?.setHeaderImagesWithURL(['header.png'])
+MDBridge?.setFooterImagesWithURL(['footer.png']) // 新增
 ```
 
 ### 4. 说话人接口简化
 ```ts
 // 旧版 - 批量设置
-window.MilkdownBridge?.setSpeakers([
+MilkdownBridge?.setSpeakers([
   { name: '张三', content: '你好' },
   { name: '李四', content: '世界' }
 ])
 
 // 新版 - 单个设置，支持修改，返回 ID
-const blockId = window.MDBridge?.setSpeaker({ name: '张三', content: '你好' })
-window.MDBridge?.setSpeaker({ name: '李四', content: '世界' })
+const blockId = MDBridge?.setSpeaker({ name: '张三', content: '你好' })
+MDBridge?.setSpeaker({ name: '李四', content: '世界' })
 
 // 修改现有说话人
-window.MDBridge?.setSpeaker({ 
+MDBridge?.setSpeaker({ 
   blockId, 
   name: '张三', 
   content: '修改后的内容' 
@@ -101,11 +101,11 @@ window.MDBridge?.setSpeaker({
 ### 5. 渐变样式升级
 ```ts
 // 旧版 - 简单开关
-window.MilkdownBridge?.setFlowing(true)
+MilkdownBridge?.setFlowing(true)
 
 // 新版 - 11 种精美渐变
-window.MDBridge?.addStyles({ gradientStyles: 'mysticPurpleBlue' })
-window.MDBridge?.addStyles({ gradientStyles: 'starryNight' })
+MDBridge?.addStyles({ gradientStyles: 'mysticPurpleBlue' })
+MDBridge?.addStyles({ gradientStyles: 'starryNight' })
 ```
 
 #### 渐变样式参考
@@ -129,7 +129,7 @@ type NewGradientType =
 
 | 旧接口 | 新接口 | 说明 |
 |--------|--------|------|
-| `window.MilkdownBridge` | `window.MDBridge` | 全局对象重命名 |
+| `MilkdownBridge` | `MDBridge` | 全局对象重命名 |
 | `setContent(markdown)` | `setMarkdown(markdown)` | Markdown 内容设置 |
 | `setContent(html)` | `setHTML(html)` | HTML 内容设置 |
 | `setImages(urls)` | `setImagesWithURL(urls)` | 当前位置图片 |

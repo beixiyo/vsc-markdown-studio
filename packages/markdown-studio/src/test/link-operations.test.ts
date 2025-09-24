@@ -5,8 +5,6 @@
  */
 
 export async function runLinkOperationsTest() {
-  const { MDTest } = window
-
   if (!MDTest) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
@@ -20,21 +18,21 @@ export async function runLinkOperationsTest() {
 
   MDTest.testCase(R, 'createLink() - 创建链接', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([{
+    MDBridge!.setContent([{
       type: 'paragraph',
       content: [{ type: 'text', text: '测试文本' }],
     }])
 
     /** 选中文本，然后创建链接 */
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     if (doc.length > 0) {
-      window.MDBridge!.setTextCursorPosition(doc[0].id, 'start')
+      MDBridge!.setTextCursorPosition(doc[0].id, 'start')
     }
 
-    window.MDBridge!.createLink('https://example.com', '链接文本')
+    MDBridge!.createLink('https://example.com', '链接文本')
 
     /** 验证链接是否创建成功 */
-    const updatedDoc = window.MDBridge!.getDocument()
+    const updatedDoc = MDBridge!.getDocument()
     const hasLink = updatedDoc[0]?.content?.some((c: any) => c.type === 'link')
 
     console.log('🔍 调试信息:')
@@ -47,7 +45,7 @@ export async function runLinkOperationsTest() {
   MDTest.testCase(R, 'getSelectedLinkUrl() - 获取选中链接URL', () => {
     MDTest.clearContent()
     /** 创建包含链接的段落 */
-    window.MDBridge!.setContent([{
+    MDBridge!.setContent([{
       type: 'paragraph',
       content: [
         { type: 'text', text: '测试文本 ' },
@@ -61,13 +59,13 @@ export async function runLinkOperationsTest() {
     }])
 
     /** 选中链接文本 */
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     if (doc.length > 0) {
       /** 设置光标到链接位置 */
-      window.MDBridge!.setTextCursorPosition(doc[0].id, 'start')
+      MDBridge!.setTextCursorPosition(doc[0].id, 'start')
     }
 
-    const linkUrl = window.MDBridge!.getSelectedLinkUrl()
+    const linkUrl = MDBridge!.getSelectedLinkUrl()
     console.log('🔍 调试信息:')
     console.log('- 文档内容:', doc)
     console.log('- 链接URL:', linkUrl)

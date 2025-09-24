@@ -5,8 +5,6 @@
  */
 
 export async function runBlockDetectionTest() {
-  const { MDTest } = window
-
   if (!MDTest) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
@@ -20,18 +18,18 @@ export async function runBlockDetectionTest() {
 
   /** 设置测试内容 */
   MDTest.testCase(R, '准备测试内容', () => {
-    window.MDBridge!.setContent([
+    MDBridge!.setContent([
       { type: 'heading', props: { level: 1 }, content: '标题 1' },
       { type: 'paragraph', content: '这是一个段落' },
       { type: 'heading', props: { level: 2 }, content: '标题 2' },
       { type: 'paragraph', content: '另一个段落' },
     ])
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     return { hasContent: doc.length >= 4 }
   }, { hasContent: true })
 
   MDTest.testCase(R, 'getBlockAtPosition() - 根据坐标获取块', () => {
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     if (doc.length === 0)
       return { success: false }
 
@@ -44,7 +42,7 @@ export async function runBlockDetectionTest() {
     const centerX = rect.left + rect.width / 2
     const centerY = rect.top + rect.height / 2
 
-    const block = window.MDBridge!.getBlockAtPosition(centerX, centerY)
+    const block = MDBridge!.getBlockAtPosition(centerX, centerY)
     return {
       foundBlock: !!block,
       correctBlock: block?.id === doc[0].id,
@@ -52,7 +50,7 @@ export async function runBlockDetectionTest() {
   }, { foundBlock: true, correctBlock: true })
 
   MDTest.testCase(R, 'getBlockFromElement() - 从元素获取块', () => {
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     if (doc.length === 0)
       return { success: false }
 
@@ -60,7 +58,7 @@ export async function runBlockDetectionTest() {
     if (!firstBlockElement)
       return { success: false }
 
-    const block = window.MDBridge!.getBlockFromElement(firstBlockElement)
+    const block = MDBridge!.getBlockFromElement(firstBlockElement)
     return {
       foundBlock: !!block,
       correctBlock: block?.id === doc[0].id,
@@ -69,7 +67,7 @@ export async function runBlockDetectionTest() {
 
   MDTest.testCase(R, 'getBlockFromElement() - 无效元素', () => {
     const invalidElement = document.createElement('div')
-    const block = window.MDBridge!.getBlockFromElement(invalidElement)
+    const block = MDBridge!.getBlockFromElement(invalidElement)
     return { shouldBeNull: block === null }
   }, { shouldBeNull: true })
 
@@ -77,7 +75,7 @@ export async function runBlockDetectionTest() {
     const hoveredBlocks: any[] = []
     let callbackCount = 0
 
-    const unsubscribe = window.MDBridge!.onBlockHover((block) => {
+    const unsubscribe = MDBridge!.onBlockHover((block) => {
       callbackCount++
       if (block) {
         hoveredBlocks.push(block.id)
@@ -85,7 +83,7 @@ export async function runBlockDetectionTest() {
     })
 
     /** 模拟鼠标移动事件 */
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     if (doc.length > 0) {
       const firstBlockElement = document.querySelector(`[data-id="${doc[0].id}"]`)
       if (firstBlockElement) {

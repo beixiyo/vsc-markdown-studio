@@ -23,7 +23,7 @@ export function useVSCode() {
         case 'update':
           if (message.content !== lastContent) {
             isUpdatingFromExtension = true
-            window.MDBridge?.setMarkdown(message.content)
+            MDBridge?.setMarkdown(message.content)
             lastContent = message.content
             /** 延迟重置标志，确保 onChange 回调不会触发 */
             setTimeout(() => {
@@ -36,13 +36,13 @@ export function useVSCode() {
 
     window.addEventListener('message', handleMessage)
 
-    window.MDBridge?.onChange(() => {
+    MDBridge?.onChange(() => {
       /** 如果正在从扩展更新内容，则跳过发送 change 消息 */
       if (isUpdatingFromExtension) {
         return
       }
 
-      const newContent = window.MDBridge?.getMarkdown() || ''
+      const newContent = MDBridge?.getMarkdown() || ''
       if (newContent !== lastContent) {
         lastContent = newContent
         vscode.postMessage({ type: 'change', content: newContent })

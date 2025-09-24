@@ -5,8 +5,6 @@
  */
 
 export async function runLabelInputTest() {
-  const { MDTest } = window
-
   if (!MDTest) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
@@ -23,8 +21,8 @@ export async function runLabelInputTest() {
       name: '测试说话人',
       content: '这是一条测试消息',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker)
-    const doc = window.MDBridge!.getDocument()
+    const blockId = MDBridge!.setSpeaker(speaker)
+    const doc = MDBridge!.getDocument()
     const labelInputBlock = doc.find((block: any) => block.id === blockId)
     return {
       hasLabelInputBlock: !!labelInputBlock,
@@ -39,8 +37,8 @@ export async function runLabelInputTest() {
       name: '标签',
       content: '默认标签测试',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker)
-    const doc = window.MDBridge!.getDocument()
+    const blockId = MDBridge!.setSpeaker(speaker)
+    const doc = MDBridge!.getDocument()
     const labelInputBlock = doc.find((block: any) => block.id === blockId)
     return {
       hasDefaultLabel: labelInputBlock?.props?.label === '标签',
@@ -56,7 +54,7 @@ export async function runLabelInputTest() {
       name: '原始标签',
       content: '原始内容',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker1)
+    const blockId = MDBridge!.setSpeaker(speaker1)
 
     /** 然后更新这个块 */
     const speaker2 = {
@@ -64,9 +62,9 @@ export async function runLabelInputTest() {
       name: '更新后的标签',
       content: '更新后的内容',
     }
-    const updatedBlockId = window.MDBridge!.setSpeaker(speaker2)
+    const updatedBlockId = MDBridge!.setSpeaker(speaker2)
 
-    const updatedDoc = window.MDBridge!.getDocument()
+    const updatedDoc = MDBridge!.getDocument()
     const updatedBlock = updatedDoc.find((block: any) => block.id === updatedBlockId)
     return {
       labelUpdated: updatedBlock?.props?.label === '更新后的标签',
@@ -78,7 +76,7 @@ export async function runLabelInputTest() {
   MDTest.testCase(R, '3.1 删除 LabelInput 块', () => {
     MDTest.clearContent()
     /** 先创建段落 */
-    window.MDBridge!.setContent([
+    MDBridge!.setContent([
       { type: 'paragraph', content: '前一段' },
       { type: 'paragraph', content: '后一段' },
     ])
@@ -88,14 +86,14 @@ export async function runLabelInputTest() {
       name: '要删除的标签',
       content: '要删除的内容',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker)
+    const blockId = MDBridge!.setSpeaker(speaker)
 
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     const initialLength = doc.length
 
-    window.MDBridge!.removeBlocks([blockId])
+    MDBridge!.removeBlocks([blockId])
 
-    const finalDoc = window.MDBridge!.getDocument()
+    const finalDoc = MDBridge!.getDocument()
     const hasLabelInputAfter = finalDoc.some((block: any) => block.type === 'labelInput')
 
     return {
@@ -112,9 +110,9 @@ export async function runLabelInputTest() {
       name: '要替换的标签',
       content: '要替换的内容',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker)
+    const blockId = MDBridge!.setSpeaker(speaker)
 
-    window.MDBridge!.replaceBlocks([blockId], [
+    MDBridge!.replaceBlocks([blockId], [
       {
         type: 'paragraph',
         content: [
@@ -127,7 +125,7 @@ export async function runLabelInputTest() {
       },
     ])
 
-    const finalDoc = window.MDBridge!.getDocument()
+    const finalDoc = MDBridge!.getDocument()
     const hasParagraph = finalDoc.some((block: any) => block.type === 'paragraph')
     const hasLabelInput = finalDoc.some((block: any) => block.type === 'labelInput')
     /** 找到有内容的段落块（替换后创建的） */
@@ -148,9 +146,9 @@ export async function runLabelInputTest() {
       name: '结构验证标签',
       content: '结构验证内容',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker)
+    const blockId = MDBridge!.setSpeaker(speaker)
 
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     const labelInputBlock = doc.find((block: any) => block.id === blockId)
 
     return {
@@ -170,9 +168,9 @@ export async function runLabelInputTest() {
       content: '你好，我是张三',
     }
 
-    const blockId = window.MDBridge!.setSpeaker(speaker)
+    const blockId = MDBridge!.setSpeaker(speaker)
 
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     const labelInputBlock = doc.find((block: any) => block.id === blockId)
 
     return {
@@ -197,7 +195,7 @@ export async function runLabelInputTest() {
       name: '李四',
       content: '我是李四',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker1)
+    const blockId = MDBridge!.setSpeaker(speaker1)
 
     /** 然后更新这个块 */
     const speaker2 = {
@@ -205,9 +203,9 @@ export async function runLabelInputTest() {
       name: '王五',
       content: '我是王五，更新后的内容',
     }
-    const updatedBlockId = window.MDBridge!.setSpeaker(speaker2)
+    const updatedBlockId = MDBridge!.setSpeaker(speaker2)
 
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     const labelInputBlock = doc.find((block: any) => block.id === updatedBlockId)
 
     return {
@@ -222,9 +220,9 @@ export async function runLabelInputTest() {
   })
 
   MDTest.testCase(R, '6.3 setSpeaker 错误处理', () => {
-    const invalidResult1 = window.MDBridge!.setSpeaker(null as any)
-    const invalidResult2 = window.MDBridge!.setSpeaker({} as any)
-    const invalidResult3 = window.MDBridge!.setSpeaker({ name: '', content: 'test' } as any)
+    const invalidResult1 = MDBridge!.setSpeaker(null as any)
+    const invalidResult2 = MDBridge!.setSpeaker({} as any)
+    const invalidResult3 = MDBridge!.setSpeaker({ name: '', content: 'test' } as any)
 
     return {
       nullResult: invalidResult1,
@@ -244,9 +242,9 @@ export async function runLabelInputTest() {
       name: '空内容测试',
       content: '',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker)
+    const blockId = MDBridge!.setSpeaker(speaker)
 
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     const labelInputBlock = doc.find((block: any) => block.id === blockId)
 
     return {
@@ -261,9 +259,9 @@ export async function runLabelInputTest() {
       name: '多行内容测试',
       content: '第一行内容\n第二行内容\n第三行内容',
     }
-    const blockId = window.MDBridge!.setSpeaker(speaker)
+    const blockId = MDBridge!.setSpeaker(speaker)
 
-    const doc = window.MDBridge!.getDocument()
+    const doc = MDBridge!.getDocument()
     const labelInputBlock = doc.find((block: any) => block.id === blockId)
     const content = labelInputBlock.content?.[0]?.text
 

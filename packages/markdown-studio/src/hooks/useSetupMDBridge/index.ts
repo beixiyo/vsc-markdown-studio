@@ -4,6 +4,7 @@ import type { BlockIdManager, CallbackManager } from './types'
 import { loadTestTools } from '@/test'
 import { createMDBridge } from './bridgeFactory'
 import { createEditorChangeHandler, createMouseMoveHandler, createSelectionChangeHandler } from './eventHandlers'
+import type { MDBridge } from '@/types/MDBridge'
 
 export function useSetupMDBridge(
   editor: BlockNoteEditor<any, any, any> | null,

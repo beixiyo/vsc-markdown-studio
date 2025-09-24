@@ -88,7 +88,7 @@ export function useToc(editor: BlockNoteEditor<any, any, any> | null) {
   /** 跳转到指定块 */
   const scrollToBlock = useCallback((blockId: string) => {
     setCurrentBlockId(blockId)
-    window.MDBridge?.scrollToBlock(blockId)
+    MDBridge?.scrollToBlock(blockId)
   }, [])
 
   /** 监听编辑器内容变化 */

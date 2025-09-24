@@ -18,7 +18,7 @@ import { gradientStylesMap, type GradientStyleType } from './constans'
  * @example
  * ```ts
  * // 通过 MDBridge 应用渐变样式
- * window.MDBridge.addStyles({ gradientStyles: 'mysticPurpleBlue' })
+ * MDBridge.addStyles({ gradientStyles: 'mysticPurpleBlue' })
  * ```
  */
 export const GradientStyles = createReactStyleSpec(

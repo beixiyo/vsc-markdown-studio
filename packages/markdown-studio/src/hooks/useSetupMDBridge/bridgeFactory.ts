@@ -1,9 +1,11 @@
 import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
-import { getBlockAtPosition, getBlockFromElement, scrollToBlock } from './blockOperations'
+import { getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
 import { createCommands } from './commands'
 import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
+import type { MDBridge } from '@/types/MDBridge'
+import type { SpeakerType } from '@/types/BlocknoteExt'
 
 /**
  * 创建 MDBridge 对象
@@ -175,6 +177,14 @@ export function createMDBridge(
     // ======================
     getBlockAtPosition: (x: number, y: number) => getBlockAtPosition(editor, x, y),
     getBlockFromElement: (element: Element) => getBlockFromElement(editor, element),
+
+    /**
+     * 获取指定块的上级标题
+     * @param blockId 目标块 ID
+     * @returns 上级标题信息，包含块对象、级别、文本内容和索引
+     */
+    getParentHeading: (blockId: string) => getParentHeading(editor, blockId),
+
     onBlockHover: (callback: (block: any | null) => void) => {
       callbackManager.onBlockHoverCallbacks.add(callback)
 

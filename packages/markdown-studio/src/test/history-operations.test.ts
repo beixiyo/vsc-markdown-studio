@@ -5,8 +5,6 @@
  */
 
 export async function runHistoryOperationsTest() {
-  const { MDTest } = window
-
   if (!MDTest) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return
@@ -20,9 +18,9 @@ export async function runHistoryOperationsTest() {
 
   MDTest.testCase(R, 'undo() - 撤销操作', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([{ type: 'paragraph', content: '原始内容' }])
-    window.MDBridge!.setContent([{ type: 'paragraph', content: '修改后内容' }])
-    const canUndo = window.MDBridge!.undo()
+    MDBridge!.setContent([{ type: 'paragraph', content: '原始内容' }])
+    MDBridge!.setContent([{ type: 'paragraph', content: '修改后内容' }])
+    const canUndo = MDBridge!.undo()
     return {
       canUndo: typeof canUndo === 'boolean',
     }
@@ -30,10 +28,10 @@ export async function runHistoryOperationsTest() {
 
   MDTest.testCase(R, 'redo() - 重做操作', () => {
     MDTest.clearContent()
-    window.MDBridge!.setContent([{ type: 'paragraph', content: '原始内容' }])
-    window.MDBridge!.setContent([{ type: 'paragraph', content: '修改后内容' }])
-    window.MDBridge!.undo()
-    const canRedo = window.MDBridge!.redo()
+    MDBridge!.setContent([{ type: 'paragraph', content: '原始内容' }])
+    MDBridge!.setContent([{ type: 'paragraph', content: '修改后内容' }])
+    MDBridge!.undo()
+    const canRedo = MDBridge!.redo()
     return {
       canRedo: typeof canRedo === 'boolean',
     }

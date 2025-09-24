@@ -13,6 +13,7 @@ export { runCursorSelectionTest } from './cursor-selection.test'
 export { runDocumentTest } from './document.test'
 export { runEditorStateTest } from './editor-state.test'
 export { runEventsTest } from './events.test'
+export { runHeadingHoverTest } from './heading-hover.test'
 export { runHistoryOperationsTest } from './history-operations.test'
 export { runImgTest } from './img.test'
 export { runLabelInputTest } from './labelInput.test'
@@ -23,6 +24,7 @@ export { runStateSelectionHistoryTest } from './state-selection-history.test'
 export { runStylesTextLinksTest } from './styles-text-links.test'
 export { runTextOperationsTest } from './text-operations.test'
 
+
 export function loadTestTools() {
   function createResults(): TestResults {
     return { total: 0, passed: 0, failed: 0, errors: [] }
@@ -30,7 +32,7 @@ export function loadTestTools() {
 
   /** 清空内容的辅助函数 */
   function clearContent() {
-    window.MDBridge?.setContent([{ type: 'paragraph', content: '' }])
+    MDBridge?.setContent([{ type: 'paragraph', content: '' }])
   }
 
   function deepEqual(a: any, b: any): boolean {

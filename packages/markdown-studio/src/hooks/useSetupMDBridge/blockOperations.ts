@@ -67,3 +67,69 @@ export function getBlockFromElement(editor: BlockNoteEditor<any, any, any>, elem
     return null
   }
 }
+
+/**
+ * 获取指定块的上级标题
+ * @param editor BlockNote 编辑器实例
+ * @param blockId 目标块 ID
+ * @returns 上级标题块，如果没有找到则返回 null
+ */
+export function getParentHeading(editor: BlockNoteEditor<any, any, any>, blockId: string) {
+  try {
+    const document = editor.document
+    const currentBlockIndex = document.findIndex(block => block.id === blockId)
+
+    if (currentBlockIndex === -1) {
+      console.warn('未找到指定的块:', blockId)
+      return null
+    }
+
+    // 从当前块向前遍历，查找最近的标题块
+    for (let i = currentBlockIndex - 1; i >= 0; i--) {
+      const block = document[i]
+
+      // 检查是否为标题块 (h1, h2, h3, h4, h5, h6)
+      if (block.type === 'heading') {
+        return {
+          block,
+          level: block.props?.level || 1,
+          text: getBlockText(block),
+          index: i
+        }
+      }
+    }
+
+    return null
+  }
+  catch (error) {
+    console.warn('获取上级标题失败:', error)
+    return null
+  }
+}
+
+/**
+ * 获取块中的文本内容
+ * @param block 块对象
+ * @returns 文本内容
+ */
+function getBlockText(block: any): string {
+  try {
+    if (!block.content || !Array.isArray(block.content)) {
+      return ''
+    }
+
+    return block.content
+      .map((item: any) => {
+        if (item.type === 'text') {
+          return item.text || ''
+        }
+        return ''
+      })
+      .join('')
+      .trim()
+  }
+  catch (error) {
+    console.warn('获取块文本失败:', error)
+    return ''
+  }
+}
