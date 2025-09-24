@@ -8,7 +8,12 @@ import type { useNotify } from '../useNotify'
 /**
  * 创建 MDBridge 对象
  */
-export function createMDBridge(editor: BlockNoteEditor<any, any, any>, callbackManager: CallbackManager, blockIdManager: BlockIdManager, notifyFns: ReturnType<typeof useNotify>): MDBridge {
+export function createMDBridge(
+  editor: BlockNoteEditor<any, any, any>,
+  callbackManager: CallbackManager,
+  blockIdManager: BlockIdManager,
+  notifyFns: ReturnType<typeof useNotify>
+): MDBridge {
   return {
     // ======================
     // * Content management
@@ -95,9 +100,11 @@ export function createMDBridge(editor: BlockNoteEditor<any, any, any>, callbackM
 
       /** 如果有 blockId，则更新现有块；否则创建新块 */
       if (speaker.blockId) {
-        /** 更新现有块 */
+        /** 更新现有块 - 分别更新 props 和 content */
         editor.updateBlock(speaker.blockId, {
           props: { ...labelInputBlock.props },
+        })
+        editor.updateBlock(speaker.blockId, {
           content: labelInputBlock.content,
         })
         return speaker.blockId

@@ -18,10 +18,6 @@ export const LabelInputBlock = createReactBlockSpec(
         default: '标签',
         type: 'string',
       },
-      content: {
-        default: '在此输入对话内容...',
-        type: 'string',
-      },
       textAlignment: defaultProps.textAlignment,
       textColor: defaultProps.textColor,
     },
@@ -48,6 +44,13 @@ export const LabelInputBlock = createReactBlockSpec(
       if (labelEl && contentEl) {
         return {
           label: labelEl.textContent || '标签',
+          content: [
+            {
+              type: 'text',
+              text: contentEl.textContent || '',
+              styles: {},
+            },
+          ],
         }
       }
       return undefined
