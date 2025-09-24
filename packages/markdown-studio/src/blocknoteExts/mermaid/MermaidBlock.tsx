@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { defaultProps } from '@blocknote/core'
 import { createReactBlockSpec } from '@blocknote/react'
-import { Modal } from 'comps'
+import { Modal, Textarea } from 'comps'
 import { useTheme } from 'hooks'
 import mermaid from 'mermaid'
 import { cn } from 'utils'
@@ -182,7 +182,7 @@ export const MermaidBlock = createReactBlockSpec(
       return (<>
         <div
           className={ cn(
-            'relative rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 overflow-hidden my-4',
+            'relative rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden my-4',
           ) }
         >
           {/* Mermaid 图表容器 */ }
@@ -204,19 +204,17 @@ export const MermaidBlock = createReactBlockSpec(
           width={ 800 }
           clickOutsideClose
         >
-          <div className="mb-3">
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-              Mermaid 代码
-            </label>
-            <textarea
-              className="w-full min-h-[300px] font-mono text-sm leading-6 p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg bg-neutral-50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-50 outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 resize-none"
-              value={ draft }
-              onChange={ e => setDraft(e.target.value) }
-              onKeyDown={ e => e.stopPropagation() }
-              placeholder="graph TD&#10;  A[Start] --> B{Is it?}&#10;  B -->|Yes| C[OK]&#10;  B -->|No| D[End]"
-              spellCheck={ false }
-            />
-          </div>
+          <Textarea
+            label="Mermaid 代码"
+            value={ draft }
+            onChange={ value => setDraft(value) }
+            onKeyDown={ e => e.stopPropagation() }
+            placeholder="graph TD&#10;  A[Start] --> B{Is it?}&#10;  B -->|Yes| C[OK]&#10;  B -->|No| D[End]"
+            spellCheck={ false }
+            className="min-h-[300px] font-mono text-sm leading-6"
+            autoResize
+            size="sm"
+          />
 
           <div className="text-xs text-neutral-500 dark:text-neutral-400 space-y-1">
             <p>支持的图表类型：flowchart、sequence、gantt、class、state、er、journey、git 等</p>

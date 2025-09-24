@@ -1,3 +1,12 @@
+import {
+  BlockColorsItem,
+  DragHandleMenu,
+  type DragHandleMenuProps,
+  RemoveBlockItem,
+  useBlockNoteEditor,
+  useComponentsContext,
+} from '@blocknote/react'
+import { memo } from 'react'
 /**
  * 自定义拖拽手柄菜单组件
  * 扩展了 BlockNote 的默认拖拽菜单，添加了渐变样式选择功能
@@ -15,15 +24,6 @@
  * ```
  */
 import { gradientStylesMap, type GradientStyleType } from '@/blocknoteExts/gradientStyles/constans'
-import {
-  BlockColorsItem,
-  DragHandleMenu,
-  RemoveBlockItem,
-  useBlockNoteEditor,
-  useComponentsContext,
-  type DragHandleMenuProps,
-} from '@blocknote/react'
-import { memo } from 'react'
 
 /**
  * 渐变样式菜单项组件
@@ -43,29 +43,31 @@ const SetColorItem = memo<DragHandleMenuProps>((props) => {
    * @param gradientStyles - 要应用的渐变样式类型
    */
   const handleGradientStyleClick = (gradientStyles: GradientStyleType) => {
-    editor.addStyles({ gradientStyles: gradientStyles } as any)
+    editor.addStyles({ gradientStyles } as any)
   }
 
   return (
-    <Components.Generic.Menu.Root position={ "right" } sub={ true }>
-      <Components.Generic.Menu.Trigger sub={ true }>
+    <Components.Generic.Menu.Root position="right" sub>
+      <Components.Generic.Menu.Trigger sub>
         <Components.Generic.Menu.Item
-          className={ "bn-menu-item" }
-          subTrigger={ true }
+          className="bn-menu-item"
+          subTrigger
         >
           Gradient
         </Components.Generic.Menu.Item>
       </Components.Generic.Menu.Trigger>
 
       <Components.Generic.Menu.Dropdown
-        sub={ true }
-        className={ "bn-menu-dropdown bn-color-picker-dropdown" }
+        sub
+        className="bn-menu-dropdown bn-color-picker-dropdown"
       >
         {
           data.map(([key, value]) => (
-            <Components.Generic.Menu.Item key={ key }
-              onClick={ () => handleGradientStyleClick(key as GradientStyleType) }>
-              <div className='flex gap-2 items-center'>
+            <Components.Generic.Menu.Item
+              key={ key }
+              onClick={ () => handleGradientStyleClick(key as GradientStyleType) }
+            >
+              <div className="flex gap-2 items-center">
                 <div
                   className="size-3 rounded-full flex-shrink-0"
                   style={ { background: value.gradient } }

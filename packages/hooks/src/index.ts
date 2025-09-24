@@ -15,8 +15,6 @@ export * from './useElBounding'
 export * from './useGenRefState'
 
 export * from './useGetState'
-export * from './useNotifyParentReady'
-
 export * from './useStateWithPromise'
 export * from './useTheme'
 export * from './useWorker'

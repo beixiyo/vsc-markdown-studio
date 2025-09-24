@@ -1,9 +1,9 @@
 import type { BlockNoteEditor } from '@blocknote/core'
+import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
 import { getBlockAtPosition, getBlockFromElement, scrollToBlock } from './blockOperations'
 import { createCommands } from './commands'
 import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
-import type { useNotify } from '../useNotify'
 
 /**
  * 创建 MDBridge 对象
@@ -12,7 +12,7 @@ export function createMDBridge(
   editor: BlockNoteEditor<any, any, any>,
   callbackManager: CallbackManager,
   blockIdManager: BlockIdManager,
-  notifyFns: ReturnType<typeof useNotify>
+  notifyFns: ReturnType<typeof useNotify>,
 ): MDBridge {
   return {
     // ======================
@@ -108,7 +108,8 @@ export function createMDBridge(
           content: labelInputBlock.content,
         })
         return speaker.blockId
-      } else {
+      }
+      else {
         /** 创建新块 */
         const lastBlock = editor.document[editor.document.length - 1]
         const newBlocks = lastBlock

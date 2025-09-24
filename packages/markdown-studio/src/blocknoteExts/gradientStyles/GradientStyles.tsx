@@ -34,5 +34,5 @@ export const GradientStyles = createReactStyleSpec(
         ref={ props.contentRef }
       />
     },
-  }
+  },
 )

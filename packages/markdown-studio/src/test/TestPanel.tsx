@@ -88,7 +88,7 @@ export function TestPanel() {
         animate={ {
           rotate: isCollapsed
             ? 0
-            : 180
+            : 180,
         } }
         transition={ { duration: 0.2 } }
       >

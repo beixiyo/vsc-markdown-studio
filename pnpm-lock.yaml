@@ -51,6 +51,9 @@ importers:
       '@jl-org/js-to-style':
         specifier: ^0.0.2
         version: 0.0.2
+      '@jl-org/ts-tool':
+        specifier: ^0.0.8
+        version: 0.0.8
       '@tsconfig/node22':
         specifier: ^22.0.2
         version: 22.0.2
@@ -803,6 +806,9 @@ packages:
 
   '@jl-org/tool@3.1.1':
     resolution: {integrity: sha512-yykHhjExdlwxgBg2WBSKBh/bzNFnqgoesM0lKxkBItLrP1hoNIkKvBwQQq7BxWzLlsXBAmlmpcjnGLJEY8beqA==}
+
+  '@jl-org/ts-tool@0.0.8':
+    resolution: {integrity: sha512-2YwGmzod5LBOi7cKknRXn2H9xcp99OhokZJ55t+kg7wvPST4obcwLxO03ji0gVuFoHp5BgrkwzDICV+z1a3TDg==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -5940,6 +5946,8 @@ snapshots:
   '@jl-org/js-to-style@0.0.2': {}
 
   '@jl-org/tool@3.1.1': {}
+
+  '@jl-org/ts-tool@0.0.8': {}
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
