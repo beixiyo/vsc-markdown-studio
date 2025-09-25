@@ -30,9 +30,16 @@ export interface MDBridge {
 
   /**
    * 设置文档内容（替换所有块）
+   * @example
+   * ```ts
+   * MDBridge.setContent([
+   *   { type: 'heading', props: { level: 1 }, content: '标题 1' },
+   *   { type: 'paragraph', content: '这是一个段落' },
+   * ])
+   * ```
    * @param blocks 要设置的块数组
    */
-  setContent: (blocks: Block[]) => void
+  setContent: (blocks: PartialBlock<any, any, any>[]) => void
 
   /**
    * 获取文档的HTML格式内容

@@ -1,3 +1,5 @@
+import { TestStateHelpers } from '@/hooks/useSetupMDBridge/testHelpers'
+
 /**
  * 图片接口 自动化验收脚本
  * 覆盖图片接口：setFooterImagesWithURL、setImagesWithURL、setHeaderImagesWithURL
@@ -36,8 +38,8 @@ export async function runImgTest() {
     ]
     MDBridge.setHeaderImagesWithURL(urls)
     return {
-      headerCount: window.__MDBridgeState?.headerImageUrls?.length || 0,
-      first: window.__MDBridgeState?.headerImageUrls?.[0]?.includes('header1') || false,
+      headerCount: TestStateHelpers.getHeaderImageCount(),
+      first: TestStateHelpers.checkHeaderImageContains(0, 'header1'),
     }
   }, { headerCount: 2, first: true })
 
@@ -50,8 +52,8 @@ export async function runImgTest() {
     ]
     MDBridge.setImagesWithURL(urls)
     return {
-      count: window.__MDBridgeState?.imageUrls?.length || 0,
-      has2: (window.__MDBridgeState?.imageUrls?.[1] || '').includes('bottom2'),
+      count: TestStateHelpers.getContentImageCount(),
+      has2: TestStateHelpers.checkContentImageContains(1, 'bottom2'),
     }
   }, { count: 3, has2: true })
 
@@ -62,20 +64,20 @@ export async function runImgTest() {
     ]
     MDBridge.setFooterImagesWithURL(urls)
     return {
-      count: window.__MDBridgeState?.imageUrls?.length || 0,
-      first: window.__MDBridgeState?.imageUrls?.[0]?.includes('local1') || false,
+      count: TestStateHelpers.getContentImageCount(),
+      first: TestStateHelpers.checkContentImageContains(0, 'local1'),
     }
   }, { count: 1, first: true })
 
   MDTest.logTitle('4. 验证最终状态')
   MDTest.testCase(R, '4.1 检查文档和图片状态', () => {
     const doc = MDBridge.getDocument()
-    const state = window.__MDBridgeState
+    const testState = TestStateHelpers.getTestState()
     return {
       docLength: doc.length,
-      hasHeaderImages: (state?.headerImageUrls?.length || 0) > 0,
-      hasContentImages: (state?.imageUrls?.length || 0) > 0,
-      totalImages: (state?.headerImageUrls?.length || 0) + (state?.imageUrls?.length || 0),
+      hasHeaderImages: testState.hasHeaderImages,
+      hasContentImages: testState.hasContentImages,
+      totalImages: testState.totalCount,
     }
   })
 

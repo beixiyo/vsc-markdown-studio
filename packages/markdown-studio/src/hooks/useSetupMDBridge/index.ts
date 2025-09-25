@@ -5,6 +5,8 @@ import type { MDBridge } from '@/types/MDBridge'
 import { useEffect, useRef } from 'react'
 import { loadTestTools } from '@/test'
 import { createMDBridge } from './bridgeFactory'
+import { createStateManager } from './stateManager'
+import { getGlobalBridgeManager } from './globalBridge'
 import { createEditorChangeHandler, createMouseClickHandler, createMouseMoveHandler, createSelectionChangeHandler } from './eventHandlers'
 
 export function useSetupMDBridge(
@@ -36,21 +38,19 @@ export function useSetupMDBridge(
       onBlockClickCallbacks: new Set(),
     }
 
+    const stateManager = createStateManager()
+
     // ======================
     // * Create bridge
     // ======================
-    const bridge = createMDBridge(editor, callbackManager, blockIdManager, notifyFns)
+    const bridge = createMDBridge(editor, callbackManager, blockIdManager, notifyFns, stateManager)
     bridgeRef.current = bridge
-    window.MDBridge = bridge
 
     // ======================
-    // * Initialize state
+    // * Setup global bridge
     // ======================
-    if (!window.__MDBridgeState) {
-      window.__MDBridgeState = {}
-    }
-    window.__MDBridgeState.imageUrls ||= []
-    window.__MDBridgeState.headerImageUrls ||= []
+    const globalBridgeManager = getGlobalBridgeManager()
+    globalBridgeManager.setBridge(bridge)
 
     // ======================
     // * Setup event listeners
@@ -70,8 +70,12 @@ export function useSetupMDBridge(
     const editorOnSelectionChangeUnsubscribe = editor.onSelectionChange(handleSelectionChange)
 
     return () => {
-      // @ts-ignore
-      window.MDBridge = null
+      // ======================
+      // * Cleanup global bridge
+      // ======================
+      const globalBridgeManager = getGlobalBridgeManager()
+      globalBridgeManager.clearBridge()
+
       bridgeRef.current = null
 
       /** 清理事件监听器 */

@@ -1,5 +1,5 @@
 import type { MDBridge } from './MDBridge'
-import type { MDTest, MDBridgeState } from './MDBridgeTest'
+import type { MDTest } from './MDBridgeTest'
 import type { Webkit, Android } from './Webview'
 
 declare global {
@@ -18,7 +18,6 @@ declare global {
 
     MDBridge: MDBridge
     MDTest: MDTest
-    __MDBridgeState: MDBridgeState | null
   }
 }
 

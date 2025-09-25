@@ -1,4 +1,4 @@
-import type { Block, BlockNoteEditor } from '@blocknote/core'
+import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
 import type { SpeakerType } from '@/types/BlocknoteExt'
@@ -9,6 +9,16 @@ import { createCommands } from './commands'
 import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
 
 /**
+ * 状态管理器接口
+ */
+export interface StateManager {
+  getImageUrls: () => string[]
+  setImageUrls: (urls: string[]) => void
+  getHeaderImageUrls: () => string[]
+  setHeaderImageUrls: (urls: string[]) => void
+}
+
+/**
  * 创建 MDBridge 对象
  */
 export function createMDBridge(
@@ -16,13 +26,14 @@ export function createMDBridge(
   callbackManager: CallbackManager,
   blockIdManager: BlockIdManager,
   notifyFns: ReturnType<typeof useNotify>,
+  stateManager: StateManager,
 ): MDBridge {
   return {
     // ======================
     // * Content management
     // ======================
     getDocument: () => editor.document,
-    setContent: (blocks: Block<any, any, any>[]) => {
+    setContent: (blocks: PartialBlock<any, any, any>[]) => {
       editor.replaceBlocks(editor.document.map(block => block.id), blocks)
     },
     getHTML: () => editor.blocksToHTMLLossy(),
@@ -43,9 +54,7 @@ export function createMDBridge(
       const urls = Array.isArray(images)
         ? images
         : []
-      if (!window.__MDBridgeState)
-        window.__MDBridgeState = {}
-      window.__MDBridgeState.imageUrls = urls
+      stateManager.setImageUrls(urls)
 
       const blocks = parseImagesToBlocks(urls)
       await appendElements(editor, blocks)
@@ -54,9 +63,7 @@ export function createMDBridge(
       const urls = Array.isArray(imageUrls)
         ? imageUrls
         : []
-      if (!window.__MDBridgeState)
-        window.__MDBridgeState = {}
-      window.__MDBridgeState.imageUrls = urls
+      stateManager.setImageUrls(urls)
       const blocks = parseImagesToBlocks(urls)
       await insertAtBottom(editor, blocks, blockIdManager)
     },
@@ -64,9 +71,7 @@ export function createMDBridge(
       const urls = Array.isArray(imageUrls)
         ? imageUrls
         : []
-      if (!window.__MDBridgeState)
-        window.__MDBridgeState = {}
-      window.__MDBridgeState.headerImageUrls = urls
+      stateManager.setHeaderImageUrls(urls)
       const blocks = parseImagesToBlocks(urls)
       await insertAtTop(editor, blocks, blockIdManager)
     },
