@@ -1,4 +1,4 @@
-import type { BlockNoteEditor, PartialBlock } from '@blocknote/core'
+import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
 import type { DocumentSection, ParentHeadingInfo, SpeakerType } from './BlocknoteExt'
 
 /**
@@ -26,13 +26,13 @@ export interface MDBridge {
    * 获取文档的所有顶层块
    * @returns 文档块数组
    */
-  getDocument: () => any[]
+  getDocument: () => Block<any, any, any>[]
 
   /**
    * 设置文档内容（替换所有块）
    * @param blocks 要设置的块数组
    */
-  setContent: (blocks: any[]) => void
+  setContent: (blocks: Block[]) => void
 
   /**
    * 获取文档的HTML格式内容
@@ -98,7 +98,7 @@ export interface MDBridge {
    * @param placement 插入位置，'before'或'after'
    * @returns 插入的块数组
    */
-  insertBlocks: (blocks: any[], referenceBlockId: string, placement?: 'before' | 'after') => any[]
+  insertBlocks: (blocks: Block[], referenceBlockId: string, placement?: 'before' | 'after') => Block<any, any, any>[]
 
   /**
    * 更新指定块的内容
@@ -106,14 +106,14 @@ export interface MDBridge {
    * @param update 更新的块数据
    * @returns 更新后的块
    */
-  updateBlock: (blockId: string, update: any) => any
+  updateBlock: (blockId: string, update: Partial<Block>) => Block<any, any, any>
 
   /**
    * 删除指定的块
    * @param blockIds 要删除的块ID数组
    * @returns 删除的块数组
    */
-  removeBlocks: (blockIds: string[]) => any[]
+  removeBlocks: (blockIds: string[]) => Block<any, any, any>[]
 
   /**
    * 替换指定块为新块
@@ -121,7 +121,7 @@ export interface MDBridge {
    * @param blocksToInsert 要插入的新块数组
    * @returns 包含插入和删除块的结果对象
    */
-  replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: any[]) => { insertedBlocks: any[], removedBlocks: any[] }
+  replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: Block[]) => void
 
   /**
    * 跳转到指定块
@@ -138,6 +138,20 @@ export interface MDBridge {
    * @returns 选中的文本字符串
    */
   getSelectedText: () => string
+
+  /**
+   * 提取块中的纯文本内容
+   * @param block 块对象
+   * @returns 提取的文本内容
+   *
+   * @example
+   * ```ts
+   * const block = MDBridge.getDocument()[0]
+   * const text = MDBridge.extractBlockText(block)
+   * console.log(text) // "这是块中的文本内容"
+   * ```
+   */
+  extractBlockText: (block: Block) => string
 
   /**
    * 在当前光标位置插入文本
@@ -185,7 +199,7 @@ export interface MDBridge {
    *   - `'snowyGlacier'`: 雪山冰川
    *   - `'tropicalSummer'`: 热带夏日
    */
-  addStyles: (styles: any) => void
+  addStyles: (styles: Record<string, any>) => void
 
   /**
    * 移除选中内容的样式
@@ -199,7 +213,7 @@ export interface MDBridge {
    * ```
    * @param styles 要移除的样式对象，属性与 addStyles 相同
    */
-  removeStyles: (styles: any) => void
+  removeStyles: (styles: Record<string, any>) => void
 
   /**
    * 切换选中内容的样式
@@ -210,7 +224,7 @@ export interface MDBridge {
    * ```
    * @param styles 要切换的样式对象，属性与 addStyles 相同
    */
-  toggleStyles: (styles: any) => void
+  toggleStyles: (styles: Record<string, any>) => void
 
   /**
    * 获取当前激活的样式
@@ -222,7 +236,7 @@ export interface MDBridge {
    * ```
    * @returns 当前样式对象，包含所有激活的样式属性
    */
-  getActiveStyles: () => any
+  getActiveStyles: () => Record<string, any>
 
   // ======================
   // * Links
@@ -249,7 +263,7 @@ export interface MDBridge {
    * 获取当前文本光标位置
    * @returns 光标位置信息
    */
-  getTextCursorPosition: () => any
+  getTextCursorPosition: () => ReturnType<BlockNoteEditor['getTextCursorPosition']>
 
   /**
    * 设置文本光标位置
@@ -262,7 +276,7 @@ export interface MDBridge {
    * 获取当前选择范围
    * @returns 选择范围信息
    */
-  getSelection: () => any
+  getSelection: () => ReturnType<BlockNoteEditor['getSelection']>
 
   /**
    * 设置选择范围
@@ -277,14 +291,14 @@ export interface MDBridge {
    * @param y 鼠标Y坐标
    * @returns 鼠标位置对应的块信息，如果没有找到则返回null
    */
-  getBlockAtPosition: (x: number, y: number) => any | null
+  getBlockAtPosition: (x: number, y: number) => Block | null
 
   /**
    * 根据DOM元素获取对应的块
    * @param element DOM元素
    * @returns 对应的块信息，如果没有找到则返回null
    */
-  getBlockFromElement: (element: Element) => any | null
+  getBlockFromElement: (element: Element) => Block | null
 
   /**
    * 获取指定块的上级标题
@@ -303,11 +317,12 @@ export interface MDBridge {
 
   /**
    * 根据块和最后一个块，将块分组，如果块是标题，则将块分组
-   * @param blocks 所有块
+   * @param editor 编辑器实例
+   * @param blockId 块ID
    * @returns 分组后的块数组
    */
   groupBlockByHeading: (
-    editor: BlockNoteEditor<any, any, any>,
+    editor: BlockNoteEditor,
     blockId: string
   ) => DocumentSection
 
@@ -316,7 +331,14 @@ export interface MDBridge {
    * @param callback 悬浮回调函数，参数为块信息
    * @returns 取消监听的函数
    */
-  onBlockHover: (callback: (block: any | null) => void) => () => void
+  onBlockHover: (callback: (block: Block | null) => void) => () => void
+
+  /**
+   * 添加鼠标点击监听器
+   * @param callback 点击回调函数，参数为块信息
+   * @returns 取消监听的函数
+   */
+  onBlockClick: (callback: (block: Block | null) => void) => () => void
 
   // ======================
   // * Editor state
@@ -440,12 +462,12 @@ export interface MDBridge {
    * @param callback 变化时的回调函数
    * @returns 取消监听的函数，如果失败返回undefined
    */
-  onChange: (callback: (editor: any) => void) => (() => void) | undefined
+  onChange: (callback: (editor: BlockNoteEditor) => void) => (() => void) | undefined
 
   /**
    * 监听编辑器选择变化
    * @param callback 选择变化时的回调函数
    * @returns 取消监听的函数，如果失败返回undefined
    */
-  onSelectionChange: (callback: (editor: any) => void) => (() => void) | undefined
+  onSelectionChange: (callback: (editor: BlockNoteEditor) => void) => (() => void) | undefined
 }

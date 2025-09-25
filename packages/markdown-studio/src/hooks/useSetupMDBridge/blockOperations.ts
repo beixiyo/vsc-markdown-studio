@@ -1,4 +1,4 @@
-import type { BlockNoteEditor } from '@blocknote/core'
+import type { Block, BlockNoteEditor } from '@blocknote/core'
 
 /**
  * 滚动到指定块
@@ -92,7 +92,7 @@ export function getParentHeading(editor: BlockNoteEditor, blockId: string) {
         return {
           block,
           level: block.props?.level || 1,
-          text: getBlockText(block),
+          text: extractBlockText(block),
           index: i,
         }
       }
@@ -111,15 +111,21 @@ export function getParentHeading(editor: BlockNoteEditor, blockId: string) {
  * @param block 块对象
  * @returns 文本内容
  */
-function getBlockText(block: any): string {
+export function extractBlockText(block: Block): string {
   try {
+    /** 检查 block 是否存在 */
+    if (!block || typeof block !== 'object') {
+      return ''
+    }
+
+    /** 检查 content 属性是否存在且为数组 */
     if (!block.content || !Array.isArray(block.content)) {
       return ''
     }
 
     return block.content
       .map((item: any) => {
-        if (item.type === 'text') {
+        if (item && item.type === 'text') {
           return item.text || ''
         }
         return ''
@@ -128,7 +134,7 @@ function getBlockText(block: any): string {
       .trim()
   }
   catch (error) {
-    console.warn('获取块文本失败:', error)
+    console.warn('提取块文本失败:', error)
     return ''
   }
 }

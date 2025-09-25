@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import {
+  runBlockClickTest,
   runBlockDetectionTest,
   runBlocksTest,
   runCommandsTest,
@@ -31,6 +32,7 @@ interface TestItem {
 }
 
 const testItems: TestItem[] = [
+  { label: '块点击', testFn: runBlockClickTest, description: '测试 onBlockClick 点击监听功能' },
   { label: '块操作', testFn: runBlocksTest, description: '测试插入、更新、删除、替换块操作' },
   { label: '块检测', testFn: runBlockDetectionTest, description: '测试鼠标悬浮、位置检测等新功能' },
   { label: '命令集合', testFn: runCommandsTest, description: '测试标题、段落、列表、样式等命令' },
@@ -48,7 +50,7 @@ const testItems: TestItem[] = [
   { label: '嵌套移动', testFn: runNestingMoveTest, description: '测试块的嵌套和上下移动操作' },
   { label: '状态选区', testFn: runStateSelectionHistoryTest, description: '测试编辑器状态、选区和历史操作' },
   { label: '样式链接', testFn: runStylesTextLinksTest, description: '测试文本样式和链接操作' },
-  { label: '文本操作', testFn: runTextOperationsTest, description: '测试获取选中文本、插入文本' },
+  { label: '文本操作', testFn: runTextOperationsTest, description: '测试获取选中文本、插入文本、提取块文本' },
 ]
 
 export function TestPanel() {

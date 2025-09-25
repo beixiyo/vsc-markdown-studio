@@ -8,14 +8,14 @@ import { useResizeObserver, useTheme } from 'hooks'
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { cn } from 'utils'
+import { schema } from './blocknoteExts/schema'
 import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
 import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
-import { TestPanel } from './test/TestPanel'
 
+import { TestPanel } from './test/TestPanel'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
-import { schema } from './blocknoteExts/schema'
 
 export default function App() {
   useTheme()

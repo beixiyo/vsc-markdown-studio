@@ -51,7 +51,7 @@ export async function runHeadingHoverTest() {
   }, true)
 
   /** 测试 : 创建测试内容并测试标题获取 */
-  MDTest.asyncTestCase(R, '标题获取功能测试', async () => {
+  await MDTest.asyncTestCase(R, '标题获取功能测试', async () => {
     if (!MDBridge)
       return false
 
@@ -115,7 +115,7 @@ export async function runHeadingHoverTest() {
   }, true)
 
   /** 测试 : 测试标题块的上级标题（应该返回 null） */
-  MDTest.asyncTestCase(R, '标题块上级标题测试', async () => {
+  await MDTest.asyncTestCase(R, '标题块上级标题测试', async () => {
     if (!MDBridge)
       return false
 

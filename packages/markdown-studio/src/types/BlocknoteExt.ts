@@ -17,7 +17,7 @@ export interface SpeakerType {
  */
 export interface ParentHeadingInfo {
   /** 标题块对象 */
-  block: any
+  block: Block
   /** 标题级别 (1-6) */
   level: number
   /** 标题文本内容 */
@@ -33,17 +33,17 @@ export interface DocumentSection {
   /**
    * 该区域的标题块，如果文档开头不是标题，则为 null
    */
-  heading: Block<any, any, any> | null
+  heading: Block | null
   /**
    * 属于该区域的所有内容块
    */
-  blocks: Block<any, any, any>[]
+  blocks: Block[]
   /**
    * 该区域的起始块
    */
-  startBlock: Block<any, any, any> | null
+  startBlock: Block | null
   /**
    * 该区域的结束块
    */
-  endBlock: Block<any, any, any> | null
+  endBlock: Block | null
 }

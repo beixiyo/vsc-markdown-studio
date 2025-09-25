@@ -71,6 +71,87 @@ export async function runTextOperationsTest() {
     return { success: hasText }
   }, { success: true })
 
+  MDTest.testCase(R, 'extractBlockText() - 提取块文本', () => {
+    MDTest.clearContent()
+    /** 创建包含文本内容的块 */
+    MDBridge.setContent([
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: '这是第一段文本' },
+          { type: 'text', text: '，包含多个文本节点' },
+        ],
+      },
+      {
+        type: 'heading',
+        content: [{ type: 'text', text: '这是一个标题' }],
+      },
+      {
+        type: 'paragraph',
+        content: [], // 空内容块
+      },
+    ])
+
+    const doc = MDBridge.getDocument()
+    console.log('🔍 调试信息:')
+    console.log('- 文档内容:', doc)
+
+    /** 测试提取第一个块的文本 */
+    const firstBlockText = MDBridge.extractBlockText(doc[0])
+    console.log('- 第一个块文本:', firstBlockText)
+
+    /** 测试提取标题块的文本 */
+    const headingText = MDBridge.extractBlockText(doc[1])
+    console.log('- 标题块文本:', headingText)
+
+    /** 测试提取空块的文本 */
+    const emptyBlockText = MDBridge.extractBlockText(doc[2])
+    console.log('- 空块文本:', emptyBlockText)
+
+    /** 测试提取不存在的块 */
+    const invalidBlockText = MDBridge.extractBlockText(null)
+    console.log('- 无效块文本 (null):', invalidBlockText)
+
+    /** 测试提取 undefined 块 */
+    const undefinedBlockText = MDBridge.extractBlockText(undefined)
+    console.log('- 无效块文本 (undefined):', undefinedBlockText)
+
+    /** 测试提取非对象块 */
+    const stringBlockText = MDBridge.extractBlockText('invalid')
+    console.log('- 无效块文本 (string):', stringBlockText)
+
+    /** 测试提取没有 content 属性的块 */
+    const noContentBlockText = MDBridge.extractBlockText({ type: 'paragraph' })
+    console.log('- 无 content 属性块文本:', noContentBlockText)
+
+    /** 测试提取 content 不是数组的块 */
+    const invalidContentBlockText = MDBridge.extractBlockText({ content: 'not an array' })
+    console.log('- content 非数组块文本:', invalidContentBlockText)
+
+    return {
+      firstBlockCorrect: firstBlockText === '这是第一段文本，包含多个文本节点',
+      headingCorrect: headingText === '这是一个标题',
+      emptyBlockCorrect: emptyBlockText === '',
+      invalidBlockCorrect: invalidBlockText === '' && undefinedBlockText === '' && stringBlockText === '',
+      noContentCorrect: noContentBlockText === '' && invalidContentBlockText === '',
+      allCorrect: firstBlockText === '这是第一段文本，包含多个文本节点'
+        && headingText === '这是一个标题'
+        && emptyBlockText === ''
+        && invalidBlockText === ''
+        && undefinedBlockText === ''
+        && stringBlockText === ''
+        && noContentBlockText === ''
+        && invalidContentBlockText === '',
+    }
+  }, {
+    firstBlockCorrect: true,
+    headingCorrect: true,
+    emptyBlockCorrect: true,
+    invalidBlockCorrect: true,
+    noContentCorrect: true,
+    allCorrect: true,
+  })
+
   MDTest.finalizeTest(R)
 }
 

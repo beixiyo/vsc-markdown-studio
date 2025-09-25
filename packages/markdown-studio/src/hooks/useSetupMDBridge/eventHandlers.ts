@@ -33,10 +33,31 @@ export function createMouseMoveHandler(editor: BlockNoteEditor, callbackManager:
 }
 
 /**
+ * 创建鼠标点击事件处理器
+ */
+export function createMouseClickHandler(editor: BlockNoteEditor, callbackManager: CallbackManager) {
+  const handleMouseClick = (event: MouseEvent) => {
+    const blockElement = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-id]')
+
+    if (blockElement) {
+      const blockId = blockElement.getAttribute('data-id')
+      const block = editor.document.find(block => block.id === blockId) || null
+      callbackManager.onBlockClickCallbacks.forEach(callback => callback(block))
+    }
+    else {
+      /** 点击在编辑器区域外 */
+      callbackManager.onBlockClickCallbacks.forEach(callback => callback(null))
+    }
+  }
+
+  return handleMouseClick
+}
+
+/**
  * 创建编辑器变更事件处理器
  */
 export function createEditorChangeHandler(callbackManager: CallbackManager, notifyFns: ReturnType<typeof useNotify>) {
-  return (editor: any) => {
+  return (editor: BlockNoteEditor) => {
     notifyFns.notifyContentChanged()
     notifyFns.notifyBlockTypeChanged()
     callbackManager.onChangeCallbacks.forEach(callback => callback(editor))
@@ -47,7 +68,7 @@ export function createEditorChangeHandler(callbackManager: CallbackManager, noti
  * 创建选择变更事件处理器
  */
 export function createSelectionChangeHandler(callbackManager: CallbackManager) {
-  return (editor: any) => {
+  return (editor: BlockNoteEditor) => {
     callbackManager.onSelectionChangeCallbacks.forEach(callback => callback(editor))
   }
 }

@@ -69,6 +69,7 @@ export default antfu({
   regexp: false,
   unocss: false,
   typescript: true,
+  markdown: false,
 
   /**
    * eslint-config 只对 Vue 和 TypeScript 有天然的支持

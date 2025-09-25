@@ -27,7 +27,6 @@ const InnerTextarea = forwardRef<HTMLTextAreaElement, TextareaProps>((props, ref
     focusedClassName,
     containerClassName,
     size = 'md',
-    enableRichPaste = false,
 
     onChange,
     onFocus,

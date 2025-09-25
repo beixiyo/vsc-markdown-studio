@@ -2,12 +2,13 @@ import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
 import type { MDBridge } from '@/types/MDBridge'
+import { useEffect, useRef } from 'react'
 import { loadTestTools } from '@/test'
 import { createMDBridge } from './bridgeFactory'
-import { createEditorChangeHandler, createMouseMoveHandler, createSelectionChangeHandler } from './eventHandlers'
+import { createEditorChangeHandler, createMouseClickHandler, createMouseMoveHandler, createSelectionChangeHandler } from './eventHandlers'
 
 export function useSetupMDBridge(
-  editor: BlockNoteEditor<any, any, any> | null,
+  editor: BlockNoteEditor | null,
   notifyFns: ReturnType<typeof useNotify>,
 ) {
   const bridgeRef = useRef<MDBridge | null>(null)
@@ -32,6 +33,7 @@ export function useSetupMDBridge(
       onChangeCallbacks: new Set(),
       onSelectionChangeCallbacks: new Set(),
       onBlockHoverCallbacks: new Set(),
+      onBlockClickCallbacks: new Set(),
     }
 
     // ======================
@@ -54,11 +56,14 @@ export function useSetupMDBridge(
     // * Setup event listeners
     // ======================
     const handleMouseMove = createMouseMoveHandler(editor, callbackManager)
+    const handleMouseClick = createMouseClickHandler(editor, callbackManager)
     const handleEditorChange = createEditorChangeHandler(callbackManager, notifyFns)
     const handleSelectionChange = createSelectionChangeHandler(callbackManager)
 
     /** 添加鼠标移动监听器 */
     document.addEventListener('mousemove', handleMouseMove)
+    /** 添加鼠标点击监听器 */
+    document.addEventListener('click', handleMouseClick)
 
     /** 设置编辑器事件监听器 */
     const editorOnChangeUnsubscribe = editor.onChange(handleEditorChange)
@@ -71,6 +76,7 @@ export function useSetupMDBridge(
 
       /** 清理事件监听器 */
       document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('click', handleMouseClick)
       editorOnChangeUnsubscribe?.()
       editorOnSelectionChangeUnsubscribe?.()
 
@@ -78,6 +84,7 @@ export function useSetupMDBridge(
       callbackManager.onChangeCallbacks.clear()
       callbackManager.onSelectionChangeCallbacks.clear()
       callbackManager.onBlockHoverCallbacks.clear()
+      callbackManager.onBlockClickCallbacks.clear()
     }
   }, [editor])
 

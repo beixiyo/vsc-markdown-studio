@@ -5,6 +5,7 @@
  * - 兼容同步/异步用例
  */
 
+export { runBlockClickTest } from './block-click.test'
 export { runBlockDetectionTest } from './block-detection.test'
 export { runBlocksTest } from './blocks.test'
 export { runCommandsTest } from './commands.test'
@@ -130,7 +131,7 @@ export function loadTestTools() {
     console.log('='.repeat(50))
     console.log(`总测试数: ${results.total}`)
 
-    if (results.failed > 0) {
+    if (results.failed > 0 || results.passed !== results.total) {
       console.log(`✅ 通过: ${results.passed}`)
       console.log(`❌ 失败: ${results.failed}`)
       console.log(`📈 通过率: ${results.total

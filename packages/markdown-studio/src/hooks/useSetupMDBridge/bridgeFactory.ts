@@ -1,9 +1,9 @@
-import type { BlockNoteEditor } from '@blocknote/core'
+import type { Block, BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
 import type { SpeakerType } from '@/types/BlocknoteExt'
 import type { MDBridge } from '@/types/MDBridge'
-import { getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
+import { extractBlockText, getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
 import { groupBlockByHeading } from './blockSections'
 import { createCommands } from './commands'
 import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
@@ -22,7 +22,7 @@ export function createMDBridge(
     // * Content management
     // ======================
     getDocument: () => editor.document,
-    setContent: (blocks: any[]) => {
+    setContent: (blocks: Block<any, any, any>[]) => {
       editor.replaceBlocks(editor.document.map(block => block.id), blocks)
     },
     getHTML: () => editor.blocksToHTMLLossy(),
@@ -125,16 +125,16 @@ export function createMDBridge(
     // ======================
     // * Block operations
     // ======================
-    insertBlocks: (blocks: any[], referenceBlockId: string, placement: 'before' | 'after' = 'after') => {
+    insertBlocks: (blocks: Block[], referenceBlockId: string, placement: 'before' | 'after' = 'after') => {
       return editor.insertBlocks(blocks, referenceBlockId, placement)
     },
-    updateBlock: (blockId: string, update: any) => {
+    updateBlock: (blockId: string, update: Partial<Block>) => {
       return editor.updateBlock(blockId, update)
     },
     removeBlocks: (blockIds: string[]) => {
       return editor.removeBlocks(blockIds)
     },
-    replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: any[]) => {
+    replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: Block[]) => {
       return editor.replaceBlocks(blockIdsToRemove, blocksToInsert)
     },
     scrollToBlock: (blockId: string) => scrollToBlock(editor, blockId),
@@ -146,13 +146,14 @@ export function createMDBridge(
     insertText: (text: string) => {
       editor.insertInlineContent(text)
     },
+    extractBlockText,
 
     // ======================
     // * Formatting
     // ======================
-    addStyles: (styles: any) => editor.addStyles(styles),
-    removeStyles: (styles: any) => editor.removeStyles(styles),
-    toggleStyles: (styles: any) => editor.toggleStyles(styles),
+    addStyles: (styles: Record<string, any>) => editor.addStyles(styles),
+    removeStyles: (styles: Record<string, any>) => editor.removeStyles(styles),
+    toggleStyles: (styles: Record<string, any>) => editor.toggleStyles(styles),
     getActiveStyles: () => editor.getActiveStyles(),
 
     // ======================
@@ -188,12 +189,21 @@ export function createMDBridge(
 
     groupBlockByHeading: (editor, blockId) => groupBlockByHeading(editor, blockId),
 
-    onBlockHover: (callback: (block: any | null) => void) => {
+    onBlockHover: (callback: (block: Block | null) => void) => {
       callbackManager.onBlockHoverCallbacks.add(callback)
 
       /** 返回取消监听的函数 */
       return () => {
         callbackManager.onBlockHoverCallbacks.delete(callback)
+      }
+    },
+
+    onBlockClick: (callback: (block: Block | null) => void) => {
+      callbackManager.onBlockClickCallbacks.add(callback)
+
+      /** 返回取消监听的函数 */
+      return () => {
+        callbackManager.onBlockClickCallbacks.delete(callback)
       }
     },
 
@@ -235,7 +245,7 @@ export function createMDBridge(
     // ======================
     // * Event callbacks
     // ======================
-    onChange: (callback: (editor: any) => void) => {
+    onChange: (callback: (editor: BlockNoteEditor<any, any, any>) => void) => {
       callbackManager.onChangeCallbacks.add(callback)
 
       /** 返回取消监听的函数 */
@@ -243,7 +253,7 @@ export function createMDBridge(
         callbackManager.onChangeCallbacks.delete(callback)
       }
     },
-    onSelectionChange: (callback: (editor: any) => void) => {
+    onSelectionChange: (callback: (editor: BlockNoteEditor<any, any, any>) => void) => {
       callbackManager.onSelectionChangeCallbacks.add(callback)
 
       /** 返回取消监听的函数 */
