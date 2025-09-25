@@ -4,12 +4,12 @@ import {
   MermaidCopyButton,
   MermaidDeleteButton,
   MermaidEditButton,
-} from '@/blocknoteExts/blocks/mermaid/MermaidToolbarBtns'
+} from '@/blocknoteExts/blocks/mermaid'
 
 /**
  * 自定义 FormattingToolbar，包含 Mermaid 专用按钮
  */
-export const CustomFormatToolbar = memo(() => {
+export const FormatToolbar = memo(() => {
   return (
     <FormattingToolbar>
       {/* 默认的工具栏按钮 */ }
@@ -23,4 +23,4 @@ export const CustomFormatToolbar = memo(() => {
   )
 })
 
-CustomFormatToolbar.displayName = 'CustomFormattingToolbar'
+FormatToolbar.displayName = 'FormattingToolbar'

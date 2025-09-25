@@ -1,4 +1,5 @@
 import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
+import { GlobalBridgeManager } from './useSetupMDBridge/GlobalBridgeManager'
 
 /**
  * 悬浮块监听
@@ -30,10 +31,12 @@ export function useHoverSection(
 
         lastHeading.current = data.heading
 
-        callback?.(MDBridge.getMarkdown([
+        const markdown = MDBridge.getMarkdown([
           data.heading as PartialBlock<any, any, any>,
           ...data.blocks,
-        ]))
+        ])
+        GlobalBridgeManager.getInstance().setGlobalState(data, markdown)
+        callback?.(markdown)
       })
     },
     [],

@@ -1,10 +1,6 @@
 import {
-  BlockColorsItem,
-  DragHandleMenu,
-  type DragHandleMenuProps,
-  RemoveBlockItem,
-  useBlockNoteEditor,
-  useComponentsContext,
+  type DragHandleMenuProps, useBlockNoteEditor,
+  useComponentsContext
 } from '@blocknote/react'
 import { memo } from 'react'
 /**
@@ -31,7 +27,7 @@ import { gradientStylesMap, type GradientStyleType } from '@/blocknoteExts/style
  *
  * @param props - DragHandleMenuProps 拖拽菜单属性
  */
-const SetColorItem = memo<DragHandleMenuProps>((props) => {
+export const SetColorItem = memo<DragHandleMenuProps>(() => {
   const editor = useBlockNoteEditor()
   const Components = useComponentsContext()!
   const data = Object.entries(gradientStylesMap)
@@ -40,10 +36,10 @@ const SetColorItem = memo<DragHandleMenuProps>((props) => {
    * 处理渐变样式点击事件
    * 将选中的渐变样式应用到当前文本选区
    *
-   * @param gradientStyles - 要应用的渐变样式类型
+   * @param gradient - 要应用的渐变样式类型
    */
-  const handleGradientStyleClick = (gradientStyles: GradientStyleType) => {
-    editor.addStyles({ gradientStyles } as any)
+  const handleGradientStyleClick = (gradient: GradientStyleType) => {
+    editor.addStyles({ gradient } as any)
   }
 
   return (
@@ -79,22 +75,5 @@ const SetColorItem = memo<DragHandleMenuProps>((props) => {
         }
       </Components.Generic.Menu.Dropdown>
     </Components.Generic.Menu.Root>
-  )
-})
-
-/**
- * 自定义拖拽手柄菜单主组件
- * 组合了删除、颜色和渐变样式功能
- *
- * @param props - DragHandleMenuProps 拖拽菜单属性
- * @returns 包含所有菜单项的拖拽菜单组件
- */
-export const CustomDragHandleMenu = memo((props: DragHandleMenuProps) => {
-  return (
-    <DragHandleMenu { ...props }>
-      <RemoveBlockItem { ...props }>Delete</RemoveBlockItem>
-      <BlockColorsItem { ...props }>Colors</BlockColorsItem>
-      <SetColorItem { ...props } />
-    </DragHandleMenu>
   )
 })

@@ -22,12 +22,12 @@ import { gradientStylesMap, type GradientStyleType } from './constans'
  * @example
  * ```ts
  * // 通过 MDBridge 应用渐变样式
- * MDBridge.addStyles({ gradientStyles: 'mysticPurpleBlue' })
+ * MDBridge.addStyles({ gradient: 'mysticPurpleBlue' })
  * ```
  */
 export const GradientStyles = createReactStyleSpec(
   {
-    type: 'gradientStyles',
+    type: 'gradient',
     propSchema: 'string',
   },
   {

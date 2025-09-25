@@ -23,6 +23,7 @@ import {
   runStateSelectionHistoryTest,
   runStylesTextLinksTest,
   runTextOperationsTest,
+  runUIShowcaseTest,
 } from './index'
 
 interface TestItem {
@@ -51,6 +52,7 @@ const testItems: TestItem[] = [
   { label: '状态选区', testFn: runStateSelectionHistoryTest, description: '测试编辑器状态、选区和历史操作' },
   { label: '样式链接', testFn: runStylesTextLinksTest, description: '测试文本样式和链接操作' },
   { label: '文本操作', testFn: runTextOperationsTest, description: '测试获取选中文本、插入文本、提取块文本' },
+  { label: 'UI 展示', testFn: runUIShowcaseTest, description: '展示所有自定义组件和样式，包括渐变、Mermaid、LabelInput 等' },
 ]
 
 export function TestPanel() {

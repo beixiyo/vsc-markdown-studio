@@ -29,21 +29,21 @@ export interface ParentHeadingInfo {
 /**
  * 文档区域的结构定义
  */
-export interface DocumentSection {
+export interface DocSection {
   /**
    * 该区域的标题块，如果文档开头不是标题，则为 null
    */
-  heading: Block | null
+  heading: Block<any, any, any> | null
   /**
    * 属于该区域的所有内容块
    */
-  blocks: Block[]
+  blocks: Block<any, any, any>[]
   /**
    * 该区域的起始块
    */
-  startBlock: Block | null
+  startBlock: Block<any, any, any> | null
   /**
    * 该区域的结束块
    */
-  endBlock: Block | null
+  endBlock: Block<any, any, any> | null
 }

@@ -6,8 +6,7 @@ import { useEffect, useRef } from 'react'
 import { loadTestTools } from '@/test'
 import { createMDBridge } from './bridgeFactory'
 import { createEditorChangeHandler, createMouseClickHandler, createMouseMoveHandler, createSelectionChangeHandler } from './eventHandlers'
-import { getGlobalBridgeManager } from './globalBridge'
-import { createStateManager } from './stateManager'
+import { GlobalBridgeManager } from './GlobalBridgeManager'
 
 export function useSetupMDBridge(
   editor: BlockNoteEditor<any, any, any> | null,
@@ -38,18 +37,16 @@ export function useSetupMDBridge(
       onBlockClickCallbacks: new Set(),
     }
 
-    const stateManager = createStateManager()
-
     // ======================
     // * Create bridge
     // ======================
-    const bridge = createMDBridge(editor, callbackManager, blockIdManager, notifyFns, stateManager)
+    const bridge = createMDBridge(editor, callbackManager, blockIdManager, notifyFns)
     bridgeRef.current = bridge
 
     // ======================
     // * Setup global bridge
     // ======================
-    const globalBridgeManager = getGlobalBridgeManager()
+    const globalBridgeManager = GlobalBridgeManager.getInstance()
     globalBridgeManager.setBridge(bridge)
 
     // ======================
@@ -73,7 +70,7 @@ export function useSetupMDBridge(
       // ======================
       // * Cleanup global bridge
       // ======================
-      const globalBridgeManager = getGlobalBridgeManager()
+      const globalBridgeManager = GlobalBridgeManager.getInstance()
       globalBridgeManager.clearBridge()
 
       bridgeRef.current = null

@@ -1,11 +1,11 @@
-import { getGlobalStateManager } from './globalStateManager'
+import { GlobalStateManager } from './GlobalStateManager'
 
 /**
  * 测试辅助工具
  * 提供测试时访问状态的便捷方法，避免直接访问全局变量
  */
 export class TestStateHelpers {
-  private static globalStateManager = getGlobalStateManager()
+  private static globalStateManager = GlobalStateManager.getInstance()
 
   /**
    * 获取头部图片数量

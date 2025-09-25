@@ -92,7 +92,7 @@ export function getParentHeading(editor: BlockNoteEditor, blockId: string) {
         return {
           block,
           level: block.props?.level || 1,
-          text: extractBlockText(block),
+          text: extractBlockText([block]),
           index: i,
         }
       }
@@ -111,19 +111,14 @@ export function getParentHeading(editor: BlockNoteEditor, blockId: string) {
  * @param block 块对象
  * @returns 文本内容
  */
-export function extractBlockText(block: Block): string {
+export function extractBlockText(blocks: Block[]): string {
   try {
-    /** 检查 block 是否存在 */
-    if (!block || typeof block !== 'object') {
+    if (!Array.isArray(blocks)) {
       return ''
     }
 
-    /** 检查 content 属性是否存在且为数组 */
-    if (!block.content || !Array.isArray(block.content)) {
-      return ''
-    }
-
-    return block.content
+    const getOne = (block: Block) => (block.content || [{ type: 'text', text: '' }])
+      // @ts-ignore
       .map((item: any) => {
         if (item && item.type === 'text') {
           return item.text || ''
@@ -132,6 +127,8 @@ export function extractBlockText(block: Block): string {
       })
       .join('')
       .trim()
+
+    return blocks.map(getOne).join('\n')
   }
   catch (error) {
     console.warn('提取块文本失败:', error)

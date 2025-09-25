@@ -1,4 +1,4 @@
-import { TestStateHelpers } from '@/hooks/useSetupMDBridge/testHelpers'
+import { TestStateHelpers } from '@/hooks/useSetupMDBridge/TestStateHelpers'
 
 /**
  * 图片接口 自动化验收脚本

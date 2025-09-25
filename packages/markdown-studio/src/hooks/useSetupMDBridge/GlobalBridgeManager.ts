@@ -1,3 +1,4 @@
+import type { DocSection } from '@/types/BlocknoteExt'
 import type { MDBridge } from '@/types/MDBridge'
 
 /**
@@ -15,6 +16,15 @@ export class GlobalBridgeManager {
       GlobalBridgeManager.instance = new GlobalBridgeManager()
     }
     return GlobalBridgeManager.instance
+  }
+
+  setGlobalState(lastGroupBlock: DocSection, lastGroupMarkdown: string) {
+    if (!this.bridge) {
+      return
+    }
+
+    this.bridge.state.lastGroupBlock = lastGroupBlock
+    this.bridge.state.lastGroupMarkdown = lastGroupMarkdown
   }
 
   /**
@@ -44,11 +54,4 @@ export class GlobalBridgeManager {
       window.MDBridge = null as any
     }
   }
-}
-
-/**
- * 获取全局桥接器实例
- */
-export function getGlobalBridgeManager(): GlobalBridgeManager {
-  return GlobalBridgeManager.getInstance()
 }

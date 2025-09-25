@@ -1,5 +1,6 @@
 import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
-import type { DocumentSection, ParentHeadingInfo, SpeakerType } from './BlocknoteExt'
+import type { DocSection, ParentHeadingInfo, SpeakerType } from './BlocknoteExt'
+import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
 
 /**
  * MDBridge编辑器桥接接口
@@ -18,6 +19,14 @@ import type { DocumentSection, ParentHeadingInfo, SpeakerType } from './Blocknot
  * ```
  */
 export interface MDBridge {
+  editor: BlockNoteEditor<any, any, any>
+  state: {
+    /** 上一次分组块 */
+    lastGroupBlock: DocSection
+    /** 上一次分组块的 Markdown 内容 */
+    lastGroupMarkdown: string
+  }
+
   // ======================
   // * Content management
   // ======================
@@ -158,7 +167,7 @@ export interface MDBridge {
    * console.log(text) // "这是块中的文本内容"
    * ```
    */
-  extractBlockText: (block: Block) => string
+  extractBlockText: (blocks: Block[]) => string
 
   /**
    * 在当前光标位置插入文本
@@ -178,12 +187,12 @@ export interface MDBridge {
    * MDBridge.addStyles({ bold: true, italic: true })
    *
    * // 渐变样式
-   * MDBridge.addStyles({ gradientStyles: 'mysticNight' })
+   * MDBridge.addStyles({ gradient: 'mysticNight' })
    *
    * // 组合样式
    * MDBridge.addStyles({
    *   bold: true,
-   *   gradientStyles: 'skyBlue'
+   *   gradient: 'skyBlue'
    * })
    * ```
    *
@@ -193,7 +202,7 @@ export interface MDBridge {
    * - `underline`: 下划线样式
    * - `strike`: 删除线样式
    * - `code`: 行内代码样式
-   * - `gradientStyles`: 渐变样式，可选值：
+   * - `gradient`: 渐变样式，可选值：
    *   - `'mysticPurpleBlue'`: 神秘紫蓝
    *   - `'skyBlue'`: 天空蓝
    *   - `'gorgeousPurpleRed'`: 瑰丽紫红
@@ -215,7 +224,7 @@ export interface MDBridge {
    * // 移除粗体和渐变样式
    * MDBridge.removeStyles({
    *   bold: true,
-   *   gradientStyles: 'mysticNight'
+   *   gradient: 'mysticNight'
    * })
    * ```
    * @param styles 要移除的样式对象，属性与 addStyles 相同
@@ -227,7 +236,7 @@ export interface MDBridge {
    * @example
    * ```ts
    * // 切换渐变样式（如果已应用则移除，未应用则添加）
-   * MDBridge.toggleStyles({ gradientStyles: 'skyBlue' })
+   * MDBridge.toggleStyles({ gradient: 'skyBlue' })
    * ```
    * @param styles 要切换的样式对象，属性与 addStyles 相同
    */
@@ -238,7 +247,7 @@ export interface MDBridge {
    * @example
    * ```ts
    * const styles = MDBridge.getActiveStyles()
-   * console.log(styles.gradientStyles) // 'mysticNight' 或 undefined
+   * console.log(styles.gradient) // 'mysticNight' 或 undefined
    * console.log(styles.bold) // true 或 false
    * ```
    * @returns 当前样式对象，包含所有激活的样式属性
@@ -331,7 +340,7 @@ export interface MDBridge {
   groupBlockByHeading: (
     editor: BlockNoteEditor,
     blockId: string
-  ) => DocumentSection
+  ) => DocSection
 
   /**
    * 添加鼠标悬浮监听器
@@ -458,6 +467,9 @@ export interface MDBridge {
     /** 将当前块设置为检查列表项 */
     setCheckList: () => void
 
+    /** 设置渐变 */
+    setGradient: (type: GradientStyleType) => void
+    unsetGradient: () => void
   }
 
   // ======================

@@ -32,7 +32,7 @@ interface MilkdownBridge {
 - **避免混淆**：历史上全局对象命名为 `MilkdownBridge`，但实际实现是 *BlockNote*，命名与实现不一致，易误导使用者。
 - **语义更清晰**：内容设置从单一的 `setContent` 拆分为 `setContent`（块数组）、`setHTML`（*HTML* 字符串）、`setMarkdown`（*Markdown* 字符串）。
 - **能力更完整**：新增块增删改、文本与样式、链接、光标与选区、历史、嵌套与移动等大量接口，覆盖更多编辑场景。
-- **渐变样式增强**：从简单的开关式渐变升级到 11 种精美渐变，支持更多视觉效果和主题表达。
+- **渐变样式增强**：从简单的开关式渐变升级到 11 种精美渐变（通过 `command.setGradient`），支持更多视觉效果和主题表达。
 
 ## 迁移范围总览
 
@@ -42,7 +42,7 @@ interface MilkdownBridge {
   - 旧：`setImages`、`setImagesWithURL`、`setHeaderImagesWithURL`
   - 新：`setImagesWithURL`、`setFooterImagesWithURL`、`setHeaderImagesWithURL`
 - **新增更多 *API***：内容、块、文本、样式、链接、光标与选区、编辑状态、历史、嵌套与移动、命令等。
-- **渐变样式升级**：从简单的开关式渐变升级到 11 种精美渐变，提供更丰富的视觉效果。
+- **渐变样式升级**：从简单的开关式渐变升级到 11 种精美渐变（通过 `command.setGradient`），提供更丰富的视觉效果。
 
 ---
 
@@ -104,14 +104,17 @@ MDBridge?.setSpeaker({
 MilkdownBridge?.setFlowing(true)
 
 // 新版 - 11 种精美渐变
-MDBridge?.addStyles({ gradientStyles: 'mysticPurpleBlue' })
-MDBridge?.addStyles({ gradientStyles: 'starryNight' })
+MDBridge?.command.setGradient('mysticPurpleBlue')
+MDBridge?.command.setGradient('starryNight')
+
+// 移除渐变
+MDBridge?.command.unsetGradient()
 ```
 
 #### 渐变样式参考
 
 ```ts
-type NewGradientType =
+type GradientStyleType =
   | 'mysticPurpleBlue' // 神秘紫蓝 - 神秘而优雅
   | 'skyBlue' // 天空蓝 - 清新自然
   | 'gorgeousPurpleRed' // 瑰丽紫红 - 温柔浪漫
@@ -134,11 +137,11 @@ type NewGradientType =
 | `setContent(html)` | `setHTML(html)` | HTML 内容设置 |
 | `setImages(urls)` | `setImagesWithURL(urls)` | 当前位置图片 |
 | `setSpeakers(speakers[])` | `setSpeaker(speaker)` | 单个说话人设置 |
-| `setFlowing(boolean)` | `addStyles({ gradientStyles })` | 渐变样式控制 |
+| `setFlowing(boolean)` | `command.setGradient(type)` | 渐变样式控制 |
 
 ## 迁移优势
 
 - **语义清晰**：内容设置按类型拆分，接口含义更明确
-- **功能增强**：支持说话人修改、11 种渐变样式、更多编辑操作
+- **功能增强**：支持说话人修改、11 种渐变样式（通过 `command.setGradient`）、更多编辑操作
 - **接口简化**：说话人从 3 个接口简化为 1 个，降低使用复杂度
 - **职责分离**：内容和说话人设置完全解耦，符合单一职责原则

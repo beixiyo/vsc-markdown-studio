@@ -24,6 +24,7 @@ export { runNestingMoveTest } from './nesting-move.test'
 export { runStateSelectionHistoryTest } from './state-selection-history.test'
 export { runStylesTextLinksTest } from './styles-text-links.test'
 export { runTextOperationsTest } from './text-operations.test'
+export { runUIShowcaseTest } from './ui-showcase.test'
 
 export function loadTestTools() {
   function createResults(): TestResults {

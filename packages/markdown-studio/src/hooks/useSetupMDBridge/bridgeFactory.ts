@@ -7,16 +7,7 @@ import { extractBlockText, getBlockAtPosition, getBlockFromElement, getParentHea
 import { groupBlockByHeading } from './blockSections'
 import { createCommands } from './commands'
 import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
-
-/**
- * 状态管理器接口
- */
-export interface StateManager {
-  getImageUrls: () => string[]
-  setImageUrls: (urls: string[]) => void
-  getHeaderImageUrls: () => string[]
-  setHeaderImageUrls: (urls: string[]) => void
-}
+import { GlobalStateManager } from './GlobalStateManager'
 
 /**
  * 创建 MDBridge 对象
@@ -26,9 +17,21 @@ export function createMDBridge(
   callbackManager: CallbackManager,
   blockIdManager: BlockIdManager,
   notifyFns: ReturnType<typeof useNotify>,
-  stateManager: StateManager,
 ): MDBridge {
+  const globalStateManager = GlobalStateManager.getInstance()
+
   return {
+    editor,
+    state: {
+      lastGroupBlock: {
+        blocks: [],
+        heading: null,
+        startBlock: null,
+        endBlock: null,
+      },
+      lastGroupMarkdown: '',
+    },
+
     // ======================
     // * Content management
     // ======================
@@ -54,7 +57,7 @@ export function createMDBridge(
       const urls = Array.isArray(images)
         ? images
         : []
-      stateManager.setImageUrls(urls)
+      globalStateManager.setImageUrls(urls)
 
       const blocks = parseImagesToBlocks(urls)
       await appendElements(editor, blocks)
@@ -63,7 +66,7 @@ export function createMDBridge(
       const urls = Array.isArray(imageUrls)
         ? imageUrls
         : []
-      stateManager.setImageUrls(urls)
+      globalStateManager.setImageUrls(urls)
       const blocks = parseImagesToBlocks(urls)
       await insertAtBottom(editor, blocks, blockIdManager)
     },
@@ -71,7 +74,7 @@ export function createMDBridge(
       const urls = Array.isArray(imageUrls)
         ? imageUrls
         : []
-      stateManager.setHeaderImageUrls(urls)
+      globalStateManager.setHeaderImageUrls(urls)
       const blocks = parseImagesToBlocks(urls)
       await insertAtTop(editor, blocks, blockIdManager)
     },

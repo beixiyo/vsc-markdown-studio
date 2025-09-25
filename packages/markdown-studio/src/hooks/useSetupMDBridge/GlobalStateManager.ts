@@ -1,8 +1,7 @@
 import type { MDBridgeState } from '@/types/MDBridgeTest'
 
 /**
- * 全局状态管理器
- * 使用内部状态管理，不再依赖 window.__MDBridgeState
+ * 全局状态管理器，用于测试时使用内部状态管理
  */
 export class GlobalStateManager {
   private static instance: GlobalStateManager | null = null
@@ -38,6 +37,9 @@ export class GlobalStateManager {
    * 设置图片 URL 列表
    */
   setImageUrls(urls: string[]): void {
+    if (!import.meta.env.DEV) {
+      return
+    }
     this.state.imageUrls = [...urls]
   }
 
@@ -52,6 +54,9 @@ export class GlobalStateManager {
    * 设置头部图片 URL 列表
    */
   setHeaderImageUrls(urls: string[]): void {
+    if (!import.meta.env.DEV) {
+      return
+    }
     this.state.headerImageUrls = [...urls]
   }
 
@@ -92,11 +97,4 @@ export class GlobalStateManager {
   getTotalImageCount(): number {
     return this.getImageUrls().length + this.getHeaderImageUrls().length
   }
-}
-
-/**
- * 获取全局状态管理器实例
- */
-export function getGlobalStateManager(): GlobalStateManager {
-  return GlobalStateManager.getInstance()
 }

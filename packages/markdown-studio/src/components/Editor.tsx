@@ -13,8 +13,8 @@ import { memo } from 'react'
 import { cn } from 'utils'
 import { labelInputMenuItem } from '@/blocknoteExts/blocks/labelInput'
 import { mermaidMenuItem } from '../blocknoteExts/blocks/mermaid'
-import { CustomDragHandleMenu } from './CustomDragHandleMenu'
-import { CustomFormatToolbar } from './CustomFormatToolbar'
+import { DragHandleMenu } from './DragHandleMenu'
+import { FormatToolbar } from './FormatToolbar'
 
 export const Editor = memo<EditorProps>((props) => {
   const {
@@ -41,11 +41,11 @@ export const Editor = memo<EditorProps>((props) => {
       <SideMenuController
         sideMenu={ sideMenuProps => <SideMenu
           { ...sideMenuProps }
-          dragHandleMenu={ CustomDragHandleMenu }
+          dragHandleMenu={ DragHandleMenu }
         /> }
       />
       <FormattingToolbarController
-        formattingToolbar={ CustomFormatToolbar }
+        formattingToolbar={ FormatToolbar }
       />
 
       <SuggestionMenuController

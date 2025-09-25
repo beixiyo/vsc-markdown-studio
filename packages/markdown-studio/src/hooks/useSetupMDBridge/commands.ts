@@ -1,6 +1,8 @@
 import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { MDBridge } from '@/types/MDBridge'
+import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
+import { filterKeys } from '@jl-org/tool'
 
 /**
  * 创建命令对象
@@ -68,6 +70,14 @@ export function createCommands(editor: BlockNoteEditor, notifyFns: ReturnType<ty
         editor.updateBlock(currentBlock, { type: 'checkListItem' })
         notifyFns.notifyBlockTypeChanged()
       }
+    },
+
+    setGradient: (type: GradientStyleType) => {
+      editor.addStyles({ gradient: type } as any)
+    },
+    unsetGradient: () => {
+      const curStyle = editor.getActiveStyles()
+      editor.removeStyles(filterKeys(curStyle, ['gradient'] as any))
     },
   }
 }

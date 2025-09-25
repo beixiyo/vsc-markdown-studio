@@ -1,5 +1,5 @@
 import type { BlockNoteEditor } from '@blocknote/core'
-import type { DocumentSection } from '@/types/BlocknoteExt'
+import type { DocSection } from '@/types/BlocknoteExt'
 import { getParentHeading } from './blockOperations'
 
 /**
@@ -8,8 +8,8 @@ import { getParentHeading } from './blockOperations'
 export function groupBlockByHeading(
   editor: BlockNoteEditor<any, any, any>,
   blockId: string,
-): DocumentSection {
-  const res: DocumentSection = {
+): DocSection {
+  const res: DocSection = {
     blocks: [],
     heading: null,
     startBlock: null,
