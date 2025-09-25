@@ -11,8 +11,8 @@ import {
 } from '@blocknote/react'
 import { memo } from 'react'
 import { cn } from 'utils'
-import { labelInputMenuItem } from '@/blocknoteExts/labelInput'
-import { mermaidMenuItem } from '../blocknoteExts/mermaid'
+import { labelInputMenuItem } from '@/blocknoteExts/blocks/labelInput'
+import { mermaidMenuItem } from '../blocknoteExts/blocks/mermaid'
 import { CustomDragHandleMenu } from './CustomDragHandleMenu'
 import { CustomFormatToolbar } from './CustomFormatToolbar'
 

@@ -5,12 +5,12 @@ import type { MDBridge } from '@/types/MDBridge'
 import { useEffect, useRef } from 'react'
 import { loadTestTools } from '@/test'
 import { createMDBridge } from './bridgeFactory'
-import { createStateManager } from './stateManager'
-import { getGlobalBridgeManager } from './globalBridge'
 import { createEditorChangeHandler, createMouseClickHandler, createMouseMoveHandler, createSelectionChangeHandler } from './eventHandlers'
+import { getGlobalBridgeManager } from './globalBridge'
+import { createStateManager } from './stateManager'
 
 export function useSetupMDBridge(
-  editor: BlockNoteEditor | null,
+  editor: BlockNoteEditor<any, any, any> | null,
   notifyFns: ReturnType<typeof useNotify>,
 ) {
   const bridgeRef = useRef<MDBridge | null>(null)

@@ -9,7 +9,7 @@ export class MDBridgeStateManager implements StateManager {
   private globalStateManager = getGlobalStateManager()
 
   constructor() {
-    // 初始化全局状态
+    /** 初始化全局状态 */
     this.globalStateManager.initializeState()
   }
 

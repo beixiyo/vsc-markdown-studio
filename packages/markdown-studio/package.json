@@ -49,15 +49,16 @@
     "lint": "eslint ./src --fix"
   },
   "dependencies": {
-    "config": "workspace:*",
-    "hooks": "workspace:*",
-    "utils": "workspace:*",
+    "@blocknote/code-block": "^0.39.1",
     "@blocknote/core": "^0.39.1",
     "@blocknote/mantine": "^0.39.1",
     "@blocknote/react": "^0.39.1",
-    "@blocknote/code-block": "^0.39.1",
-    "mermaid": "^11.12.0",
+    "@tiptap/core": "^3.5.3",
     "comps": "workspace:*",
-    "styles": "workspace:*"
+    "config": "workspace:*",
+    "hooks": "workspace:*",
+    "mermaid": "^11.12.0",
+    "styles": "workspace:*",
+    "utils": "workspace:*"
   }
 }

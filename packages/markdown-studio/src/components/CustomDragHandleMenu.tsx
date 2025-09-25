@@ -23,7 +23,7 @@ import { memo } from 'react'
  * </BlockNoteView>
  * ```
  */
-import { gradientStylesMap, type GradientStyleType } from '@/blocknoteExts/gradientStyles/constans'
+import { gradientStylesMap, type GradientStyleType } from '@/blocknoteExts/styles/gradientStyles/constans'
 
 /**
  * 渐变样式菜单项组件

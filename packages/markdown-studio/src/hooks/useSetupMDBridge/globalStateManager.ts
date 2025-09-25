@@ -24,7 +24,7 @@ export class GlobalStateManager {
    * 初始化状态（现在只是确保状态已创建）
    */
   initializeState(): void {
-    // 状态已经在构造函数中初始化，这里不需要额外操作
+    /** 状态已经在构造函数中初始化，这里不需要额外操作 */
   }
 
   /**

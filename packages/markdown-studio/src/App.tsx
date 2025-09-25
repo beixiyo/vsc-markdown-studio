@@ -8,12 +8,14 @@ import { useResizeObserver, useTheme } from 'hooks'
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { cn } from 'utils'
+import { ArrowBeautify } from './blocknoteExts/exts/ArrowBeautify'
+import { TimeInsert } from './blocknoteExts/exts/TimeInsert'
 import { schema } from './blocknoteExts/schema'
 import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
 import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
-
 import { TestPanel } from './test/TestPanel'
+
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 
@@ -25,20 +27,22 @@ export default function App() {
   // ======================
   const editor = useCreateBlockNote({
     schema,
+
+    _tiptapOptions: {
+      extensions: [ArrowBeautify],
+    },
+    extensions: [TimeInsert],
+
     pasteHandler: ({ event, editor, defaultPasteHandler }) => {
       /** 检查剪贴板是否包含纯文本 */
       if (event.clipboardData?.types.includes('text/plain')) {
-        /** 获取纯文本内容 */
         const plainText = event.clipboardData.getData('text/plain')
 
         /**
          * 将双换行符替换为两个段落分隔符，将单换行符替换为 Markdown 硬换行符
          * 这是一个更精细的处理，以区分段落与行内换行
          */
-        const markdown = plainText
-          .replace(/(?<!\n)\n(?!\n)/g, '  \n') // 将单换行转换为 Markdown 硬换行符
-
-        /** 将转换后的 Markdown 粘贴到编辑器 */
+        const markdown = plainText.replace(/(?<!\n)\n(?!\n)/g, '  \n') // 将单换行转换为 Markdown 硬换行符
         editor.pasteMarkdown(markdown)
 
         /** 告知 Blocknote 粘贴事件已处理 */

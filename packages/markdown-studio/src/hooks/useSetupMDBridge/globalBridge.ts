@@ -22,7 +22,7 @@ export class GlobalBridgeManager {
    */
   setBridge(bridge: MDBridge): void {
     this.bridge = bridge
-    // 同步到全局 window 对象，供外部使用
+    /** 同步到全局 window 对象，供外部使用 */
     if (typeof window !== 'undefined') {
       window.MDBridge = bridge
     }

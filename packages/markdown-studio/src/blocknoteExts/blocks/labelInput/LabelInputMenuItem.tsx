@@ -32,7 +32,7 @@ export function labelInputMenuItem(): LabelInputMenuItemConfig {
       )
     },
     aliases: ['label', 'labelInput', 'labelBlock'],
-    group: '对话',
+    group: 'Conversation',
     icon: <Tag className="w-5 h-5" />,
     hint: '创建标签输入块，标识标签',
   }

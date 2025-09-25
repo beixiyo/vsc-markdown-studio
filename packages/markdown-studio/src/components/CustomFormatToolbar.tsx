@@ -4,7 +4,7 @@ import {
   MermaidCopyButton,
   MermaidDeleteButton,
   MermaidEditButton,
-} from '@/blocknoteExts/mermaid/MermaidToolbarBtns'
+} from '@/blocknoteExts/blocks/mermaid/MermaidToolbarBtns'
 
 /**
  * 自定义 FormattingToolbar，包含 Mermaid 专用按钮
