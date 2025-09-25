@@ -22,7 +22,6 @@ export function groupBlockByHeading(
     /** 获取上级标题 */
     const heading = getParentHeading(editor, blockId)
     if (!heading) {
-      console.warn('未找到指定的块:', blockId)
       return res
     }
 

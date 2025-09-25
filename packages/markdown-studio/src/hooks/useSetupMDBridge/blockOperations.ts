@@ -80,7 +80,6 @@ export function getParentHeading(editor: BlockNoteEditor, blockId: string) {
     const currentBlockIndex = docs.findIndex(block => block.id === blockId)
 
     if (currentBlockIndex === -1) {
-      console.warn('未找到指定的块:', blockId)
       return null
     }
 

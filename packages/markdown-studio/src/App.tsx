@@ -2,17 +2,12 @@
  * @link https://www.blocknotejs.org/docs/features/custom-schemas/custom-blocks
  */
 
-import { codeBlockOptions } from '@blocknote/code-block'
-import { BlockNoteSchema, createCodeBlockSpec } from '@blocknote/core'
 import { useCreateBlockNote } from '@blocknote/react'
 import { Resizable } from 'comps'
 import { useResizeObserver, useTheme } from 'hooks'
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { cn } from 'utils'
-import { GradientStyles } from './blocknoteExts/gradientStyles/GradientStyles'
-import { LabelInputBlock } from './blocknoteExts/labelInput'
-import { MermaidBlock } from './blocknoteExts/mermaid'
 import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
 import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
@@ -20,6 +15,7 @@ import { TestPanel } from './test/TestPanel'
 
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
+import { schema } from './blocknoteExts/schema'
 
 export default function App() {
   useTheme()
@@ -27,17 +23,6 @@ export default function App() {
   // ======================
   // * Editor
   // ======================
-  const schema = BlockNoteSchema.create().extend({
-    blockSpecs: {
-      mermaid: MermaidBlock(),
-      labelInput: LabelInputBlock(),
-      codeBlock: createCodeBlockSpec(codeBlockOptions),
-    },
-    styleSpecs: {
-      gradientStyles: GradientStyles,
-    },
-  })
-
   const editor = useCreateBlockNote({
     schema,
     pasteHandler: ({ event, editor, defaultPasteHandler }) => {
@@ -51,7 +36,6 @@ export default function App() {
          * 这是一个更精细的处理，以区分段落与行内换行
          */
         const markdown = plainText
-          .replace(/\n\n/g, '\n\n') // 保留双换行，作为段落分隔
           .replace(/(?<!\n)\n(?!\n)/g, '  \n') // 将单换行转换为 Markdown 硬换行符
 
         /** 将转换后的 Markdown 粘贴到编辑器 */
@@ -66,6 +50,9 @@ export default function App() {
     },
   })
 
+  // ======================
+  // * Hooks
+  // ======================
   const editorElRef = useRef<HTMLDivElement>(null)
   const notifyFns = useNotify(editor, editorElRef)
 
