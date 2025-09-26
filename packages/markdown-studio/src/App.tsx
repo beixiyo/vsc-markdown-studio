@@ -15,6 +15,7 @@ import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
 import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
 import { TestPanel } from './test/TestPanel'
+import { en } from "@blocknote/core/locales"
 
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
@@ -27,6 +28,23 @@ export default function App() {
   // ======================
   const editor = useCreateBlockNote({
     schema,
+    dictionary: {
+      ...en,
+      placeholders: {
+        ...en.placeholders,
+        default: "Start typing your story...",
+        heading: "Enter your title here",
+        emptyDocument: "Begin your document",
+      },
+      slash_menu: {
+        ...en.slash_menu,
+        paragraph: {
+          ...en.slash_menu.paragraph,
+          title: "Text Block",
+          subtext: "Regular text content",
+        },
+      },
+    },
 
     _tiptapOptions: {
       extensions: [ArrowBeautify],
