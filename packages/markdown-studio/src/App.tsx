@@ -13,9 +13,10 @@ import { TimeInsert } from './blocknoteExts/exts/TimeInsert'
 import { schema } from './blocknoteExts/schema'
 import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
-import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
+import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode, useAITest } from './hooks'
 import { TestPanel } from './test/TestPanel'
 import { en } from "@blocknote/core/locales"
+import { createMyAIExtension } from './blocknoteExts/MyAIExtension'
 
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
@@ -49,7 +50,7 @@ export default function App() {
     _tiptapOptions: {
       extensions: [ArrowBeautify],
     },
-    extensions: [TimeInsert],
+    extensions: [TimeInsert, createMyAIExtension()],
 
     pasteHandler: ({ event, editor, defaultPasteHandler }) => {
       /** 检查剪贴板是否包含纯文本 */
@@ -81,6 +82,7 @@ export default function App() {
   useSetupMDBridge(editor, notifyFns)
   useVSCode()
   useHoverSection(editor)
+  useAITest(editor) // <--- 使用我们新的测试 Hook
 
   // ======================
   // * Sidebar
