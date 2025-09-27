@@ -39,12 +39,9 @@
     "dist"
   ],
   "scripts": {
-    "dev": "run-s build:styles dev:only",
-    "dev:only": "vite",
+    "dev": "vite",
     "---build---": "",
-    "build": "run-s build:styles build:only",
-    "build:only": "vite build",
-    "build:styles": "node ../../scripts/autoWriteStyle.cjs",
+    "build": "run-s build",
     "preview": "vite preview",
     "lint": "eslint ./src --fix"
   },

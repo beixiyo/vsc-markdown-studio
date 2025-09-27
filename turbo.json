@@ -12,13 +12,7 @@
       "cache": false,
       "persistent": true
     },
-    "lint": {},
-    "build:styles": {
-      "outputs": ["src/styles/**"]
-    },
-    "build:comp": {
-      "dependsOn": ["build:styles"]
-    }
+    "lint": {}
   },
   "globalDependencies": [
     "package.json",

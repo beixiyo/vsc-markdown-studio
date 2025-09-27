@@ -1,23 +1,24 @@
-// @ts-check
-import * as Variable from './packages/styles/variable'
-
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
-  content: [],
   theme: {
     extend: {
       /** 颜色 */
       colors: {
-        lightBg: Variable.lightBg,
-        innerBg: Variable.innerBg,
-        primary: Variable.primaryColor,
-        border: Variable.borderColor,
-        light: Variable.lightTextColor,
-
-        success: Variable.successColor,
-        info: Variable.infoColor,
-        danger: Variable.dangerColor,
+        primary: 'var(--primary)',
+        primaryHover: 'var(--primaryHover)',
+        background: 'var(--background)',
+        backgroundSubtle: 'var(--backgroundSubtle)',
+        textPrimary: 'var(--textPrimary)',
+        textSecondary: 'var(--textSecondary)',
+        textDisabled: 'var(--textDisabled)',
+        border: 'var(--border)',
+        borderStrong: 'var(--borderStrong)',
+        shadow: 'var(--shadow)',
+        shadowStrong: 'var(--shadowStrong)',
+        success: 'var(--success)',
+        info: 'var(--info)',
+        danger: 'var(--danger)',
       },
 
       /** 动画 */
@@ -78,33 +79,16 @@ export default {
         'slate',
       ]
       toning.forEach((color) => {
-        const text = Variable[`${color}TextColor`]
-        const darkText = Variable[`${color}DarkTextColor`]
-        const bg = Variable[`${color}BgColor`]
-        const darkBg = Variable[`${color}DarkBgColor`]
-        const border = Variable[`${color}BorderColor`]
-        const darkBorder = Variable[`${color}DarkBorderColor`]
-
         addComponents({
           [`.toning-${color}`]: {
-            'color': text,
-            'backgroundColor': bg,
-            '.dark &': {
-              color: darkText,
-              backgroundColor: darkBg,
-            },
+            'color': `var(--${color}TextColor)`,
+            'backgroundColor': `var(--${color}BgColor)`,
           },
           [`.toning-${color}-text`]: {
-            'color': text,
-            '.dark &': {
-              color: darkText,
-            },
+            'color': `var(--${color}TextColor)`,
           },
           [`.toning-${color}-border`]: {
-            'borderColor': border,
-            '.dark &': {
-              borderColor: darkBorder,
-            },
+            'borderColor': `var(--${color}BorderColor)`,
           },
         })
       })

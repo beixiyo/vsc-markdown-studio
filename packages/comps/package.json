@@ -23,9 +23,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "run-s build:styles build:comp",
-    "build:comp": "vite build",
-    "build:styles": "node ../../scripts/autoWriteStyle.cjs",
+    "build": "vite build",
     "lint": "eslint ./src --fix"
   },
   "dependencies": {
