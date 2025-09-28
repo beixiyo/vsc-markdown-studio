@@ -15,7 +15,7 @@ import { TimeInsert } from './blocknoteExts/exts/TimeInsert'
 import { schema } from './blocknoteExts/schema'
 import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
-import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
+import { useClickSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
 import { TestPanel } from './test/TestPanel'
 
 import '@blocknote/core/fonts/inter.css'
@@ -81,7 +81,8 @@ export default function App() {
 
   useSetupMDBridge(editor, notifyFns)
   useVSCode()
-  useHoverSection(editor)
+  // useHoverSection(editor)
+  useClickSection(editor)
 
   // ======================
   // * Sidebar

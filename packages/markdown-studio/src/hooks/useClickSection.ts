@@ -3,11 +3,11 @@ import type { AnyBlock } from '@/types/MDBridge'
 import { GlobalBridgeManager } from './useSetupMDBridge/GlobalBridgeManager'
 
 /**
- * 悬浮块标题监听
+ * 点击块标题监听
  * @param editor 编辑器
  * @param callback 回调函数，回调字符串类型 Markdown 内容
  */
-export function useHoverSection(
+export function useClickSection(
   editor: BlockNoteEditor<any, any, any>,
   callback?: (markdown: string) => void,
 ) {
@@ -15,7 +15,7 @@ export function useHoverSection(
 
   useEffect(
     () => {
-      MDBridge.onBlockHover((block) => {
+      MDBridge.onBlockClick((block) => {
         if (!block?.id) {
           return
         }

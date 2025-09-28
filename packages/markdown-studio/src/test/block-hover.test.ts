@@ -2,7 +2,7 @@
  * 标题悬浮监听功能测试
  */
 
-export async function runHeadingHoverTest() {
+export async function runBlockHoverTest() {
   if (!MDTest || !MDBridge) {
     console.error('MDTest 工具未加载，请先加载测试工具')
     return

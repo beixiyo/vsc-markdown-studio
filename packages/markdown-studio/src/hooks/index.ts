@@ -1,3 +1,4 @@
+export * from './useClickSection'
 export * from './useHoverSection'
 export * from './useNotify'
 export * from './useSetupMDBridge'
