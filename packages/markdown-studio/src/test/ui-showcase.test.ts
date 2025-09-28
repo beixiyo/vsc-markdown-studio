@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { gradientStylesMap, type GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
 
 /**
@@ -10,26 +9,26 @@ export async function runUIShowcaseTest() {
 
   MDTest.logTitle('UI 展示测试')
 
-  // 等待 MDBridge 可用
+  /** 等待 MDBridge 可用 */
   await MDTest.std.waitForMDBridge(3000)
   if (!MDBridge) {
     throw new Error('MDBridge 不可用')
   }
 
-  // 清空内容
+  /** 清空内容 */
   MDTest.clearContent()
 
-  // 构建展示内容
+  /** 构建展示内容 */
   const showcaseContent = buildShowcaseContent()
 
-  // 设置内容
+  /** 设置内容 */
   await MDTest.asyncTestCase(results, '设置 UI 展示内容', async () => {
     MDBridge.setContent(showcaseContent)
     await MDTest.delay(100) // 等待渲染
     return 'UI 展示内容已设置'
   })
 
-  // 验证内容设置成功
+  /** 验证内容设置成功 */
   await MDTest.asyncTestCase(results, '验证内容设置成功', async () => {
     const document = MDBridge.getDocument()
     return document.length > 0
@@ -44,7 +43,7 @@ export async function runUIShowcaseTest() {
  */
 function buildShowcaseContent() {
   return [
-    // 标题
+    /** 标题 */
     {
       type: 'heading',
       props: { level: 1 },
@@ -57,7 +56,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 渐变样式展示
+    /** 渐变样式展示 */
     {
       type: 'heading',
       props: { level: 2 },
@@ -70,7 +69,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 渐变样式示例
+    /** 渐变样式示例 */
     ...Object.entries(gradientStylesMap).map(([key, config]) => ({
       type: 'paragraph',
       content: [
@@ -87,7 +86,7 @@ function buildShowcaseContent() {
       ],
     })),
 
-    // 分隔线
+    /** 分隔线 */
     {
       type: 'paragraph',
       content: [
@@ -112,7 +111,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 流程图示例
+    /** 流程图示例 */
     {
       type: 'mermaid',
       props: {
@@ -131,7 +130,7 @@ function buildShowcaseContent() {
       },
     },
 
-    // 时序图示例
+    /** 时序图示例 */
     {
       type: 'mermaid',
       props: {
@@ -151,7 +150,7 @@ function buildShowcaseContent() {
       },
     },
 
-    // 甘特图示例
+    /** 甘特图示例 */
     {
       type: 'mermaid',
       props: {
@@ -171,7 +170,7 @@ function buildShowcaseContent() {
       },
     },
 
-    // 分隔线
+    /** 分隔线 */
     {
       type: 'paragraph',
       content: [
@@ -196,7 +195,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 对话示例
+    /** 对话示例 */
     {
       type: 'labelInput',
       props: {
@@ -239,7 +238,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 分隔线
+    /** 分隔线 */
     {
       type: 'paragraph',
       content: [
@@ -251,7 +250,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 文本样式展示
+    /** 文本样式展示 */
     {
       type: 'heading',
       props: { level: 2 },
@@ -264,7 +263,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 基础样式
+    /** 基础样式 */
     {
       type: 'paragraph',
       content: [
@@ -306,7 +305,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 代码样式
+    /** 代码样式 */
     {
       type: 'paragraph',
       content: [
@@ -328,7 +327,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 分隔线
+    /** 分隔线 */
     {
       type: 'paragraph',
       content: [
@@ -340,7 +339,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 列表展示
+    /** 列表展示 */
     {
       type: 'heading',
       props: { level: 2 },
@@ -353,7 +352,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 无序列表
+    /** 无序列表 */
     {
       type: 'paragraph',
       content: [
@@ -385,7 +384,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 有序列表
+    /** 有序列表 */
     {
       type: 'paragraph',
       content: [
@@ -417,7 +416,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 分隔线
+    /** 分隔线 */
     {
       type: 'paragraph',
       content: [
@@ -429,7 +428,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // 代码块展示
+    /** 代码块展示 */
     {
       type: 'heading',
       props: { level: 2 },
@@ -496,7 +495,7 @@ class UserService {
       ],
     },
 
-    // 分隔线
+    /** 分隔线 */
     {
       type: 'paragraph',
       content: [

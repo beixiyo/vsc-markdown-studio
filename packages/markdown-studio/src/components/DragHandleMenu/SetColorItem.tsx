@@ -1,6 +1,7 @@
 import {
-  type DragHandleMenuProps, useBlockNoteEditor,
-  useComponentsContext
+  type DragHandleMenuProps,
+  useBlockNoteEditor,
+  useComponentsContext,
 } from '@blocknote/react'
 import { memo } from 'react'
 /**

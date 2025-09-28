@@ -1,14 +1,14 @@
-import type { MermaidBlockNoteEditor, MermaidMenuItemConfig } from './types'
+import type { DefaultReactSuggestionItem } from '@blocknote/react'
+import type { AnyBlockNoteEditor } from '@/types/MDBridge'
 import { Workflow } from 'lucide-react'
 
 /**
  * 生成一个 Slash 菜单项，用于插入 Mermaid 块
  */
-export function mermaidMenuItem(): MermaidMenuItemConfig {
+export function MermaidMenuItem(editor: AnyBlockNoteEditor): DefaultReactSuggestionItem {
   return {
-    key: 'mermaid',
     title: 'Mermaid Diagram',
-    onItemClick: (editor: MermaidBlockNoteEditor) => {
+    onItemClick: () => {
       const selected = editor.getTextCursorPosition().block
       editor.insertBlocks(
         [
@@ -27,6 +27,5 @@ export function mermaidMenuItem(): MermaidMenuItemConfig {
     aliases: ['mermaid', 'diagram', 'chart', '图表', '流程图'],
     group: 'Media-Code',
     icon: <Workflow className="w-5 h-5" />,
-    hint: '插入 Mermaid 图表',
   }
 }

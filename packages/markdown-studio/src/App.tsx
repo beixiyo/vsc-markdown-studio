@@ -2,21 +2,21 @@
  * @link https://www.blocknotejs.org/docs/features/custom-schemas/custom-blocks
  */
 
+import { en } from '@blocknote/core/locales'
 import { useCreateBlockNote } from '@blocknote/react'
 import { Resizable } from 'comps'
 import { useResizeObserver, useTheme } from 'hooks'
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { cn } from 'utils'
+import { createAIExtension } from './blocknoteExts/AI/AIExtension'
 import { ArrowBeautify } from './blocknoteExts/exts/ArrowBeautify'
 import { TimeInsert } from './blocknoteExts/exts/TimeInsert'
 import { schema } from './blocknoteExts/schema'
 import { Editor } from './components/Editor'
 import { TocSidebar } from './components/TocSidebar'
-import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode, useAITest } from './hooks'
+import { useHoverSection, useNotify, useSetupMDBridge, useToc, useVSCode } from './hooks'
 import { TestPanel } from './test/TestPanel'
-import { en } from "@blocknote/core/locales"
-import { createMyAIExtension } from './blocknoteExts/MyAIExtension'
 
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
@@ -33,16 +33,16 @@ export default function App() {
       ...en,
       placeholders: {
         ...en.placeholders,
-        default: "Start typing your story...",
-        heading: "Enter your title here",
-        emptyDocument: "Begin your document",
+        default: 'Start typing your story...',
+        heading: 'Enter your title here',
+        emptyDocument: 'Begin your document',
       },
       slash_menu: {
         ...en.slash_menu,
         paragraph: {
           ...en.slash_menu.paragraph,
-          title: "Text Block",
-          subtext: "Regular text content",
+          title: 'Text Block',
+          subtext: 'Regular text content',
         },
       },
     },
@@ -50,7 +50,7 @@ export default function App() {
     _tiptapOptions: {
       extensions: [ArrowBeautify],
     },
-    extensions: [TimeInsert, createMyAIExtension()],
+    extensions: [TimeInsert, createAIExtension()],
 
     pasteHandler: ({ event, editor, defaultPasteHandler }) => {
       /** 检查剪贴板是否包含纯文本 */
@@ -82,7 +82,6 @@ export default function App() {
   useSetupMDBridge(editor, notifyFns)
   useVSCode()
   useHoverSection(editor)
-  useAITest(editor) // <--- 使用我们新的测试 Hook
 
   // ======================
   // * Sidebar

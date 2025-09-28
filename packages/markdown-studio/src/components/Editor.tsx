@@ -11,10 +11,12 @@ import {
 } from '@blocknote/react'
 import { memo } from 'react'
 import { cn } from 'utils'
-import { labelInputMenuItem } from '@/blocknoteExts/blocks/labelInput'
-import { mermaidMenuItem } from '../blocknoteExts/blocks/mermaid'
+import { AIMenuItem } from '@/blocknoteExts/AI/AIMenuItem'
+import { LabelInputMenuItem } from '@/blocknoteExts/blocks/labelInput'
+import { MermaidMenuItem } from '@/blocknoteExts/blocks/mermaid'
+import { AIMenu } from './AIMenu'
 import { DragHandleMenu } from './DragHandleMenu'
-import { FormatToolbar } from './FormatToolbar'
+import { FormatToolbar } from './Toolbar'
 
 export const Editor = memo<EditorProps>((props) => {
   const {
@@ -53,8 +55,9 @@ export const Editor = memo<EditorProps>((props) => {
         getItems={ async (query: string) => {
           return filterSuggestionItems([
             ...getDefaultReactSlashMenuItems(editor),
-            labelInputMenuItem(),
-            mermaidMenuItem(),
+            LabelInputMenuItem(editor),
+            AIMenuItem(editor),
+            MermaidMenuItem(editor),
           ], query) as any[]
         } }
       />
@@ -64,6 +67,8 @@ export const Editor = memo<EditorProps>((props) => {
         columns={ 5 }
         minQueryLength={ 2 }
       />
+
+      <AIMenu />
     </BlockNoteView>
   </div>
 })

@@ -1,7 +1,7 @@
 import type { DocSection } from '@/types/BlocknoteExt'
 import {
   type DragHandleMenuProps,
-  useComponentsContext
+  useComponentsContext,
 } from '@blocknote/react'
 import { memo } from 'react'
 /**
@@ -20,7 +20,6 @@ import { memo } from 'react'
  * </BlockNoteView>
  * ```
  */
-
 
 /**
  * 获取当前块分组菜单项组件

@@ -34,16 +34,3 @@ export type LabelInputBlockSchema = BlockSchemaWithBlock<'labelInput', LabelInpu
  * 包含 LabelInput 块的编辑器类型
  */
 export type LabelInputBlockNoteEditor = BlockNoteEditor<LabelInputBlockSchema, InlineContentSchema, StyleSchema>
-
-/**
- * LabelInput 菜单项配置
- */
-export interface LabelInputMenuItemConfig {
-  key: string
-  title: string
-  onItemClick: (editor: LabelInputBlockNoteEditor) => void
-  aliases: string[]
-  group: string
-  icon: React.ReactNode
-  hint: string
-}

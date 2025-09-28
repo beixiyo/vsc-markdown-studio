@@ -39,16 +39,3 @@ export type MermaidBlock = BlockFromConfig<MermaidBlockConfig, InlineContentSche
  * 包含 Mermaid 块的编辑器类型
  */
 export type MermaidBlockNoteEditor = BlockNoteEditor<MermaidBlockSchema, InlineContentSchema, StyleSchema>
-
-/**
- * Mermaid 菜单项配置
- */
-export interface MermaidMenuItemConfig {
-  key: string
-  title: string
-  onItemClick: (editor: MermaidBlockNoteEditor) => void
-  aliases: string[]
-  group: string
-  icon: React.ReactNode
-  hint: string
-}

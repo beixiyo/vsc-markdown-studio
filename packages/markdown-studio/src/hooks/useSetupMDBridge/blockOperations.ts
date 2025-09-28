@@ -1,4 +1,5 @@
-import type { Block, BlockNoteEditor } from '@blocknote/core'
+import type { BlockNoteEditor } from '@blocknote/core'
+import type { AnyBlock } from '@/types/MDBridge'
 
 /**
  * 滚动到指定块
@@ -92,7 +93,7 @@ export function getParentHeading(editor: BlockNoteEditor, blockId: string) {
         return {
           block,
           level: block.props?.level || 1,
-          text: extractBlockText([block]),
+          text: extractBlockText(block),
           index: i,
         }
       }
@@ -108,27 +109,44 @@ export function getParentHeading(editor: BlockNoteEditor, blockId: string) {
 
 /**
  * 获取块中的文本内容
- * @param block 块对象
+ * @param blocks 块对象或块数组
  * @returns 文本内容
  */
-export function extractBlockText(blocks: Block[]): string {
+export function extractBlockText(blocks: AnyBlock | AnyBlock[]): string {
   try {
-    if (!Array.isArray(blocks)) {
+    /** 归一化参数：将单个块转换为数组 */
+    const blockArray = Array.isArray(blocks)
+      ? blocks
+      : [blocks]
+
+    if (blockArray.length === 0) {
       return ''
     }
 
-    const getOne = (block: Block) => (block.content || [{ type: 'text', text: '' }])
-      // @ts-ignore
-      .map((item: any) => {
-        if (item && item.type === 'text') {
-          return item.text || ''
-        }
+    const getOne = (block: AnyBlock) => {
+      if (!block || typeof block !== 'object') {
         return ''
-      })
-      .join('')
-      .trim()
+      }
 
-    return blocks.map(getOne).join('\n')
+      const content = block.content || [{ type: 'text', text: '' }]
+
+      if (!Array.isArray(content)) {
+        return ''
+      }
+
+      return content
+        // @ts-ignore
+        .map((item: any) => {
+          if (item && item.type === 'text') {
+            return item.text || ''
+          }
+          return ''
+        })
+        .join('')
+        .trim()
+    }
+
+    return blockArray.map(getOne).join('\n')
   }
   catch (error) {
     console.warn('提取块文本失败:', error)

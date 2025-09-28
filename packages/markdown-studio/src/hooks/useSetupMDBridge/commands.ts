@@ -1,7 +1,7 @@
 import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
-import type { MDBridge } from '@/types/MDBridge'
 import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
+import type { MDBridge } from '@/types/MDBridge'
 import { filterKeys } from '@jl-org/tool'
 
 /**

@@ -1,4 +1,5 @@
 import type { Block } from '@blocknote/core'
+import type { AnyBlock } from './MDBridge'
 
 /**
  * 说话人类型定义
@@ -33,17 +34,17 @@ export interface DocSection {
   /**
    * 该区域的标题块，如果文档开头不是标题，则为 null
    */
-  heading: Block<any, any, any> | null
+  heading: AnyBlock | null
   /**
    * 属于该区域的所有内容块
    */
-  blocks: Block<any, any, any>[]
+  blocks: AnyBlock[]
   /**
    * 该区域的起始块
    */
-  startBlock: Block<any, any, any> | null
+  startBlock: AnyBlock | null
   /**
    * 该区域的结束块
    */
-  endBlock: Block<any, any, any> | null
+  endBlock: AnyBlock | null
 }

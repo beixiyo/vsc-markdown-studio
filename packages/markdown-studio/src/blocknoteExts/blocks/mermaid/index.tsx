@@ -1,5 +1,5 @@
 export { MermaidBlock } from './MermaidBlock'
-export { mermaidMenuItem } from './MermaidMenuItem'
+export { MermaidMenuItem } from './MermaidMenuItem'
 export {
   MermaidCopyButton,
   MermaidDeleteButton,

@@ -1,4 +1,5 @@
-import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
+import type { BlockNoteEditor, PartialBlock } from '@blocknote/core'
+import type { AnyBlock } from '@/types/MDBridge'
 import { GlobalBridgeManager } from './useSetupMDBridge/GlobalBridgeManager'
 
 /**
@@ -10,7 +11,7 @@ export function useHoverSection(
   editor: BlockNoteEditor<any, any, any>,
   callback?: (markdown: string) => void,
 ) {
-  const lastHeading = useRef<Block<any, any, any> | null>(null)
+  const lastHeading = useRef<AnyBlock | null>(null)
 
   useEffect(
     () => {

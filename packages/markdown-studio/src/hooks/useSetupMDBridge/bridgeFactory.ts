@@ -6,8 +6,8 @@ import type { MDBridge } from '@/types/MDBridge'
 import { extractBlockText, getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
 import { groupBlockByHeading } from './blockSections'
 import { createCommands } from './commands'
-import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
 import { GlobalStateManager } from './GlobalStateManager'
+import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
 
 /**
  * 创建 MDBridge 对象

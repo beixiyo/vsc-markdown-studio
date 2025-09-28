@@ -2,11 +2,11 @@ import {
   BlockColorsItem,
   DragHandleMenu as BuiltInDragHandleMenu,
   type DragHandleMenuProps,
-  RemoveBlockItem
+  RemoveBlockItem,
 } from '@blocknote/react'
 import { memo } from 'react'
-import { SetColorItem } from './SetColorItem'
 import { GroupBlockItem } from './GroupBlockItem'
+import { SetColorItem } from './SetColorItem'
 /**
  * 自定义拖拽手柄菜单组件
  * 扩展了 BlockNote 的默认拖拽菜单，添加了渐变样式选择功能

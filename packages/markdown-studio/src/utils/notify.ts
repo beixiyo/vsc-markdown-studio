@@ -11,7 +11,7 @@ export function notifyNative(event: NativeEvent, payload?: any) {
     window.Android.postMessage(JSON.stringify({ name: event, payload })) // Android
   }
   else {
-    console.log('[native-mock]', event, payload) // 浏览器调试
+    // console.log('[native-mock]', event, payload) // 浏览器调试
   }
 }
 

@@ -35,7 +35,7 @@ export interface MDBridge {
    * 获取文档的所有顶层块
    * @returns 文档块数组
    */
-  getDocument: () => Block<any, any, any>[]
+  getDocument: () => AnyBlock[]
 
   /**
    * 设置文档内容（替换所有块）
@@ -114,7 +114,7 @@ export interface MDBridge {
    * @param placement 插入位置，'before'或'after'
    * @returns 插入的块数组
    */
-  insertBlocks: (blocks: Block[], referenceBlockId: string, placement?: 'before' | 'after') => Block<any, any, any>[]
+  insertBlocks: (blocks: Block[], referenceBlockId: string, placement?: 'before' | 'after') => AnyBlock[]
 
   /**
    * 更新指定块的内容
@@ -122,14 +122,14 @@ export interface MDBridge {
    * @param update 更新的块数据
    * @returns 更新后的块
    */
-  updateBlock: (blockId: string, update: Partial<Block>) => Block<any, any, any>
+  updateBlock: (blockId: string, update: Partial<Block>) => AnyBlock
 
   /**
    * 删除指定的块
    * @param blockIds 要删除的块ID数组
    * @returns 删除的块数组
    */
-  removeBlocks: (blockIds: string[]) => Block<any, any, any>[]
+  removeBlocks: (blockIds: string[]) => AnyBlock[]
 
   /**
    * 替换指定块为新块
@@ -157,17 +157,22 @@ export interface MDBridge {
 
   /**
    * 提取块中的纯文本内容
-   * @param block 块对象
+   * @param blocks 块对象或块数组
    * @returns 提取的文本内容
    *
    * @example
    * ```ts
+   * // 提取单个块
    * const block = MDBridge.getDocument()[0]
    * const text = MDBridge.extractBlockText(block)
+   *
+   * // 提取多个块
+   * const blocks = MDBridge.getDocument()
+   * const text = MDBridge.extractBlockText(blocks)
    * console.log(text) // "这是块中的文本内容"
    * ```
    */
-  extractBlockText: (blocks: Block[]) => string
+  extractBlockText: (blocks: AnyBlock | AnyBlock[]) => string
 
   /**
    * 在当前光标位置插入文本
@@ -490,3 +495,7 @@ export interface MDBridge {
    */
   onSelectionChange: (callback: (editor: BlockNoteEditor) => void) => (() => void) | undefined
 }
+
+export type AnyBlock = Block<any, any, any>
+
+export type AnyBlockNoteEditor = BlockNoteEditor<any, any, any>
