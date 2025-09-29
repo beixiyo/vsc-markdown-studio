@@ -30,6 +30,9 @@ export function createMDBridge(
         endBlock: null,
       },
       lastGroupMarkdown: '',
+      lastBlock: null,
+      lastBlockMarkdown: '',
+      selectionContexts: {},
     },
 
     // ======================

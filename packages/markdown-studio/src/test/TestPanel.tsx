@@ -1,12 +1,13 @@
-/* eslint-disable no-console */
 import { AnimateShow } from 'comps'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+/* eslint-disable no-console */
 import {
   runAITest,
   runBlockClickTest,
   runBlockDetectionTest,
+  runBlockSelectionTest,
   runBlocksTest,
   runCommandsTest,
   runContentTest,
@@ -21,7 +22,6 @@ import {
   runLinkOperationsTest,
   runMermaidTest,
   runNestingMoveTest,
-  runSectionClick,
   runStateSelectionHistoryTest,
   runStylesTextLinksTest,
   runTextOperationsTest,
@@ -37,7 +37,7 @@ interface TestItem {
 const testItems: TestItem[] = [
   { label: 'AI 功能', testFn: runAITest, description: '测试 AI 菜单、LLM 调用、建议接受/拒绝等功能' },
   { label: '块点击', testFn: runBlockClickTest, description: '测试 onBlockClick 点击监听功能' },
-  { label: '块点击记录', testFn: runSectionClick, description: '测试 useClickSection 在点击后同步分组数据' },
+  { label: '块选区', testFn: runBlockSelectionTest, description: '测试 useClickSection 同步分组与块上下文' },
   { label: '块悬浮记录', testFn: runHeadingHoverTest, description: '测试 onBlockHover 和 getParentHeading 功能' },
   { label: '块操作', testFn: runBlocksTest, description: '测试插入、更新、删除、替换块操作' },
   { label: '块检测', testFn: runBlockDetectionTest, description: '测试鼠标悬浮、位置检测等新功能' },

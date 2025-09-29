@@ -1,6 +1,37 @@
 import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
 import type { DocSection, ParentHeadingInfo, SpeakerType } from './BlocknoteExt'
 import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
+/**
+ * 选区模式
+ */
+export type SelectionMode = 'headingSection' | 'block'
+
+/**
+ * 选区上下文信息
+ */
+export interface SelectionContext {
+  /**
+   * 选区的模式
+   */
+  mode: SelectionMode
+  /**
+   * 与选区关联的块
+   */
+  block: AnyBlock | null
+  /**
+   * 当模式为标题分组时的分组数据
+   */
+  section: DocSection | null
+  /**
+   * 当前模式下对应的 Markdown 内容
+   */
+  markdown: string
+}
+
+/**
+ * 选区上下文集合
+ */
+export type SelectionContextMap = Partial<Record<SelectionMode, SelectionContext>>
 
 /**
  * MDBridge编辑器桥接接口
@@ -25,6 +56,12 @@ export interface MDBridge {
     lastGroupBlock: DocSection
     /** 上一次分组块的 Markdown 内容 */
     lastGroupMarkdown: string
+    /** 上一次选中的块 */
+    lastBlock: AnyBlock | null
+    /** 上一次选中的块的 Markdown 内容 */
+    lastBlockMarkdown: string
+    /** 当前保存的选区上下文集合 */
+    selectionContexts: SelectionContextMap
   }
 
   // ======================

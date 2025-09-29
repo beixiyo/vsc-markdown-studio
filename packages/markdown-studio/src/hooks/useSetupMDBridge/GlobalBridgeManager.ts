@@ -1,5 +1,12 @@
 import type { DocSection } from '@/types/BlocknoteExt'
-import type { MDBridge } from '@/types/MDBridge'
+import type { MDBridge, SelectionContext, SelectionContextMap } from '@/types/MDBridge'
+
+const emptySection: DocSection = {
+  blocks: [],
+  heading: null,
+  startBlock: null,
+  endBlock: null,
+}
 
 /**
  * 全局桥接器
@@ -18,13 +25,47 @@ export class GlobalBridgeManager {
     return GlobalBridgeManager.instance
   }
 
-  setGlobalState(lastGroupBlock: DocSection, lastGroupMarkdown: string) {
+  setSelectionContexts(contexts: SelectionContext[]) {
     if (!this.bridge) {
       return
     }
 
-    this.bridge.state.lastGroupBlock = lastGroupBlock
-    this.bridge.state.lastGroupMarkdown = lastGroupMarkdown
+    const bridge = this.bridge
+    if (!bridge.state.selectionContexts) {
+      bridge.state.selectionContexts = {} as SelectionContextMap
+    }
+    const selectionContexts = bridge.state.selectionContexts
+
+    contexts.forEach((context) => {
+      selectionContexts[context.mode] = {
+        ...context,
+        section: context.section
+          ? {
+              ...context.section,
+              blocks: [...context.section.blocks],
+            }
+          : null,
+      }
+
+      if (context.mode === 'headingSection') {
+        bridge.state.lastGroupBlock = context.section
+          ? {
+              ...context.section,
+              blocks: [...context.section.blocks],
+            }
+          : emptySection
+        bridge.state.lastGroupMarkdown = context.section
+          ? context.markdown
+          : ''
+      }
+
+      if (context.mode === 'block') {
+        bridge.state.lastBlock = context.block
+        bridge.state.lastBlockMarkdown = context.block
+          ? context.markdown
+          : ''
+      }
+    })
   }
 
   /**
