@@ -41,7 +41,7 @@
   "scripts": {
     "dev": "vite",
     "---build---": "",
-    "build": "run-s build",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint ./src --fix"
   },

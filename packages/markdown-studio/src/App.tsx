@@ -105,44 +105,49 @@ export default function App() {
 
   return (
     <div className="w-full h-screen bg-neutral-50 dark:bg-neutral-900 relative overflow-hidden" ref={ editorElRef }>
+      {
+        import.meta.env.VITE_ONLY_MD_EDITOR === 'true'
+          ? <Editor editor={ editor } className="h-full" />
+          : <>
+            <Resizable
+              fixedPanel="second"
+              initialSize={ getSidebarSize(size.width) }
+            >
+              {/* Editor */ }
+              <Editor editor={ editor } className="h-full" />
 
-      <Resizable
-        fixedPanel="second"
-        initialSize={ getSidebarSize(size.width) }
-      >
-        {/* Editor */ }
-        <Editor editor={ editor } className="h-full" />
+              {/* Sidebar */ }
+              {
+                sidebarVisible && <TocSidebar
+                  tocSections={ tocSections }
+                  currentBlockId={ currentBlockId }
+                  onItemClick={ handleTocItemClick }
+                  className="h-full"
+                />
+              }
+            </Resizable>
 
-        {/* Sidebar */ }
-        {
-          sidebarVisible && <TocSidebar
-            tocSections={ tocSections }
-            currentBlockId={ currentBlockId }
-            onItemClick={ handleTocItemClick }
-            className="h-full"
-          />
-        }
-      </Resizable>
-
-      {/* Floating Toggle Button */ }
-      <button
-        onClick={ () => setSidebarVisible(!sidebarVisible) }
-        className={ cn(
-          'absolute top-1/2 -translate-y-1/2 p-2 rounded-l-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-r-0 border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out z-10',
-          sidebarVisible
-            ? 'right-0'
-            : 'right-0',
-        ) }
-        title={ sidebarVisible
-          ? '隐藏目录'
-          : '显示目录' }
-      >
-        {
-          sidebarVisible
-            ? <PanelLeftClose className="dark:text-white w-5 h-5" />
-            : <PanelLeftOpen className="dark:text-white w-5 h-5" />
-        }
-      </button>
+            {/* Floating Toggle Button */ }
+            <button
+              onClick={ () => setSidebarVisible(!sidebarVisible) }
+              className={ cn(
+                'absolute top-1/2 -translate-y-1/2 p-2 rounded-l-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-r-0 border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out z-10',
+                sidebarVisible
+                  ? 'right-0'
+                  : 'right-0',
+              ) }
+              title={ sidebarVisible
+                ? '隐藏目录'
+                : '显示目录' }
+            >
+              {
+                sidebarVisible
+                  ? <PanelLeftClose className="dark:text-white w-5 h-5" />
+                  : <PanelLeftOpen className="dark:text-white w-5 h-5" />
+              }
+            </button>
+          </>
+      }
 
       <TestPanel />
     </div>

@@ -109,20 +109,20 @@ export interface MDBridge {
    * 通过Markdown设置文档内容（异步）
    * @param markdown Markdown字符串
    */
-  setMarkdown: (markdown: string) => void
+  setMarkdown: (markdown: string) => Promise<void>
 
   // ======================
   // * Image operations
   // ======================
 
   /** 通过URL设置图片到当前位置 */
-  setImagesWithURL: (imageUrls: string[]) => void
+  setImagesWithURL: (imageUrls: string[]) => Promise<void>
 
   /** 通过URL设置底部图片 */
-  setFooterImagesWithURL: (imageUrls: string[]) => void
+  setFooterImagesWithURL: (imageUrls: string[]) => Promise<void>
 
   /** 通过URL设置头部图片 */
-  setHeaderImagesWithURL: (imageUrls: string[]) => void
+  setHeaderImagesWithURL: (imageUrls: string[]) => Promise<void>
 
   // ======================
   // * Speaker operations
