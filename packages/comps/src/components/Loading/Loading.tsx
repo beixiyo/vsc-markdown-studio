@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import { vShow } from 'hooks'
 import { memo } from 'react'
 import { cn } from 'utils'
-import { Mask } from '@/components/Mask'
+import { Mask } from '../Mask'
 import { LoadingIcon } from './LoadingIcon'
 
 export const Loading = memo<LoadingProps>((

@@ -1,37 +1,53 @@
 'use client'
 
 import type { ButtonProps } from './types'
-import React, { Children, memo, useState } from 'react'
+import React, { Children, forwardRef, memo, useState } from 'react'
 import { cn } from 'utils'
 import { LoadingIcon } from '../Loading/LoadingIcon'
 import { Slot } from '../Slot'
-import { getFlatStyles, getGhostStyles, getIconButtonStyles, getNeumorphicStyles, getOutlinedStyles } from './styles'
+import { getDefaultStyles, getIconButtonStyles, getNeumorphicStyles } from './styles'
 
-function InnerButton({ ref, ...props }: ButtonProps & { ref?: React.RefObject<HTMLButtonElement | null> }) {
+const defaultProps: ButtonProps = {
+  iconOnly: false,
+  loading: false,
+  disabled: false,
+  designStyle: 'default',
+  variant: 'default',
+  size: 'md',
+  rounded: 'full',
+  block: false,
+}
+
+const InnerButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+  const newProps = {
+    ...defaultProps,
+    ...props,
+  } as ButtonProps
+
   const {
     children,
+    variant,
+    size,
+    rounded,
+    block,
     leftIcon,
-    rightIcon,
-    iconOnly = false,
-    loading = false,
     loadingText,
-    disabled = false,
-    designStyle = 'flat',
-    variant = 'default',
-    size = 'md',
-    rounded = 'md',
-    block = false,
-    as: Component = 'button',
+    rightIcon,
     className,
     iconClassName,
+    disabled,
+    loading,
     hoverClassName,
     activeClassName,
     disabledClassName,
     loadingClassName,
     asChild,
     onClick,
+    iconOnly,
+    designStyle,
+    as: Component = 'button',
     ...rest
-  } = props
+  } = newProps
 
   const [isActive, setIsActive] = useState(false)
   const [isHover, setIsHover] = useState(false)
@@ -41,14 +57,10 @@ function InnerButton({ ref, ...props }: ButtonProps & { ref?: React.RefObject<HT
   const getStylesByDesign = () => {
     switch (designStyle) {
       case 'neumorphic':
-        return getNeumorphicStyles(props)
-      case 'outlined':
-        return getOutlinedStyles(props)
-      case 'ghost':
-        return getGhostStyles(props)
-      case 'flat':
+        return getNeumorphicStyles(newProps)
+      case 'default':
       default:
-        return getFlatStyles(props)
+        return getDefaultStyles(newProps)
     }
   }
 
@@ -60,7 +72,7 @@ function InnerButton({ ref, ...props }: ButtonProps & { ref?: React.RefObject<HT
   /** 最终的按钮样式 */
   const buttonStyles = cn(
     getStylesByDesign(),
-    block && 'w-full',
+    block && 'w-full block',
     noChild && [iconButtonSize, 'p-0'],
     disabled && disabledClassName,
     loading && loadingClassName,
@@ -107,7 +119,7 @@ function InnerButton({ ref, ...props }: ButtonProps & { ref?: React.RefObject<HT
   /** 获取按钮内容 */
   const getButtonContent = () => {
     const color = variant === 'primary'
-      ? '#fff'
+      ? 'white'
       : undefined
 
     if (loading) {
@@ -178,7 +190,7 @@ function InnerButton({ ref, ...props }: ButtonProps & { ref?: React.RefObject<HT
       { getButtonContent() }
     </Component>
   )
-}
+})
 
 InnerButton.displayName = 'Button'
 

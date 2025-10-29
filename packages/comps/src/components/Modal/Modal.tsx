@@ -92,9 +92,9 @@ const InnerModal = forwardRef<ModalRef, ModalProps>((
       { open && <Mask style={ { zIndex } }>
         { showCloseBtn && <div
           className={ cn(
-            'fixed top-4 right-4 z-50 flex justify-center items-center size-10 rounded-full',
+            'fixed top-4 right-4 z-50 rounded-full flex justify-center items-center size-10',
             'hover:opacity-50 cursor-pointer duration-300 transition-all',
-            'bg-primary text-white',
+            'bg-primaryBgColor text-primaryTextColor',
           ) }
           onClick={ onClose }
         >
@@ -124,7 +124,7 @@ const InnerModal = forwardRef<ModalRef, ModalProps>((
           exit={ { scale: 0.5, opacity: 0 } }
           transition={ { duration: DURATION } }
         >
-          <div className="h-full max-h-[90vh] flex flex-col gap-4 p-4">
+          <div className="h-full max-h-[90vh] flex flex-col gap-4 p-6">
             { header === null
               ? null
               : header === undefined
@@ -136,7 +136,7 @@ const InnerModal = forwardRef<ModalRef, ModalProps>((
                     headerClassName={ headerClassName }
                     headerStyle={ headerStyle }
                   />
-                : null }
+                : header }
 
             <div
               className={ cn(

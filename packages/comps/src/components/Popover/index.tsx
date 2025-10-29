@@ -1,6 +1,7 @@
 'use client'
 
 import type { Variants } from 'framer-motion'
+import type { RefObject } from 'react'
 import { onUnmounted, useClickOutside } from 'hooks'
 import { X } from 'lucide-react'
 import { cn } from 'utils'
@@ -37,9 +38,9 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
   const [actualPosition, setActualPosition] = useState<PopoverPosition>(position)
 
   /** 触发器元素的引用 */
-  const triggerRef = useRef<HTMLDivElement | null>(null)
+  const triggerRef = useRef<HTMLDivElement>(null)
   /** 内容元素的引用 */
-  const contentRef = useRef<HTMLDivElement | null>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
   /** 延迟关闭的计时器引用 */
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -129,8 +130,7 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
    * Effects
    */
   useClickOutside(
-    // @ts-expect-error - 类型错误
-    [triggerRef, contentRef],
+    [triggerRef as RefObject<HTMLDivElement>, contentRef as RefObject<HTMLDivElement>],
     handleClose,
     {
       enabled: isOpen && trigger === 'click' && clickOutsideToClose,

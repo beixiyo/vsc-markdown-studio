@@ -85,12 +85,6 @@ export type TextareaProps
        */
       onPressEnter?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
       /**
-       * 粘贴事件回调
-       * 如果启用了 enableRichPaste，此回调会在富文本处理逻辑之后被调用。
-       * 事件对象的 preventDefault 可能已经被调用。
-       */
-      onPaste?: (e: ReactClipboardEvent<HTMLTextAreaElement>) => void
-      /**
        * 标签文本
        */
       label?: string
@@ -99,11 +93,6 @@ export type TextareaProps
        * @default 'top'
        */
       labelPosition?: 'top' | 'left'
-      /**
-       * 是否启用富文本粘贴功能 (将粘贴的 HTML 转换为 Markdown)
-       * @default false
-       */
-      enableRichPaste?: boolean
       /**
        * 计数器位置。'left'/'right' 控制 TextareaCounter 内部的 text-align
        * @default 'right'

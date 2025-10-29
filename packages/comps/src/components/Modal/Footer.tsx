@@ -1,6 +1,6 @@
 import type { ModalProps } from './types'
 import { cn } from 'utils'
-import { Button } from '@/components/Button'
+import { Button } from '../Button'
 
 export function Footer(
   {
@@ -25,12 +25,12 @@ export function Footer(
       style={ footerStyle }
     >
 
-      <Button onClick={ onClose }>
-        {cancelText}
+      <Button onClick={ onClose } size="sm">
+        { cancelText }
       </Button>
 
-      <Button onClick={ onOk } variant="primary">
-        {okText}
+      <Button onClick={ onOk } variant="primary" size="sm">
+        { okText }
       </Button>
     </div>
   )

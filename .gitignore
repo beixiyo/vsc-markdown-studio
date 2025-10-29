@@ -42,3 +42,5 @@ duyi-editor
 .turbo
 packages/vsc-markdown-studio/webview
 *.vsix
+
+.cursor/

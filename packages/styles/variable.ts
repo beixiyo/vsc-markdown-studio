@@ -1,8 +1,15 @@
 export default {
   light: {
     // 🌈 主色调 —— 品牌色/交互色
-    primary: '#2563eb',
-    primaryHover: '#1d4ed8',
+
+    // 默认的背景色、文字色，类似 Vercel 风格
+    defaultTextColor: '#0a0a0a',
+    defaultBgColor: '#fff',
+    primaryTextColor: '#fff',
+    primaryBgColor: '#171717',
+
+    // 描边/幽灵按钮的 hover 背景色
+    outlineHoverBg: '#f3f4f6',
 
     // 🪟 背景色 —— 白底 + 微灰，打造留白与层级感
     background: '#ffffff',
@@ -21,10 +28,20 @@ export default {
     shadow: 'rgba(0, 0, 0, 0.05)',
     shadowStrong: 'rgba(0, 0, 0, 0.1)',
 
+    // 📜 滚动条 —— 轨道与滑块
+    scrollbarTrack: 'rgba(0, 0, 0, 0.05)',
+    scrollbarThumb: 'rgba(0, 0, 0, 0.2)',
+    scrollbarThumbHover: 'rgba(0, 0, 0, 0.35)',
+
     // 状态色
     success: '#10B981',
+    successBg: '#ECFDF5',
     info: '#3B82F6',
+    infoBg: '#EFF6FF',
     danger: '#EF4444',
+    dangerBg: '#FEF2F2',
+    warning: '#F59E0B',
+    warningBg: '#FEF3C7',
 
     // 绿色调色
     greenTextColor: '#059669',
@@ -63,17 +80,24 @@ export default {
 
     // 石板色调色
     slateTextColor: '#374151',
-    slateBgColor: '#F3F4F6',
+    slateBgColor: '#f3f4f6',
     slateBorderColor: '#64748B',
   },
   dark: {
     // 🌈 主色调 —— 深色背景下的品牌点缀
-    primary: '#3b82f6',
-    primaryHover: '#60a5fa',
+
+    // 默认的背景色、文字色，类似 Vercel 风格
+    defaultTextColor: '#fff',
+    defaultBgColor: '#171717',
+    primaryTextColor: '#0a0a0a',
+    primaryBgColor: '#fff',
+
+    // 描边/幽灵按钮的 hover 背景色
+    outlineHoverBg: '#374151',
 
     // 🪟 背景色 —— 以深灰为主，避免死黑
-    background: '#111827',
-    backgroundSubtle: '#1f2937',
+    background: '#000000',
+    backgroundSubtle: '#0A0A0A',
 
     // ✍️ 文字颜色 —— 反转对比
     textPrimary: '#f9fafb',
@@ -88,10 +112,20 @@ export default {
     shadow: 'rgba(0, 0, 0, 0.4)',
     shadowStrong: 'rgba(0, 0, 0, 0.6)',
 
+    // 📜 滚动条 —— 轨道与滑块
+    scrollbarTrack: 'rgba(255, 255, 255, 0.05)',
+    scrollbarThumb: 'rgba(255, 255, 255, 0.2)',
+    scrollbarThumbHover: 'rgba(255, 255, 255, 0.35)',
+
     // 状态色
     success: '#10B981',
+    successBg: '#064E3B',
     info: '#3B82F6',
+    infoBg: '#1E3A8A',
     danger: '#EF4444',
+    dangerBg: '#7F1D1D',
+    warning: '#FBBF24',
+    warningBg: '#78350F',
 
     // 绿色调色
     greenTextColor: '#34D399',

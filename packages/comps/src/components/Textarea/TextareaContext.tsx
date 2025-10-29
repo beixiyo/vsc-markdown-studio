@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext } from 'react'
+import { createContext, use } from 'react'
 
 export interface TextareaContextValue {
   id?: string
@@ -26,7 +26,7 @@ export function TextareaProvider({
 }
 
 export function useTextarea() {
-  const context = useContext(TextareaContext)
+  const context = use(TextareaContext)
   if (!context) {
     throw new Error('useTextarea must be used within a TextareaProvider')
   }
