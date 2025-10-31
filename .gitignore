@@ -44,3 +44,4 @@ packages/vsc-markdown-studio/webview
 *.vsix
 
 .cursor/
+__snapshots__/
