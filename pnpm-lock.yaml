@@ -442,6 +442,21 @@ importers:
         specifier: workspace:*
         version: link:../styles
 
+  packages/markdown-simple:
+    dependencies:
+      '@blocknote/core':
+        specifier: workspace:*
+        version: link:../../blocknote/core
+      '@blocknote/mantine':
+        specifier: workspace:*
+        version: link:../../blocknote/mantine
+      '@blocknote/react':
+        specifier: workspace:*
+        version: link:../../blocknote/react
+      styles:
+        specifier: workspace:*
+        version: link:../styles
+
   packages/markdown-studio:
     dependencies:
       '@blocknote/code-block':
