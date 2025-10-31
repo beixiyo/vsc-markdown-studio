@@ -46,7 +46,7 @@
     "lint": "eslint ./src --fix"
   },
   "dependencies": {
-    "@blocknote/code-block": "^0.41.1",
+    "@blocknote/code-block": "workspace:*",
     "@blocknote/core": "workspace:*",
     "@blocknote/mantine": "workspace:*",
     "@blocknote/prosemirror-suggest-changes": "^0.1.3",
