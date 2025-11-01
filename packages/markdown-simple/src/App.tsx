@@ -5,9 +5,12 @@ import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 import './blocknote.scss'
 import 'styles/index.css'
+import { useSetupMDBridge } from './hooks/useSetupMDBridge'
 
 export default function App() {
   const editor = useCreateBlockNote()
+
+  useSetupMDBridge(editor)
 
   return (
     <BlockNoteView

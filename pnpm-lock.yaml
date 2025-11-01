@@ -462,6 +462,9 @@ importers:
       '@blocknote/react':
         specifier: workspace:*
         version: link:../../blocknote/react
+      markdown-operate:
+        specifier: workspace:*
+        version: link:../markdown-operate
       styles:
         specifier: workspace:*
         version: link:../styles
