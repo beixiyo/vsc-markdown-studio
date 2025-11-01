@@ -27,10 +27,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+
       'comps/index.css': fileURLToPath(new URL('../comps/dist/index.css', import.meta.url)),
       'comps': fileURLToPath(new URL('../comps/src', import.meta.url)),
       'hooks': fileURLToPath(new URL('../hooks/src', import.meta.url)),
       'utils': fileURLToPath(new URL('../utils/src', import.meta.url)),
+
+      '@blocknote/core': fileURLToPath(new URL('../../blocknote/core/src', import.meta.url)),
+      '@blocknote/react': fileURLToPath(new URL('../../blocknote/react/src', import.meta.url)),
+      '@blocknote/code-block': fileURLToPath(new URL('../../blocknote/code-block/src', import.meta.url)),
+      '@blocknote/mantine': fileURLToPath(new URL('../../blocknote/mantine/src', import.meta.url)),
     },
   },
   base: './',

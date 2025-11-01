@@ -1,13 +1,13 @@
-import * as path from "path";
-import { webpackStats } from "rollup-plugin-webpack-stats";
-import { defineConfig } from "vite";
-import pkg from "./package.json";
-// import eslintPlugin from "vite-plugin-eslint";
+import * as path from "path"
+import { webpackStats } from "rollup-plugin-webpack-stats"
+import { defineConfig } from "vite"
+import pkg from "./package.json"
 
-const deps = Object.keys(pkg.dependencies);
+const deps = Object.keys(pkg.dependencies)
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // @ts-ignore
   test: {
     environment: "jsdom",
     setupFiles: ["./vitestSetup.ts"],
@@ -32,13 +32,13 @@ export default defineConfig({
       // into your library
       external: (source: string) => {
         if (deps.includes(source)) {
-          return true;
+          return true
         }
         return (
           source.startsWith("prosemirror-") ||
           source.startsWith("@shikijs/lang") ||
           source.startsWith("@shikijs/theme")
-        );
+        )
       },
       output: {
         // Provide global variables to use in the UMD build
@@ -48,4 +48,4 @@ export default defineConfig({
       },
     },
   },
-});
+})

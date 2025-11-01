@@ -1,9 +1,8 @@
-import react from "@vitejs/plugin-react";
-import * as path from "path";
-import { webpackStats } from "rollup-plugin-webpack-stats";
-import { defineConfig } from "vite";
-import pkg from "./package.json";
-// import eslintPlugin from "vite-plugin-eslint";
+import react from "@vitejs/plugin-react"
+import * as path from "path"
+import { webpackStats } from "rollup-plugin-webpack-stats"
+import { defineConfig } from "vite"
+import pkg from "./package.json"
 
 // https://vitejs.dev/config/
 export default defineConfig((conf) => ({
@@ -18,9 +17,9 @@ export default defineConfig((conf) => ({
       conf.command === "build"
         ? ({} as Record<string, string>)
         : ({
-            // load live from sources with live reload working
-            "@blocknote/core": path.resolve(__dirname, "../core/src/"),
-          } as Record<string, string>),
+          // load live from sources with live reload working
+          "@blocknote/core": path.resolve(__dirname, "../core/src/"),
+        } as Record<string, string>),
   },
   build: {
     sourcemap: true,
@@ -56,4 +55,4 @@ export default defineConfig((conf) => ({
       },
     },
   },
-}));
+}))

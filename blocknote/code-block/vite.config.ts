@@ -1,14 +1,12 @@
-import * as path from "path";
-import { webpackStats } from "rollup-plugin-webpack-stats";
-import { defineConfig } from "vite";
-import pkg from "./package.json";
-// import eslintPlugin from "vite-plugin-eslint";
+import * as path from "path"
+import { webpackStats } from "rollup-plugin-webpack-stats"
+import { defineConfig } from "vite"
+import pkg from "./package.json"
 
 const deps = Object.keys({
   ...pkg.dependencies,
-  ...pkg.peerDependencies,
   ...pkg.devDependencies,
-});
+})
 
 // https://vitejs.dev/config/
 export default defineConfig((conf) => ({
@@ -22,10 +20,10 @@ export default defineConfig((conf) => ({
       conf.command === "build"
         ? ({} as Record<string, string>)
         : ({
-            // load live from sources with live reload working
-            "@blocknote/core": path.resolve(__dirname, "../core/src/"),
-            "@blocknote/react": path.resolve(__dirname, "../react/src/"),
-          } as Record<string, string>),
+          // load live from sources with live reload working
+          "@blocknote/core": path.resolve(__dirname, "../core/src/"),
+          "@blocknote/react": path.resolve(__dirname, "../react/src/"),
+        } as Record<string, string>),
   },
   build: {
     sourcemap: true,
@@ -43,14 +41,14 @@ export default defineConfig((conf) => ({
       // into your library
       external: (source: string) => {
         if (deps.includes(source)) {
-          return true;
+          return true
         }
 
         if (source.startsWith("@shikijs/")) {
-          return true;
+          return true
         }
 
-        return false;
+        return false
       },
       output: {
         // Provide global variables to use in the UMD build
@@ -60,4 +58,4 @@ export default defineConfig((conf) => ({
       },
     },
   },
-}));
+}))

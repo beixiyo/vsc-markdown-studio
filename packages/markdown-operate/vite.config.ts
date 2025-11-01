@@ -6,11 +6,7 @@ export default defineConfig({
   plugins: [
     dts({ tsconfigPath: './tsconfig.json' }),
   ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
+
   build: {
     outDir: './dist',
     lib: {
