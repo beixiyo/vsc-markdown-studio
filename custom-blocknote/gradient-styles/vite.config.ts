@@ -19,6 +19,15 @@ export default defineConfig({
         'react-dom',
         '@blocknote/react',
       ],
+      output: {
+        assetFileNames: (assetInfo) => {
+          // 将 CSS 文件命名为 index.css
+          if (assetInfo.name === 'style.css') {
+            return 'index.css'
+          }
+          return assetInfo.name || 'asset'
+        },
+      },
     },
   },
 })
