@@ -295,45 +295,17 @@ export type MDBridge = MarkdownOperateFromLib & {
   // ======================
 
   // ======================
-  // * Commands for compatibility
+  // * Commands (扩展 MarkdownOperate 的 command)
   // ======================
 
   /**
    * 提供快捷的格式化命令
+   * 继承自 MarkdownOperate，并扩展了渐变样式相关命令
    */
-  command: {
-    /**
-     * 将当前块设置为标题
-     * @param level 标题级别 (1-3)
-     */
-    setHeading: (level: 1 | 2 | 3) => void
-
-    /** 将当前块设置为段落 */
-    setParagraph: () => void
-
-    /** 将当前块设置为有序列表项 */
-    setOrderedList: () => void
-
-    /** 将当前块设置为无序列表项 */
-    setUnorderedList: () => void
-
-    /** 切换选中文本的粗体样式 */
-    setBold: () => void
-    unsetBold: () => void
-
-    /** 切换选中文本的斜体样式 */
-    setItalic: () => void
-    unsetItalic: () => void
-
-    /** 切换选中文本的删除线样式 */
-    setUnderline: () => void
-    unsetUnderline: () => void
-
-    /** 将当前块设置为检查列表项 */
-    setCheckList: () => void
-
+  command: MarkdownOperateFromLib['command'] & {
     /** 设置渐变 */
     setGradient: (type: GradientStyleType) => void
+    /** 移除渐变 */
     unsetGradient: () => void
   }
 

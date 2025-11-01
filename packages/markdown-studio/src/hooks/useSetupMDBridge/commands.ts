@@ -2,82 +2,48 @@ import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
 import type { MDBridge } from '@/types/MDBridge'
+import { createMarkdownOperate } from 'markdown-operate'
 import { filterKeys } from '@jl-org/tool'
 
 /**
  * 创建命令对象
+ * 从 markdown-operate 继承基础命令，并添加扩展（渐变样式相关命令）
  */
 export function createCommands(editor: BlockNoteEditor, notifyFns: ReturnType<typeof useNotify>): MDBridge['command'] {
+  const base = createMarkdownOperate(editor)
+  const baseCommand = base.command
+
+  // 包装基础命令，添加 notifyFns 通知
+  const wrapCommand = <T extends (...args: any[]) => any>(fn: T): T => {
+    return ((...args: any[]) => {
+      const result = fn(...args)
+      notifyFns.notifyBlockTypeChanged()
+      return result
+    }) as T
+  }
+
   return {
-    setHeading: (level: 1 | 2 | 3) => {
-      const currentBlock = editor.getTextCursorPosition().block
-      if (currentBlock) {
-        editor.updateBlock(currentBlock, { type: 'heading', props: { level } })
-        notifyFns.notifyBlockTypeChanged()
-      }
-    },
-    setParagraph: () => {
-      const currentBlock = editor.getTextCursorPosition().block
-      if (currentBlock) {
-        editor.updateBlock(currentBlock, { type: 'paragraph' })
-        notifyFns.notifyBlockTypeChanged()
-      }
-    },
-    setOrderedList: () => {
-      const currentBlock = editor.getTextCursorPosition().block
-      if (currentBlock) {
-        editor.updateBlock(currentBlock, { type: 'numberedListItem' })
-        notifyFns.notifyBlockTypeChanged()
-      }
-    },
-    setUnorderedList: () => {
-      const currentBlock = editor.getTextCursorPosition().block
-      if (currentBlock) {
-        editor.updateBlock(currentBlock, { type: 'bulletListItem' })
-        notifyFns.notifyBlockTypeChanged()
-      }
-    },
-    setBold: () => {
-      editor.toggleStyles({ bold: true })
-      notifyFns.notifyBlockTypeChanged()
-    },
-    unsetBold: () => {
-      editor.toggleStyles({ bold: false })
-      notifyFns.notifyBlockTypeChanged()
-    },
-
-    setItalic: () => {
-      editor.toggleStyles({ italic: true })
-      notifyFns.notifyBlockTypeChanged()
-    },
-    unsetItalic: () => {
-      editor.toggleStyles({ italic: false })
-      notifyFns.notifyBlockTypeChanged()
-    },
-
-    setUnderline: () => {
-      editor.toggleStyles({ underline: true })
-      notifyFns.notifyBlockTypeChanged()
-    },
-    unsetUnderline: () => {
-      editor.toggleStyles({ underline: false })
-      notifyFns.notifyBlockTypeChanged()
-    },
-
-    setCheckList: () => {
-      const currentBlock = editor.getTextCursorPosition().block
-      if (currentBlock) {
-        editor.updateBlock(currentBlock, { type: 'checkListItem' })
-        notifyFns.notifyBlockTypeChanged()
-      }
-    },
+    ...baseCommand,
+    setHeading: wrapCommand(baseCommand.setHeading),
+    setParagraph: wrapCommand(baseCommand.setParagraph),
+    setOrderedList: wrapCommand(baseCommand.setOrderedList),
+    setUnorderedList: wrapCommand(baseCommand.setUnorderedList),
+    setBold: wrapCommand(baseCommand.setBold),
+    unsetBold: wrapCommand(baseCommand.unsetBold),
+    setItalic: wrapCommand(baseCommand.setItalic),
+    unsetItalic: wrapCommand(baseCommand.unsetItalic),
+    setUnderline: wrapCommand(baseCommand.setUnderline),
+    unsetUnderline: wrapCommand(baseCommand.unsetUnderline),
+    setCheckList: wrapCommand(baseCommand.setCheckList),
 
     setGradient: (type: GradientStyleType) => {
       editor.addStyles({ gradient: type } as any)
+      notifyFns.notifyBlockTypeChanged()
     },
     unsetGradient: () => {
       const curStyle = editor.getActiveStyles()
       editor.removeStyles(filterKeys(curStyle, ['gradient'] as any))
+      notifyFns.notifyBlockTypeChanged()
     },
   }
 }
