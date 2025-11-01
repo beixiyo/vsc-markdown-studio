@@ -1,4 +1,3 @@
-
 /** 示例内部调试状态（仅验收脚本使用，不建议业务侧依赖） */
 export interface MDBridgeState {
   headerImageUrls?: string[]

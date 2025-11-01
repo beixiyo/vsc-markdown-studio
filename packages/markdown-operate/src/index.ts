@@ -1,6 +1,7 @@
 import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
 import type { MarkdownOperateOptions } from './types'
-export type { MarkdownOperateOptions, AnyBlock } from './types'
+
+export type { AnyBlock, MarkdownOperateOptions } from './types'
 
 /**
  * 创建通用的 BlockNote 操作对象
@@ -14,7 +15,7 @@ export function createMarkdownOperate(
 
   return {
     // ======================
-    // 内容管理
+    /** 内容管理 */
     // ======================
     /**
      * 获取文档内容
@@ -62,7 +63,7 @@ export function createMarkdownOperate(
     },
 
     // ======================
-    // 块操作
+    /** 块操作 */
     // ======================
     /**
      * 插入块
@@ -98,7 +99,7 @@ export function createMarkdownOperate(
     },
 
     // ======================
-    // 文本
+    /** 文本 */
     // ======================
     /**
      * 获取选中的文本
@@ -113,7 +114,7 @@ export function createMarkdownOperate(
     },
 
     // ======================
-    // 样式
+    /** 样式 */
     // ======================
     /**
      * 添加样式
@@ -136,7 +137,7 @@ export function createMarkdownOperate(
     getActiveStyles: () => editor.getActiveStyles(),
 
     // ======================
-    // 链接
+    /** 链接 */
     // ======================
     /**
      * 创建链接
@@ -150,7 +151,7 @@ export function createMarkdownOperate(
     getSelectedLinkUrl: () => editor.getSelectedLinkUrl(),
 
     // ======================
-    // 选择与光标
+    /** 选择与光标 */
     // ======================
     /**
      * 获取文本光标位置
@@ -178,7 +179,7 @@ export function createMarkdownOperate(
     },
 
     // ======================
-    // 编辑器状态
+    /** 编辑器状态 */
     // ======================
     /**
      * 聚焦编辑器
@@ -201,7 +202,7 @@ export function createMarkdownOperate(
     isEmpty: () => editor.isEmpty,
 
     // ======================
-    // 历史
+    /** 历史 */
     // ======================
     /**
      * 撤销
@@ -213,7 +214,7 @@ export function createMarkdownOperate(
     redo: () => editor.redo(),
 
     // ======================
-    // 嵌套与移动
+    /** 嵌套与移动 */
     // ======================
     /**
      * 判断是否可以嵌套块
@@ -241,7 +242,7 @@ export function createMarkdownOperate(
     moveBlocksDown: () => editor.moveBlocksDown(),
 
     // ======================
-    // 格式化命令
+    /** 格式化命令 */
     // ======================
     command: {
       /**
@@ -344,4 +345,3 @@ export function createMarkdownOperate(
  * MarkdownOperate 类型，通过 ReturnType 自动推导
  */
 export type MarkdownOperate = ReturnType<typeof createMarkdownOperate>
-

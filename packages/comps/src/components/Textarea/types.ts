@@ -1,4 +1,4 @@
-import type { ChangeEvent, ClipboardEvent as ReactClipboardEvent } from 'react'
+import type { ChangeEvent } from 'react'
 import type { TextareaCounterProps } from './TextareaCounter'
 
 export type TextareaProps

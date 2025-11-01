@@ -182,8 +182,6 @@ function buildShowcaseContent() {
       ],
     },
 
-
-
     /** 分隔线 */
     {
       type: 'paragraph',

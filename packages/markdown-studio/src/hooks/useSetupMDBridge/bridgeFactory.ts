@@ -66,7 +66,6 @@ export function createMDBridge(
       await insertAtTop(editor, blocks, blockIdManager)
     },
 
-
     scrollToBlock: (blockId: string) => scrollToBlock(editor, blockId),
 
     // ======================

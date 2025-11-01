@@ -80,8 +80,6 @@ export type MDBridge = MarkdownOperateFromLib & {
   /** 通过URL设置头部图片 */
   setHeaderImagesWithURL: (imageUrls: string[]) => Promise<void>
 
-
-
   // ======================
   // * Block operations (扩展)
   // ======================

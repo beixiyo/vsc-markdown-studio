@@ -2,8 +2,8 @@ import type { BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
 import type { MDBridge } from '@/types/MDBridge'
-import { createMarkdownOperate } from 'markdown-operate'
 import { filterKeys } from '@jl-org/tool'
+import { createMarkdownOperate } from 'markdown-operate'
 
 /**
  * 创建命令对象
@@ -13,7 +13,7 @@ export function createCommands(editor: BlockNoteEditor, notifyFns: ReturnType<ty
   const base = createMarkdownOperate(editor)
   const baseCommand = base.command
 
-  // 包装基础命令，添加 notifyFns 通知
+  /** 包装基础命令，添加 notifyFns 通知 */
   const wrapCommand = <T extends (...args: any[]) => any>(fn: T): T => {
     return ((...args: any[]) => {
       const result = fn(...args)
