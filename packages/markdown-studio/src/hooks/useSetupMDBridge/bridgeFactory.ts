@@ -1,8 +1,9 @@
-import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
+import type { Block, BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
 import type { SpeakerType } from '@/types/BlocknoteExt'
 import type { MDBridge } from '@/types/MDBridge'
+import { createMarkdownOperate } from 'markdown-operate'
 import { extractBlockText, getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
 import { groupBlockByHeading } from './blockSections'
 import { createCommands } from './commands'
@@ -19,8 +20,10 @@ export function createMDBridge(
   notifyFns: ReturnType<typeof useNotify>,
 ): MDBridge {
   const globalStateManager = GlobalStateManager.getInstance()
+  const base = createMarkdownOperate(editor)
 
   return {
+    ...base,
     editor,
     state: {
       lastGroupBlock: {
@@ -33,24 +36,6 @@ export function createMDBridge(
       lastBlock: null,
       lastBlockMarkdown: '',
       selectionContexts: {},
-    },
-
-    // ======================
-    // * Content management
-    // ======================
-    getDocument: () => editor.document,
-    setContent: (blocks: PartialBlock<any, any, any>[]) => {
-      editor.replaceBlocks(editor.document.map(block => block.id), blocks)
-    },
-    getHTML: () => editor.blocksToHTMLLossy(),
-    setHTML: (html: string) => {
-      const blocks = editor.tryParseHTMLToBlocks(html)
-      editor.replaceBlocks(editor.document.map(block => block.id), blocks)
-    },
-    getMarkdown: blocks => editor.blocksToMarkdownLossy(blocks),
-    setMarkdown: async (markdown: string) => {
-      const blocks = await editor.tryParseMarkdownToBlocks(markdown)
-      editor.replaceBlocks(editor.document.map(block => block.id), blocks)
     },
 
     // ======================
@@ -132,58 +117,24 @@ export function createMDBridge(
         return newBlocks[0]?.id || ''
       }
     },
-
-    // ======================
-    // * Block operations
-    // ======================
-    insertBlocks: (blocks: Block[], referenceBlockId: string, placement: 'before' | 'after' = 'after') => {
-      return editor.insertBlocks(blocks, referenceBlockId, placement)
-    },
-    updateBlock: (blockId: string, update: Partial<Block>) => {
-      return editor.updateBlock(blockId, update)
-    },
-    removeBlocks: (blockIds: string[]) => {
-      return editor.removeBlocks(blockIds)
-    },
-    replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: Block[]) => {
-      return editor.replaceBlocks(blockIdsToRemove, blocksToInsert)
-    },
     scrollToBlock: (blockId: string) => scrollToBlock(editor, blockId),
 
     // ======================
-    // * Text operations
+    // * Text operations (扩展)
     // ======================
-    getSelectedText: () => editor.getSelectedText(),
-    insertText: (text: string) => {
-      editor.insertInlineContent(text)
-    },
     extractBlockText,
 
     // ======================
-    // * Formatting
+    // * Formatting 由通用库提供
     // ======================
-    addStyles: (styles: Record<string, any>) => editor.addStyles(styles),
-    removeStyles: (styles: Record<string, any>) => editor.removeStyles(styles),
-    toggleStyles: (styles: Record<string, any>) => editor.toggleStyles(styles),
-    getActiveStyles: () => editor.getActiveStyles(),
 
     // ======================
-    // * Links
+    // * Links 由通用库提供
     // ======================
-    createLink: (url: string, text?: string) => editor.createLink(url, text),
-    getSelectedLinkUrl: () => editor.getSelectedLinkUrl(),
 
     // ======================
-    // * Selection and cursor
+    // * Selection and cursor (扩展)
     // ======================
-    getTextCursorPosition: () => editor.getTextCursorPosition(),
-    setTextCursorPosition: (blockId: string, placement: 'start' | 'end' = 'end') => {
-      editor.setTextCursorPosition(blockId, placement)
-    },
-    getSelection: () => editor.getSelection(),
-    setSelection: (startBlockId: string, endBlockId: string) => {
-      editor.setSelection(startBlockId, endBlockId)
-    },
 
     // ======================
     // * Block detection
@@ -198,7 +149,7 @@ export function createMDBridge(
      */
     getParentHeading: (blockId: string) => getParentHeading(editor, blockId),
 
-    groupBlockByHeading: (editor, blockId) => groupBlockByHeading(editor, blockId),
+    groupBlockByHeading: (editor: BlockNoteEditor, blockId: string) => groupBlockByHeading(editor, blockId),
 
     onBlockHover: (callback: (block: Block | null) => void) => {
       callbackManager.onBlockHoverCallbacks.add(callback)
@@ -217,36 +168,6 @@ export function createMDBridge(
         callbackManager.onBlockClickCallbacks.delete(callback)
       }
     },
-
-    // ======================
-    // * Editor state
-    // ======================
-    focus: () => editor.focus(),
-    isEditable: () => editor.isEditable,
-    setEditable: (editable: boolean) => {
-      editor.isEditable = editable
-    },
-    isEmpty: () => editor.isEmpty,
-
-    // ======================
-    // * History
-    // ======================
-    undo: () => editor.undo(),
-    redo: () => editor.redo(),
-
-    // ======================
-    // * Block nesting
-    // ======================
-    canNestBlock: () => editor.canNestBlock(),
-    nestBlock: () => editor.nestBlock(),
-    canUnnestBlock: () => editor.canUnnestBlock(),
-    unnestBlock: () => editor.unnestBlock(),
-
-    // ======================
-    // * Block movement
-    // ======================
-    moveBlocksUp: () => editor.moveBlocksUp(),
-    moveBlocksDown: () => editor.moveBlocksDown(),
 
     // ======================
     // * Commands for compatibility with MDBridge

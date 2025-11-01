@@ -442,6 +442,15 @@ importers:
         specifier: workspace:*
         version: link:../styles
 
+  packages/markdown-operate:
+    dependencies:
+      '@blocknote/core':
+        specifier: workspace:*
+        version: link:../../blocknote/core
+      config:
+        specifier: workspace:*
+        version: link:../config
+
   packages/markdown-simple:
     dependencies:
       '@blocknote/core':
@@ -489,6 +498,9 @@ importers:
       hooks:
         specifier: workspace:*
         version: link:../hooks
+      markdown-operate:
+        specifier: workspace:*
+        version: link:../markdown-operate
       mermaid:
         specifier: ^11.12.0
         version: 11.12.0

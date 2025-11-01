@@ -1,4 +1,5 @@
-import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
+import type { Block, BlockNoteEditor } from '@blocknote/core'
+import type { createMarkdownOperate } from 'markdown-operate'
 import type { DocSection, ParentHeadingInfo, SpeakerType } from './BlocknoteExt'
 import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
 /**
@@ -49,7 +50,9 @@ export type SelectionContextMap = Partial<Record<SelectionMode, SelectionContext
  * });
  * ```
  */
-export interface MDBridge {
+type MarkdownOperateFromLib = ReturnType<typeof createMarkdownOperate>
+
+export type MDBridge = MarkdownOperateFromLib & {
   editor: BlockNoteEditor<any, any, any>
   state: {
     /** 上一次分组块 */
@@ -63,53 +66,6 @@ export interface MDBridge {
     /** 当前保存的选区上下文集合 */
     selectionContexts: SelectionContextMap
   }
-
-  // ======================
-  // * Content management
-  // ======================
-
-  /**
-   * 获取文档的所有顶层块
-   * @returns 文档块数组
-   */
-  getDocument: () => AnyBlock[]
-
-  /**
-   * 设置文档内容（替换所有块）
-   * @example
-   * ```ts
-   * MDBridge.setContent([
-   *   { type: 'heading', props: { level: 1 }, content: '标题 1' },
-   *   { type: 'paragraph', content: '这是一个段落' },
-   * ])
-   * ```
-   * @param blocks 要设置的块数组
-   */
-  setContent: (blocks: PartialBlock<any, any, any>[]) => void
-
-  /**
-   * 获取文档的HTML格式内容
-   * @returns HTML字符串
-   */
-  getHTML: () => string
-
-  /**
-   * 通过HTML设置文档内容
-   * @param html HTML字符串
-   */
-  setHTML: (html: string) => void
-
-  /**
-   * 获取文档的Markdown格式内容
-   * @returns Markdown字符串
-   */
-  getMarkdown: (blocks?: PartialBlock<any, any, any>[] | undefined) => string
-
-  /**
-   * 通过Markdown设置文档内容（异步）
-   * @param markdown Markdown字符串
-   */
-  setMarkdown: (markdown: string) => Promise<void>
 
   // ======================
   // * Image operations
@@ -141,40 +97,8 @@ export interface MDBridge {
   setSpeaker: (speakers: SpeakerType) => string
 
   // ======================
-  // * Block operations
+  // * Block operations (扩展)
   // ======================
-
-  /**
-   * 在指定位置插入新块
-   * @param blocks 要插入的块数组
-   * @param referenceBlockId 参考块ID
-   * @param placement 插入位置，'before'或'after'
-   * @returns 插入的块数组
-   */
-  insertBlocks: (blocks: Block[], referenceBlockId: string, placement?: 'before' | 'after') => AnyBlock[]
-
-  /**
-   * 更新指定块的内容
-   * @param blockId 块ID
-   * @param update 更新的块数据
-   * @returns 更新后的块
-   */
-  updateBlock: (blockId: string, update: Partial<Block>) => AnyBlock
-
-  /**
-   * 删除指定的块
-   * @param blockIds 要删除的块ID数组
-   * @returns 删除的块数组
-   */
-  removeBlocks: (blockIds: string[]) => AnyBlock[]
-
-  /**
-   * 替换指定块为新块
-   * @param blockIdsToRemove 要删除的块ID数组
-   * @param blocksToInsert 要插入的新块数组
-   * @returns 包含插入和删除块的结果对象
-   */
-  replaceBlocks: (blockIdsToRemove: string[], blocksToInsert: Block[]) => void
 
   /**
    * 跳转到指定块
@@ -183,14 +107,8 @@ export interface MDBridge {
   scrollToBlock: (blockId: string) => void
 
   // ======================
-  // * Text operations
+  // * Text operations (扩展)
   // ======================
-
-  /**
-   * 获取当前选中的文本
-   * @returns 选中的文本字符串
-   */
-  getSelectedText: () => string
 
   /**
    * 提取块中的纯文本内容
@@ -218,7 +136,7 @@ export interface MDBridge {
   insertText: (text: string) => void
 
   // ======================
-  // * Formatting
+  // * Formatting (保持 MarkdownOperate 能力)
   // ======================
 
   /**
@@ -294,10 +212,10 @@ export interface MDBridge {
    * ```
    * @returns 当前样式对象，包含所有激活的样式属性
    */
-  getActiveStyles: () => Record<string, any>
+  getActiveStyles: () => ReturnType<BlockNoteEditor['getActiveStyles']>
 
   // ======================
-  // * Links
+  // * Links (保持 MarkdownOperate 能力)
   // ======================
 
   /**
@@ -311,37 +229,11 @@ export interface MDBridge {
    * 获取当前选中的链接URL
    * @returns 链接URL，如果没有选中链接则返回undefined
    */
-  getSelectedLinkUrl: () => string | undefined
+  getSelectedLinkUrl: () => ReturnType<BlockNoteEditor['getSelectedLinkUrl']>
 
   // ======================
-  // * Selection and cursor
+  // * Selection and cursor (扩展)
   // ======================
-
-  /**
-   * 获取当前文本光标位置
-   * @returns 光标位置信息
-   */
-  getTextCursorPosition: () => ReturnType<BlockNoteEditor['getTextCursorPosition']>
-
-  /**
-   * 设置文本光标位置
-   * @param blockId 目标块ID
-   * @param placement 位置，'start'或'end'
-   */
-  setTextCursorPosition: (blockId: string, placement?: 'start' | 'end') => void
-
-  /**
-   * 获取当前选择范围
-   * @returns 选择范围信息
-   */
-  getSelection: () => ReturnType<BlockNoteEditor['getSelection']>
-
-  /**
-   * 设置选择范围
-   * @param startBlockId 开始块ID
-   * @param endBlockId 结束块ID
-   */
-  setSelection: (startBlockId: string, endBlockId: string) => void
 
   /**
    * 根据鼠标位置获取对应的块
@@ -399,77 +291,8 @@ export interface MDBridge {
   onBlockClick: (callback: (block: Block | null) => void) => () => void
 
   // ======================
-  // * Editor state
+  // * Editor/History/Nesting/Movement 由 MarkdownOperate 提供
   // ======================
-
-  /** 聚焦编辑器 */
-  focus: () => void
-
-  /**
-   * 检查编辑器是否可编辑
-   * @returns 是否可编辑
-   */
-  isEditable: () => boolean
-
-  /**
-   * 设置编辑器可编辑状态
-   * @param editable 是否可编辑
-   */
-  setEditable: (editable: boolean) => void
-
-  /**
-   * 检查编辑器是否为空
-   * @returns 是否为空
-   */
-  isEmpty: () => boolean
-
-  // ======================
-  // * History
-  // ======================
-
-  /**
-   * 撤销操作
-   * @returns 是否成功撤销
-   */
-  undo: () => boolean
-
-  /**
-   * 重做操作
-   * @returns 是否成功重做
-   */
-  redo: () => boolean
-
-  // ======================
-  // * Block nesting
-  // ======================
-
-  /**
-   * 检查当前块是否可以嵌套
-   * @returns 是否可以嵌套
-   */
-  canNestBlock: () => boolean
-
-  /** 将当前块嵌套到上一个块中 */
-  nestBlock: () => void
-
-  /**
-   * 检查当前块是否可以取消嵌套
-   * @returns 是否可以取消嵌套
-   */
-  canUnnestBlock: () => boolean
-
-  /** 将当前块从嵌套中提升出来 */
-  unnestBlock: () => void
-
-  // ======================
-  // * Block movement
-  // ======================
-
-  /** 将选中的块向上移动 */
-  moveBlocksUp: () => void
-
-  /** 将选中的块向下移动 */
-  moveBlocksDown: () => void
 
   // ======================
   // * Commands for compatibility
@@ -533,6 +356,4 @@ export interface MDBridge {
   onSelectionChange: (callback: (editor: BlockNoteEditor) => void) => (() => void) | undefined
 }
 
-export type AnyBlock = Block<any, any, any>
-
-export type AnyBlockNoteEditor = BlockNoteEditor<any, any, any>
+export type AnyBlock = ReturnType<MarkdownOperateFromLib['getDocument']>[number]
