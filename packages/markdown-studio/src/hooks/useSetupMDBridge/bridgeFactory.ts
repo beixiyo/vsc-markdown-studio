@@ -2,6 +2,7 @@ import type { Block, BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
 import type { MDBridge } from '@/types/MDBridge'
+import { setContentWithSpeakers as speakerSetContentWithSpeakers, setSpeakers as speakerSetSpeakers } from 'custom-blocknote-speaker'
 import { createMarkdownOperate } from 'markdown-operate'
 import { extractBlockText, getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
 import { groupBlockByHeading } from './blockSections'
@@ -65,6 +66,12 @@ export function createMDBridge(
       const blocks = parseImagesToBlocks(urls)
       await insertAtTop(editor, blocks, blockIdManager)
     },
+
+    // ======================
+    // * Speakers
+    // ======================
+    setSpeakers: async speakers => speakerSetSpeakers(editor, speakers),
+    setContentWithSpeakers: async data => speakerSetContentWithSpeakers(editor, data.content || '', data.speakers),
 
     scrollToBlock: (blockId: string) => scrollToBlock(editor, blockId),
 

@@ -42,6 +42,7 @@ export default defineConfig({
       'custom-blocknote-mermaid': fileURLToPath(new URL('../../custom-blocknote/mermaid/src', import.meta.url)),
       'custom-blocknote-gradient-styles': fileURLToPath(new URL('../../custom-blocknote/gradient-styles/src', import.meta.url)),
       'custom-blocknote-exts-basic': fileURLToPath(new URL('../../custom-blocknote/exts-basic/src', import.meta.url)),
+      'custom-blocknote-speaker': fileURLToPath(new URL('../../custom-blocknote/speaker/src', import.meta.url)),
     },
   },
   base: './',

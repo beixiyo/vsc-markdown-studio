@@ -1,5 +1,6 @@
 import type { Block, BlockNoteEditor } from '@blocknote/core'
 import type { GradientStyleType } from 'custom-blocknote-gradient-styles'
+import type { SpeakerType } from 'custom-blocknote-speaker'
 import type { createMarkdownOperate } from 'markdown-operate'
 import type { DocSection, ParentHeadingInfo } from './BlocknoteExt'
 /**
@@ -79,6 +80,23 @@ export type MDBridge = MarkdownOperateFromLib & {
 
   /** 通过URL设置头部图片 */
   setHeaderImagesWithURL: (imageUrls: string[]) => Promise<void>
+
+  // ======================
+  // * Speaker operations
+  // ======================
+
+  /**
+   * 设置说话人列表
+   * 如果编辑器已有内容，会重新处理 speaker 标签
+   * @param speakers 说话人列表
+   */
+  setSpeakers: (speakers: SpeakerType[]) => Promise<void>
+
+  /**
+   * 设置内容和说话人列表（合并方法）
+   * @param data 包含内容和 speakers 的对象
+   */
+  setContentWithSpeakers: (data: { content: string, speakers: SpeakerType[] }) => Promise<void>
 
   // ======================
   // * Block operations (扩展)

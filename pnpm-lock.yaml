@@ -470,6 +470,18 @@ importers:
         specifier: workspace:*
         version: link:../../packages/utils
 
+  custom-blocknote/speaker:
+    dependencies:
+      '@blocknote/core':
+        specifier: workspace:*
+        version: link:../../blocknote/core
+      '@blocknote/react':
+        specifier: workspace:*
+        version: link:../../blocknote/react
+      utils:
+        specifier: workspace:*
+        version: link:../../packages/utils
+
   packages/comps:
     dependencies:
       config:
@@ -564,6 +576,9 @@ importers:
       custom-blocknote-mermaid:
         specifier: workspace:*
         version: link:../../custom-blocknote/mermaid
+      custom-blocknote-speaker:
+        specifier: workspace:*
+        version: link:../../custom-blocknote/speaker
       hooks:
         specifier: workspace:*
         version: link:../hooks

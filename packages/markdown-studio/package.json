@@ -64,6 +64,7 @@
     "custom-blocknote-ai": "workspace:*",
     "custom-blocknote-mermaid": "workspace:*",
     "custom-blocknote-gradient-styles": "workspace:*",
-    "custom-blocknote-exts-basic": "workspace:*"
+    "custom-blocknote-exts-basic": "workspace:*",
+    "custom-blocknote-speaker": "workspace:*"
   }
 }
