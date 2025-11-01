@@ -182,61 +182,7 @@ function buildShowcaseContent() {
       ],
     },
 
-    // LabelInput 块展示
-    {
-      type: 'heading',
-      props: { level: 2 },
-      content: [
-        {
-          type: 'text',
-          text: '💬 LabelInput 对话块展示',
-          styles: {},
-        },
-      ],
-    },
 
-    /** 对话示例 */
-    {
-      type: 'labelInput',
-      props: {
-        label: '张三',
-      },
-      content: [
-        {
-          type: 'text',
-          text: '你好！欢迎使用我们的 Markdown 编辑器。这里可以创建丰富的对话内容。',
-          styles: {},
-        },
-      ],
-    },
-
-    {
-      type: 'labelInput',
-      props: {
-        label: '李四',
-      },
-      content: [
-        {
-          type: 'text',
-          text: '这个编辑器真的很棒！支持多种自定义组件，包括渐变样式、Mermaid 图表等。',
-          styles: {},
-        },
-      ],
-    },
-
-    {
-      type: 'labelInput',
-      props: {
-        label: '王五',
-      },
-      content: [
-        {
-          type: 'text',
-          text: '是的，而且还可以通过双击标签来编辑说话人姓名，非常方便！',
-          styles: {},
-        },
-      ],
-    },
 
     /** 分隔线 */
     {

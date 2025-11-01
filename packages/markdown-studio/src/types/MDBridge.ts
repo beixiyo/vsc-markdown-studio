@@ -1,6 +1,6 @@
 import type { Block, BlockNoteEditor } from '@blocknote/core'
 import type { createMarkdownOperate } from 'markdown-operate'
-import type { DocSection, ParentHeadingInfo, SpeakerType } from './BlocknoteExt'
+import type { DocSection, ParentHeadingInfo } from './BlocknoteExt'
 import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
 /**
  * 选区模式
@@ -80,21 +80,7 @@ export type MDBridge = MarkdownOperateFromLib & {
   /** 通过URL设置头部图片 */
   setHeaderImagesWithURL: (imageUrls: string[]) => Promise<void>
 
-  // ======================
-  // * Speaker operations
-  // ======================
 
-  /**
-   * 设置说话人列表，blockId 可选，传递则为修改对应 ID 的内容
-   * @param speakers 说话人数组
-   * @returns 设置后的块 ID
-   *
-   * @example
-   * ```ts
-   * MDBridge.setSpeaker({ blockId: '1', name: '张三', content: '你好' })
-   * ```
-   */
-  setSpeaker: (speakers: SpeakerType) => string
 
   // ======================
   // * Block operations (扩展)

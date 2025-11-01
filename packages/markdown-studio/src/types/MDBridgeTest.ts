@@ -1,11 +1,9 @@
-import type { SpeakerType } from './BlocknoteExt'
 
 /** 示例内部调试状态（仅验收脚本使用，不建议业务侧依赖） */
 export interface MDBridgeState {
   headerImageUrls?: string[]
   imageUrls?: string[]
   flowing?: boolean
-  speakers?: SpeakerType[]
 }
 
 /** 统一测试工具（在 Console 使用） */

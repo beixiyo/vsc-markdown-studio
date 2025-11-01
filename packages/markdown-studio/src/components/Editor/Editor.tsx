@@ -12,7 +12,6 @@ import {
 import { memo } from 'react'
 import { cn } from 'utils'
 import { AIMenuItem } from '@/blocknoteExts/AI/AIMenuItem'
-import { LabelInputMenuItem } from '@/blocknoteExts/blocks/labelInput'
 import { MermaidMenuItem } from '@/blocknoteExts/blocks/mermaid'
 import { AIMenu } from '../AIMenu'
 import { DragHandleMenu } from '../DragHandleMenu'
@@ -53,7 +52,6 @@ export const Editor = memo<EditorProps>((props) => {
       getItems={ async (query: string) => {
         return filterSuggestionItems([
           ...getDefaultReactSlashMenuItems(editor),
-          LabelInputMenuItem(editor),
           AIMenuItem(editor),
           MermaidMenuItem(editor),
         ], query) as any[]

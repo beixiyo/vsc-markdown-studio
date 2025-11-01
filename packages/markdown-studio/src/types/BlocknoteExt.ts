@@ -2,18 +2,6 @@ import type { Block } from '@blocknote/core'
 import type { AnyBlock } from './MDBridge'
 
 /**
- * 说话人类型定义
- */
-export interface SpeakerType {
-  /** 说话人唯一标识 */
-  blockId?: string
-  /** 说话人显示名称 */
-  name: string
-  /** 内容字符串 */
-  content: string
-}
-
-/**
  * 上级标题信息类型定义
  */
 export interface ParentHeadingInfo {

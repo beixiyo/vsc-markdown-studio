@@ -1,7 +1,6 @@
 import type { Block, BlockNoteEditor } from '@blocknote/core'
 import type { useNotify } from '../useNotify'
 import type { BlockIdManager, CallbackManager } from './types'
-import type { SpeakerType } from '@/types/BlocknoteExt'
 import type { MDBridge } from '@/types/MDBridge'
 import { createMarkdownOperate } from 'markdown-operate'
 import { extractBlockText, getBlockAtPosition, getBlockFromElement, getParentHeading, scrollToBlock } from './blockOperations'
@@ -67,56 +66,7 @@ export function createMDBridge(
       await insertAtTop(editor, blocks, blockIdManager)
     },
 
-    // ======================
-    // * Speaker operations
-    // ======================
-    setSpeaker: (speaker: SpeakerType) => {
-      /** 验证输入参数 */
-      if (!speaker || typeof speaker !== 'object') {
-        console.warn('setSpeaker: speakers 参数必须是对象')
-        return ''
-      }
 
-      if (!speaker.name || typeof speaker.name !== 'string') {
-        console.warn('setSpeaker: speakers.name 参数必须是字符串')
-        return ''
-      }
-
-      /** 创建 LabelInput 块数据 */
-      const labelInputBlock = {
-        type: 'labelInput' as const,
-        props: {
-          label: speaker.name || '未知说话人',
-        },
-        content: [
-          {
-            type: 'text',
-            text: speaker.content || '',
-            styles: {},
-          },
-        ],
-      }
-
-      /** 如果有 blockId，则更新现有块；否则创建新块 */
-      if (speaker.blockId) {
-        /** 更新现有块 - 分别更新 props 和 content */
-        editor.updateBlock(speaker.blockId, {
-          props: { ...labelInputBlock.props },
-        })
-        editor.updateBlock(speaker.blockId, {
-          content: labelInputBlock.content,
-        })
-        return speaker.blockId
-      }
-      else {
-        /** 创建新块 */
-        const lastBlock = editor.document[editor.document.length - 1]
-        const newBlocks = lastBlock
-          ? editor.insertBlocks([labelInputBlock], lastBlock.id, 'after')
-          : editor.insertBlocks([labelInputBlock], editor.document[0]?.id || '', 'after')
-        return newBlocks[0]?.id || ''
-      }
-    },
     scrollToBlock: (blockId: string) => scrollToBlock(editor, blockId),
 
     // ======================
