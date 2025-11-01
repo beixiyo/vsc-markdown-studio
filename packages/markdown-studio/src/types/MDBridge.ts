@@ -1,7 +1,7 @@
 import type { Block, BlockNoteEditor } from '@blocknote/core'
+import type { GradientStyleType } from 'custom-blocknote-gradient-styles'
 import type { createMarkdownOperate } from 'markdown-operate'
 import type { DocSection, ParentHeadingInfo } from './BlocknoteExt'
-import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
 /**
  * 选区模式
  */

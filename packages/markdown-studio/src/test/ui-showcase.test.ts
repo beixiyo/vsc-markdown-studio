@@ -1,4 +1,4 @@
-import { gradientStylesMap, type GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
+import { gradientStylesMap, type GradientStyleType } from 'custom-blocknote-gradient-styles'
 
 /**
  * UI 展示测试

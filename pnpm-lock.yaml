@@ -416,6 +416,60 @@ importers:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@22.18.6)(jsdom@25.0.1)(msw@2.11.3(@types/node@22.18.6)(typescript@5.9.3))(sass@1.93.0)
 
+  custom-blocknote/ai:
+    dependencies:
+      '@blocknote/core':
+        specifier: workspace:*
+        version: link:../../blocknote/core
+      '@blocknote/prosemirror-suggest-changes':
+        specifier: ^0.1.3
+        version: 0.1.3(prosemirror-model@1.25.3)(prosemirror-state@1.4.3)(prosemirror-transform@1.10.4)(prosemirror-view@1.41.3)
+      '@blocknote/react':
+        specifier: workspace:*
+        version: link:../../blocknote/react
+      valtio:
+        specifier: ^2.1.8
+        version: 2.1.8(@types/react@19.2.2)(react@19.1.0)
+
+  custom-blocknote/exts-basic:
+    dependencies:
+      '@blocknote/core':
+        specifier: workspace:*
+        version: link:../../blocknote/core
+      '@tiptap/core':
+        specifier: ^3.7.2
+        version: 3.10.1(@tiptap/pm@3.10.1)
+
+  custom-blocknote/gradient-styles:
+    dependencies:
+      '@blocknote/react':
+        specifier: workspace:*
+        version: link:../../blocknote/react
+
+  custom-blocknote/mermaid:
+    dependencies:
+      '@blocknote/core':
+        specifier: workspace:*
+        version: link:../../blocknote/core
+      '@blocknote/react':
+        specifier: workspace:*
+        version: link:../../blocknote/react
+      comps:
+        specifier: workspace:*
+        version: link:../../packages/comps
+      hooks:
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      lucide-react:
+        specifier: ^0.525.0
+        version: 0.525.0(react@19.1.0)
+      mermaid:
+        specifier: ^11.12.0
+        version: 11.12.0
+      utils:
+        specifier: workspace:*
+        version: link:../../packages/utils
+
   packages/comps:
     dependencies:
       config:
@@ -498,6 +552,18 @@ importers:
       config:
         specifier: workspace:*
         version: link:../config
+      custom-blocknote-ai:
+        specifier: workspace:*
+        version: link:../../custom-blocknote/ai
+      custom-blocknote-exts-basic:
+        specifier: workspace:*
+        version: link:../../custom-blocknote/exts-basic
+      custom-blocknote-gradient-styles:
+        specifier: workspace:*
+        version: link:../../custom-blocknote/gradient-styles
+      custom-blocknote-mermaid:
+        specifier: workspace:*
+        version: link:../../custom-blocknote/mermaid
       hooks:
         specifier: workspace:*
         version: link:../hooks

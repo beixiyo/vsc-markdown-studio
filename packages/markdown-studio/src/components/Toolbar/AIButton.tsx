@@ -1,8 +1,8 @@
 import { useBlockNoteEditor, useComponentsContext } from '@blocknote/react'
+import { getAIExtension } from 'custom-blocknote-ai'
 import { Sparkles } from 'lucide-react'
 import { memo, useCallback } from 'react'
 import { useSnapshot } from 'valtio'
-import { getAIExtension } from '@/blocknoteExts/AI/AIExtension'
 
 export const AIButton = memo(() => {
   const components = useComponentsContext()

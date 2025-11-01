@@ -1,11 +1,11 @@
+import type { BlockNoteEditor } from '@blocknote/core'
 import type { DefaultReactSuggestionItem } from '@blocknote/react'
-import type { AnyBlockNoteEditor } from '@/types/MDBridge'
 import { Workflow } from 'lucide-react'
 
 /**
  * 生成一个 Slash 菜单项，用于插入 Mermaid 块
  */
-export function MermaidMenuItem(editor: AnyBlockNoteEditor): DefaultReactSuggestionItem {
+export function MermaidMenuItem(editor: BlockNoteEditor<any, any, any>): DefaultReactSuggestionItem {
   return {
     title: 'Mermaid Diagram',
     onItemClick: () => {

@@ -4,11 +4,10 @@
 
 import { en } from '@blocknote/core/locales'
 import { useCreateBlockNote } from '@blocknote/react'
+import { createAIExtension } from 'custom-blocknote-ai'
+import { ArrowBeautify, TimeInsert } from 'custom-blocknote-exts-basic'
 import { useTheme } from 'hooks'
 import { useRef } from 'react'
-import { createAIExtension } from './blocknoteExts/AI/AIExtension'
-import { ArrowBeautify } from './blocknoteExts/exts/ArrowBeautify'
-import { TimeInsert } from './blocknoteExts/exts/TimeInsert'
 import { schema } from './blocknoteExts/schema'
 import { Editor } from './components/Editor/Editor'
 import { useClickSection, useHoverSection, useNotify, useSetupMDBridge, useVSCode } from './hooks'
@@ -16,7 +15,7 @@ import { TestPanel } from './test/TestPanel'
 
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
-import './styles/gradient.css'
+import 'custom-blocknote-gradient-styles/index.css'
 import 'styles/index.css'
 
 export default function App() {

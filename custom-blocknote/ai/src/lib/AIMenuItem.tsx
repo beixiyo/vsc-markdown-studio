@@ -1,9 +1,12 @@
+import type { BlockNoteEditor } from '@blocknote/core'
 import type { DefaultReactSuggestionItem } from '@blocknote/react'
-import type { AnyBlockNoteEditor } from '@/types/MDBridge'
 import { Sparkles } from 'lucide-react'
 import { getAIExtension } from './AIExtension'
 
-export function AIMenuItem(editor: AnyBlockNoteEditor): DefaultReactSuggestionItem {
+/**
+ * 生成一个 Slash 菜单项，用于触发 AI Writing 流程
+ */
+export function AIMenuItem(editor: BlockNoteEditor<any, any, any>): DefaultReactSuggestionItem {
   const aiExtension = getAIExtension(editor)
 
   return {

@@ -3,7 +3,6 @@ import {
   useBlockNoteEditor,
   useComponentsContext,
 } from '@blocknote/react'
-import { memo } from 'react'
 /**
  * 自定义拖拽手柄菜单组件
  * 扩展了 BlockNote 的默认拖拽菜单，添加了渐变样式选择功能
@@ -20,7 +19,8 @@ import { memo } from 'react'
  * </BlockNoteView>
  * ```
  */
-import { gradientStylesMap, type GradientStyleType } from '@/blocknoteExts/styles/gradientStyles/constans'
+import { gradientStylesMap, type GradientStyleType } from 'custom-blocknote-gradient-styles'
+import { memo } from 'react'
 
 /**
  * 渐变样式菜单项组件

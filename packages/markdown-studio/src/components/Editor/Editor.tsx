@@ -9,10 +9,10 @@ import {
   SideMenuController,
   SuggestionMenuController,
 } from '@blocknote/react'
+import { AIMenuItem } from 'custom-blocknote-ai'
+import { MermaidMenuItem } from 'custom-blocknote-mermaid'
 import { memo } from 'react'
 import { cn } from 'utils'
-import { AIMenuItem } from '@/blocknoteExts/AI/AIMenuItem'
-import { MermaidMenuItem } from '@/blocknoteExts/blocks/mermaid'
 import { AIMenu } from '../AIMenu'
 import { DragHandleMenu } from '../DragHandleMenu'
 import { FormatToolbar } from '../Toolbar'

@@ -37,6 +37,11 @@ export default defineConfig({
       '@blocknote/react': fileURLToPath(new URL('../../blocknote/react/src', import.meta.url)),
       '@blocknote/code-block': fileURLToPath(new URL('../../blocknote/code-block/src', import.meta.url)),
       '@blocknote/mantine': fileURLToPath(new URL('../../blocknote/mantine/src', import.meta.url)),
+
+      '@custom-blocknote-ai': fileURLToPath(new URL('../../custom-blocknote/ai/src', import.meta.url)),
+      '@custom-blocknote-mermaid': fileURLToPath(new URL('../../custom-blocknote/mermaid/src', import.meta.url)),
+      '@custom-blocknote-gradient-styles': fileURLToPath(new URL('../../custom-blocknote/gradient-styles/src', import.meta.url)),
+      '@custom-blocknote-exts-basic': fileURLToPath(new URL('../../custom-blocknote/exts-basic/src', import.meta.url)),
     },
   },
   base: './',

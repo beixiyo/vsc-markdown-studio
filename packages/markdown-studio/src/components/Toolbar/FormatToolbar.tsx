@@ -1,10 +1,10 @@
 import { FormattingToolbar, getFormattingToolbarItems } from '@blocknote/react'
-import { memo } from 'react'
 import {
   MermaidCopyButton,
   MermaidDeleteButton,
   MermaidEditButton,
-} from '@/blocknoteExts/blocks/mermaid'
+} from 'custom-blocknote-mermaid'
+import { memo } from 'react'
 import { AIButton } from './AIButton'
 
 /**

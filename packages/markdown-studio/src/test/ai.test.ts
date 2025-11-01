@@ -3,7 +3,7 @@
  * 测试 AI 扩展的各种功能，包括菜单打开、LLM 调用、建议接受/拒绝等
  */
 
-import { getAIExtension } from '../blocknoteExts/AI'
+import { getAIExtension } from 'custom-blocknote-ai'
 
 export async function runAITest() {
   const { createResults, asyncTestCase, finalizeTest, clearContent, delay, logTitle } = window.MDTest

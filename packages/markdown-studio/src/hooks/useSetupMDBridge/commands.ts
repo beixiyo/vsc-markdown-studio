@@ -1,6 +1,6 @@
 import type { BlockNoteEditor } from '@blocknote/core'
+import type { GradientStyleType } from 'custom-blocknote-gradient-styles'
 import type { useNotify } from '../useNotify'
-import type { GradientStyleType } from '@/blocknoteExts/styles/gradientStyles'
 import type { MDBridge } from '@/types/MDBridge'
 import { filterKeys } from '@jl-org/tool'
 import { createMarkdownOperate } from 'markdown-operate'

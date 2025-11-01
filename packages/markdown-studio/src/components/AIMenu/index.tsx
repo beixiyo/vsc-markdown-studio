@@ -1,11 +1,11 @@
 import type { KeyboardEvent } from 'react'
 import type { MyAIMenuProps } from './types'
 import { useBlockNoteEditor } from '@blocknote/react'
+import { getAIExtension } from 'custom-blocknote-ai'
 import { AlertTriangle, Check, Loader2, Sparkles, X } from 'lucide-react'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { cn } from 'utils'
 import { useSnapshot } from 'valtio'
-import { getAIExtension } from '../../blocknoteExts/AI/AIExtension'
 
 /**
  * 右下角 AI 菜单
