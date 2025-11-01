@@ -5,8 +5,11 @@ export default {
     extend: {
       /** 颜色 */
       colors: {
-        primary: 'var(--primary)',
-        primaryHover: 'var(--primaryHover)',
+        primaryTextColor: 'var(--primaryTextColor)',
+        primaryBgColor: 'var(--primaryBgColor)',
+        defaultTextColor: 'var(--defaultTextColor)',
+        defaultBgColor: 'var(--defaultBgColor)',
+        outlineHoverBg: 'var(--outlineHoverBg)',
         background: 'var(--background)',
         backgroundSubtle: 'var(--backgroundSubtle)',
         textPrimary: 'var(--textPrimary)',
@@ -17,8 +20,13 @@ export default {
         shadow: 'var(--shadow)',
         shadowStrong: 'var(--shadowStrong)',
         success: 'var(--success)',
+        successBg: 'var(--successBg)',
         info: 'var(--info)',
+        infoBg: 'var(--infoBg)',
         danger: 'var(--danger)',
+        dangerBg: 'var(--dangerBg)',
+        warning: 'var(--warning)',
+        warningBg: 'var(--warningBg)',
       },
 
       /** 动画 */
@@ -41,13 +49,43 @@ export default {
       /** 隐藏滚动条 */
       addUtilities({
         '.hide-scroll': {
-          /* Firefox */
-          'scrollbar-width': 'none',
+          /* Firefox - 保持滚动条占用空间，但颜色透明 */
+          'scrollbar-width': 'thin',
+          'scrollbar-color': 'transparent transparent',
           /* IE & Edge */
-          '-ms-overflow-style': 'none',
-          /* Safari & Chrome */
+          '-ms-overflow-style': 'auto',
+          /* Safari & Chrome - 保持滚动条占用空间，但颜色透明 */
           '&::-webkit-scrollbar': {
-            display: 'none',
+            width: '7px',
+            height: '7px',
+          },
+          '&::-webkit-scrollbar-track': {
+            'background-color': 'transparent',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            'background-color': 'transparent',
+            'border-radius': '6px',
+            'border': '2px solid transparent',
+            'background-clip': 'padding-box',
+          },
+          /* 鼠标悬停或聚焦时显示滚动条颜色 */
+          '&:hover': {
+            'scrollbar-color': 'var(--scrollbarThumb) transparent',
+            '&::-webkit-scrollbar-thumb': {
+              'background-color': 'var(--scrollbarThumb)',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              'background-color': 'var(--scrollbarThumbHover)',
+            },
+          },
+          '&:focus-within': {
+            'scrollbar-color': 'var(--scrollbarThumb) transparent',
+            '&::-webkit-scrollbar-thumb': {
+              'background-color': 'var(--scrollbarThumb)',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              'background-color': 'var(--scrollbarThumbHover)',
+            },
           },
         },
       })

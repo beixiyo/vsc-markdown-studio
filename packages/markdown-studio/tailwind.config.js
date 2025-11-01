@@ -9,6 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export default {
   ...Config,
   content: [
+    './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
     path.resolve(__dirname, '../comps/src/**/*.{js,ts,jsx,tsx}'),
   ],
