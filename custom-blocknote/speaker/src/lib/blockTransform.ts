@@ -2,7 +2,34 @@ import type { Block, BlockNoteEditor } from '@blocknote/core'
 import type { SpeakerType } from './types'
 
 /**
- * 设置 Markdown 内容并应用 speakers，将占位符转为内联节点
+ * 将一段 Markdown 设置到编辑器并同步应用 speakers 占位符解析
+ *
+ * @description
+ * - 会先把传入的 Markdown 解析为 BlockNote 的 Block 数组
+ * - 在所有块及其子块的内联内容中，识别并把 `[speaker:X]` 占位符替换为内联节点 `{ type: 'speaker', props }`
+ * - 未匹配到的占位符会保留为原样文本；文本样式会在拆分后保留到新的普通文本片段；非文本类内联元素保持不变
+ * - 最终使用转换后的 Block 数组整体替换编辑器当前文档（会替换整篇文档）
+ *
+ * 使用时机
+ * - 首次加载或需要整体替换文档时，且手里已经有 Markdown 文本和 speakers 映射
+ * - 希望一次性让内容与 speakers 一起生效
+ *
+ * 参数
+ * @param editor BlockNote 编辑器实例
+ * @param content Markdown 文本，支持包含 `[speaker:X]` 占位符
+ * @param speakers Speaker 列表，按 `originalLabel` 建立映射；当 `id` 未提供时，内联节点中的 `id` 会设置为 `null`
+ *
+ * 返回值
+ * - 无返回值（通过副作用替换编辑器文档）
+ *
+ * 限制
+ * - 仅匹配形如 `[speaker:数字]` 的占位符（正则：`/\[speaker:(\d+)\]/g`）
+ *
+ * 示例
+ * @example
+ * await setContentWithSpeakers(editor, 'Hi [speaker:0]', [
+ *   { originalLabel: 0, name: 'Bob', id: 1 }
+ * ])
  */
 export async function setContentWithSpeakers(
   editor: BlockNoteEditor<any, any, any>,
@@ -18,7 +45,29 @@ export async function setContentWithSpeakers(
 }
 
 /**
- * 对当前文档应用 speakers，将占位符转为内联节点
+ * 在不改变现有 Markdown 内容前提下，对当前文档应用/更新 speakers 解析
+ *
+ * @description
+ * - 基于当前编辑器文档的 Block 数组执行占位符替换，规则与 {@link setContentWithSpeakers} 相同
+ * - 在文本或 `type ==='text'` 的内联项中识别 `[speaker:X]`，替换为 `{ type: 'speaker', props }`
+ * - 未匹配到的占位符保留为原样文本；文本样式保留；其它内联元素不变；对子节点递归处理
+ * - 使用转换后的 Block 数组整体替换当前文档
+ *
+ * 使用时机
+ * - 文档内容已在编辑器中，随后才获取或更新 speakers 映射（例如异步到达或切换数据源）
+ *
+ * 参数
+ * @param editor BlockNote 编辑器实例
+ * @param speakers Speaker 列表，按 `originalLabel` 建立映射；当 `id` 未提供时，内联节点中的 `id` 会设置为 `null`
+ *
+ * 返回值
+ * - 无返回值（通过副作用替换编辑器文档）
+ *
+ * 示例
+ * @example
+ * // 先设置内容，再单独应用 speakers
+ * editor.setMarkdown('A [speaker:0] B')
+ * await setSpeakers(editor, [{ originalLabel: 0, name: 'Bob', id: 1 }])
  */
 export async function setSpeakers(
   editor: BlockNoteEditor<any, any, any>,
@@ -74,9 +123,7 @@ function splitTextWithSpeakers(
         type: 'speaker',
         props: {
           originalLabel: s.originalLabel,
-          id: typeof s.id === 'number'
-            ? s.id
-            : 0,
+          id: s.id || null,
           name: s.name,
         },
       })
