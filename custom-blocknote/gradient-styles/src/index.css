@@ -1,0 +1,159 @@
+/**
+ * ===========
+ * 渐变文字样式
+ * 与 constans.ts 中的渐变定义保持一致
+ */
+.gradient-mystic-purple-blue {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-sky-blue {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-gorgeous-purple-red {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-warm-sunshine {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-natural-green {
+  background: linear-gradient(135deg, #a8e6cf 0%, #7fcdcd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-mystic-night {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-colorful-candy {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-starry-night {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-metallic {
+  background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-snowy-glacier {
+  background: linear-gradient(135deg, #e6ddd4 0%, #f1f2f6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.gradient-tropical-summer {
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+/* 渐变按钮样式 */
+.gradient-mystic-purple-blue-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-sky-blue-btn {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-gorgeous-purple-red-btn {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-warm-sunshine-btn {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-natural-green-btn {
+  background: linear-gradient(135deg, #a8e6cf 0%, #7fcdcd 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-mystic-night-btn {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-colorful-candy-btn {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-starry-night-btn {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-metallic-btn {
+  background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-snowy-glacier-btn {
+  background: linear-gradient(135deg, #e6ddd4 0%, #f1f2f6 100%);
+  color: white;
+  border: none;
+}
+
+.gradient-tropical-summer-btn {
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+  color: white;
+  border: none;
+}

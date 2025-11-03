@@ -1,0 +1,31 @@
+{
+  "name": "markdown-simple",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "description": "A minimal BlockNote Markdown editor for mobile WebView",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@blocknote/core": "workspace:*",
+    "@blocknote/mantine": "workspace:*",
+    "@blocknote/react": "workspace:*",
+    "custom-blocknote-gradient-styles": "workspace:*",
+    "custom-blocknote-speaker": "workspace:*",
+    "markdown-operate": "workspace:*",
+    "notify": "workspace:*",
+    "styles": "workspace:*",
+    "hooks": "workspace:*"
+  }
+}
+
+

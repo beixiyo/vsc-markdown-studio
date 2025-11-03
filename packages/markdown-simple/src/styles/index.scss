@@ -1,0 +1,8 @@
+@use './blocknote.scss' as *;
+@use './markdown-light.scss' as *;
+@use './markdown-dark.scss' as *;
+
+@import '@blocknote/core/fonts/inter.css';
+@import '@blocknote/mantine/style.css';
+@import 'custom-blocknote-gradient-styles/index.css';
+@import 'styles/index.css';

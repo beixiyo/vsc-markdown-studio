@@ -1,0 +1,71 @@
+{
+  "name": "markdown-studio",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./index.css": "./dist/index.css",
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "description": "A powerful WYSIWYG Markdown editor with Mermaid diagrams, and VSCode integration",
+  "keywords": [
+    "markdown",
+    "editor",
+    "wysiwyg",
+    "mermaid",
+    "vscode",
+    "diagram"
+  ],
+  "author": "CJL <2662442385@qq.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/beixiyo/vsc-markdown-studio",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beixiyo/vsc-markdown-studio"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "---build---": "",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint ./src --fix"
+  },
+  "dependencies": {
+    "@blocknote/code-block": "workspace:*",
+    "@blocknote/core": "workspace:*",
+    "@blocknote/mantine": "workspace:*",
+    "@blocknote/prosemirror-suggest-changes": "^0.1.3",
+    "@blocknote/react": "workspace:*",
+    "markdown-operate": "workspace:*",
+    "@tiptap/core": "^3.7.2",
+    "comps": "workspace:*",
+    "config": "workspace:*",
+    "hooks": "workspace:*",
+    "mermaid": "^11.12.0",
+    "styles": "workspace:*",
+    "notify": "workspace:*",
+    "utils": "workspace:*",
+    "@y-sweet/react": "^0.6.3",
+    "valtio": "^2.1.8",
+    "custom-blocknote-ai": "workspace:*",
+    "custom-blocknote-mermaid": "workspace:*",
+    "custom-blocknote-gradient-styles": "workspace:*",
+    "custom-blocknote-exts-basic": "workspace:*",
+    "custom-blocknote-speaker": "workspace:*"
+  }
+}
