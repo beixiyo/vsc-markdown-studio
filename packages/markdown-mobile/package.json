@@ -1,9 +1,9 @@
 {
-  "name": "markdown-simple",
+  "name": "markdown-mobile",
   "version": "0.0.1",
   "private": false,
   "type": "module",
-  "description": "A minimal BlockNote Markdown editor for mobile WebView",
+  "description": "A minimal BlockNote Markdown editor for mobile",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

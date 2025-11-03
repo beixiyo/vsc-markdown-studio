@@ -32,7 +32,7 @@ export function createSpeaker(onSpeakerTapped?: (speaker: {
     {
       render: props => (
         <span
-          className="px-1 font-bold cursor-pointer text-white dark:text-black"
+          className="px-1 font-bold cursor-pointer text-black dark:text-white"
           onClick={ () => {
             const speakerData = {
               label: props.inlineContent.props.label,

@@ -508,16 +508,7 @@ importers:
         specifier: workspace:*
         version: link:../styles
 
-  packages/markdown-operate:
-    dependencies:
-      '@blocknote/core':
-        specifier: workspace:*
-        version: link:../../blocknote/core
-      config:
-        specifier: workspace:*
-        version: link:../config
-
-  packages/markdown-simple:
+  packages/markdown-mobile:
     dependencies:
       '@blocknote/core':
         specifier: workspace:*
@@ -546,6 +537,15 @@ importers:
       styles:
         specifier: workspace:*
         version: link:../styles
+
+  packages/markdown-operate:
+    dependencies:
+      '@blocknote/core':
+        specifier: workspace:*
+        version: link:../../blocknote/core
+      config:
+        specifier: workspace:*
+        version: link:../config
 
   packages/markdown-studio:
     dependencies:
