@@ -36,6 +36,7 @@ export default function App() {
     const unsubscribe = editor.onChange(() => {
       const markdown = editor.blocksToMarkdownLossy()
       notifyNative('contentChanged', markdown)
+      console.log('contentChanged\n', markdown)
       notifyBlockTypeChanged()
     })
 

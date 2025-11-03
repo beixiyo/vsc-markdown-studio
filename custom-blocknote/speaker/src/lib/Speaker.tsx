@@ -53,6 +53,37 @@ export function createSpeaker(onSpeakerTapped?: (speaker: {
           { props.inlineContent.props.name }
         </span>
       ),
+
+      toExternalHTML(props) {
+        const p = props.inlineContent.props
+        const extraAttrs: Record<string, string> = {}
+
+        /** 仅在非默认值时输出自定义前缀的 data-speaker-* 属性，避免无意义冗余 */
+        if (p.name != null) {
+          extraAttrs['data-speaker-name'] = p.name
+        }
+        if (p.id != null) {
+          extraAttrs['data-speaker-id'] = String(p.id)
+        }
+        if (p.label != null) {
+          extraAttrs['data-speaker-label'] = String(p.label)
+        }
+        if (p.originalLabel != null) {
+          extraAttrs['data-speaker-original-label'] = String(p.originalLabel)
+        }
+
+        /** 使用 <span> 承载，附带自定义的 data-speaker-* 属性； */
+        // Markdown 导出阶段由 rehype 插件转换为 <speaker> 标签
+        return (
+          <span
+            ref={ props.contentRef }
+            className="px-1 font-bold text-black dark:text-white"
+            { ...extraAttrs }
+          >
+            { props.inlineContent.props.name }
+          </span>
+        )
+      },
     },
   )
 }

@@ -16,12 +16,15 @@ import { createExternalHTMLExporter } from "../html/externalHTMLExporter.js";
 import { removeUnderlines } from "./util/removeUnderlinesRehypePlugin.js";
 import { addSpacesToCheckboxes } from "./util/addSpacesToCheckboxesRehypePlugin.js";
 import { convertVideoToMarkdown } from "./util/convertVideoToMarkdownRehypePlugin.js";
+import { convertSpeakerToTag } from "./util/convertSpeakerToTagRehypePlugin.js";
 
 // Needs to be sync because it's used in drag handler event (SideMenuPlugin)
 export function cleanHTMLToMarkdown(cleanHTMLString: string) {
   const markdownString = unified()
     .use(rehypeParse, { fragment: true })
     .use(convertVideoToMarkdown)
+    // 自定义节点转换
+    .use(convertSpeakerToTag)
     .use(removeUnderlines)
     .use(addSpacesToCheckboxes)
     .use(rehypeRemark)
