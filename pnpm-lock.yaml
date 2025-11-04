@@ -446,6 +446,18 @@ importers:
         specifier: workspace:*
         version: link:../../blocknote/react
 
+  custom-blocknote/markdown-extensions:
+    dependencies:
+      '@tiptap/core':
+        specifier: ^3.7.2
+        version: 3.10.1(@tiptap/pm@3.10.1)
+      '@tiptap/extension-bold':
+        specifier: ^3.7.2
+        version: 3.10.1(@tiptap/core@3.10.1(@tiptap/pm@3.10.1))
+      '@tiptap/extension-italic':
+        specifier: ^3.7.2
+        version: 3.10.1(@tiptap/core@3.10.1(@tiptap/pm@3.10.1))
+
   custom-blocknote/mermaid:
     dependencies:
       '@blocknote/core':
