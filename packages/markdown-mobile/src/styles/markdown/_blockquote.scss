@@ -1,0 +1,21 @@
+/* ============================================
+   引用样式
+   ============================================ */
+
+.markdown-body {
+  blockquote {
+    margin: 0;
+    padding: 0 1em;
+    color: var(--md-blockquote-text);
+    border-left: 0.25em solid var(--md-blockquote-border);
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+

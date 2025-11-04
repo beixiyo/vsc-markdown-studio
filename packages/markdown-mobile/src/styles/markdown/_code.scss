@@ -1,0 +1,115 @@
+/* ============================================
+   代码样式
+   ============================================ */
+
+.markdown-body {
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: monospace;
+    font-size: 1em;
+  }
+
+  tt,
+  code,
+  samp {
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+    font-size: 12px;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+    font-size: 12px;
+    word-wrap: normal;
+    padding: 1rem;
+    overflow: auto;
+    line-height: 1.45;
+    color: var(--md-pre-text);
+    background-color: var(--md-pre-bg);
+    border-radius: 6px;
+
+    code,
+    tt {
+      display: inline;
+      max-width: auto;
+      padding: 0;
+      margin: 0;
+      overflow: visible;
+      line-height: inherit;
+      word-wrap: normal;
+      background-color: transparent;
+      border: 0;
+      font-size: 100%;
+    }
+
+    > code {
+      padding: 0;
+      margin: 0;
+      word-break: normal;
+      white-space: pre;
+      background: transparent;
+      border: 0;
+    }
+
+    &:has(+ .zeroclipboard-container) {
+      min-height: 52px;
+    }
+  }
+
+  code,
+  tt {
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    white-space: break-spaces;
+    background-color: var(--md-code-bg);
+    border-radius: 6px;
+
+    br {
+      display: none;
+    }
+  }
+
+  del code {
+    text-decoration: inherit;
+  }
+
+  samp {
+    font-size: 85%;
+  }
+
+  kbd {
+    display: inline-block;
+    padding: 0.25rem;
+    font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+    line-height: 10px;
+    color: var(--md-code-text);
+    vertical-align: middle;
+    background-color: var(--md-kbd-bg);
+    border: solid 1px var(--md-kbd-border);
+    border-bottom-color: var(--md-kbd-border);
+    border-radius: 6px;
+    box-shadow: inset 0 -1px 0 var(--md-kbd-border);
+  }
+
+  .highlight {
+    margin-bottom: 1rem;
+
+    pre {
+      margin-bottom: 0;
+      word-break: normal;
+    }
+  }
+}
+
+/* Dark Theme 代码块字体大小 */
+.dark .markdown-body {
+  .highlight pre,
+  pre {
+    font-size: 85%;
+  }
+}
+

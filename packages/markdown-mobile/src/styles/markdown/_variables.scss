@@ -1,0 +1,82 @@
+/* ============================================
+   Markdown 样式变量定义
+   ============================================ */
+
+.markdown-body {
+  /* Light Theme 颜色变量 */
+  --md-color-scheme: light;
+  --md-bg: #ffffff;
+  --md-text: #000;
+  --md-text-secondary: #444;
+  --md-text-muted: #59636e;
+  --md-link: #0969da;
+  --md-link-focus: #0969da;
+  --md-border: #d1d9e0;
+  --md-border-alpha: #d1d9e0b3;
+  --md-code-bg: #818b981f;
+  --md-code-text: #1f2328;
+  --md-pre-bg: #f6f8fa;
+  --md-pre-text: #1f2328;
+  --md-table-bg: #ffffff;
+  --md-table-bg-alt: #f6f8fa;
+  --md-mark-bg: #fff8c5;
+  --md-mark-text: #1f2328;
+  --md-absent: #d1242f;
+  --md-kbd-bg: #f6f8fa;
+  --md-kbd-border: #d1d9e0b3;
+  --md-footnote-text: #59636e;
+  --md-footnote-border: #d1d9e0;
+  --md-footnote-target: #1f2328;
+  --md-footnote-focus: #0969da;
+  --md-alert-border: #d1d9e0;
+  --md-blockquote-text: #59636e;
+  --md-blockquote-border: #d1d9e0;
+  --md-list-marker: #5560F5;
+  --md-task-completed: #999;
+  --md-blob-num-bg: #ffffff;
+  --md-csv-header-bg: #f6f8fa;
+  --md-frame-border: #d1d9e0;
+  --md-frame-text: #1f2328;
+  --md-hr-bg: #d1d9e0;
+  --md-hr-border: #d1d9e0b3;
+}
+
+/* Dark Theme 颜色变量覆盖 */
+.dark .markdown-body {
+  --md-color-scheme: dark;
+  --md-bg: #1e1e1e;
+  --md-text: #fff;
+  --md-text-secondary: #e0e0e0;
+  --md-text-muted: #9198a1;
+  --md-link: #4493f8;
+  --md-link-focus: #1f6feb;
+  --md-border: #3d444d;
+  --md-border-alpha: #3d444db3;
+  --md-code-bg: #656c7633;
+  --md-code-text: #f0f6fc;
+  --md-pre-bg: #151b23;
+  --md-pre-text: #f0f6fc;
+  --md-table-bg: #0d1117;
+  --md-table-bg-alt: #151b23;
+  --md-mark-bg: #bb800926;
+  --md-mark-text: #f0f6fc;
+  --md-absent: #f85149;
+  --md-kbd-bg: #151b23;
+  --md-kbd-border: #3d444db3;
+  --md-footnote-text: #9198a1;
+  --md-footnote-border: #3d444d;
+  --md-footnote-target: #f0f6fc;
+  --md-footnote-focus: #1f6feb;
+  --md-alert-border: #3d444d;
+  --md-blockquote-text: #9198a1;
+  --md-blockquote-border: #3d444d;
+  --md-list-marker: #5560F5;
+  --md-task-completed: #999;
+  --md-blob-num-bg: #0d1117;
+  --md-csv-header-bg: #151b23;
+  --md-frame-border: #3d444d;
+  --md-frame-text: #f0f6fc;
+  --md-hr-bg: #3d444d;
+  --md-hr-border: #3d444db3;
+}
+

@@ -1,0 +1,115 @@
+/* ============================================
+   Markdown 警告框样式
+   ============================================ */
+
+.markdown-body {
+  .markdown-alert {
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    color: inherit;
+    border-left: 0.25em solid var(--md-alert-border);
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    .markdown-alert-title {
+      display: flex;
+      font-weight: 500;
+      align-items: center;
+      line-height: 1;
+    }
+
+    /* Light Theme 警告框颜色 */
+    &.markdown-alert-note {
+      border-left-color: #0969da;
+
+      .markdown-alert-title {
+        color: #0969da;
+      }
+    }
+
+    &.markdown-alert-important {
+      border-left-color: #8250df;
+
+      .markdown-alert-title {
+        color: #8250df;
+      }
+    }
+
+    &.markdown-alert-warning {
+      border-left-color: #9a6700;
+
+      .markdown-alert-title {
+        color: #9a6700;
+      }
+    }
+
+    &.markdown-alert-tip {
+      border-left-color: #1a7f37;
+
+      .markdown-alert-title {
+        color: #1a7f37;
+      }
+    }
+
+    &.markdown-alert-caution {
+      border-left-color: #cf222e;
+
+      .markdown-alert-title {
+        color: #d1242f;
+      }
+    }
+  }
+
+}
+
+/* Dark Theme 警告框颜色 */
+.dark .markdown-body {
+  .markdown-alert {
+    &.markdown-alert-note {
+      border-left-color: #1f6feb;
+
+      .markdown-alert-title {
+        color: #4493f8;
+      }
+    }
+
+    &.markdown-alert-important {
+      border-left-color: #8957e5;
+
+      .markdown-alert-title {
+        color: #ab7df8;
+      }
+    }
+
+    &.markdown-alert-warning {
+      border-left-color: #9e6a03;
+
+      .markdown-alert-title {
+        color: #d29922;
+      }
+    }
+
+    &.markdown-alert-tip {
+      border-left-color: #238636;
+
+      .markdown-alert-title {
+        color: #3fb950;
+      }
+    }
+
+    &.markdown-alert-caution {
+      border-left-color: #da3633;
+
+      .markdown-alert-title {
+        color: #f85149;
+      }
+    }
+  }
+}
+

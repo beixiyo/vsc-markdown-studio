@@ -1,0 +1,148 @@
+/* ============================================
+   列表样式
+   ============================================ */
+
+.markdown-body {
+  ul,
+  ol {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 1.2em;
+  }
+
+  ul {
+    list-style: disc;
+
+    ul {
+      margin-top: 4px;
+      margin-bottom: 0;
+      padding-left: 1em;
+      list-style-type: circle;
+    }
+
+    ol {
+      margin-top: 4px;
+      margin-bottom: 0;
+      padding-left: 1em;
+    }
+
+    ul ol,
+    ol ol {
+      list-style-type: lower-alpha;
+    }
+
+    &:has(input[type="checkbox"]) {
+      list-style-type: none;
+      padding-left: 0;
+
+      li {
+        list-style-type: none;
+        padding-left: 0;
+      }
+    }
+
+    &:dir(rtl) .task-list-item-checkbox {
+      margin: 0 -1.6em 0.25em 0.2em;
+    }
+  }
+
+  ol {
+    list-style: decimal;
+    counter-reset: list-counter;
+
+    > li {
+      counter-increment: list-counter;
+      padding-left: 0.5em;
+    }
+
+    ol {
+      margin-top: 4px;
+      margin-bottom: 0;
+      padding-left: 1em;
+    }
+
+    ul {
+      margin-top: 4px;
+      margin-bottom: 0;
+      padding-left: 1em;
+    }
+
+    &[type="a s"] {
+      list-style-type: lower-alpha;
+    }
+
+    &[type="A s"] {
+      list-style-type: upper-alpha;
+    }
+
+    &[type="i s"] {
+      list-style-type: lower-roman;
+    }
+
+    &[type="I s"] {
+      list-style-type: upper-roman;
+    }
+
+    &[type="1"] {
+      list-style-type: decimal;
+    }
+
+    &:has(input[type="checkbox"]) {
+      list-style-type: none;
+      padding-left: 0;
+
+      li {
+        list-style-type: none;
+        padding-left: 0;
+      }
+    }
+
+    &:dir(rtl) .task-list-item-checkbox {
+      margin: 0 -1.6em 0.25em 0.2em;
+    }
+  }
+
+  ul ul,
+  ul ol,
+  ol ol,
+  ol ul {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  ul ul ol,
+  ul ol ol,
+  ol ul ol,
+  ol ol ol {
+    list-style-type: lower-alpha;
+  }
+
+  li {
+    margin-bottom: 4px;
+    line-height: 1.5;
+    color: var(--md-text-secondary);
+
+    &::marker {
+      color: var(--md-list-marker);
+    }
+
+    > p {
+      margin-top: 1rem;
+    }
+
+    + li {
+      margin-top: 4px;
+    }
+  }
+
+  ul.no-list,
+  ol.no-list {
+    padding: 0;
+    list-style-type: none;
+  }
+
+  div > ol:not([type]) {
+    list-style-type: decimal;
+  }
+}
+

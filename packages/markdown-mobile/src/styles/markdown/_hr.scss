@@ -1,0 +1,29 @@
+/* ============================================
+   水平线样式
+   ============================================ */
+
+.markdown-body {
+  hr {
+    box-sizing: content-box;
+    overflow: hidden;
+    background: transparent;
+    border-bottom: 1px solid var(--md-hr-border);
+    height: 0.25em;
+    padding: 0;
+    margin: 1.5rem 0;
+    background-color: var(--md-hr-bg);
+    border: 0;
+
+    &::before {
+      display: table;
+      content: "";
+    }
+
+    &::after {
+      display: table;
+      clear: both;
+      content: "";
+    }
+  }
+}
+

@@ -1,0 +1,86 @@
+/* ============================================
+   链接和交互元素样式
+   ============================================ */
+
+.markdown-body {
+  a {
+    background-color: transparent;
+    color: var(--md-link);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:not([href]) {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    &:focus,
+    &:focus-visible {
+      outline: 2px solid var(--md-link-focus);
+      outline-offset: -2px;
+      box-shadow: none;
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: solid 1px transparent;
+    }
+
+    &:not([class]):focus,
+    &:not([class]):focus-visible {
+      outline-offset: 0;
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  [role=button],
+  input[type=radio],
+  input[type=checkbox] {
+    &:focus {
+      outline: 2px solid var(--md-link-focus);
+      outline-offset: -2px;
+      box-shadow: none;
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: solid 1px transparent;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--md-link-focus);
+      outline-offset: -2px;
+      box-shadow: none;
+    }
+  }
+
+  input[type=radio] {
+    &:focus,
+    &:focus-visible {
+      outline-offset: 0;
+    }
+  }
+
+  [role=button],
+  [role=tabpanel][tabindex="0"],
+  button,
+  summary {
+    &:focus:not(:focus-visible) {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  [tabindex="0"],
+  details-dialog {
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+  }
+}
+

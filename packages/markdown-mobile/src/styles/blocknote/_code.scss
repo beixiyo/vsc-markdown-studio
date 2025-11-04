@@ -1,0 +1,10 @@
+/* ============================================
+   BlockNote 代码块样式
+   ============================================ */
+
+.markdown-body {
+  .bn-block-content[data-content-type=codeBlock] {
+    background-color: transparent;
+  }
+}
+

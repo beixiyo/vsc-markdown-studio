@@ -1,0 +1,41 @@
+/* ============================================
+   BlockNote 列表样式
+   ============================================ */
+
+.markdown-body {
+  /* BlockNote 列表样式 */
+  .bn-block-group {
+    &:has([data-content-type="bulletListItem"]),
+    &:has([data-content-type="numberedListItem"]) {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-left: 1.2em;
+    }
+  }
+
+  .bn-block-content {
+    &[data-content-type="bulletListItem"],
+    &[data-content-type="numberedListItem"],
+    &[data-content-type="checkListItem"] {
+      margin-bottom: 4px;
+      line-height: 1.5;
+      color: var(--md-text-secondary);
+
+      .bn-inline-content {
+        margin: 0;
+      }
+    }
+
+    &[data-content-type="bulletListItem"]::before,
+    &[data-content-type="numberedListItem"]::before {
+      color: var(--md-list-marker);
+    }
+
+    &[data-content-type="checkListItem"] {
+      input[type="checkbox"] {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+

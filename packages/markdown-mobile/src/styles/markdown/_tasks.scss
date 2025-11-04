@@ -1,0 +1,47 @@
+/* ============================================
+   任务列表样式
+   ============================================ */
+
+.markdown-body {
+  .task-list-item {
+    label {
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+    }
+
+    &.enabled label {
+      cursor: pointer;
+    }
+
+    + .task-list-item {
+      margin-top: 4px;
+    }
+
+    .handle {
+      display: none;
+    }
+
+    input[type="checkbox"]:checked + * {
+      color: var(--md-task-completed);
+      text-decoration: line-through;
+    }
+  }
+
+  .task-list-item-checkbox {
+    margin: 0 0.2em 0 -1.4em;
+    vertical-align: middle;
+  }
+
+  .contains-task-list {
+    &:hover .task-list-item-convert-container,
+    &:focus-within .task-list-item-convert-container {
+      display: block;
+      width: auto;
+      height: 24px;
+      overflow: visible;
+      clip: auto;
+    }
+  }
+}
+

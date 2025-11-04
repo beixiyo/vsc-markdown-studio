@@ -1,0 +1,13 @@
+/* ============================================
+   BlockNote 排版样式
+   ============================================ */
+
+.markdown-body {
+  p {
+    + .bn-block-group:has([data-content-type="bulletListItem"]),
+    + .bn-block-group:has([data-content-type="numberedListItem"]) {
+      margin-top: 6px;
+    }
+  }
+}
+

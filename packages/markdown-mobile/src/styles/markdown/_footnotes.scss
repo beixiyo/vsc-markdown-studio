@@ -1,0 +1,55 @@
+/* ============================================
+   脚注样式
+   ============================================ */
+
+.markdown-body {
+  [data-footnote-ref] {
+    &::before {
+      content: "[";
+    }
+
+    &::after {
+      content: "]";
+    }
+  }
+
+  .footnotes {
+    color: var(--md-footnote-text);
+    border-top: 1px solid var(--md-footnote-border);
+
+    ol {
+      padding-left: 1rem;
+
+      ul {
+        display: inline-block;
+        padding-left: 1rem;
+        margin-top: 1rem;
+      }
+    }
+
+    li {
+      position: relative;
+
+      &:target {
+        color: var(--md-footnote-target);
+
+        &::before {
+          position: absolute;
+          top: calc(0.5rem * -1);
+          right: calc(0.5rem * -1);
+          bottom: calc(0.5rem * -1);
+          left: calc(1.5rem * -1);
+          pointer-events: none;
+          content: "";
+          border: 2px solid var(--md-footnote-focus);
+          border-radius: 6px;
+        }
+      }
+    }
+
+    .data-footnote-backref g-emoji {
+      font-family: monospace;
+    }
+  }
+}
+
