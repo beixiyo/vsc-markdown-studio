@@ -3,11 +3,11 @@
    ============================================ */
 
 .markdown-body {
+
   ul,
   ol {
     margin-top: 0;
     margin-bottom: 0;
-    padding-left: 1.2em;
   }
 
   ul {
@@ -50,7 +50,7 @@
     list-style: decimal;
     counter-reset: list-counter;
 
-    > li {
+    >li {
       counter-increment: list-counter;
       padding-left: 0.5em;
     }
@@ -126,11 +126,11 @@
       color: var(--md-list-marker);
     }
 
-    > p {
+    >p {
       margin-top: 1rem;
     }
 
-    + li {
+    +li {
       margin-top: 4px;
     }
   }
@@ -141,8 +141,7 @@
     list-style-type: none;
   }
 
-  div > ol:not([type]) {
+  div>ol:not([type]) {
     list-style-type: decimal;
   }
 }
-

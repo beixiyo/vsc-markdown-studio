@@ -3,17 +3,19 @@
    ============================================ */
 
 .markdown-body {
+
   /* BlockNote 列表样式 */
   .bn-block-group {
+
     &:has([data-content-type="bulletListItem"]),
     &:has([data-content-type="numberedListItem"]) {
       margin-top: 0;
       margin-bottom: 0;
-      padding-left: 1.2em;
     }
   }
 
   .bn-block-content {
+
     &[data-content-type="bulletListItem"],
     &[data-content-type="numberedListItem"],
     &[data-content-type="checkListItem"] {
@@ -38,4 +40,3 @@
     }
   }
 }
-
