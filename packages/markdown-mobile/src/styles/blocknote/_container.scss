@@ -1,6 +1,6 @@
 /* ============================================
-   BlockNote 容器样式
-   ============================================ */
+  BlockNote 容器样式
+  ============================================ */
 
 .bn-container {
   >.tiptap {
@@ -9,3 +9,62 @@
   }
 }
 
+/* ============================================
+  光标颜色设置 - 修复 iOS WebView 光标颜色问题
+  ============================================ */
+
+.markdown-body {
+  // 在 iOS WebView 中确保光标颜色正确显示
+  caret-color: var(--md-text) !important;
+
+  // 确保所有可编辑元素的光标颜色
+  * {
+    caret-color: var(--md-text) !important;
+  }
+
+  // 针对 ProseMirror 编辑器的光标颜色（组合类名，匹配 BlockNote 的实际结构）
+  .ProseMirror,
+  .ProseMirror.bn-editor,
+  .ProseMirror.bn-editor.bn-default-styles {
+    caret-color: var(--md-text) !important;
+  }
+
+  // 针对 BlockNote 编辑器的光标颜色
+  .bn-editor {
+    caret-color: var(--md-text) !important;
+  }
+
+  // 针对各种文本元素的光标颜色
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    caret-color: var(--md-text) !important;
+  }
+
+  p {
+    caret-color: var(--md-text) !important;
+  }
+
+  ol,
+  ul {
+    caret-color: var(--md-text) !important;
+  }
+
+  // 针对 BlockNote 内联内容的光标颜色
+  .bn-inline-content {
+    caret-color: var(--md-text) !important;
+  }
+
+  // 针对 BlockNote 块内容的光标颜色
+  .bn-block-content {
+    caret-color: var(--md-text) !important;
+  }
+
+  // 针对 BlockNote 块外层容器的光标颜色
+  .bn-block-outer {
+    caret-color: var(--md-text) !important;
+  }
+}
