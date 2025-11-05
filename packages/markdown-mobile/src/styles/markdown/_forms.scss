@@ -16,6 +16,11 @@
       margin: 0;
       appearance: none;
     }
+
+    &[type=checkbox] {
+      width: 22px;
+      height: 22px;
+    }
   }
 
   [type=button],

@@ -51,11 +51,17 @@
 
   /* 标题 */
   h1 {
+    font-size: 18px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  h3 {
     font-size: 17px;
   }
 
-  h2,
-  h3,
   h4,
   h5,
   h6 {
@@ -68,9 +74,9 @@
   h4,
   h5,
   h6 {
-    margin-top: 44px;
     margin-bottom: 8px;
     font-weight: bold;
+    line-height: 1.75;
 
     tt,
     code {
@@ -104,6 +110,21 @@
     }
   }
 
+  h1,
+  h2 {
+    margin-top: 44px;
+  }
+
+  h3 {
+    margin-top: 8px;
+  }
+
+  h4,
+  h5,
+  h6 {
+    margin-top: 44px;
+  }
+
   .anchor {
     float: left;
     padding-right: 0.25rem;
@@ -118,8 +139,9 @@
   /* 段落 */
   p {
     margin-top: 0;
-    font-size: 14px;
+    font-size: 16.5px;
     font-weight: 400;
+    line-height: 1.75;
 
     + ul,
     + ol {
