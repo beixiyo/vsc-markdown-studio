@@ -1,8 +1,12 @@
 import { createCheckListItemBlockSpec } from '@blocknote/core'
+import { setupChecklistEvents } from './events'
 import { injectChecklistStyles } from './styles'
 
-// Replaces the default checklist <input type="checkbox"> with a <div>
-// to avoid iOS WebView focusing the input and summoning the keyboard.
+/**
+ * 将默认的清单项 <input type="checkbox"> 替换为 <div>，以避免 iOS WebView 聚焦输入框并弹出键盘
+ * - 增加点击区域，整个容器都可触发，除了 p
+ * - 判断是点击还是滑动，智能适配
+ */
 export function createDivCheckListItemBlockSpec() {
   const base = createCheckListItemBlockSpec()
 
@@ -36,25 +40,14 @@ export function createDivCheckListItemBlockSpec() {
           checkbox.classList.toggle('is-checked', nowChecked)
         }
 
-        // Prevent iOS from focusing contenteditable/keyboard on tap
-        checkbox.addEventListener('touchstart', e => e.preventDefault(), { passive: false } as any)
-        checkbox.addEventListener('mousedown', e => e.preventDefault())
-        checkbox.addEventListener('click', (e) => {
-          e.preventDefault()
-          toggle()
-        })
-        checkbox.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            toggle()
-          }
-        })
-
-        // Use a <p> for content DOM, same as default
+        /** 使用 <p> 作为内容 DOM，与默认实现相同 */
         const paragraph = document.createElement('p')
 
         container.appendChild(checkbox)
         container.appendChild(paragraph)
+
+        /** 设置事件监听器 */
+        setupChecklistEvents(container, paragraph, toggle)
 
         return {
           dom: container,

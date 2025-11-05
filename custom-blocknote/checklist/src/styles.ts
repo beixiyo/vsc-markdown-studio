@@ -1,7 +1,7 @@
 export const checklistStyles = `
 .bn-checklist {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
 }
 
