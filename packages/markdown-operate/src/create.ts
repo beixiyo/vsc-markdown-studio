@@ -1,5 +1,6 @@
 import type { Block, BlockNoteEditor, PartialBlock } from '@blocknote/core'
 import type { MarkdownOperateOptions } from './types'
+import { getMarkdownWithEmptyLines } from './getMarkdownWithEmptyLines'
 
 /**
  * 创建通用的 BlockNote 操作对象
@@ -44,12 +45,7 @@ export function createMarkdownOperate(
      * 获取 Markdown 格式内容
      * @param blocks 可选的块数组，如果不提供则使用当前文档
      */
-    getMarkdown: (blocks?: PartialBlock<any, any, any>[]) => {
-      const source = blocks && blocks.length > 0
-        ? blocks
-        : editor.document
-      return editor.blocksToMarkdownLossy(source)
-    },
+    getMarkdown: getMarkdownWithEmptyLines,
     /**
      * 设置 Markdown 格式内容
      * @param markdown Markdown 字符串

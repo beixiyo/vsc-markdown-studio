@@ -13,8 +13,11 @@ export default defineConfig(({ mode }) => {
         '@blocknote/core': fileURLToPath(new URL('../../blocknote/core/src', import.meta.url)),
 
         'markdown-operate': fileURLToPath(new URL('../markdown-operate/src', import.meta.url)),
+        'custom-blocknote-checklist': fileURLToPath(new URL('../../custom-blocknote/checklist/src', import.meta.url)),
         'custom-blocknote-speaker': fileURLToPath(new URL('../../custom-blocknote/speaker/src', import.meta.url)),
         'custom-blocknote-gradient-styles': fileURLToPath(new URL('../../custom-blocknote/gradient-styles/src', import.meta.url)),
+        'custom-blocknote-markdown-extensions': fileURLToPath(new URL('../../custom-blocknote/markdown-extensions/src', import.meta.url)),
+        'notify': fileURLToPath(new URL('../notify/src', import.meta.url)),
       },
     },
     esbuild: {

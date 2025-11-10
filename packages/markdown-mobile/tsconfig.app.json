@@ -24,7 +24,14 @@
     "noUncheckedSideEffectImports": true,
 
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "notify": ["../notify/src"],
+      "@blocknote/core": ["../../blocknote/core/src"],
+      "markdown-operate": ["../markdown-operate/src"],
+      "custom-blocknote-checklist": ["../../custom-blocknote/checklist/src"],
+      "custom-blocknote-speaker": ["../../custom-blocknote/speaker/src"],
+      "custom-blocknote-gradient-styles": ["../../custom-blocknote/gradient-styles/src"],
+      "custom-blocknote-markdown-extensions": ["../../custom-blocknote/markdown-extensions/src"],
     }
   },
   "include": ["src"]

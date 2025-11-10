@@ -1,4 +1,5 @@
 export * from './create'
+export * from './getMarkdownWithEmptyLines'
 export * from './sections'
 export * from './selection'
 export * from './types'
