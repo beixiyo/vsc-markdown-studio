@@ -4,7 +4,6 @@
  * 被谁使用：本目录下的实现文件（如 `bridgeFactory.ts`、`imageUtils.ts`、`eventHandlers.ts` 等）
  */
 import type { Block, BlockNoteEditor } from '@blocknote/core'
-import type { useNotify } from 'notify'
 
 /**
  * MDBridge 回调函数类型定义
@@ -37,7 +36,6 @@ export type BlockIdManager = {
  */
 export type UseSetupMDBridgeParams = {
   editor: BlockNoteEditor | null
-  notifyFns: ReturnType<typeof useNotify>
 }
 
 /**

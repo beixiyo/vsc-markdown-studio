@@ -45,7 +45,7 @@ export function createMarkdownOperate(
      * 获取 Markdown 格式内容
      * @param blocks 可选的块数组，如果不提供则使用当前文档
      */
-    getMarkdown: getMarkdownWithEmptyLines,
+    getMarkdown: () => getMarkdownWithEmptyLines(editor),
     /**
      * 设置 Markdown 格式内容
      * @param markdown Markdown 字符串

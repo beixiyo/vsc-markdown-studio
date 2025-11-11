@@ -1,13 +1,14 @@
 import { BlockNoteView } from '@blocknote/mantine'
 import { useCreateBlockNote } from '@blocknote/react'
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { BlockNoteSchema } from '@blocknote/core'
 import { GradientStyles } from 'custom-blocknote-gradient-styles'
 import { createSpeaker } from 'custom-blocknote-speaker'
 import { useSetupMDBridge } from './hooks/useSetupMDBridge'
 import './styles/index.scss'
 import { useTheme } from 'hooks'
-import { useNotify, notifyNative } from 'notify'
+import { notifyNative } from 'notify'
+import { useNotifyChnage } from './hooks/useNotify'
 
 export default function App() {
   const editor = useCreateBlockNote({
@@ -27,40 +28,7 @@ export default function App() {
   const editorElRef = useRef<HTMLDivElement>(null)
 
   useSetupMDBridge(editor)
-  const { notifyBlockTypeChanged } = useNotify(editor, editorElRef)
-
-  // 监听内容变化
-  useEffect(() => {
-    if (!editor) return
-
-    const unsubscribe = editor.onChange(() => {
-      const markdown = editor.blocksToMarkdownLossy()
-      notifyNative('contentChanged', markdown)
-      console.log('contentChanged\n', markdown)
-      notifyBlockTypeChanged()
-    })
-
-    return () => {
-      if (typeof unsubscribe === 'function') {
-        unsubscribe()
-      }
-    }
-  }, [editor, notifyBlockTypeChanged])
-
-  // 监听块类型变化（选择变化时）
-  useEffect(() => {
-    if (!editor) return
-
-    const unsubscribe = editor.onSelectionChange(() => {
-      notifyBlockTypeChanged()
-    })
-
-    return () => {
-      if (typeof unsubscribe === 'function') {
-        unsubscribe()
-      }
-    }
-  }, [editor, notifyBlockTypeChanged])
+  useNotifyChnage(editor, editorElRef)
 
   return (
     <div ref={ editorElRef }>

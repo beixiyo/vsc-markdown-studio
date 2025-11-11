@@ -4,7 +4,6 @@
  * 被谁使用：`useSetupMDBridge/index.ts` 注册这些事件处理器
  */
 import type { BlockNoteEditor } from '@blocknote/core'
-import type { useNotify } from 'notify'
 import type { CallbackManager } from './types'
 import { throttle } from '@jl-org/tool'
 
@@ -61,10 +60,8 @@ export function createMouseClickHandler(editor: BlockNoteEditor, callbackManager
 /**
  * 创建编辑器变更事件处理器
  */
-export function createEditorChangeHandler(callbackManager: CallbackManager, notifyFns: ReturnType<typeof useNotify>) {
+export function createEditorChangeHandler(callbackManager: CallbackManager) {
   return (editor: BlockNoteEditor) => {
-    notifyFns.notifyContentChanged()
-    notifyFns.notifyBlockTypeChanged()
     callbackManager.onChangeCallbacks.forEach(callback => callback(editor))
   }
 }

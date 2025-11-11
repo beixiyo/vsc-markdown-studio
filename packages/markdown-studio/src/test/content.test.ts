@@ -24,7 +24,7 @@ export async function runContentTest() {
   MDTest.logTitle('2. 功能性验证（setMarkdown / getMarkdown）')
   await MDTest.asyncTestCase(R, '2.1 setMarkdown 后 getMarkdown 包含关键内容', async () => {
     const md = `# 验收标题\n\n- 事项 1\n- 事项 2\n\n时间: ${new Date().toLocaleString()}`
-    await MDBridge.setMarkdown(md)
+    MDBridge.setMarkdown(md)
     await MDTest.delay(120)
     const read = MDBridge.getMarkdown()
     return {
@@ -36,9 +36,9 @@ export async function runContentTest() {
 
   await MDTest.asyncTestCase(R, '2.2 连续两次 setMarkdown 的幂等性（不抛错）', async () => {
     const md2 = `# 第二次设置\n\n内容 A\n\n- X\n- Y`
-    await MDBridge.setMarkdown(md2)
+    MDBridge.setMarkdown(md2)
     await MDTest.delay(80)
-    await MDBridge.setMarkdown(md2)
+    MDBridge.setMarkdown(md2)
     await MDTest.delay(80)
     const read2 = MDBridge.getMarkdown()
     return { includes: read2.includes('第二次设置') && read2.includes('内容 A') }
@@ -49,5 +49,5 @@ export async function runContentTest() {
 
 /** 挂载到全局对象，方便在 Console 中调用 */
 if (typeof window !== 'undefined') {
-  ;(window as any).runContentTest = runContentTest
+  ; (window as any).runContentTest = runContentTest
 }

@@ -13,6 +13,7 @@ export default defineConfig({
   },
 
   build: {
+    sourcemap: true,
     outDir: './dist',
     lib: {
       entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),

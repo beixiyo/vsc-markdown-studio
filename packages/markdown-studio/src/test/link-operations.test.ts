@@ -33,7 +33,7 @@ export async function runLinkOperationsTest() {
 
     /** 验证链接是否创建成功 */
     const updatedDoc = MDBridge.getDocument()
-    const hasLink = updatedDoc[0]?.content?.some((c: any) => c.type === 'link')
+    const hasLink = (updatedDoc[0]?.content as any[])?.some((c: any) => c.type === 'link')
 
     console.log('🔍 调试信息:')
     console.log('- 创建链接后的文档:', updatedDoc)
@@ -51,7 +51,7 @@ export async function runLinkOperationsTest() {
         { type: 'text', text: '测试文本 ' },
         {
           type: 'link',
-          content: [{ type: 'text', text: '链接文本' }],
+          content: [{ type: 'text', text: '链接文本', styles: {} }],
           href: 'https://example.com',
         },
         { type: 'text', text: ' 更多文本' },

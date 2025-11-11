@@ -86,7 +86,7 @@ export async function runCommandsTest() {
         },
       ],
     }])
-    const doc = MDBridge.getDocument()
+    const doc = MDBridge.getDocument() as any
     const hasItalic = doc[0]?.content?.[0]?.styles?.italic === true
     return { hasItalic }
   }, { hasItalic: true })

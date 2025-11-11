@@ -4,7 +4,6 @@
  * 被谁使用：`useSetupMDBridge/index.ts` 调用创建实例，随后由 `GlobalBridgeManager` 挂载到全局
  */
 import type { Block, BlockNoteEditor } from '@blocknote/core'
-import type { useNotify } from 'notify'
 import type { BlockIdManager, CallbackManager } from './types'
 import type { MDBridge } from '@/types/MDBridge'
 import { setContentWithSpeakers as speakerSetContentWithSpeakers, setSpeakers as speakerSetSpeakers } from 'custom-blocknote-speaker'
@@ -21,7 +20,6 @@ export function createMDBridge(
   editor: BlockNoteEditor<any, any, any>,
   callbackManager: CallbackManager,
   blockIdManager: BlockIdManager,
-  notifyFns: ReturnType<typeof useNotify>,
 ): MDBridge {
   const globalStateManager = GlobalStateManager.getInstance()
   const base = createMarkdownOperate(editor)
@@ -132,7 +130,7 @@ export function createMDBridge(
     // ======================
     // * Commands for compatibility with MDBridge
     // ======================
-    command: createCommands(editor, notifyFns),
+    command: createCommands(editor),
 
     // ======================
     // * Event callbacks

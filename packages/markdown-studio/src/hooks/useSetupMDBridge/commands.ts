@@ -5,7 +5,6 @@
  */
 import type { BlockNoteEditor } from '@blocknote/core'
 import type { GradientStyleType } from 'custom-blocknote-gradient-styles'
-import type { useNotify } from 'notify'
 import type { MDBridge } from '@/types/MDBridge'
 import { filterKeys } from '@jl-org/tool'
 import { createMarkdownOperate } from 'markdown-operate'
@@ -14,7 +13,7 @@ import { createMarkdownOperate } from 'markdown-operate'
  * 创建命令对象
  * 从 markdown-operate 继承基础命令，并添加扩展（渐变样式相关命令）
  */
-export function createCommands(editor: BlockNoteEditor, notifyFns: ReturnType<typeof useNotify>): MDBridge['command'] {
+export function createCommands(editor: BlockNoteEditor): MDBridge['command'] {
   const base = createMarkdownOperate(editor)
   const baseCommand = base.command
 
@@ -22,7 +21,6 @@ export function createCommands(editor: BlockNoteEditor, notifyFns: ReturnType<ty
   const wrapCommand = <T extends (...args: any[]) => any>(fn: T): T => {
     return ((...args: any[]) => {
       const result = fn(...args)
-      notifyFns.notifyBlockTypeChanged()
       return result
     }) as T
   }
@@ -43,12 +41,10 @@ export function createCommands(editor: BlockNoteEditor, notifyFns: ReturnType<ty
 
     setGradient: (type: GradientStyleType) => {
       editor.addStyles({ gradient: type } as any)
-      notifyFns.notifyBlockTypeChanged()
     },
     unsetGradient: () => {
       const curStyle = editor.getActiveStyles()
       editor.removeStyles(filterKeys(curStyle, ['gradient'] as any))
-      notifyFns.notifyBlockTypeChanged()
     },
   }
 }

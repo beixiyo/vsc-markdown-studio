@@ -23,7 +23,7 @@ export function cleanHTMLToMarkdown(cleanHTMLString: string) {
   const markdownString = unified()
     .use(rehypeParse, { fragment: true })
     .use(convertVideoToMarkdown)
-    // 自定义节点转换
+    // @Custom 自定义节点转换
     .use(convertSpeakerToTag)
     .use(removeUnderlines)
     .use(addSpacesToCheckboxes)

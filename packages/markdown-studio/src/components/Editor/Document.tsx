@@ -6,7 +6,6 @@ import { useCreateBlockNote } from '@blocknote/react'
 import { getColor } from '@jl-org/tool'
 import { createAIExtension } from 'custom-blocknote-ai'
 import { ArrowBeautify, TimeInsert } from 'custom-blocknote-exts-basic'
-import { useNotify } from 'notify'
 import { memo, useRef } from 'react'
 import { cn } from 'utils'
 import { schema } from '@/blocknoteExts/schema'
@@ -97,9 +96,8 @@ export const Document = memo<DocumentProps>((props) => {
   // * Hooks
   // ======================
   const editorElRef = useRef<HTMLDivElement>(null)
-  const notifyFns = useNotify(editor, editorElRef)
 
-  useSetupMDBridge(editor, notifyFns)
+  useSetupMDBridge(editor)
   useVSCode()
   useHoverSection(editor)
   useClickSection(editor)

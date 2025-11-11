@@ -1,12 +1,8 @@
-/**
- * @description 将 <span> 元素转换为 [speaker:数字] 占位符格式
- */
 import { Parent as HASTParent, Element as HASTElement } from 'hast'
 import { visit } from 'unist-util-visit'
 
 /**
- * Rehype plugin which converts <span> elements with data-speaker-* attributes
- * to [speaker:originalLabel] placeholder format in Markdown export.
+ * @description 将 <span> 元素转换为 [speaker:originalLabel] 占位符格式
  */
 export function convertSpeakerToTag() {
   return (tree: HASTParent) => {

@@ -4,7 +4,6 @@
  * 被谁使用：上层组件/页面调用该 Hook 获取 `MDBridge`
  */
 import type { BlockNoteEditor } from '@blocknote/core'
-import type { useNotify } from 'notify'
 import type { BlockIdManager, CallbackManager } from './types'
 import type { MDBridge } from '@/types/MDBridge'
 import { useEffect, useRef } from 'react'
@@ -14,8 +13,7 @@ import { createEditorChangeHandler, createMouseClickHandler, createMouseMoveHand
 import { GlobalBridgeManager } from './GlobalBridgeManager'
 
 export function useSetupMDBridge(
-  editor: BlockNoteEditor<any, any, any> | null,
-  notifyFns: ReturnType<typeof useNotify>,
+  editor: BlockNoteEditor<any, any, any> | null
 ) {
   const bridgeRef = useRef<MDBridge | null>(null)
 
@@ -45,7 +43,7 @@ export function useSetupMDBridge(
     // ======================
     // * Create bridge
     // ======================
-    const bridge = createMDBridge(editor, callbackManager, blockIdManager, notifyFns)
+    const bridge = createMDBridge(editor, callbackManager, blockIdManager)
     bridgeRef.current = bridge
 
     // ======================
@@ -59,7 +57,7 @@ export function useSetupMDBridge(
     // ======================
     const handleMouseMove = createMouseMoveHandler(editor, callbackManager)
     const handleMouseClick = createMouseClickHandler(editor, callbackManager)
-    const handleEditorChange = createEditorChangeHandler(callbackManager, notifyFns)
+    const handleEditorChange = createEditorChangeHandler(callbackManager)
     const handleSelectionChange = createSelectionChangeHandler(callbackManager)
 
     /** 添加鼠标移动监听器 */

@@ -76,7 +76,7 @@ export async function runMermaidTest() {
     const mermaidId = doc[0].id
 
     MDBridge.updateBlock(mermaidId, {
-      type: 'mermaid',
+      type: 'mermaid' as any,
       props: {
         diagram: 'graph LR\n    X --> Y\n    Y --> Z',
       },
@@ -108,7 +108,7 @@ export async function runMermaidTest() {
     const mermaidBlock = doc.find((block: any) => block.type === 'mermaid')
     const initialLength = doc.length
 
-    MDBridge.removeBlocks([mermaidBlock.id])
+    MDBridge.removeBlocks([mermaidBlock!.id])
 
     const finalDoc = MDBridge.getDocument()
     const hasMermaidAfter = finalDoc.some((block: any) => block.type === 'mermaid')
@@ -135,7 +135,7 @@ export async function runMermaidTest() {
     const mermaidId = doc[0].id
 
     MDBridge.replaceBlocks([mermaidId], [
-      { type: 'paragraph', content: '替换后的段落' },
+      { type: 'paragraph', content: '替换后的段落' } as any,
     ])
 
     const finalDoc = MDBridge.getDocument()
@@ -145,7 +145,7 @@ export async function runMermaidTest() {
 
     return {
       replaced: hasParagraph && !hasMermaid,
-      content: paragraphBlock?.content?.[0]?.text === '替换后的段落',
+      content: (paragraphBlock?.content as any[])?.[0]?.text === '替换后的段落',
     }
   }, { replaced: true, content: true })
 
