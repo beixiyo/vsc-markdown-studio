@@ -1,15 +1,21 @@
 export const checklistStyles = `
 .bn-checklist {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
+  width: 100%;
 }
 
 .bn-checklist p {
   margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .bn-checklist-checkbox {
+  margin: 6px 0;
   width: 18px;
   height: 18px;
   display: inline-flex;
@@ -21,6 +27,8 @@ export const checklistStyles = `
   box-sizing: border-box;
   user-select: none;
   cursor: pointer;
+  flex: 0 0 18px;
+  flex-shrink: 0;
 }
 
 .bn-checklist-checkbox.is-checked {
