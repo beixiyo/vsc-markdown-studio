@@ -3,10 +3,8 @@
    ============================================ */
 
 .markdown-body {
-
   /* BlockNote 列表样式 */
   .bn-block-group {
-
     &:has([data-content-type="bulletListItem"]),
     &:has([data-content-type="numberedListItem"]) {
       margin-top: 0;
@@ -15,13 +13,12 @@
   }
 
   .bn-block-content {
-
     &[data-content-type="bulletListItem"],
     &[data-content-type="numberedListItem"],
     &[data-content-type="checkListItem"] {
       margin-bottom: 4px;
       line-height: 1.5;
-      color: var(--md-text-secondary);
+      color: var(--md-text);
 
       .bn-inline-content {
         margin: 0;
@@ -40,3 +37,4 @@
     }
   }
 }
+

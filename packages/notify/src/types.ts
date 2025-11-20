@@ -7,7 +7,7 @@ export type NativeEvent =
   | 'blockTypeChanged'
   | 'contentChanged'
   | 'heightChanged'
-  | 'milkdownReady'
+  | 'mdBridgeReady'
   | 'labelClicked'
   | 'speakerTapped'
   | 'imagesSet'

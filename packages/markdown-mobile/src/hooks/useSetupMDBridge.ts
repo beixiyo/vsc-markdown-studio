@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { createMarkdownOperate } from 'markdown-operate'
 import type { MDBridge } from '../types/MDBridge'
 import { appendElements, insertAtBottom, insertAtTop, parseImagesToBlocks } from './imageUtils'
+import { notifyNative } from 'notify'
 
 /**
  * 创建命令对象
@@ -73,6 +74,7 @@ export function useSetupMDBridge(
     if (typeof window !== 'undefined') {
       window.MDBridge = bridge
     }
+    notifyNative('mdBridgeReady')
   }, [editor])
 }
 

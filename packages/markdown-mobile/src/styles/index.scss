@@ -1,7 +1,8 @@
 @use './blocknote/blocknote.scss' as *;
 @use './markdown/markdown.scss' as *;
 
-@import '@blocknote/core/fonts/inter.css';
 @import '@blocknote/mantine/style.css';
 @import 'custom-blocknote-gradient-styles/index.css';
-@import 'styles/index.css';
+
+@import 'styles/css/reset.css';
+@import 'styles/css/tailwind.css';
