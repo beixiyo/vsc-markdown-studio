@@ -104,7 +104,7 @@ export const Document = memo<DocumentProps>((props) => {
 
   return <div
     className={ cn(
-      'DocumentContainer relative overflow-auto h-full',
+      'DocumentContainer relative overflow-auto h-full bg-background',
       className,
     ) }
     style={ style }

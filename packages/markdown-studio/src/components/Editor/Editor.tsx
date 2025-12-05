@@ -17,7 +17,6 @@ import { cn } from 'utils'
 import { AIMenu } from '../AIMenu'
 import { DragHandleMenu } from '../DragHandleMenu'
 import { FormatToolbar } from '../Toolbar'
-import './editor.scss'
 
 export const Editor = memo<EditorProps>((props) => {
   const {
