@@ -1,6 +1,5 @@
 import { Parent as HASTParent } from 'hast';
 /**
- * Rehype plugin which converts <span> elements with data-speaker-* attributes
- * to <speaker> tags as HTML text in Markdown export.
+ * @description 将 <span> 元素转换为 [speaker:originalLabel] 占位符格式
  */
 export declare function convertSpeakerToTag(): (tree: HASTParent) => void;
