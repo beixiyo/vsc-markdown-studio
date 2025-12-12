@@ -88,7 +88,7 @@ export class CommentStore {
   private rangeQueryCache: Map<string, Comment[]> = new Map()
 
   /** 缓存的 ranges 版本（用于检测 ranges 是否变更） */
-  private cachedRangesVersion: number = 0
+  private cachedRangesSignature: string = ''
 
   /** 订阅者回调列表 */
   private listeners: Set<() => void> = new Set()
@@ -102,6 +102,29 @@ export class CommentStore {
    */
   private clearRangeQueryCache(): void {
     this.rangeQueryCache.clear()
+  }
+
+  /**
+   * 计算 ranges 签名
+   * 使用 commentId + 段落坐标（支持多段）构造稳定字符串，便于检测位置变化
+   */
+  private computeRangesSignature(ranges: Map<string, CommentRange>): string {
+    const parts: string[] = []
+
+    const sorted = Array.from(ranges.entries()).sort(([a], [b]) => a.localeCompare(b))
+    for (const [commentId, range] of sorted) {
+      if (range.segments && range.segments.length > 0) {
+        const segmentSig = range.segments
+          .map(seg => `${seg.from}-${seg.to}`)
+          .join(',')
+        parts.push(`${commentId}:${segmentSig}`)
+      }
+      else {
+        parts.push(`${commentId}:${range.from}-${range.to}`)
+      }
+    }
+
+    return parts.join('|')
   }
 
   /** 通知所有订阅者 */
@@ -245,14 +268,14 @@ export class CommentStore {
     from: number,
     to: number,
   ): Comment[] {
-    /** 检测 ranges 是否变更（通过比较 ranges 的大小和内容） */
-    const currentRangesVersion = ranges.size
-    const rangesChanged = currentRangesVersion !== this.cachedRangesVersion
+    /** 检测 ranges 是否变更（通过签名比较，考虑位置与段落变化） */
+    const currentSignature = this.computeRangesSignature(ranges)
+    const rangesChanged = currentSignature !== this.cachedRangesSignature
 
     if (rangesChanged) {
       // ranges 变更，清除缓存并更新版本
       this.clearRangeQueryCache()
-      this.cachedRangesVersion = currentRangesVersion
+      this.cachedRangesSignature = currentSignature
     }
 
     /** 检查缓存 */
@@ -265,10 +288,17 @@ export class CommentStore {
     /** 缓存未命中，执行查询 */
     const matchingCommentIds: string[] = []
 
-    /** 遍历所有评论范围，找出与查询范围有交集的评论 */
+    /** 遍历所有评论范围，找出与查询范围有交集的评论（支持多段） */
     for (const [commentId, range] of ranges) {
-      /** 判断范围交集：commentFrom < to && commentTo > from */
-      if (range.from < to && range.to > from) {
+      const segments = range.segments && range.segments.length > 0
+        ? range.segments
+        : [{ from: range.from, to: range.to }]
+
+      const hasIntersect = segments.some(
+        segment => segment.from < to && segment.to > from,
+      )
+
+      if (hasIntersect) {
         matchingCommentIds.push(commentId)
       }
     }
@@ -332,6 +362,9 @@ export class CommentStore {
       }
       this.comments.set(comment.id, comment)
     }
+    /** 导入后需清理缓存与版本，避免旧范围缓存污染 */
+    this.clearRangeQueryCache()
+    this.cachedRangesSignature = ''
     this.rebuildSnapshot()
     this.notify()
   }
@@ -455,7 +488,7 @@ export class CommentStore {
   clear(): void {
     this.comments.clear()
     this.clearRangeQueryCache()
-    this.cachedRangesVersion = 0
+    this.cachedRangesSignature = ''
     this.rebuildSnapshot()
     this.notify()
   }

@@ -13,6 +13,8 @@ export interface CommentRange {
   from: number
   /** 文档结束位置（字符偏移，ProseMirror 位置） */
   to: number
+  /** 多段范围（当评论被拆分为多个不连续片段时） */
+  segments?: Array<{ from: number, to: number }>
 }
 
 /**
@@ -148,42 +150,31 @@ function scanCommentRanges(doc: Node): Map<string, CommentRange> {
             const from = pos
             const to = pos + node.nodeSize
 
-            /** 如果已存在该 commentId 的范围，尝试合并或更新 */
+            /** 收集并合并多段范围 */
             const existingRange = ranges.get(commentId)
 
-            if (existingRange) {
-              /** 如果新范围与现有范围相邻或重叠，合并它们 */
-              if (
-                (from >= existingRange.from && from <= existingRange.to)
-                || (to >= existingRange.from && to <= existingRange.to)
-                || (from <= existingRange.to && to >= existingRange.from)
-              ) {
-                ranges.set(commentId, {
-                  commentId,
-                  from: Math.min(existingRange.from, from),
-                  to: Math.max(existingRange.to, to),
-                })
-              }
-              else {
-                /** 如果范围不重叠，保留较大的范围（或可以根据需求选择其他策略） */
-                const existingSize = existingRange.to - existingRange.from
-                const newSize = to - from
-
-                if (newSize > existingSize) {
-                  ranges.set(commentId, {
-                    commentId,
-                    from,
-                    to,
-                  })
-                }
-              }
-            }
-            else {
-              /** 新范围，直接添加 */
+            if (!existingRange) {
               ranges.set(commentId, {
                 commentId,
                 from,
                 to,
+                segments: [{ from, to }],
+              })
+            }
+            else {
+              const segments = existingRange.segments
+                ? [...existingRange.segments, { from, to }]
+                : [{ from: existingRange.from, to: existingRange.to }, { from, to }]
+
+              const merged = mergeSegments(segments)
+              const minFrom = merged[0].from
+              const maxTo = merged[merged.length - 1].to
+
+              ranges.set(commentId, {
+                commentId,
+                from: minFrom,
+                to: maxTo,
+                segments: merged,
               })
             }
           }
@@ -210,22 +201,58 @@ function computeDecorations(
   const decorations: Decoration[] = []
 
   for (const [commentId, range] of ranges) {
-    /** 验证范围有效性 */
-    if (range.from >= range.to || range.from < 0 || range.to > doc.content.size) {
-      continue
+    const segments = range.segments && range.segments.length > 0
+      ? range.segments
+      : [{ from: range.from, to: range.to }]
+
+    for (const segment of segments) {
+      /** 验证范围有效性 */
+      if (segment.from >= segment.to || segment.from < 0 || segment.to > doc.content.size) {
+        continue
+      }
+
+      /** 创建内联装饰，用于高亮显示评论区域 */
+      const decoration = Decoration.inline(segment.from, segment.to, {
+        'class':
+          'comment-highlight bg-[var(--tt-color-highlight-yellow)] border-b-2 border-b-[var(--tt-color-highlight-yellow-contrast)] '
+          + 'px-[2px] rounded-[var(--tt-radius-xxs)] cursor-pointer transition-[background-color,border-bottom-color] '
+          + 'duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)]',
+        'data-comment-id': commentId,
+      })
+
+      decorations.push(decoration)
     }
-
-    /** 创建内联装饰，用于高亮显示评论区域 */
-    const decoration = Decoration.inline(range.from, range.to, {
-      'class':
-        'comment-highlight bg-[var(--tt-color-highlight-yellow)] border-b-2 border-b-[var(--tt-color-highlight-yellow-contrast)] '
-        + 'px-[2px] rounded-[var(--tt-radius-xxs)] cursor-pointer transition-[background-color,border-bottom-color] '
-        + 'duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)]',
-      'data-comment-id': commentId,
-    })
-
-    decorations.push(decoration)
   }
 
   return DecorationSet.create(doc, decorations)
+}
+
+/**
+ * 合并重叠或相邻的段落，并按起点排序
+ */
+function mergeSegments(
+  segments: Array<{ from: number, to: number }>,
+): Array<{ from: number, to: number }> {
+  const sorted = segments
+    .map(seg => ({ ...seg }))
+    .sort((a, b) => a.from - b.from)
+
+  const merged: Array<{ from: number, to: number }> = []
+
+  for (const seg of sorted) {
+    if (merged.length === 0) {
+      merged.push(seg)
+      continue
+    }
+
+    const last = merged[merged.length - 1]
+    if (seg.from <= last.to) {
+      last.to = Math.max(last.to, seg.to)
+    }
+    else {
+      merged.push(seg)
+    }
+  }
+
+  return merged
 }

@@ -13,7 +13,7 @@
 
 import type { Editor } from '@tiptap/react'
 import type { CommentStore } from './comment-store'
-import { commentPluginKey, type CommentRange } from './plugin'
+import { commentPluginKey } from './plugin'
 
 /**
  * 评论范围同步结果
@@ -86,66 +86,13 @@ export function syncCommentRanges(
     }
   }
 
-  // 3. 检测评论范围被分割的情况
-  /** 需要扫描文档，查找同一个 commentId 是否出现在多个不连续的位置 */
-  const commentIdPositions = new Map<string, CommentRange[]>()
+  // 3. 检测评论范围被分割的情况（使用 Plugin 的多段信息）
+  for (const [commentId, range] of ranges) {
+    const segments = range.segments && range.segments.length > 0
+      ? range.segments
+      : [{ from: range.from, to: range.to }]
 
-  /** 扫描文档，收集每个 commentId 的所有位置 */
-  editor.state.doc.descendants((node, pos) => {
-    if (!node.isText || !node.marks) {
-      return true
-    }
-
-    for (const mark of node.marks) {
-      if (mark.type.name === 'comment') {
-        const commentId = mark.attrs?.commentId
-        if (commentId && typeof commentId === 'string') {
-          const range: CommentRange = {
-            commentId,
-            from: pos,
-            to: pos + node.nodeSize,
-          }
-
-          if (!commentIdPositions.has(commentId)) {
-            commentIdPositions.set(commentId, [])
-          }
-          commentIdPositions.get(commentId)!.push(range)
-        }
-      }
-    }
-
-    return true
-  })
-
-  /** 检测分割：如果一个 commentId 有多个不连续的范围，则认为是分割 */
-  for (const [commentId, positions] of commentIdPositions) {
-    if (positions.length === 0) {
-      continue
-    }
-
-    /** 合并连续或重叠的范围 */
-    const sortedPositions = positions.sort((a, b) => a.from - b.from)
-    const mergedRanges: CommentRange[] = []
-
-    for (const range of sortedPositions) {
-      if (mergedRanges.length === 0) {
-        mergedRanges.push({ ...range })
-      }
-      else {
-        const lastRange = mergedRanges[mergedRanges.length - 1]
-        /** 如果当前范围与上一个范围连续或重叠，则合并 */
-        if (range.from <= lastRange.to) {
-          lastRange.to = Math.max(lastRange.to, range.to)
-        }
-        else {
-          /** 不连续，添加新范围 */
-          mergedRanges.push({ ...range })
-        }
-      }
-    }
-
-    /** 如果合并后有多个不连续的范围，则认为是分割 */
-    if (mergedRanges.length > 1) {
+    if (segments.length > 1) {
       result.split.push(commentId)
       /** 注意：不执行任何自动操作，只记录检测结果 */
     }
@@ -202,19 +149,25 @@ export function cleanupOrphanedCommentMarks(
         const { tr } = state
 
         /** 遍历范围内的所有节点，移除带有该 commentId 的 mark */
-        tr.doc.nodesBetween(range.from, range.to, (node, pos) => {
-          if (node.isText && node.marks) {
-            const commentMark = node.marks.find(
-              mark => mark.type === commentMarkType && mark.attrs.commentId === commentId,
-            )
+        const segments = range.segments && range.segments.length > 0
+          ? range.segments
+          : [{ from: range.from, to: range.to }]
 
-            if (commentMark) {
-              const nodeFrom = pos
-              const nodeTo = pos + node.nodeSize
-              tr.removeMark(nodeFrom, nodeTo, commentMarkType)
+        for (const segment of segments) {
+          tr.doc.nodesBetween(segment.from, segment.to, (node, pos) => {
+            if (node.isText && node.marks) {
+              const commentMark = node.marks.find(
+                mark => mark.type === commentMarkType && mark.attrs.commentId === commentId,
+              )
+
+              if (commentMark) {
+                const nodeFrom = pos
+                const nodeTo = pos + node.nodeSize
+                tr.removeMark(nodeFrom, nodeTo, commentMarkType)
+              }
             }
-          }
-        })
+          })
+        }
 
         if (tr.steps.length > 0) {
           editor.view.dispatch(tr)

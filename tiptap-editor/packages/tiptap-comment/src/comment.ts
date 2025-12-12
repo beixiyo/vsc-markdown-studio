@@ -332,8 +332,16 @@ export function getCommentText(editor: Editor | null, commentId: string): string
     return ''
   }
 
-  const { from, to } = range
-  return editor.state.doc.textBetween(from, to, '\n')
+  const segments = range.segments && range.segments.length > 0
+    ? range.segments
+    : [{ from: range.from, to: range.to }]
+
+  const texts: string[] = []
+  for (const segment of segments) {
+    texts.push(editor.state.doc.textBetween(segment.from, segment.to, '\n'))
+  }
+
+  return texts.join('\n')
 }
 
 /**
