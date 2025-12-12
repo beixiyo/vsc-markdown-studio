@@ -1,10 +1,9 @@
-import type { NodeWithPos } from "@tiptap/core"
-import { Extension } from "@tiptap/core"
-import type { EditorState, Transaction } from "@tiptap/pm/state"
-import { getSelectedNodesOfType } from "tiptap-styles/utils"
-import { updateNodesAttr } from "tiptap-styles/utils"
+import type { NodeWithPos } from '@tiptap/core'
+import type { EditorState, Transaction } from '@tiptap/pm/state'
+import { Extension } from '@tiptap/core'
+import { getSelectedNodesOfType, updateNodesAttr } from 'tiptap-styles/utils'
 
-declare module "@tiptap/core" {
+declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     nodeBackground: {
       setNodeBackgroundColor: (backgroundColor: string) => ReturnType
@@ -32,9 +31,10 @@ export interface NodeBackgroundOptions {
  */
 function getToggleColor(
   targets: NodeWithPos[],
-  inputColor: string
+  inputColor: string,
 ): string | null {
-  if (targets.length === 0) return null
+  if (targets.length === 0)
+    return null
 
   for (const target of targets) {
     const currentColor = target.node.attrs?.backgroundColor ?? null
@@ -47,19 +47,19 @@ function getToggleColor(
 }
 
 export const NodeBackground = Extension.create<NodeBackgroundOptions>({
-  name: "nodeBackground",
+  name: 'nodeBackground',
 
   addOptions() {
     return {
       types: [
-        "paragraph",
-        "heading",
-        "blockquote",
-        "taskList",
-        "bulletList",
-        "orderedList",
-        "tableCell",
-        "tableHeader",
+        'paragraph',
+        'heading',
+        'blockquote',
+        'taskList',
+        'bulletList',
+        'orderedList',
+        'tableCell',
+        'tableHeader',
       ],
       useStyle: true,
     }
@@ -75,23 +75,26 @@ export const NodeBackground = Extension.create<NodeBackgroundOptions>({
 
             parseHTML: (element: HTMLElement) => {
               const styleColor = element.style?.backgroundColor
-              if (styleColor) return styleColor
+              if (styleColor)
+                return styleColor
 
-              const dataColor = element.getAttribute("data-background-color")
+              const dataColor = element.getAttribute('data-background-color')
               return dataColor || null
             },
 
             renderHTML: (attributes) => {
               const color = attributes.backgroundColor as string | null
-              if (!color) return {}
+              if (!color)
+                return {}
 
               if (this.options.useStyle) {
                 return {
                   style: `background-color: ${color}`,
                 }
-              } else {
+              }
+              else {
                 return {
-                  "data-background-color": color,
+                  'data-background-color': color,
                 }
               }
             },
@@ -109,20 +112,21 @@ export const NodeBackground = Extension.create<NodeBackgroundOptions>({
       getTargetColor: (
         targets: NodeWithPos[],
         inputColor?: string
-      ) => string | null
+      ) => string | null,
     ) => {
       return (inputColor?: string) =>
-        ({ state, tr }: { state: EditorState; tr: Transaction }) => {
+        ({ state, tr }: { state: EditorState, tr: Transaction }) => {
           const targets = getSelectedNodesOfType(
             state.selection,
-            this.options.types
+            this.options.types,
           )
 
-          if (targets.length === 0) return false
+          if (targets.length === 0)
+            return false
 
           const targetColor = getTargetColor(targets, inputColor)
 
-          return updateNodesAttr(tr, targets, "backgroundColor", targetColor)
+          return updateNodesAttr(tr, targets, 'backgroundColor', targetColor)
         }
     }
 
@@ -131,7 +135,7 @@ export const NodeBackground = Extension.create<NodeBackgroundOptions>({
        * Set background color to specific value
        */
       setNodeBackgroundColor: executeBackgroundCommand(
-        (_, inputColor) => inputColor || null
+        (_, inputColor) => inputColor || null,
       ),
 
       /**
@@ -143,7 +147,7 @@ export const NodeBackground = Extension.create<NodeBackgroundOptions>({
        * Toggle background color (set if different/missing, unset if all have it)
        */
       toggleNodeBackgroundColor: executeBackgroundCommand(
-        (targets, inputColor) => getToggleColor(targets, inputColor || "")
+        (targets, inputColor) => getToggleColor(targets, inputColor || ''),
       ),
     }
   },

@@ -1,10 +1,10 @@
-"use client"
+'use client'
 
-import { memo, useEffect } from 'react'
+import type { EditorContentProps } from '../types'
 import { EditorContent, EditorContext } from '@tiptap/react'
 
+import { memo, useEffect } from 'react'
 import { useDefaultEditor } from '../hooks/use-default-editor'
-import type { EditorContentProps } from '../types'
 
 export const TiptapEditor = memo<EditorContentProps>(({
   data,
@@ -14,17 +14,19 @@ export const TiptapEditor = memo<EditorContentProps>(({
   className,
   style,
   onUpdate,
-  ref
+  ref,
 }) => {
-  const contentType = typeof data === 'string' ? 'markdown' : 'json'
+  const contentType = typeof data === 'string'
+    ? 'markdown'
+    : 'json'
   const editor = useDefaultEditor({
     speakerMap,
     onSpeakerClick,
-    // 编辑器初始内容（从 JSON 文件导入或 Markdown 字符串）
+    /** 编辑器初始内容（从 JSON 文件导入或 Markdown 字符串） */
     content: data || '',
-    // 明确告诉 Tiptap 当前内容类型，Markdown 字符串会被正确解析
+    /** 明确告诉 Tiptap 当前内容类型，Markdown 字符串会被正确解析 */
     contentType,
-    // 监听编辑器内容更新
+    /** 监听编辑器内容更新 */
     onUpdate,
   })
 
@@ -34,9 +36,9 @@ export const TiptapEditor = memo<EditorContentProps>(({
     }
     editor.commands.setContent(
       data,
-      { contentType }
+      { contentType },
     )
-  }, [editor, data])
+  }, [editor, data, contentType])
 
   useEffect(() => {
     if (ref) {
@@ -45,7 +47,7 @@ export const TiptapEditor = memo<EditorContentProps>(({
   }, [editor, ref])
 
   return (
-    <EditorContext.Provider value={ { editor } }>
+    <EditorContext value={ { editor } }>
       { children }
       <EditorContent
         editor={ editor }
@@ -53,9 +55,8 @@ export const TiptapEditor = memo<EditorContentProps>(({
         className={ className }
         style={ style }
       />
-    </EditorContext.Provider>
+    </EditorContext>
   )
 })
 
 TiptapEditor.displayName = 'EditorContentComponent'
-

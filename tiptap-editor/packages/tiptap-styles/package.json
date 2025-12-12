@@ -29,7 +29,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "lint": "eslint ./src --fix"
   },
   "dependencies": {
     "@tiptap/extension-horizontal-rule": "^3.13.0",

@@ -1,10 +1,10 @@
 import type { Content, Editor } from '@tiptap/core'
+import { setBold, setCheckList, setHeading, setItalic, setOrderedList, setParagraph, setUnderline, setUnorderedList, unsetBold, unsetItalic, unsetUnderline } from './command'
 import { getEditorHTML, getEditorMarkdown, setEditorContent, setEditorHTML, setEditorMarkdown } from './content'
-import { setCheckList, setBold, setHeading, setItalic, setOrderedList, setParagraph, setUnderline, setUnorderedList, unsetBold, unsetItalic, unsetUnderline } from './command'
-import { getSelectedLinkUrl, createLink } from './link'
-import { getSelectionRange, getSelectedText, setSelectionRange } from './selection'
 import { getTextCursorPosition, setTextCursorPosition } from './cursor'
 import { redo, undo } from './history'
+import { createLink, getSelectedLinkUrl } from './link'
+import { getSelectedText, getSelectionRange, setSelectionRange } from './selection'
 import { focusEditor, isEditable, isEmptyDoc, setEditableState } from './state'
 import { insertText } from './text'
 

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
 import type { Editor } from '@tiptap/react'
+import { useCallback, useEffect, useState } from 'react'
 import { getSelectedText, hasSelectedText } from 'tiptap-api'
 import { useTiptapEditor } from './use-tiptap-editor'
 
@@ -34,7 +34,7 @@ export interface UseSelectionReturn {
  * Hook 用于获取和管理编辑器选中文本
  */
 export function useSelection(
-  config: UseSelectionConfig = {}
+  config: UseSelectionConfig = {},
 ): UseSelectionReturn {
   const { editor: providedEditor, autoUpdate = true } = config
   const { editor } = useTiptapEditor(providedEditor)
@@ -78,4 +78,3 @@ export function useSelection(
     getSelection,
   }
 }
-

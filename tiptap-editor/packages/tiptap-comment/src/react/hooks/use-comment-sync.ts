@@ -5,10 +5,10 @@
  * 包括处理撤销/重做时的评论状态恢复。
  */
 
-import { useEffect } from 'react'
 import type { Editor } from '@tiptap/react'
-import { CommentStore } from '../../comment-store'
-import { syncCommentRanges, type CommentSyncResult } from '../../comment-sync'
+import type { CommentStore } from '../../comment-store'
+import { useEffect } from 'react'
+import { type CommentSyncResult, syncCommentRanges } from '../../comment-sync'
 
 /**
  * 评论同步选项
@@ -42,7 +42,7 @@ export interface UseCommentSyncOptions {
 export function useCommentSync(
   editor: Editor | null,
   commentStore: CommentStore,
-  options: UseCommentSyncOptions = {}
+  options: UseCommentSyncOptions = {},
 ): void {
   const {
     enabled = true,
@@ -57,7 +57,7 @@ export function useCommentSync(
 
     let timeoutId: ReturnType<typeof setTimeout> | null = null
 
-    // 应用同步结果：当文档中已无评论 mark 时，删除 Store 中对应的评论，避免数据与 UI 脱节
+    /** 应用同步结果：当文档中已无评论 mark 时，删除 Store 中对应的评论，避免数据与 UI 脱节 */
     const applySyncResult = (result: CommentSyncResult) => {
       if (result.deleted.length > 0) {
         result.deleted.forEach((commentId) => {
@@ -66,7 +66,7 @@ export function useCommentSync(
       }
     }
 
-    // 同步函数（带防抖）
+    /** 同步函数（带防抖） */
     const sync = () => {
       if (timeoutId) {
         clearTimeout(timeoutId)
@@ -78,26 +78,29 @@ export function useCommentSync(
       }, debounceMs)
     }
 
-    // 订阅编辑器更新事件
-    // 注意：Tiptap 的 'update' 事件会在每次状态变更时触发，包括撤销/重做
+    /**
+     * 订阅编辑器更新事件
+     * 注意：Tiptap 的 'update' 事件会在每次状态变更时触发，包括撤销/重做
+     */
     // ProseMirror 的 Mapping 机制已经处理了位置更新，我们只需要同步状态即可
     const handleUpdate = ({ transaction }: { transaction: any }) => {
-      // 检查是否是撤销/重做操作
+      /** 检查是否是撤销/重做操作 */
       const isUndoRedo = transaction.getMeta('undo') || transaction.getMeta('redo')
 
       if (isUndoRedo && syncOnUndoRedo) {
-        // 撤销/重做后立即同步（不使用防抖）
+        /** 撤销/重做后立即同步（不使用防抖） */
         const result = syncCommentRanges(editor, commentStore)
         applySyncResult(result)
-      } else {
-        // 普通更新使用防抖
+      }
+      else {
+        /** 普通更新使用防抖 */
         sync()
       }
     }
 
     editor.on('update', handleUpdate)
 
-    // 清理函数
+    /** 清理函数 */
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId)
@@ -106,4 +109,3 @@ export function useCommentSync(
     }
   }, [editor, commentStore, enabled, syncOnUndoRedo, debounceMs])
 }
-

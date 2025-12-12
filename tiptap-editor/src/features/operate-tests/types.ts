@@ -72,5 +72,3 @@ export type OperateTestRunnerOptions = {
    */
   continueOnFail?: boolean
 }
-
-

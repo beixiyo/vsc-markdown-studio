@@ -1,28 +1,25 @@
-"use client"
+'use client'
 
-import { useCallback, useEffect, useState } from "react"
-import { type Editor } from "@tiptap/react"
-import { NodeSelection, TextSelection } from "@tiptap/pm/state"
+import type { Editor } from '@tiptap/react'
+import { NodeSelection, TextSelection } from '@tiptap/pm/state'
+import { useCallback, useEffect, useState } from 'react'
+import { useTiptapEditor } from 'tiptap-react-hook'
 
-// --- Hooks ---
-import { useTiptapEditor } from "tiptap-react-hook"
-
-// --- Lib ---
+import {
+  HeadingFiveIcon,
+  HeadingFourIcon,
+  HeadingOneIcon,
+  HeadingSixIcon,
+  HeadingThreeIcon,
+  HeadingTwoIcon,
+} from 'tiptap-styles/icons'
 import {
   findNodePosition,
   isNodeInSchema,
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
-} from "tiptap-styles/utils"
-
-// --- Icons ---
-import { HeadingOneIcon } from "tiptap-styles/icons"
-import { HeadingTwoIcon } from "tiptap-styles/icons"
-import { HeadingThreeIcon } from "tiptap-styles/icons"
-import { HeadingFourIcon } from "tiptap-styles/icons"
-import { HeadingFiveIcon } from "tiptap-styles/icons"
-import { HeadingSixIcon } from "tiptap-styles/icons"
+} from 'tiptap-styles/utils'
 
 export type Level = 1 | 2 | 3 | 4 | 5 | 6
 
@@ -59,12 +56,12 @@ export const headingIcons = {
 }
 
 export const HEADING_SHORTCUT_KEYS: Record<Level, string> = {
-  1: "ctrl+alt+1",
-  2: "ctrl+alt+2",
-  3: "ctrl+alt+3",
-  4: "ctrl+alt+4",
-  5: "ctrl+alt+5",
-  6: "ctrl+alt+6",
+  1: 'ctrl+alt+1',
+  2: 'ctrl+alt+2',
+  3: 'ctrl+alt+3',
+  4: 'ctrl+alt+4',
+  5: 'ctrl+alt+5',
+  6: 'ctrl+alt+6',
 }
 
 /**
@@ -73,40 +70,43 @@ export const HEADING_SHORTCUT_KEYS: Record<Level, string> = {
 export function canToggle(
   editor: Editor | null,
   level?: Level,
-  turnInto: boolean = true
+  turnInto: boolean = true,
 ): boolean {
-  if (!editor || !editor.isEditable) return false
-  if (
-    !isNodeInSchema("heading", editor) ||
-    isNodeTypeSelected(editor, ["image"])
-  )
+  if (!editor || !editor.isEditable)
     return false
+  if (
+    !isNodeInSchema('heading', editor)
+    || isNodeTypeSelected(editor, ['image'])
+  ) {
+    return false
+  }
 
   if (!turnInto) {
     return level
-      ? editor.can().setNode("heading", { level })
-      : editor.can().setNode("heading")
+      ? editor.can().setNode('heading', { level })
+      : editor.can().setNode('heading')
   }
 
   // Ensure selection is in nodes we're allowed to convert
   if (
     !selectionWithinConvertibleTypes(editor, [
-      "paragraph",
-      "heading",
-      "bulletList",
-      "orderedList",
-      "taskList",
-      "blockquote",
-      "codeBlock",
+      'paragraph',
+      'heading',
+      'bulletList',
+      'orderedList',
+      'taskList',
+      'blockquote',
+      'codeBlock',
     ])
-  )
+  ) {
     return false
+  }
 
   // Either we can set heading directly on the selection,
   // or we can clear formatting/nodes to arrive at a heading.
   return level
-    ? editor.can().setNode("heading", { level }) || editor.can().clearNodes()
-    : editor.can().setNode("heading") || editor.can().clearNodes()
+    ? editor.can().setNode('heading', { level }) || editor.can().clearNodes()
+    : editor.can().setNode('heading') || editor.can().clearNodes()
 }
 
 /**
@@ -114,17 +114,18 @@ export function canToggle(
  */
 export function isHeadingActive(
   editor: Editor | null,
-  level?: Level | Level[]
+  level?: Level | Level[],
 ): boolean {
-  if (!editor || !editor.isEditable) return false
+  if (!editor || !editor.isEditable)
+    return false
 
   if (Array.isArray(level)) {
-    return level.some((l) => editor.isActive("heading", { level: l }))
+    return level.some(l => editor.isActive('heading', { level: l }))
   }
 
   return level
-    ? editor.isActive("heading", { level })
-    : editor.isActive("heading")
+    ? editor.isActive('heading', { level })
+    : editor.isActive('heading')
 }
 
 /**
@@ -132,14 +133,18 @@ export function isHeadingActive(
  */
 export function toggleHeading(
   editor: Editor | null,
-  level: Level | Level[]
+  level: Level | Level[],
 ): boolean {
-  if (!editor || !editor.isEditable) return false
+  if (!editor || !editor.isEditable)
+    return false
 
-  const levels = Array.isArray(level) ? level : [level]
-  const toggleLevel = levels.find((l) => canToggle(editor, l))
+  const levels = Array.isArray(level)
+    ? level
+    : [level]
+  const toggleLevel = levels.find(l => canToggle(editor, l))
 
-  if (!toggleLevel) return false
+  if (!toggleLevel)
+    return false
 
   try {
     const view = editor.view
@@ -152,7 +157,8 @@ export function toggleHeading(
         editor,
         node: state.selection.$anchor.node(1),
       })?.pos
-      if (!isValidPosition(pos)) return false
+      if (!isValidPosition(pos))
+        return false
 
       tr = tr.setSelection(NodeSelection.create(state.doc, pos))
       view.dispatch(tr)
@@ -183,20 +189,21 @@ export function toggleHeading(
         .clearNodes()
     }
 
-    const isActive = levels.some((l) =>
-      editor.isActive("heading", { level: l })
+    const isActive = levels.some(l =>
+      editor.isActive('heading', { level: l }),
     )
 
     const toggle = isActive
-      ? chain.setNode("paragraph")
-      : chain.setNode("heading", { level: toggleLevel })
+      ? chain.setNode('paragraph')
+      : chain.setNode('heading', { level: toggleLevel })
 
     toggle.run()
 
     editor.chain().focus().selectTextblockEnd().run()
 
     return true
-  } catch {
+  }
+  catch {
     return false
   }
 }
@@ -211,12 +218,14 @@ export function shouldShowButton(props: {
 }): boolean {
   const { editor, level, hideWhenUnavailable } = props
 
-  if (!editor || !editor.isEditable) return false
-  if (!isNodeInSchema("heading", editor)) return false
+  if (!editor || !editor.isEditable)
+    return false
+  if (!isNodeInSchema('heading', editor))
+    return false
 
-  if (hideWhenUnavailable && !editor.isActive("code")) {
+  if (hideWhenUnavailable && !editor.isActive('code')) {
     if (Array.isArray(level)) {
-      return level.some((l) => canToggle(editor, l))
+      return level.some(l => canToggle(editor, l))
     }
     return canToggle(editor, level)
   }
@@ -284,7 +293,8 @@ export function useHeading(config: UseHeadingConfig) {
   const isActive = isHeadingActive(editor, level)
 
   useEffect(() => {
-    if (!editor) return
+    if (!editor)
+      return
 
     const handleSelectionUpdate = () => {
       setIsVisible(shouldShowButton({ editor, level, hideWhenUnavailable }))
@@ -292,15 +302,16 @@ export function useHeading(config: UseHeadingConfig) {
 
     handleSelectionUpdate()
 
-    editor.on("selectionUpdate", handleSelectionUpdate)
+    editor.on('selectionUpdate', handleSelectionUpdate)
 
     return () => {
-      editor.off("selectionUpdate", handleSelectionUpdate)
+      editor.off('selectionUpdate', handleSelectionUpdate)
     }
   }, [editor, level, hideWhenUnavailable])
 
   const handleToggle = useCallback(() => {
-    if (!editor) return false
+    if (!editor)
+      return false
 
     const success = toggleHeading(editor, level)
     if (success) {

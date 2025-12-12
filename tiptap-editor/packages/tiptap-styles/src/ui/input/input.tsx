@@ -1,9 +1,9 @@
-import { cn } from "../../utils"
-import "./input.scss"
+import { cn } from '../../utils'
+import './input.scss'
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   return (
-    <input type={type} className={cn("tiptap-input", className)} {...props} />
+    <input type={ type } className={ cn('tiptap-input', className) } { ...props } />
   )
 }
 
@@ -11,9 +11,9 @@ function InputGroup({
   className,
   children,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<'div'>) {
   return (
-    <div className={cn("tiptap-input-group", className)} {...props}>
+    <div className={ cn('tiptap-input-group', className) } { ...props }>
       {children}
     </div>
   )

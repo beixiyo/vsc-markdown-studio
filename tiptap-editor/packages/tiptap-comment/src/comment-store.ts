@@ -45,7 +45,6 @@ export interface CommentAuthor {
  * 评论的 ID 与文档中 Mark 的 commentId 对应。
  */
 export interface Comment {
-  // 核心字段
   /** 评论 ID，与 mark 的 commentId 对应 */
   id: string
   /** 评论内容（支持 Markdown） */
@@ -57,11 +56,9 @@ export interface Comment {
   /** 更新时间戳（可选） */
   updatedAt?: number
 
-  // 状态字段
   /** 评论状态 */
   status: 'active' | 'resolved'
 
-  // 回复相关字段（扁平化结构）
   /** 被回复的评论 ID（如果存在，表示这是回复） */
   replyTo?: string
   /** 被回复的作者信息（用于展示引用） */
@@ -69,7 +66,6 @@ export interface Comment {
   /** 被回复的评论内容（用于展示引用，可选，可截断） */
   replyToContent?: string
 
-  // 扩展字段（可选）
   /** @提及的用户 ID 列表 */
   mentions?: string[]
   /** 标签列表 */
@@ -110,7 +106,7 @@ export class CommentStore {
 
   /** 通知所有订阅者 */
   private notify(): void {
-    this.listeners.forEach((listener) => listener())
+    this.listeners.forEach(listener => listener())
   }
 
   /** 重建快照 */
@@ -146,7 +142,7 @@ export class CommentStore {
       throw new Error(`评论 ID "${comment.id}" 已存在`)
     }
     this.comments.set(comment.id, comment)
-    // 清除查询缓存（因为评论列表变更）
+    /** 清除查询缓存（因为评论列表变更） */
     this.clearRangeQueryCache()
     this.rebuildSnapshot()
     this.notify()
@@ -173,7 +169,7 @@ export class CommentStore {
       throw new Error(`评论 ID "${id}" 不存在`)
     }
 
-    // 更新评论，同时更新 updatedAt 时间戳
+    /** 更新评论，同时更新 updatedAt 时间戳 */
     const updatedComment: Comment = {
       ...comment,
       ...updates,
@@ -181,7 +177,7 @@ export class CommentStore {
     }
 
     this.comments.set(id, updatedComment)
-    // 清除查询缓存（因为评论内容变更）
+    /** 清除查询缓存（因为评论内容变更） */
     this.clearRangeQueryCache()
     this.rebuildSnapshot()
     this.notify()
@@ -195,7 +191,7 @@ export class CommentStore {
   deleteComment(id: string): boolean {
     const deleted = this.comments.delete(id)
     if (deleted) {
-      // 清除查询缓存（因为评论列表变更）
+      /** 清除查询缓存（因为评论列表变更） */
       this.clearRangeQueryCache()
       this.rebuildSnapshot()
       this.notify()
@@ -217,7 +213,7 @@ export class CommentStore {
    * @returns 匹配状态的评论数组
    */
   getCommentsByStatus(status: Comment['status']): Comment[] {
-    return this.getAllComments().filter((comment) => comment.status === status)
+    return this.getAllComments().filter(comment => comment.status === status)
   }
 
   /**
@@ -247,9 +243,9 @@ export class CommentStore {
   getCommentsByRange(
     ranges: Map<string, CommentRange>,
     from: number,
-    to: number
+    to: number,
   ): Comment[] {
-    // 检测 ranges 是否变更（通过比较 ranges 的大小和内容）
+    /** 检测 ranges 是否变更（通过比较 ranges 的大小和内容） */
     const currentRangesVersion = ranges.size
     const rangesChanged = currentRangesVersion !== this.cachedRangesVersion
 
@@ -259,25 +255,25 @@ export class CommentStore {
       this.cachedRangesVersion = currentRangesVersion
     }
 
-    // 检查缓存
+    /** 检查缓存 */
     const cacheKey = `${from}-${to}`
     const cachedResult = this.rangeQueryCache.get(cacheKey)
     if (cachedResult !== undefined) {
       return cachedResult
     }
 
-    // 缓存未命中，执行查询
+    /** 缓存未命中，执行查询 */
     const matchingCommentIds: string[] = []
 
-    // 遍历所有评论范围，找出与查询范围有交集的评论
+    /** 遍历所有评论范围，找出与查询范围有交集的评论 */
     for (const [commentId, range] of ranges) {
-      // 判断范围交集：commentFrom < to && commentTo > from
+      /** 判断范围交集：commentFrom < to && commentTo > from */
       if (range.from < to && range.to > from) {
         matchingCommentIds.push(commentId)
       }
     }
 
-    // 从 Store 中获取对应的评论实体
+    /** 从 Store 中获取对应的评论实体 */
     const comments: Comment[] = []
     for (const commentId of matchingCommentIds) {
       const comment = this.getComment(commentId)
@@ -286,7 +282,7 @@ export class CommentStore {
       }
     }
 
-    // 将查询结果存入缓存
+    /** 将查询结果存入缓存 */
     this.rangeQueryCache.set(cacheKey, comments)
 
     return comments
@@ -311,22 +307,26 @@ export class CommentStore {
     if (typeof json === 'string') {
       try {
         comments = JSON.parse(json) as Comment[]
-      } catch (error) {
-        throw new Error(`无效的 JSON 格式: ${error instanceof Error ? error.message : String(error)}`)
       }
-    } else {
+      catch (error) {
+        throw new Error(`无效的 JSON 格式: ${error instanceof Error
+          ? error.message
+          : String(error)}`)
+      }
+    }
+    else {
       comments = json
     }
 
-    // 验证数据格式
+    /** 验证数据格式 */
     if (!Array.isArray(comments)) {
-      throw new Error('评论数据必须是数组')
+      throw new TypeError('评论数据必须是数组')
     }
 
-    // 清空现有评论并导入新评论
+    /** 清空现有评论并导入新评论 */
     this.comments.clear()
     for (const comment of comments) {
-      // 基本验证
+      /** 基本验证 */
       if (!comment.id || !comment.content || !comment.author) {
         throw new Error(`无效的评论数据: 缺少必需字段`)
       }
@@ -360,7 +360,7 @@ export class CommentStore {
    */
   getCommentsByReplyTo(replyToId: string): Comment[] {
     return this.getAllComments().filter(
-      (comment) => comment.replyTo === replyToId
+      comment => comment.replyTo === replyToId,
     )
   }
 
@@ -403,10 +403,10 @@ export class CommentStore {
     const chain: Comment[] = []
     const visited = new Set<string>()
 
-    // 递归查找回复链
+    /** 递归查找回复链 */
     const buildChain = (id: string) => {
       if (visited.has(id)) {
-        // 防止循环引用
+        /** 防止循环引用 */
         return
       }
       visited.add(id)
@@ -416,10 +416,10 @@ export class CommentStore {
         return
       }
 
-      // 先添加当前评论
+      /** 先添加当前评论 */
       chain.push(comment)
 
-      // 查找所有回复当前评论的评论
+      /** 查找所有回复当前评论的评论 */
       const replies = this.getCommentsByReplyTo(id)
       for (const reply of replies) {
         buildChain(reply.id)
@@ -428,7 +428,7 @@ export class CommentStore {
 
     buildChain(commentId)
 
-    // 按创建时间排序
+    /** 按创建时间排序 */
     return chain.sort((a, b) => a.createdAt - b.createdAt)
   }
 
@@ -446,7 +446,7 @@ export class CommentStore {
    * ```
    */
   getTopLevelComments(): Comment[] {
-    return this.getAllComments().filter((comment) => !comment.replyTo)
+    return this.getAllComments().filter(comment => !comment.replyTo)
   }
 
   /**
@@ -478,7 +478,7 @@ export class CommentStore {
  * ```
  */
 export function getCommentRangesFromPlugin(
-  editor: Editor | null
+  editor: Editor | null,
 ): Map<string, CommentRange> {
   if (!editor) {
     return new Map()
@@ -517,7 +517,7 @@ export function getCommentsByRange(
   editor: Editor | null,
   commentStore: CommentStore,
   from: number,
-  to: number
+  to: number,
 ): Comment[] {
   const ranges = getCommentRangesFromPlugin(editor)
   return commentStore.getCommentsByRange(ranges, from, to)

@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
+import type { SuggestionItem, SuggestionItemContext, SuggestionSource, SuggestionSourceParams } from '../types'
 import { createElement } from 'react'
 import { AlignLeftIcon, BlockquoteIcon, HeadingOneIcon, HeadingTwoIcon, ListIcon, ListOrderedIcon } from 'tiptap-styles/icons'
-import type { SuggestionItem, SuggestionItemContext, SuggestionSource, SuggestionSourceParams } from '../types'
 
 type SlashAction = (editor: Editor, context: SuggestionItemContext) => void | Promise<void>
 
@@ -30,12 +30,14 @@ export class SlashMenuSource implements SuggestionSource {
     const q = query.trim().toLowerCase()
 
     const matched = this.items.filter((item) => {
-      if (!q) return true
-      if (item.title.toLowerCase().includes(q)) return true
-      return item.aliases?.some((alias) => alias.toLowerCase().includes(q)) ?? false
+      if (!q)
+        return true
+      if (item.title.toLowerCase().includes(q))
+        return true
+      return item.aliases?.some(alias => alias.toLowerCase().includes(q)) ?? false
     })
 
-    return matched.map((item) => ({
+    return matched.map(item => ({
       id: item.id,
       title: item.title,
       subtitle: item.subtitle,
@@ -122,5 +124,3 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
     },
   ]
 }
-
-

@@ -39,7 +39,6 @@ async function loadEmojiMart() {
   return emojiLoadingPromise;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function EmojiPicker(props: any) {
   const ref = useRef(null);
   const instance = useRef(null) as any;

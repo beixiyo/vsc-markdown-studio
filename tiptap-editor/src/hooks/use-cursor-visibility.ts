@@ -1,7 +1,7 @@
-import type { Editor } from "@tiptap/react"
-import { useWindowSize } from "@/hooks/use-window-size"
-import { useBodyRect } from "@/hooks/use-element-rect"
-import { useEffect } from "react"
+import type { Editor } from '@tiptap/react'
+import { useEffect } from 'react'
+import { useBodyRect } from '@/hooks/use-element-rect'
+import { useWindowSize } from '@/hooks/use-window-size'
 
 export interface CursorVisibilityOptions {
   /**
@@ -16,11 +16,11 @@ export interface CursorVisibilityOptions {
 
 /**
  * 确保 Tiptap 编辑器中光标可见性的自定义 Hook
- * 
+ *
  * 当用户在编辑器中输入时，如果光标被工具栏或其他元素遮挡，
  * 此 Hook 会自动滚动窗口，使光标保持在可见区域内。
  * 这对于提供流畅的编辑体验非常重要，特别是在移动设备上。
- * 
+ *
  * @example
  * ```tsx
  * const MyEditor = () => {
@@ -29,11 +29,11 @@ export interface CursorVisibilityOptions {
  *     editor,
  *     overlayHeight: 60 // 工具栏高度
  *   });
- *   
+ *
  *   return <TiptapEditor editor={editor} />;
  * };
  * ```
- * 
+ *
  * @param options - 配置选项
  * @param options.editor - Tiptap 编辑器实例，当编辑器存在且获得焦点时触发滚动
  * @param options.overlayHeight - 需要考虑的工具栏或其他遮挡元素的高度（像素），默认为 0
@@ -52,19 +52,21 @@ export function useCursorVisibility({
 
   useEffect(() => {
     const ensureCursorVisibility = () => {
-      if (!editor) return
+      if (!editor)
+        return
 
       const { state, view } = editor
-      if (!view.hasFocus()) return
+      if (!view.hasFocus())
+        return
 
-      // 获取当前光标位置坐标
+      /** 获取当前光标位置坐标 */
       const { from } = state.selection
       const cursorCoords = view.coordsAtPos(from)
 
       if (windowHeight < rect.height && cursorCoords) {
         const availableSpace = windowHeight - cursorCoords.top
 
-        // 如果光标被遮挡层隐藏或超出屏幕，滚动到可见位置
+        /** 如果光标被遮挡层隐藏或超出屏幕，滚动到可见位置 */
         if (availableSpace < overlayHeight) {
           const targetCursorY = Math.max(windowHeight / 2, overlayHeight)
           const currentScrollY = window.scrollY
@@ -73,7 +75,7 @@ export function useCursorVisibility({
 
           window.scrollTo({
             top: Math.max(0, newScrollY),
-            behavior: "smooth",
+            behavior: 'smooth',
           })
         }
       }

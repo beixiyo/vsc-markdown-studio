@@ -45,7 +45,7 @@ export const CommentMark = Mark.create<CommentMarkOptions>({
           }
           return {
             'data-comment-id': attributes.commentId,
-            class: 'comment-mark',
+            'class': 'comment-mark',
           }
         },
       },
@@ -77,7 +77,7 @@ export const CommentMark = Mark.create<CommentMarkOptions>({
     ]
   },
 
-  // 支持在同一文本上使用多个评论标记
+  /** 支持在同一文本上使用多个评论标记 */
   // inclusive: false - 允许相同类型的多个标记
   // spanning: false - 标记不跨越块边界
   inclusive: false,

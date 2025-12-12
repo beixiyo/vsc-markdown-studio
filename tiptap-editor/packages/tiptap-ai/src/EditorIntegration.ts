@@ -1,7 +1,7 @@
-import type { PreviewController } from './PreviewController'
 import type { AIOrchestrator } from './AIOrchestrator'
-import type { NormalizedResponse, SelectionPayload } from './types'
+import type { PreviewController } from './PreviewController'
 import type { PreviewState } from './PreviewStateMachine'
+import type { NormalizedResponse, SelectionPayload } from './types'
 
 export type EditorBridge = {
   /**
@@ -54,7 +54,7 @@ export type EventCallbacks = {
   /**
    * 错误发生
    */
-  onError?: (error: { code?: string; message: string; meta?: Record<string, any> }, selection?: SelectionPayload) => void
+  onError?: (error: { code?: string, message: string, meta?: Record<string, any> }, selection?: SelectionPayload) => void
   /**
    * 取消操作
    */
@@ -83,66 +83,66 @@ export function bindEditor(
   controller: PreviewController,
   bridge: EditorBridge,
   orchestrator?: AIOrchestrator,
-  callbacks?: EventCallbacks
+  callbacks?: EventCallbacks,
 ): EditorIntegration {
   let lastSelection: SelectionPayload | undefined
   let undo: (() => void) | undefined
 
-  // 绑定 orchestrator 事件回调
+  /** 绑定 orchestrator 事件回调 */
   const unsubscribes: Array<() => void> = []
   if (orchestrator && callbacks) {
     if (callbacks.onSelection) {
       unsubscribes.push(
         orchestrator.on('start', ({ payload }) => {
           callbacks.onSelection?.(payload)
-        })
+        }),
       )
     }
     if (callbacks.onPreviewUpdate) {
       unsubscribes.push(
         orchestrator.on('chunk', (preview) => {
           callbacks.onPreviewUpdate?.(preview, lastSelection)
-        })
+        }),
       )
       unsubscribes.push(
         orchestrator.on('done', (preview) => {
           callbacks.onPreviewUpdate?.(preview, lastSelection)
-        })
+        }),
       )
     }
     if (callbacks.onReadyForDecision) {
       unsubscribes.push(
         orchestrator.on('readyForDecision', ({ preview }) => {
           callbacks.onReadyForDecision?.(preview, lastSelection)
-        })
+        }),
       )
     }
     if (callbacks.onAccept) {
       unsubscribes.push(
         orchestrator.on('accept', ({ preview }) => {
           callbacks.onAccept?.(preview, lastSelection)
-        })
+        }),
       )
     }
     if (callbacks.onReject) {
       unsubscribes.push(
         orchestrator.on('reject', ({ preview }) => {
           callbacks.onReject?.(preview, lastSelection)
-        })
+        }),
       )
     }
     if (callbacks.onError) {
       unsubscribes.push(
         orchestrator.on('error', (error) => {
           callbacks.onError?.(error, lastSelection)
-        })
+        }),
       )
     }
     if (callbacks.onCancel) {
       unsubscribes.push(
         orchestrator.on('cancel', ({ reason }) => {
           callbacks.onCancel?.(reason, lastSelection)
-        })
+        }),
       )
     }
   }
@@ -151,7 +151,7 @@ export function bindEditor(
     lastSelection = state.selection ?? lastSelection
     switch (state.status) {
       case 'processing':
-        // 流式模式下，如果有预览内容，实时渲染；否则显示处理中提示
+        /** 流式模式下，如果有预览内容，实时渲染；否则显示处理中提示 */
         if (state.preview && (state.preview.delta || state.preview.text)) {
           bridge.renderPreview(state.preview, lastSelection)
         }
@@ -201,7 +201,7 @@ export function bindEditor(
 
   const dispose = () => {
     unsubscribe()
-    unsubscribes.forEach((unsub) => unsub())
+    unsubscribes.forEach(unsub => unsub())
     undo = undefined
   }
 
@@ -210,6 +210,3 @@ export function bindEditor(
     dispose,
   }
 }
-
-
-

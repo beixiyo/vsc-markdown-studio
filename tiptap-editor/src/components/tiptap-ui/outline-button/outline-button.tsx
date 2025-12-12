@@ -1,20 +1,20 @@
-import { forwardRef, useState, useCallback } from 'react'
-import { useTiptapEditor } from 'tiptap-react-hook'
-import { Button } from 'tiptap-styles/ui'
+import type { ButtonProps } from 'tiptap-styles/ui'
 import {
-  useFloating,
   autoUpdate,
-  offset,
   flip,
+  FloatingPortal,
+  offset,
   shift,
   useDismiss,
+  useFloating,
   useInteractions,
   useMergeRefs,
-  FloatingPortal,
 } from '@floating-ui/react'
+import { forwardRef, useCallback, useState } from 'react'
+import { useTiptapEditor } from 'tiptap-react-hook'
 import { ListIcon } from 'tiptap-styles/icons'
+import { Button } from 'tiptap-styles/ui'
 import { OutlinePanel } from '@/playground/components/outline-panel'
-import type { ButtonProps } from 'tiptap-styles/ui'
 
 export interface OutlineButtonProps extends Omit<ButtonProps, 'type'> {
   /**
@@ -34,7 +34,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
       className,
       ...buttonProps
     },
-    ref
+    ref,
   ) => {
     const { editor } = useTiptapEditor()
     const [isOpen, setIsOpen] = useState(false)
@@ -62,10 +62,11 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
-        if (event.defaultPrevented) return
-        setIsOpen((prev) => !prev)
+        if (event.defaultPrevented)
+          return
+        setIsOpen(prev => !prev)
       },
-      [onClick]
+      [onClick],
     )
 
     const mergedRef = useMergeRefs([ref, refs.setReference])
@@ -103,8 +104,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
         ) }
       </>
     )
-  }
+  },
 )
 
 OutlineButton.displayName = 'OutlineButton'
-

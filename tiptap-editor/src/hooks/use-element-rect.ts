@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import { useCallback, useEffect, useState } from "react"
-import { useThrottledCallback } from "tiptap-react-hook"
+import { useCallback, useEffect, useState } from 'react'
+import { useThrottledCallback } from 'tiptap-react-hook'
 
 /**
  * 元素边界矩形的状态类型，排除了 DOMRect 的 toJSON 方法
  */
-export type RectState = Omit<DOMRect, "toJSON">
+export type RectState = Omit<DOMRect, 'toJSON'>
 
 export interface ElementRectOptions {
   /**
@@ -39,8 +39,8 @@ const initialRect: RectState = {
   left: 0,
 }
 
-const isSSR = typeof window === "undefined"
-const hasResizeObserver = !isSSR && typeof ResizeObserver !== "undefined"
+const isSSR = typeof window === 'undefined'
+const hasResizeObserver = !isSSR && typeof ResizeObserver !== 'undefined'
 
 /**
  * 检查代码是否在客户端运行的辅助函数
@@ -50,25 +50,25 @@ const isClientSide = (): boolean => !isSSR
 
 /**
  * 跟踪元素边界矩形的自定义 Hook
- * 
+ *
  * 实时监控元素的边界矩形变化，包括位置、尺寸等信息。
  * 支持多种元素选择方式（直接元素、React ref、CSS 选择器）。
  * 自动监听窗口滚动、调整大小以及元素自身尺寸变化。
  * 使用节流优化性能，避免频繁更新。
- * 
+ *
  * @example
  * ```tsx
  * // 跟踪特定元素
  * const rect = useElementRect({ element: "#my-element" });
- * 
+ *
  * // 跟踪 React ref
  * const ref = useRef<HTMLDivElement>(null);
  * const rect = useElementRect({ element: ref });
- * 
+ *
  * // 跟踪 body 元素
  * const bodyRect = useBodyRect();
  * ```
- * 
+ *
  * @param options - 元素矩形跟踪的配置选项
  * @param options.element - 要跟踪的元素，可以是 Element、React.RefObject 或 CSS 选择器字符串
  * @param options.enabled - 是否启用跟踪，默认为 true
@@ -85,17 +85,18 @@ export function useElementRect({
   const [rect, setRect] = useState<RectState>(initialRect)
 
   const getTargetElement = useCallback((): Element | null => {
-    if (!enabled || !isClientSide()) return null
+    if (!enabled || !isClientSide())
+      return null
 
     if (!element) {
       return document.body
     }
 
-    if (typeof element === "string") {
+    if (typeof element === 'string') {
       return document.querySelector(element)
     }
 
-    if ("current" in element) {
+    if ('current' in element) {
       return element.current
     }
 
@@ -104,7 +105,8 @@ export function useElementRect({
 
   const updateRect = useThrottledCallback(
     () => {
-      if (!enabled || !isClientSide()) return
+      if (!enabled || !isClientSide())
+        return
 
       const targetElement = getTargetElement()
       if (!targetElement) {
@@ -126,7 +128,7 @@ export function useElementRect({
     },
     throttleMs,
     [enabled, getTargetElement],
-    { leading: true, trailing: true }
+    { leading: true, trailing: true },
   )
 
   useEffect(() => {
@@ -136,7 +138,8 @@ export function useElementRect({
     }
 
     const targetElement = getTargetElement()
-    if (!targetElement) return
+    if (!targetElement)
+      return
 
     updateRect()
 
@@ -152,16 +155,16 @@ export function useElementRect({
 
     const handleUpdate = () => updateRect()
 
-    window.addEventListener("scroll", handleUpdate, true)
-    window.addEventListener("resize", handleUpdate, true)
+    window.addEventListener('scroll', handleUpdate, true)
+    window.addEventListener('resize', handleUpdate, true)
 
     cleanup.push(() => {
-      window.removeEventListener("scroll", handleUpdate)
-      window.removeEventListener("resize", handleUpdate)
+      window.removeEventListener('scroll', handleUpdate)
+      window.removeEventListener('resize', handleUpdate)
     })
 
     return () => {
-      cleanup.forEach((fn) => fn())
+      cleanup.forEach(fn => fn())
       setRect(initialRect)
     }
   }, [enabled, getTargetElement, updateRect, useResizeObserver])
@@ -171,10 +174,10 @@ export function useElementRect({
 
 /**
  * 跟踪 document.body 边界矩形的便捷 Hook
- * 
+ *
  * 这是 useElementRect 的便捷封装，专门用于跟踪文档主体的边界矩形。
  * 常用于需要知道文档整体尺寸或位置的场景。
- * 
+ *
  * @example
  * ```tsx
  * const bodyRect = useBodyRect({
@@ -182,25 +185,27 @@ export function useElementRect({
  *   useResizeObserver: true
  * });
  * ```
- * 
+ *
  * @param options - 元素矩形跟踪的配置选项（排除 element 参数）
  * @returns 文档主体的当前边界矩形
  */
 export function useBodyRect(
-  options: Omit<ElementRectOptions, "element"> = {}
+  options: Omit<ElementRectOptions, 'element'> = {},
 ): RectState {
   return useElementRect({
     ...options,
-    element: isClientSide() ? document.body : null,
+    element: isClientSide()
+      ? document.body
+      : null,
   })
 }
 
 /**
  * 跟踪 React ref 元素边界矩形的便捷 Hook
- * 
+ *
  * 这是 useElementRect 的便捷封装，专门用于跟踪 React ref 指向的元素的边界矩形。
  * 适用于需要知道组件尺寸或位置的场景。
- * 
+ *
  * @example
  * ```tsx
  * const ref = useRef<HTMLDivElement>(null);
@@ -209,7 +214,7 @@ export function useBodyRect(
  *   useResizeObserver: true
  * });
  * ```
- * 
+ *
  * @template T - 元素类型，必须是 Element 的子类
  * @param ref - React ref 对象，指向要跟踪的元素
  * @param options - 元素矩形跟踪的配置选项（排除 element 参数）
@@ -217,7 +222,7 @@ export function useBodyRect(
  */
 export function useRefRect<T extends Element>(
   ref: React.RefObject<T>,
-  options: Omit<ElementRectOptions, "element"> = {}
+  options: Omit<ElementRectOptions, 'element'> = {},
 ): RectState {
   return useElementRect({ ...options, element: ref })
 }

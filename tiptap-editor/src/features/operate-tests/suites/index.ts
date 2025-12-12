@@ -1,5 +1,5 @@
-import { getHoverContent, scrollToRange, scrollToRangeSelection, scrollToText, selectAndScrollToText } from 'tiptap-api'
 import type { OperateTestSuite } from '../types'
+import { getHoverContent, scrollToRange, scrollToRangeSelection, scrollToText, selectAndScrollToText } from 'tiptap-api'
 
 const contentBackup: { markdown: string | null } = {
   markdown: null,
@@ -112,7 +112,9 @@ export const defaultOperateSuites: OperateTestSuite[] = [
           const json = editor?.getJSON()
           const hasContent = Array.isArray(json?.content) && json.content.length > 0
           const first = json?.content?.[0]
-          const para = first?.type === 'paragraph' ? first : undefined
+          const para = first?.type === 'paragraph'
+            ? first
+            : undefined
           const speakerNode = (para?.content as any[])?.find((item: any) => item.type === 'speaker') as any
           const hasSpeaker = speakerNode?.attrs?.originalLabel === '1'
           if (!json || !hasContent || !hasSpeaker) {
@@ -495,5 +497,3 @@ export const defaultOperateSuites: OperateTestSuite[] = [
     ],
   },
 ]
-
-

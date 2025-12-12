@@ -1,5 +1,5 @@
-import type { Editor } from "@tiptap/react"
-import { useEffect, useState } from "react"
+import type { Editor } from '@tiptap/react'
+import { useEffect, useState } from 'react'
 
 /**
  * 菜单导航方向
@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
  * - "vertical": 垂直导航（使用上下方向键）
  * - "both": 双向导航（同时支持水平和垂直）
  */
-type Orientation = "horizontal" | "vertical" | "both"
+type Orientation = 'horizontal' | 'vertical' | 'both'
 
 interface MenuNavigationOptions<T> {
   /**
@@ -48,10 +48,10 @@ interface MenuNavigationOptions<T> {
 
 /**
  * 为下拉菜单、命令面板和自动完成组件实现键盘导航的自定义 Hook
- * 
+ *
  * 提供完整的键盘导航支持，包括方向键导航、Tab 键切换、Home/End 键跳转、
  * Enter 键选择和 Escape 键关闭。支持 Tiptap 编辑器和常规 DOM 元素。
- * 
+ *
  * @example
  * ```tsx
  * // 在命令面板中使用
@@ -61,7 +61,7 @@ interface MenuNavigationOptions<T> {
  *   onClose: () => setOpen(false),
  *   orientation: "vertical"
  * });
- * 
+ *
  * // 在 Tiptap 编辑器中使用
  * const { selectedIndex } = useMenuNavigation({
  *   editor,
@@ -69,7 +69,7 @@ interface MenuNavigationOptions<T> {
  *   onSelect: (suggestion) => insertSuggestion(suggestion)
  * });
  * ```
- * 
+ *
  * @template T - 菜单项的类型
  * @param options - 菜单导航的配置选项
  * @param options.editor - Tiptap 编辑器实例，如果导航与编辑器集成
@@ -83,7 +83,7 @@ interface MenuNavigationOptions<T> {
  * @returns 包含选中索引和设置函数的对象
  *   - selectedIndex: 当前选中项的索引，如果没有项目则为 undefined
  *   - setSelectedIndex: 手动设置选中索引的函数
- * 
+ *
  * @note
  * - 支持以下键盘操作：
  *   - ArrowUp/ArrowDown: 垂直导航
@@ -101,82 +101,93 @@ export function useMenuNavigation<T>({
   items,
   onSelect,
   onClose,
-  orientation = "vertical",
+  orientation = 'vertical',
   autoSelectFirstItem = true,
 }: MenuNavigationOptions<T>) {
   const [selectedIndex, setSelectedIndex] = useState<number>(
-    autoSelectFirstItem ? 0 : -1
+    autoSelectFirstItem
+      ? 0
+      : -1,
   )
 
   useEffect(() => {
     const handleKeyboardNavigation = (event: KeyboardEvent) => {
-      if (!items.length) return false
+      if (!items.length)
+        return false
 
       const moveNext = () =>
         setSelectedIndex((currentIndex) => {
-          if (currentIndex === -1) return 0
+          if (currentIndex === -1)
+            return 0
           return (currentIndex + 1) % items.length
         })
 
       const movePrev = () =>
         setSelectedIndex((currentIndex) => {
-          if (currentIndex === -1) return items.length - 1
+          if (currentIndex === -1)
+            return items.length - 1
           return (currentIndex - 1 + items.length) % items.length
         })
 
       switch (event.key) {
-        case "ArrowUp": {
-          if (orientation === "horizontal") return false
+        case 'ArrowUp': {
+          if (orientation === 'horizontal')
+            return false
           event.preventDefault()
           movePrev()
           return true
         }
 
-        case "ArrowDown": {
-          if (orientation === "horizontal") return false
+        case 'ArrowDown': {
+          if (orientation === 'horizontal')
+            return false
           event.preventDefault()
           moveNext()
           return true
         }
 
-        case "ArrowLeft": {
-          if (orientation === "vertical") return false
+        case 'ArrowLeft': {
+          if (orientation === 'vertical')
+            return false
           event.preventDefault()
           movePrev()
           return true
         }
 
-        case "ArrowRight": {
-          if (orientation === "vertical") return false
+        case 'ArrowRight': {
+          if (orientation === 'vertical')
+            return false
           event.preventDefault()
           moveNext()
           return true
         }
 
-        case "Tab": {
+        case 'Tab': {
           event.preventDefault()
           if (event.shiftKey) {
             movePrev()
-          } else {
+          }
+          else {
             moveNext()
           }
           return true
         }
 
-        case "Home": {
+        case 'Home': {
           event.preventDefault()
           setSelectedIndex(0)
           return true
         }
 
-        case "End": {
+        case 'End': {
           event.preventDefault()
           setSelectedIndex(items.length - 1)
           return true
         }
 
-        case "Enter": {
-          if (event.isComposing) return false
+        case 'Enter': {
+          if (event.isComposing)
+            return false
           event.preventDefault()
           if (selectedIndex !== -1 && items[selectedIndex]) {
             onSelect?.(items[selectedIndex])
@@ -184,7 +195,7 @@ export function useMenuNavigation<T>({
           return true
         }
 
-        case "Escape": {
+        case 'Escape': {
           event.preventDefault()
           onClose?.()
           return true
@@ -199,18 +210,19 @@ export function useMenuNavigation<T>({
 
     if (editor) {
       targetElement = editor.view.dom
-    } else if (containerRef?.current) {
+    }
+    else if (containerRef?.current) {
       targetElement = containerRef.current
     }
 
     if (targetElement) {
-      targetElement.addEventListener("keydown", handleKeyboardNavigation, true)
+      targetElement.addEventListener('keydown', handleKeyboardNavigation, true)
 
       return () => {
         targetElement?.removeEventListener(
-          "keydown",
+          'keydown',
           handleKeyboardNavigation,
-          true
+          true,
         )
       }
     }
@@ -228,12 +240,16 @@ export function useMenuNavigation<T>({
 
   useEffect(() => {
     if (query) {
-      setSelectedIndex(autoSelectFirstItem ? 0 : -1)
+      setSelectedIndex(autoSelectFirstItem
+        ? 0
+        : -1)
     }
   }, [query, autoSelectFirstItem])
 
   return {
-    selectedIndex: items.length ? selectedIndex : undefined,
+    selectedIndex: items.length
+      ? selectedIndex
+      : undefined,
     setSelectedIndex,
   }
 }

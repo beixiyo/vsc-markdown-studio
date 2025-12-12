@@ -23,14 +23,14 @@ export type PreviewState = {
 }
 
 export type PreviewEvent =
-  | { type: 'start'; payload: SelectionPayload; mode: AIRequestMode }
-  | { type: 'chunk'; preview: NormalizedResponse }
-  | { type: 'done'; preview: NormalizedResponse }
-  | { type: 'readyForDecision'; preview: NormalizedResponse }
-  | { type: 'accept'; preview: NormalizedResponse }
-  | { type: 'reject'; preview: NormalizedResponse }
-  | { type: 'error'; error: AIError }
-  | { type: 'cancel'; reason?: string }
+  | { type: 'start', payload: SelectionPayload, mode: AIRequestMode }
+  | { type: 'chunk', preview: NormalizedResponse }
+  | { type: 'done', preview: NormalizedResponse }
+  | { type: 'readyForDecision', preview: NormalizedResponse }
+  | { type: 'accept', preview: NormalizedResponse }
+  | { type: 'reject', preview: NormalizedResponse }
+  | { type: 'error', error: AIError }
+  | { type: 'cancel', reason?: string }
   | { type: 'reset' }
 
 export const initialPreviewState: PreviewState = {
@@ -97,4 +97,3 @@ export function previewReducer(state: PreviewState, event: PreviewEvent): Previe
       return state
   }
 }
-

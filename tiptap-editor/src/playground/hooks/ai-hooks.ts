@@ -1,10 +1,10 @@
+import type { Editor } from '@tiptap/core'
 import { useEffect, useState } from 'react'
 import { AIOrchestrator, bindEditor, createMockBatchAdapter, createMockStreamingAdapter, createPreviewController, createTiptapEditorBridge } from 'tiptap-ai'
-import type { Editor } from '@tiptap/core'
 
 export type AiController = ReturnType<typeof createPreviewController>
 
-export const useAiSetup = () => {
+export function useAiSetup() {
   const [aiOrchestrator] = useState(
     () =>
       new AIOrchestrator({
@@ -21,7 +21,7 @@ export const useAiSetup = () => {
         },
         mode: 'preview',
         timeoutMs: 5000,
-      })
+      }),
   )
 
   const [aiController] = useState(() => createPreviewController(aiOrchestrator))
@@ -32,11 +32,7 @@ export const useAiSetup = () => {
   }
 }
 
-export const useBindAi = (
-  editor: Editor | null,
-  aiController: AiController | null,
-  aiOrchestrator: AIOrchestrator | null,
-) => {
+export function useBindAi(editor: Editor | null, aiController: AiController | null, aiOrchestrator: AIOrchestrator | null) {
   useEffect(() => {
     if (!editor || !aiController || !aiOrchestrator) {
       return
@@ -54,4 +50,3 @@ export const useBindAi = (
     }
   }, [editor, aiController, aiOrchestrator])
 }
-

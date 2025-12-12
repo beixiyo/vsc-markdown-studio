@@ -1,23 +1,22 @@
-import { forwardRef, useCallback } from "react"
-
-// --- Lib ---
-import { parseShortcutKeys } from "tiptap-styles/utils"
-
-// --- Hooks ---
-import { useTiptapEditor } from "tiptap-react-hook"
-
 // --- UI Primitives ---
-import type { ButtonProps } from "tiptap-styles/ui"
-import { Button } from "tiptap-styles/ui"
-import { Badge } from "tiptap-styles/ui"
+import type { ButtonProps } from 'tiptap-styles/ui'
 
 // --- Tiptap UI ---
-import type { ListType, UseListConfig } from "@/components/tiptap-ui/list-button"
-import { LIST_SHORTCUT_KEYS, useList } from "@/components/tiptap-ui/list-button"
+import type { ListType, UseListConfig } from '@/components/tiptap-ui/list-button'
+
+import { forwardRef, useCallback } from 'react'
+
+// --- Hooks ---
+import { useTiptapEditor } from 'tiptap-react-hook'
+import { Badge, Button } from 'tiptap-styles/ui'
+
+// --- Lib ---
+import { parseShortcutKeys } from 'tiptap-styles/utils'
+import { LIST_SHORTCUT_KEYS, useList } from '@/components/tiptap-ui/list-button'
 
 export interface ListButtonProps
-  extends Omit<ButtonProps, "type">,
-    UseListConfig {
+  extends Omit<ButtonProps, 'type'>,
+  UseListConfig {
   /**
    * Optional text to display alongside the icon.
    */
@@ -57,7 +56,7 @@ export const ListButton = forwardRef<HTMLButtonElement, ListButtonProps>(
       children,
       ...buttonProps
     },
-    ref
+    ref,
   ) => {
     const { editor } = useTiptapEditor(providedEditor)
     const {
@@ -78,10 +77,11 @@ export const ListButton = forwardRef<HTMLButtonElement, ListButtonProps>(
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
-        if (event.defaultPrevented) return
+        if (event.defaultPrevented)
+          return
         handleToggle()
       },
-      [handleToggle, onClick]
+      [handleToggle, onClick],
     )
 
     if (!isVisible) {
@@ -92,30 +92,32 @@ export const ListButton = forwardRef<HTMLButtonElement, ListButtonProps>(
       <Button
         type="button"
         data-style="ghost"
-        data-active-state={isActive ? "on" : "off"}
+        data-active-state={ isActive
+          ? 'on'
+          : 'off' }
         role="button"
-        tabIndex={-1}
-        disabled={!canToggle}
-        data-disabled={!canToggle}
-        aria-label={label}
-        aria-pressed={isActive}
-        tooltip={label}
-        onClick={handleClick}
-        {...buttonProps}
-        ref={ref}
+        tabIndex={ -1 }
+        disabled={ !canToggle }
+        data-disabled={ !canToggle }
+        aria-label={ label }
+        aria-pressed={ isActive }
+        tooltip={ label }
+        onClick={ handleClick }
+        { ...buttonProps }
+        ref={ ref }
       >
         {children ?? (
           <>
             <Icon className="tiptap-button-icon" />
             {text && <span className="tiptap-button-text">{text}</span>}
             {showShortcut && (
-              <ListShortcutBadge type={type} shortcutKeys={shortcutKeys} />
+              <ListShortcutBadge type={ type } shortcutKeys={ shortcutKeys } />
             )}
           </>
         )}
       </Button>
     )
-  }
+  },
 )
 
-ListButton.displayName = "ListButton"
+ListButton.displayName = 'ListButton'

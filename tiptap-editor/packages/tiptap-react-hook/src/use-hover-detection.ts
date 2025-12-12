@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
 import type { Editor } from '@tiptap/react'
-import { useThrottledCallback } from './use-throttled-callback'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { getHoverContentFromCoords, type HoverContent } from 'tiptap-api'
+import { useThrottledCallback } from './use-throttled-callback'
 
 export interface UseHoverDetectionConfig {
   /** Tiptap 编辑器实例 */
@@ -24,7 +24,7 @@ export interface UseHoverDetectionReturn {
   /** 是否正在拖拽 */
   isDragging: boolean
   /** 手动触发 hover 检测（用于测试） */
-  triggerHover: (coords: { left: number; top: number }) => void
+  triggerHover: (coords: { left: number, top: number }) => void
 }
 
 /**
@@ -47,7 +47,7 @@ export interface UseHoverDetectionReturn {
  * ```
  */
 export function useHoverDetection(
-  config: UseHoverDetectionConfig
+  config: UseHoverDetectionConfig,
 ): UseHoverDetectionReturn {
   const {
     editor,
@@ -62,51 +62,51 @@ export function useHoverDetection(
   const [isDragging, setIsDragging] = useState(false)
   const editorElementRef = useRef<HTMLElement | null>(null)
 
-  // 处理 hover 内容更新
+  /** 处理 hover 内容更新 */
   const handleHoverContent = useCallback(
     (content: HoverContent | null) => {
       setHoverContent(content)
       onHoverChange?.(content)
     },
-    [onHoverChange]
+    [onHoverChange],
   )
 
-  // 节流处理鼠标移动
+  /** 节流处理鼠标移动 */
   const handleMouseMove = useThrottledCallback(
     (event: MouseEvent) => {
       if (!enabled || !editor || !editor.view) {
         return
       }
 
-      // 如果正在拖拽且启用了拖拽禁用，则跳过
+      /** 如果正在拖拽且启用了拖拽禁用，则跳过 */
       if (isDragging && disableOnDrag) {
         return
       }
 
-      // 如果正在选择文本且启用了选择禁用，则跳过
+      /** 如果正在选择文本且启用了选择禁用，则跳过 */
       if (disableOnSelection && editor.state.selection.from !== editor.state.selection.to) {
         return
       }
 
-      // 检查鼠标是否在编辑器内
+      /** 检查鼠标是否在编辑器内 */
       const editorElement = editorElementRef.current
       if (!editorElement) {
         return
       }
 
       const rect = editorElement.getBoundingClientRect()
-      const isInsideEditor =
-        event.clientX >= rect.left &&
-        event.clientX <= rect.right &&
-        event.clientY >= rect.top &&
-        event.clientY <= rect.bottom
+      const isInsideEditor
+        = event.clientX >= rect.left
+          && event.clientX <= rect.right
+          && event.clientY >= rect.top
+          && event.clientY <= rect.bottom
 
       if (!isInsideEditor) {
         handleHoverContent(null)
         return
       }
 
-      // 获取 hover 内容
+      /** 获取 hover 内容 */
       const content = getHoverContentFromCoords(editor, {
         left: event.clientX,
         top: event.clientY,
@@ -115,10 +115,10 @@ export function useHoverDetection(
       handleHoverContent(content)
     },
     throttleDelay,
-    [enabled, editor, isDragging, disableOnDrag, disableOnSelection, handleHoverContent]
+    [enabled, editor, isDragging, disableOnDrag, disableOnSelection, handleHoverContent],
   )
 
-  // 处理鼠标离开编辑器
+  /** 处理鼠标离开编辑器 */
   const handleMouseLeave = useCallback(() => {
     if (!enabled) {
       return
@@ -126,7 +126,7 @@ export function useHoverDetection(
     handleHoverContent(null)
   }, [enabled, handleHoverContent])
 
-  // 处理拖拽开始
+  /** 处理拖拽开始 */
   const handleDragStart = useCallback(() => {
     setIsDragging(true)
     if (disableOnDrag) {
@@ -134,24 +134,24 @@ export function useHoverDetection(
     }
   }, [disableOnDrag, handleHoverContent])
 
-  // 处理拖拽结束
+  /** 处理拖拽结束 */
   const handleDragEnd = useCallback(() => {
     setIsDragging(false)
   }, [])
 
-  // 手动触发 hover 检测
+  /** 手动触发 hover 检测 */
   const triggerHover = useCallback(
-    (coords: { left: number; top: number }) => {
+    (coords: { left: number, top: number }) => {
       if (!enabled || !editor) {
         return
       }
       const content = getHoverContentFromCoords(editor, coords)
       handleHoverContent(content)
     },
-    [enabled, editor, handleHoverContent]
+    [enabled, editor, handleHoverContent],
   )
 
-  // 设置事件监听
+  /** 设置事件监听 */
   useEffect(() => {
     if (!enabled || !editor || !editor.view) {
       return
@@ -164,7 +164,7 @@ export function useHoverDetection(
 
     editorElementRef.current = editorElement
 
-    // 添加事件监听
+    /** 添加事件监听 */
     editorElement.addEventListener('mousemove', handleMouseMove)
     editorElement.addEventListener('mouseleave', handleMouseLeave)
     document.addEventListener('dragstart', handleDragStart)
@@ -191,4 +191,3 @@ export function useHoverDetection(
     triggerHover,
   }
 }
-

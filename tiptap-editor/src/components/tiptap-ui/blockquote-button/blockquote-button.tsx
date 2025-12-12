@@ -1,26 +1,20 @@
-import { forwardRef, useCallback } from "react"
+import type { ButtonProps } from 'tiptap-styles/ui'
 
-// --- Tiptap UI ---
-import type { UseBlockquoteConfig } from "@/components/tiptap-ui/blockquote-button"
+import type { UseBlockquoteConfig } from '@/components/tiptap-ui/blockquote-button'
+import { forwardRef, useCallback } from 'react'
+import { useTiptapEditor } from 'tiptap-react-hook'
+
+import { Badge, Button } from 'tiptap-styles/ui'
+
+import { parseShortcutKeys } from 'tiptap-styles/utils'
 import {
   BLOCKQUOTE_SHORTCUT_KEY,
   useBlockquote,
-} from "@/components/tiptap-ui/blockquote-button"
-
-// --- Hooks ---
-import { useTiptapEditor } from "tiptap-react-hook"
-
-// --- Lib ---
-import { parseShortcutKeys } from "tiptap-styles/utils"
-
-// --- UI Primitives ---
-import type { ButtonProps } from "tiptap-styles/ui"
-import { Button } from "tiptap-styles/ui"
-import { Badge } from "tiptap-styles/ui"
+} from '@/components/tiptap-ui/blockquote-button'
 
 export interface BlockquoteButtonProps
-  extends Omit<ButtonProps, "type">,
-    UseBlockquoteConfig {
+  extends Omit<ButtonProps, 'type'>,
+  UseBlockquoteConfig {
   /**
    * Optional text to display alongside the icon.
    */
@@ -60,7 +54,7 @@ export const BlockquoteButton = forwardRef<
       children,
       ...buttonProps
     },
-    ref
+    ref,
   ) => {
     const { editor } = useTiptapEditor(providedEditor)
     const {
@@ -80,10 +74,11 @@ export const BlockquoteButton = forwardRef<
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
-        if (event.defaultPrevented) return
+        if (event.defaultPrevented)
+          return
         handleToggle()
       },
-      [handleToggle, onClick]
+      [handleToggle, onClick],
     )
 
     if (!isVisible) {
@@ -94,30 +89,32 @@ export const BlockquoteButton = forwardRef<
       <Button
         type="button"
         data-style="ghost"
-        data-active-state={isActive ? "on" : "off"}
+        data-active-state={ isActive
+          ? 'on'
+          : 'off' }
         role="button"
-        tabIndex={-1}
-        disabled={!canToggle}
-        data-disabled={!canToggle}
-        aria-label={label}
-        aria-pressed={isActive}
+        tabIndex={ -1 }
+        disabled={ !canToggle }
+        data-disabled={ !canToggle }
+        aria-label={ label }
+        aria-pressed={ isActive }
         tooltip="Blockquote"
-        onClick={handleClick}
-        {...buttonProps}
-        ref={ref}
+        onClick={ handleClick }
+        { ...buttonProps }
+        ref={ ref }
       >
         {children ?? (
           <>
             <Icon className="tiptap-button-icon" />
             {text && <span className="tiptap-button-text">{text}</span>}
             {showShortcut && (
-              <BlockquoteShortcutBadge shortcutKeys={shortcutKeys} />
+              <BlockquoteShortcutBadge shortcutKeys={ shortcutKeys } />
             )}
           </>
         )}
       </Button>
     )
-  }
+  },
 )
 
-BlockquoteButton.displayName = "BlockquoteButton"
+BlockquoteButton.displayName = 'BlockquoteButton'

@@ -1,15 +1,15 @@
-import { type Editor } from '@tiptap/react'
+import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
-import { useStorageSave, type UseStorageSaveOptions } from './use-storage-save'
 import { getEditorContent } from 'tiptap-api'
 import { useTiptapEditor } from '../use-tiptap-editor'
+import { useStorageSave, type UseStorageSaveOptions } from './use-storage-save'
 
 export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }) {
   const { editor } = useTiptapEditor(options.editor)
   const {
     loadFromStorage,
     debouncedSave: _debouncedSave,
-    immediateSave: _immediateSave
+    immediateSave: _immediateSave,
   } = useStorageSave(options)
 
   const [markdown, setMarkdown] = useState<string | object>('')
@@ -18,12 +18,15 @@ export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }
     : 'json'
 
   useEffect(() => {
-    if (!editor) return
+    if (!editor)
+      return
 
     loadFromStorage().then((markdown) => {
       const str = markdown || ''
       setMarkdown(str)
-      editor?.commands.setContent(str, { contentType: typeof str === 'string' ? 'markdown' : 'json' })
+      editor?.commands.setContent(str, { contentType: typeof str === 'string'
+        ? 'markdown'
+        : 'json' })
     })
   }, [loadFromStorage, editor])
 
@@ -33,7 +36,7 @@ export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }
       setMarkdown(content)
       _debouncedSave(editor)
     },
-    [_debouncedSave]
+    [_debouncedSave],
   )
 
   const immediateSave = useCallback(
@@ -42,13 +45,13 @@ export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }
       setMarkdown(content)
       _immediateSave(editor)
     },
-    [_immediateSave]
+    [_immediateSave],
   )
 
   return {
     markdown,
     contentType,
     debouncedSave,
-    immediateSave
+    immediateSave,
   }
 }

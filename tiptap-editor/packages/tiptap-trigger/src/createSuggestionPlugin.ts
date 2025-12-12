@@ -1,6 +1,8 @@
-import { Plugin, PluginKey } from '@tiptap/pm/state'
-import { Decoration, DecorationSet, EditorView } from '@tiptap/pm/view'
+import type { PluginKey } from '@tiptap/pm/state'
+import type { EditorView } from '@tiptap/pm/view'
 import type { SuggestionPluginAPI, SuggestionState, SuggestionTriggerOptions } from './types'
+import { Plugin } from '@tiptap/pm/state'
+import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { TRIGGER_PLUGIN_KEY } from './constans'
 
 export function createSuggestionPlugin(): {
@@ -31,7 +33,7 @@ export function createSuggestionPlugin(): {
       return
     }
     currentState = state
-    listeners.forEach((listener) => listener(state))
+    listeners.forEach(listener => listener(state))
   }
 
   const plugin = new Plugin<SuggestionState>({
@@ -137,7 +139,7 @@ export function createSuggestionPlugin(): {
         update(updatedView) {
           view = updatedView
 
-          // 同步 referenceRect（用于浮层定位）
+          /** 同步 referenceRect（用于浮层定位） */
           const state = TRIGGER_PLUGIN_KEY.getState(updatedView.state) ?? currentState
           if (!state.active || !state.decorationId) {
             if (state.referenceRect !== null) {
@@ -151,7 +153,7 @@ export function createSuggestionPlugin(): {
           }
 
           const dom = updatedView.dom.querySelector<HTMLElement>(
-            `[data-suggestion-decoration-id="${state.decorationId}"]`
+            `[data-suggestion-decoration-id="${state.decorationId}"]`,
           )
 
           if (!dom) {
@@ -167,11 +169,11 @@ export function createSuggestionPlugin(): {
 
           const rect = dom.getBoundingClientRect()
 
-          if (!state.referenceRect ||
-            rect.top !== state.referenceRect.top ||
-            rect.left !== state.referenceRect.left ||
-            rect.bottom !== state.referenceRect.bottom ||
-            rect.right !== state.referenceRect.right) {
+          if (!state.referenceRect
+            || rect.top !== state.referenceRect.top
+            || rect.left !== state.referenceRect.left
+            || rect.bottom !== state.referenceRect.bottom
+            || rect.right !== state.referenceRect.right) {
             const next: SuggestionState = {
               ...state,
               referenceRect: rect,
@@ -213,12 +215,12 @@ export function createSuggestionPlugin(): {
           return false
         }
 
-        // 只处理单字符触发
+        /** 只处理单字符触发 */
         if (!text || text.length !== 1) {
           return false
         }
 
-        const trigger = Array.from(triggers.values()).find((item) => item.character === text)
+        const trigger = Array.from(triggers.values()).find(item => item.character === text)
 
         if (!trigger) {
           return false
@@ -255,7 +257,7 @@ export function createSuggestionPlugin(): {
             const span = document.createElement('span')
             span.setAttribute(
               'data-suggestion-decoration-id',
-              pluginState.decorationId ?? ''
+              pluginState.decorationId ?? '',
             )
             span.style.position = 'relative'
             span.style.display = 'inline-flex'
@@ -265,7 +267,7 @@ export function createSuggestionPlugin(): {
           },
           {
             key: pluginState.decorationId ?? undefined,
-          }
+          },
         )
 
         return DecorationSet.create(state.doc, [widget])

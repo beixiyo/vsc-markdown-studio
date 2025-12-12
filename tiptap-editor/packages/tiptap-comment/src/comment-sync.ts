@@ -12,7 +12,7 @@
  */
 
 import type { Editor } from '@tiptap/react'
-import { CommentStore } from './comment-store'
+import type { CommentStore } from './comment-store'
 import { commentPluginKey, type CommentRange } from './plugin'
 
 /**
@@ -50,7 +50,7 @@ export interface CommentSyncResult {
  */
 export function syncCommentRanges(
   editor: Editor | null,
-  commentStore: CommentStore
+  commentStore: CommentStore,
 ): CommentSyncResult {
   if (!editor) {
     return { deleted: [], split: [], orphaned: [] }
@@ -62,7 +62,7 @@ export function syncCommentRanges(
     orphaned: [],
   }
 
-  // 获取 Plugin state 中的评论范围
+  /** 获取 Plugin state 中的评论范围 */
   const pluginState = commentPluginKey.getState(editor.state)
   if (!pluginState) {
     return result
@@ -75,7 +75,7 @@ export function syncCommentRanges(
   for (const comment of storeComments) {
     if (!ranges.has(comment.id)) {
       result.deleted.push(comment.id)
-      // 注意：不执行任何自动操作，只记录检测结果
+      /** 注意：不执行任何自动操作，只记录检测结果 */
     }
   }
 
@@ -87,10 +87,10 @@ export function syncCommentRanges(
   }
 
   // 3. 检测评论范围被分割的情况
-  // 需要扫描文档，查找同一个 commentId 是否出现在多个不连续的位置
+  /** 需要扫描文档，查找同一个 commentId 是否出现在多个不连续的位置 */
   const commentIdPositions = new Map<string, CommentRange[]>()
 
-  // 扫描文档，收集每个 commentId 的所有位置
+  /** 扫描文档，收集每个 commentId 的所有位置 */
   editor.state.doc.descendants((node, pos) => {
     if (!node.isText || !node.marks) {
       return true
@@ -117,35 +117,37 @@ export function syncCommentRanges(
     return true
   })
 
-  // 检测分割：如果一个 commentId 有多个不连续的范围，则认为是分割
+  /** 检测分割：如果一个 commentId 有多个不连续的范围，则认为是分割 */
   for (const [commentId, positions] of commentIdPositions) {
     if (positions.length === 0) {
       continue
     }
 
-    // 合并连续或重叠的范围
+    /** 合并连续或重叠的范围 */
     const sortedPositions = positions.sort((a, b) => a.from - b.from)
     const mergedRanges: CommentRange[] = []
 
     for (const range of sortedPositions) {
       if (mergedRanges.length === 0) {
         mergedRanges.push({ ...range })
-      } else {
+      }
+      else {
         const lastRange = mergedRanges[mergedRanges.length - 1]
-        // 如果当前范围与上一个范围连续或重叠，则合并
+        /** 如果当前范围与上一个范围连续或重叠，则合并 */
         if (range.from <= lastRange.to) {
           lastRange.to = Math.max(lastRange.to, range.to)
-        } else {
-          // 不连续，添加新范围
+        }
+        else {
+          /** 不连续，添加新范围 */
           mergedRanges.push({ ...range })
         }
       }
     }
 
-    // 如果合并后有多个不连续的范围，则认为是分割
+    /** 如果合并后有多个不连续的范围，则认为是分割 */
     if (mergedRanges.length > 1) {
       result.split.push(commentId)
-      // 注意：不执行任何自动操作，只记录检测结果
+      /** 注意：不执行任何自动操作，只记录检测结果 */
     }
   }
 
@@ -169,7 +171,7 @@ export function syncCommentRanges(
  */
 export function cleanupOrphanedCommentMarks(
   editor: Editor | null,
-  commentStore: CommentStore
+  commentStore: CommentStore,
 ): string[] {
   if (!editor || !editor.isEditable) {
     return []
@@ -189,21 +191,21 @@ export function cleanupOrphanedCommentMarks(
     return cleaned
   }
 
-  // 查找所有孤立的评论 mark
+  /** 查找所有孤立的评论 mark */
   for (const [commentId] of ranges) {
     if (!commentStore.getComment(commentId)) {
       cleaned.push(commentId)
 
-      // 移除该 mark
+      /** 移除该 mark */
       const range = ranges.get(commentId)
       if (range) {
         const { tr } = state
 
-        // 遍历范围内的所有节点，移除带有该 commentId 的 mark
+        /** 遍历范围内的所有节点，移除带有该 commentId 的 mark */
         tr.doc.nodesBetween(range.from, range.to, (node, pos) => {
           if (node.isText && node.marks) {
             const commentMark = node.marks.find(
-              (mark) => mark.type === commentMarkType && mark.attrs.commentId === commentId
+              mark => mark.type === commentMarkType && mark.attrs.commentId === commentId,
             )
 
             if (commentMark) {
@@ -244,22 +246,22 @@ export function cleanupOrphanedCommentMarks(
  */
 export function validateCommentRanges(
   editor: Editor | null,
-  commentStore: CommentStore
+  commentStore: CommentStore,
 ): {
-  isValid: boolean
-  issues: {
-    deleted: string[]
-    orphaned: string[]
-    split: string[]
-  }
-} {
+    isValid: boolean
+    issues: {
+      deleted: string[]
+      orphaned: string[]
+      split: string[]
+    }
+  } {
   const syncResult = syncCommentRanges(editor, commentStore)
 
   return {
     isValid:
-      syncResult.deleted.length === 0 &&
-      syncResult.orphaned.length === 0 &&
-      syncResult.split.length === 0,
+      syncResult.deleted.length === 0
+      && syncResult.orphaned.length === 0
+      && syncResult.split.length === 0,
     issues: {
       deleted: syncResult.deleted,
       orphaned: syncResult.orphaned,

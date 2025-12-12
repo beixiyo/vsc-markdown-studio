@@ -1,17 +1,17 @@
-import { memo } from "react"
+import { memo } from 'react'
 
-type SvgProps = React.ComponentPropsWithoutRef<"svg">
+type SvgProps = React.ComponentPropsWithoutRef<'svg'>
 
 export const ListOrderedIcon = memo(({ className, ...props }: SvgProps) => {
   return (
     <svg
       width="24"
       height="24"
-      className={className}
+      className={ className }
       viewBox="0 0 24 24"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      { ...props }
     >
       <path
         fillRule="evenodd"
@@ -53,4 +53,4 @@ export const ListOrderedIcon = memo(({ className, ...props }: SvgProps) => {
   )
 })
 
-ListOrderedIcon.displayName = "ListOrderedIcon"
+ListOrderedIcon.displayName = 'ListOrderedIcon'

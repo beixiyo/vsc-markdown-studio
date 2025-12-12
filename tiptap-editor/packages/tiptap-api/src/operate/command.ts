@@ -1,18 +1,19 @@
 import type { Editor } from '@tiptap/core'
 
-const run = (
-  editor: Editor | null,
-  cb: (chain: ReturnType<Editor['chain']>) => void
-): boolean => {
-  if (!editor) return false
+function run(editor: Editor | null, cb: (chain: ReturnType<Editor['chain']>) => void): boolean {
+  if (!editor)
+    return false
 
   try {
     const chain = editor?.chain?.()
-    if (!chain) return false
+    if (!chain)
+      return false
 
     chain.focus()
     cb(chain)
-    return typeof chain.run === 'function' ? chain.run() : false
+    return typeof chain.run === 'function'
+      ? chain.run()
+      : false
   }
   catch (error) {
     console.error('执行格式化命令失败:', error)
@@ -96,5 +97,3 @@ export function unsetUnderline(editor: Editor | null): boolean {
 export function setCheckList(editor: Editor | null): boolean {
   return run(editor, chain => chain.toggleTaskList())
 }
-
-

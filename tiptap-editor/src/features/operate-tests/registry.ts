@@ -12,5 +12,3 @@ export const operateTestSuites: OperateTestSuite[] = [...defaultOperateSuites]
 export function collectOperateTestCases(suites: OperateTestSuite[]): OperateTestCase[] {
   return suites.flatMap(suite => suite.cases)
 }
-
-

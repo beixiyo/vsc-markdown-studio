@@ -1,7 +1,7 @@
-import { memo, useCallback } from 'react'
 import type React from 'react'
+import { memo, useCallback } from 'react'
+import { CloseIcon, CornerDownLeftIcon } from 'tiptap-styles/icons'
 import { Button } from 'tiptap-styles/ui'
-import { CornerDownLeftIcon, CloseIcon } from 'tiptap-styles/icons'
 import { cn } from 'tiptap-styles/utils'
 
 export type CommentMainProps = {
@@ -55,15 +55,15 @@ export const CommentMain = memo((props: CommentMainProps) => {
         cancel()
       }
     },
-    [cancel, canCreate, content, createComment]
+    [cancel, canCreate, content, createComment],
   )
 
   return (
     <div
-      className={cn(
+      className={ cn(
         'relative z-50 min-w-[320px] max-w-[400px] rounded-[var(--tt-radius-lg)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] shadow-[var(--tt-shadow-elevated-md)] backdrop-blur-[12px] animate-[fadeIn_var(--tt-transition-duration-default)_var(--tt-transition-easing-default)] max-[480px]:min-w-[280px] max-[480px]:max-w-[320px]',
-        className
-      )}
+        className,
+      ) }
       role="dialog"
       aria-label="添加评论"
     >
@@ -72,11 +72,11 @@ export const CommentMain = memo((props: CommentMainProps) => {
         <textarea
           className="min-h-[80px] w-full resize-y rounded-[var(--tt-radius-md)] border border-[var(--tt-border-color)] bg-[var(--tt-color-surface-default)] p-3 text-sm leading-6 text-[var(--tt-color-text-primary)] transition-[border-color,box-shadow] duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)] placeholder:text-[var(--tt-color-text-tertiary)] focus:border-[var(--tt-brand-color-500)] focus:shadow-[0_0_0_3px_var(--tt-selection-color)] focus:outline-none"
           placeholder="输入评论内容..."
-          value={content}
-          onChange={(event) => setContent(event.target.value)}
-          onKeyDown={handleKeyDown}
+          value={ content }
+          onChange={ event => setContent(event.target.value) }
+          onKeyDown={ handleKeyDown }
           autoFocus
-          rows={3}
+          rows={ 3 }
         />
         <div className="text-xs text-[var(--tt-color-text-secondary)]">
           按 Ctrl/Cmd + Enter 提交，Esc 取消
@@ -87,9 +87,9 @@ export const CommentMain = memo((props: CommentMainProps) => {
         <div className="inline-flex items-center">
           <Button
             type="button"
-            onClick={createComment}
+            onClick={ createComment }
             title="创建评论 (Ctrl/Cmd + Enter)"
-            disabled={!canCreate || !content.trim()}
+            disabled={ !canCreate || !content.trim() }
             data-style="primary"
             className="inline-flex items-center gap-2 font-semibold"
           >
@@ -100,7 +100,7 @@ export const CommentMain = memo((props: CommentMainProps) => {
 
         <Button
           type="button"
-          onClick={cancel}
+          onClick={ cancel }
           title="取消 (Esc)"
           data-style="ghost"
           className="inline-flex items-center justify-center gap-1.5 rounded-[var(--tt-radius-md)] px-2.5 py-2"
@@ -113,4 +113,3 @@ export const CommentMain = memo((props: CommentMainProps) => {
 })
 
 CommentMain.displayName = 'CommentMain'
-

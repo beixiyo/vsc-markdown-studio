@@ -1,27 +1,26 @@
-import { forwardRef, useCallback } from "react"
-
-// --- Lib ---
-import { parseShortcutKeys } from "tiptap-styles/utils"
+// --- UI Primitives ---
+import type { ButtonProps } from 'tiptap-styles/ui'
 
 // --- Tiptap UI ---
 import type {
   Level,
   UseHeadingConfig,
-} from "@/components/tiptap-ui/heading-button"
+} from '@/components/tiptap-ui/heading-button'
+
+import { forwardRef, useCallback } from 'react'
+import { useTiptapEditor } from 'tiptap-react-hook'
+
+import { Badge, Button } from 'tiptap-styles/ui'
+// --- Lib ---
+import { parseShortcutKeys } from 'tiptap-styles/utils'
 import {
   HEADING_SHORTCUT_KEYS,
   useHeading,
-} from "@/components/tiptap-ui/heading-button"
-
-// --- UI Primitives ---
-import type { ButtonProps } from "tiptap-styles/ui"
-import { Button } from "tiptap-styles/ui"
-import { Badge } from "tiptap-styles/ui"
-import { useTiptapEditor } from "tiptap-react-hook"
+} from '@/components/tiptap-ui/heading-button'
 
 export interface HeadingButtonProps
-  extends Omit<ButtonProps, "type">,
-    UseHeadingConfig {
+  extends Omit<ButtonProps, 'type'>,
+  UseHeadingConfig {
   /**
    * Optional text to display alongside the icon.
    */
@@ -61,7 +60,7 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
       children,
       ...buttonProps
     },
-    ref
+    ref,
   ) => {
     const { editor } = useTiptapEditor(providedEditor)
     const {
@@ -82,10 +81,11 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
-        if (event.defaultPrevented) return
+        if (event.defaultPrevented)
+          return
         handleToggle()
       },
-      [handleToggle, onClick]
+      [handleToggle, onClick],
     )
 
     if (!isVisible) {
@@ -96,30 +96,32 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
       <Button
         type="button"
         data-style="ghost"
-        data-active-state={isActive ? "on" : "off"}
+        data-active-state={ isActive
+          ? 'on'
+          : 'off' }
         role="button"
-        tabIndex={-1}
-        disabled={!canToggle}
-        data-disabled={!canToggle}
-        aria-label={label}
-        aria-pressed={isActive}
-        tooltip={label}
-        onClick={handleClick}
-        {...buttonProps}
-        ref={ref}
+        tabIndex={ -1 }
+        disabled={ !canToggle }
+        data-disabled={ !canToggle }
+        aria-label={ label }
+        aria-pressed={ isActive }
+        tooltip={ label }
+        onClick={ handleClick }
+        { ...buttonProps }
+        ref={ ref }
       >
         {children ?? (
           <>
             <Icon className="tiptap-button-icon" />
             {text && <span className="tiptap-button-text">{text}</span>}
             {showShortcut && (
-              <HeadingShortcutBadge level={level} shortcutKeys={shortcutKeys} />
+              <HeadingShortcutBadge level={ level } shortcutKeys={ shortcutKeys } />
             )}
           </>
         )}
       </Button>
     )
-  }
+  },
 )
 
-HeadingButton.displayName = "HeadingButton"
+HeadingButton.displayName = 'HeadingButton'

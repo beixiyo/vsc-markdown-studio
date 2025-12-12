@@ -166,4 +166,3 @@ export type AIConfig = {
   /** UI 行为配置 */
   uiBehavior?: UIBehaviorConfig
 }
-

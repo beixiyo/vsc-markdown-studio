@@ -1,11 +1,11 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import type { Editor } from '@tiptap/react'
+import type { Comment, CommentAuthor, CommentStore } from '../../comment-store'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { scrollToRangeSelection } from 'tiptap-api'
-import { cn } from 'tiptap-styles/utils'
 import { BanIcon, TrashIcon } from 'tiptap-styles/icons'
-import { CommentStore, type Comment, type CommentAuthor } from '../../comment-store'
-import { commentPluginKey } from '../../plugin'
+import { cn } from 'tiptap-styles/utils'
 import { createReply, deleteComment, updateComment } from '../../comment'
+import { commentPluginKey } from '../../plugin'
 import { CommentEditDialog } from './comment-edit-dialog'
 import { ReplyDialog } from './reply-dialog'
 
@@ -49,7 +49,8 @@ export const CommentItem = memo(({
   }, [comment.content, isEditing])
 
   const handleJumpToComment = useCallback(() => {
-    if (!editor) return
+    if (!editor)
+      return
 
     const pluginState = commentPluginKey.getState(editor.state)
     const range = pluginState?.ranges.get(comment.id)
@@ -64,16 +65,16 @@ export const CommentItem = memo(({
       setTimeout(() => {
         const editorElement = editor.view.dom
         const commentElements = editorElement.querySelectorAll(
-          `[data-comment-id="${comment.id}"]`
+          `[data-comment-id="${comment.id}"]`,
         )
 
         commentElements.forEach((element) => {
-          activeHighlightClasses.forEach((cls) => element.classList.add(cls))
+          activeHighlightClasses.forEach(cls => element.classList.add(cls))
         })
 
         setTimeout(() => {
           commentElements.forEach((element) => {
-            activeHighlightClasses.forEach((cls) => element.classList.remove(cls))
+            activeHighlightClasses.forEach(cls => element.classList.remove(cls))
           })
         }, 3000)
       }, 100)
@@ -81,10 +82,12 @@ export const CommentItem = memo(({
   }, [editor, comment.id])
 
   const handleDelete = useCallback(() => {
-    if (!editor) return
+    if (!editor)
+      return
     const preview = comment.content.substring(0, 20)
     const confirmed = confirm(`确定要删除评论 "${preview}..." 吗？`)
-    if (!confirmed) return
+    if (!confirmed)
+      return
     deleteComment(editor, commentStore, comment.id)
   }, [editor, commentStore, comment.id, comment.content])
 
@@ -108,7 +111,8 @@ export const CommentItem = memo(({
     if (success) {
       setIsEditing(false)
       onUpdate()
-    } else {
+    }
+    else {
       console.warn('更新评论失败')
     }
   }, [commentStore, comment.id, editContent, onUpdate])
@@ -119,14 +123,17 @@ export const CommentItem = memo(({
   }, [comment.content])
 
   const handleToggleStatus = useCallback(() => {
-    const newStatus: Comment['status'] = comment.status === 'active' ? 'resolved' : 'active'
+    const newStatus: Comment['status'] = comment.status === 'active'
+      ? 'resolved'
+      : 'active'
     const success = updateComment(commentStore, comment.id, {
       status: newStatus,
     })
 
     if (success) {
       onUpdate()
-    } else {
+    }
+    else {
       console.warn('更新评论状态失败')
     }
   }, [commentStore, comment.id, comment.status, onUpdate])
@@ -152,7 +159,8 @@ export const CommentItem = memo(({
       setReplyContent('')
       setIsReplying(false)
       onUpdate()
-    } else {
+    }
+    else {
       console.warn('回复创建失败')
     }
   }, [editor, commentStore, replyContent, comment.id, defaultAuthor, onUpdate])
@@ -163,7 +171,8 @@ export const CommentItem = memo(({
   }, [])
 
   const handleJumpToReplyTo = useCallback(() => {
-    if (!editor || !comment.replyTo) return
+    if (!editor || !comment.replyTo)
+      return
 
     const pluginState = commentPluginKey.getState(editor.state)
     const range = pluginState?.ranges.get(comment.replyTo)
@@ -178,16 +187,16 @@ export const CommentItem = memo(({
       setTimeout(() => {
         const editorElement = editor.view.dom
         const commentElements = editorElement.querySelectorAll(
-          `[data-comment-id="${comment.replyTo}"]`
+          `[data-comment-id="${comment.replyTo}"]`,
         )
 
         commentElements.forEach((element) => {
-          activeHighlightClasses.forEach((cls) => element.classList.add(cls))
+          activeHighlightClasses.forEach(cls => element.classList.add(cls))
         })
 
         setTimeout(() => {
           commentElements.forEach((element) => {
-            activeHighlightClasses.forEach((cls) => element.classList.remove(cls))
+            activeHighlightClasses.forEach(cls => element.classList.remove(cls))
           })
         }, 3000)
       }, 100)
@@ -195,8 +204,11 @@ export const CommentItem = memo(({
   }, [editor, comment.replyTo])
 
   const truncateReplyContent = useCallback((content: string | undefined): string => {
-    if (!content) return ''
-    return content.length > 50 ? `${content.substring(0, 50)}...` : content
+    if (!content)
+      return ''
+    return content.length > 50
+      ? `${content.substring(0, 50)}...`
+      : content
   }, [])
 
   const formatDate = (timestamp: number) => {
@@ -211,13 +223,13 @@ export const CommentItem = memo(({
 
   const containerClass = cn(
     'rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-4 shadow-[var(--tt-shadow-elevated-md)] transition duration-[var(--tt-transition-duration-default)] hover:shadow-[var(--tt-shadow-elevated-md)]',
-    comment.status === 'resolved' &&
-      'border-[var(--tt-color-green-inc-3)] bg-[var(--tt-color-green-inc-5)]/70'
+    comment.status === 'resolved'
+    && 'border-[var(--tt-color-green-inc-3)] bg-[var(--tt-color-green-inc-5)]/70',
   )
 
   if (isEditing) {
     return (
-      <div className={containerClass}>
+      <div className={ containerClass }>
         <CommentEditDialog
           content={ editContent }
           setContent={ setEditContent }
@@ -235,7 +247,7 @@ export const CommentItem = memo(({
       : comment.content
 
     return (
-      <div className={containerClass}>
+      <div className={ containerClass }>
         <ReplyDialog
           content={ replyContent }
           setContent={ setReplyContent }
@@ -249,7 +261,7 @@ export const CommentItem = memo(({
   }
 
   return (
-    <div className={containerClass}>
+    <div className={ containerClass }>
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
@@ -272,10 +284,10 @@ export const CommentItem = memo(({
             type="button"
             onClick={ handleJumpToComment }
             disabled={ comment.status === 'resolved' }
-            className={cn(
+            className={ cn(
               'flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)] disabled:cursor-not-allowed disabled:opacity-50',
-              comment.status === 'resolved' && 'cursor-not-allowed opacity-50'
-            )}
+              comment.status === 'resolved' && 'cursor-not-allowed opacity-50',
+            ) }
             aria-label="跳转到评论位置"
             title="跳转到评论位置"
           >
@@ -309,14 +321,20 @@ export const CommentItem = memo(({
             type="button"
             onClick={ handleToggleStatus }
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)] disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label={ comment.status === 'active' ? '已解决' : '重新打开' }
-            title={ comment.status === 'active' ? '标记为已解决' : '重新打开' }
+            aria-label={ comment.status === 'active'
+              ? '已解决'
+              : '重新打开' }
+            title={ comment.status === 'active'
+              ? '标记为已解决'
+              : '重新打开' }
           >
-            { comment.status === 'active' ? (
-              <BanIcon className="h-4 w-4" />
-            ) : (
-              <TrashIcon className="h-4 w-4" />
-            )}
+            { comment.status === 'active'
+              ? (
+                  <BanIcon className="h-4 w-4" />
+                )
+              : (
+                  <TrashIcon className="h-4 w-4" />
+                )}
           </button>
 
           <button
@@ -338,7 +356,10 @@ export const CommentItem = memo(({
           className="mt-3 flex w-full items-center gap-2 rounded-xl bg-[var(--tt-color-highlight-blue)] px-3 py-2 text-left text-sm text-[var(--tt-color-text-blue)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)]"
           aria-label={ `跳转到被回复的评论：${comment.replyToAuthor.name}` }
         >
-          <span className="text-[12px] font-semibold">@{ comment.replyToAuthor.name }</span>
+          <span className="text-[12px] font-semibold">
+            @
+            { comment.replyToAuthor.name }
+          </span>
           <span className="text-[var(--tt-color-text-gray)]">
             { comment.replyToContent
               ? truncateReplyContent(comment.replyToContent)
@@ -355,4 +376,3 @@ export const CommentItem = memo(({
 })
 
 CommentItem.displayName = 'CommentItem'
-

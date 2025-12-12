@@ -1,6 +1,5 @@
 import type { ButtonProps } from 'tiptap-styles/ui'
-import type { CommentAuthor } from '../comment-store'
-import type { CommentStore } from '../comment-store'
+import type { CommentAuthor, CommentStore } from '../comment-store'
 
 /**
  * 评论按钮组件的属性
@@ -18,10 +17,9 @@ export interface CommentButtonProps extends Omit<ButtonProps, 'type'> {
   /**
    * 回调函数，当评论创建成功时调用
    */
-  onCommentCreated?: (comment: { id: string; content: string }) => void
+  onCommentCreated?: (comment: { id: string, content: string }) => void
   /**
    * 回调函数，当 Popover 打开或关闭时调用
    */
   onOpenChange?: (isOpen: boolean) => void
 }
-

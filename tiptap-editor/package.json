@@ -25,7 +25,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint ./src --fix"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",

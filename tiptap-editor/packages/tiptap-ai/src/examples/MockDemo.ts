@@ -1,7 +1,7 @@
+import type { SelectionPayload } from '../types'
 import { AIOrchestrator } from '../AIOrchestrator'
 import { createPreviewController } from '../PreviewController'
 import { createMockBatchAdapter, createMockStreamingAdapter } from './MockAdapters'
-import type { SelectionPayload } from '../types'
 
 /**
  * 创建一个带有 mock 适配器的 orchestrator + controller 组合
@@ -32,8 +32,8 @@ function createMockBundle() {
  */
 export async function runMockStreamingDemo(payload: SelectionPayload) {
   const { controller, orchestrator } = createMockBundle()
-  const unsub = controller.subscribe(state => {
-    // 仅用于 PoC 打印
+  const unsub = controller.subscribe((state) => {
+    /** 仅用于 PoC 打印 */
     // eslint-disable-next-line no-console
     console.log('[stream]', state.status, {
       delta: state.preview?.delta,
@@ -52,8 +52,8 @@ export async function runMockStreamingDemo(payload: SelectionPayload) {
  */
 export async function runMockBatchDemo(payload: SelectionPayload) {
   const { controller, orchestrator } = createMockBundle()
-  const unsub = controller.subscribe(state => {
-    // 仅用于 PoC 打印
+  const unsub = controller.subscribe((state) => {
+    /** 仅用于 PoC 打印 */
     // eslint-disable-next-line no-console
     console.log('[batch]', state.status, {
       delta: state.preview?.delta,
@@ -66,4 +66,3 @@ export async function runMockBatchDemo(payload: SelectionPayload) {
   unsub()
   controller.destroy()
 }
-

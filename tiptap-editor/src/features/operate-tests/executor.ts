@@ -2,15 +2,17 @@ import type { OperateTestCase, OperateTestContext, OperateTestLog, OperateTestRe
 
 const now = () => Date.now()
 
-const createLogger = (logs: OperateTestLog[]) => (
-  message: string,
-  level: OperateTestLog['level'] = 'info'
-) => {
-  logs.push({
-    level,
-    message,
-    timestamp: now(),
-  })
+function createLogger(logs: OperateTestLog[]) {
+  return (
+    message: string,
+    level: OperateTestLog['level'] = 'info',
+  ) => {
+    logs.push({
+      level,
+      message,
+      timestamp: now(),
+    })
+  }
 }
 
 /**
@@ -24,7 +26,7 @@ export class OperateTestExecutor {
    */
   private printResult(
     result: OperateTestResult,
-    index: number
+    index: number,
   ) {
     const indexLabel = `#${index + 1}`
     const statusLabel = result.status === 'success'
@@ -33,7 +35,9 @@ export class OperateTestExecutor {
         ? '❌ 失败'
         : '⏳ 运行中'
     const durationLabel = `${result.durationMs}ms`
-    const errorPart = result.errorMessage ? ` | 错误：${result.errorMessage}` : ''
+    const errorPart = result.errorMessage
+      ? ` | 错误：${result.errorMessage}`
+      : ''
     console.info(`[operate-test] ${indexLabel} ${result.id} ${statusLabel} (${durationLabel})${errorPart}`)
   }
 
@@ -43,7 +47,7 @@ export class OperateTestExecutor {
   async runAll(
     cases: OperateTestCase[],
     context: OperateTestContext,
-    options: OperateTestRunnerOptions = {}
+    options: OperateTestRunnerOptions = {},
   ): Promise<OperateTestResult[]> {
     if (this.running) {
       throw new Error('测试执行中，请勿重复触发')
@@ -66,7 +70,8 @@ export class OperateTestExecutor {
       }
 
       return results
-    } finally {
+    }
+    finally {
       this.running = false
     }
   }
@@ -76,7 +81,7 @@ export class OperateTestExecutor {
    */
   async runSingle(
     testCase: OperateTestCase,
-    context: OperateTestContext
+    context: OperateTestContext,
   ): Promise<OperateTestResult> {
     const startedAt = now()
     const logs: OperateTestLog[] = []
@@ -88,19 +93,24 @@ export class OperateTestExecutor {
     try {
       await testCase.run(context, log)
       status = 'success'
-    } catch (error) {
+    }
+    catch (error) {
       status = 'failed'
-      errorMessage = error instanceof Error ? error.message : '未知错误'
+      errorMessage = error instanceof Error
+        ? error.message
+        : '未知错误'
       log(errorMessage, 'error')
-    } finally {
+    }
+    finally {
       try {
         await testCase.cleanup?.(context)
-      } catch (cleanupError) {
+      }
+      catch (cleanupError) {
         log(
           cleanupError instanceof Error
             ? cleanupError.message
             : '清理阶段出现未知错误',
-          'warn'
+          'warn',
         )
       }
     }
@@ -121,5 +131,3 @@ export class OperateTestExecutor {
 }
 
 export const operateTestExecutor = new OperateTestExecutor()
-
-

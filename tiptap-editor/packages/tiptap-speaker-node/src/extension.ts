@@ -1,14 +1,13 @@
-import { Node, mergeAttributes, type CommandProps } from '@tiptap/core'
-import { Plugin } from '@tiptap/pm/state'
 import type { EditorView } from '@tiptap/pm/view'
 import type { SpeakerAttributes, SpeakerOptions } from './types'
-
+import { type CommandProps, mergeAttributes, Node } from '@tiptap/core'
+import { Plugin } from '@tiptap/pm/state'
 
 const DEFAULT_TAG = 'strong'
 const TOKEN_NAME = 'speaker'
 const TOKEN_REGEX = /^\[speaker:([^\]]+?)\]/
 
-const buildDataAttributes = (attrs: Partial<SpeakerAttributes>) => {
+function buildDataAttributes(attrs: Partial<SpeakerAttributes>) {
   const dataAttrs: Record<string, string> = {}
   if (attrs.originalLabel) {
     dataAttrs['data-speaker-original-label'] = attrs.originalLabel
@@ -25,12 +24,11 @@ const buildDataAttributes = (attrs: Partial<SpeakerAttributes>) => {
   return dataAttrs
 }
 
-const resolveDisplayText = (
-  attrs: Partial<SpeakerAttributes>,
-  options: SpeakerOptions
-) => {
+function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerOptions) {
   const key = attrs.originalLabel ?? ''
-  const mapped = key ? options.speakerMap?.[key] : undefined
+  const mapped = key
+    ? options.speakerMap?.[key]
+    : undefined
   if (mapped?.name) {
     return mapped.name
   }
@@ -75,7 +73,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       },
       name: {
         default: null,
-        parseHTML: (element) => element.getAttribute('data-speaker-name'),
+        parseHTML: element => element.getAttribute('data-speaker-name'),
         renderHTML: (attrs) => {
           if (!attrs.name) {
             return {}
@@ -87,7 +85,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       },
       id: {
         default: null,
-        parseHTML: (element) => element.getAttribute('data-speaker-id'),
+        parseHTML: element => element.getAttribute('data-speaker-id'),
         renderHTML: (attrs) => {
           if (!attrs.id) {
             return {}
@@ -99,7 +97,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       },
       label: {
         default: null,
-        parseHTML: (element) => element.getAttribute('data-speaker-label'),
+        parseHTML: element => element.getAttribute('data-speaker-label'),
         renderHTML: (attrs) => {
           if (!attrs.label) {
             return {}
@@ -136,8 +134,10 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
     }
     const attrs = mergeAttributes(
       HTMLAttributes,
-      this.options.className ? { class: this.options.className } : {},
-      buildDataAttributes(mergedAttrs)
+      this.options.className
+        ? { class: this.options.className }
+        : {},
+      buildDataAttributes(mergedAttrs),
     )
     const text = resolveDisplayText(node.attrs, this.options)
     return [
@@ -151,7 +151,9 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
     return {
       setSpeakers: (items: SpeakerAttributes | SpeakerAttributes[]) =>
         ({ chain }: CommandProps) => {
-          const list = Array.isArray(items) ? items : [items]
+          const list = Array.isArray(items)
+            ? items
+            : [items]
           const content = list.map(item => ({
             type: 'speaker',
             attrs: {

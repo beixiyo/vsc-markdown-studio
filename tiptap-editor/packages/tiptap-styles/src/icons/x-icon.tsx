@@ -7,11 +7,11 @@ export const XIcon = memo(({ className, ...props }: SvgProps) => {
     <svg
       width="24"
       height="24"
-      className={className}
+      className={ className }
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      { ...props }
     >
       <path
         d="M18 6L6 18M6 6L18 18"
@@ -25,4 +25,3 @@ export const XIcon = memo(({ className, ...props }: SvgProps) => {
 })
 
 XIcon.displayName = 'XIcon'
-

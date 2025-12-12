@@ -1,14 +1,14 @@
-import { EventBus } from './Eventbus'
 import type {
+  AIAdapterContext,
   AIAdapters,
   AIConfig,
   AIError,
   AIRequestMode,
-  AIAdapterContext,
   NormalizedResponse,
   ResponseSchema,
   SelectionPayload,
 } from './types'
+import { EventBus } from './Eventbus'
 
 type AIOrchestratorEvents = {
   start: {
@@ -66,7 +66,9 @@ export class AIOrchestrator {
     const { responseSchema, adapters, mode, timeoutMs, retry, uiBehavior } = config
     this.config.adapters = adapters
     this.config.mode = mode ?? 'preview'
-    this.config.timeoutMs = typeof timeoutMs === 'number' ? timeoutMs : -1
+    this.config.timeoutMs = typeof timeoutMs === 'number'
+      ? timeoutMs
+      : -1
     this.config.retry = retry
     this.config.uiBehavior = uiBehavior
     this.schema = {
@@ -158,7 +160,7 @@ export class AIOrchestrator {
         return
       }
 
-      // 流式模式下，传递累积的预览内容，以便 UI 实时展示
+      /** 流式模式下，传递累积的预览内容，以便 UI 实时展示 */
       if (normalized.delta)
         this.bus.emit('chunk', this.latestPreview)
     }
@@ -253,4 +255,3 @@ export class AIOrchestrator {
     return { message: '未知错误' }
   }
 }
-

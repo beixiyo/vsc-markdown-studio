@@ -13,7 +13,7 @@ import { createEditorChangeHandler, createMouseClickHandler, createMouseMoveHand
 import { GlobalBridgeManager } from './GlobalBridgeManager'
 
 export function useSetupMDBridge(
-  editor: BlockNoteEditor<any, any, any> | null
+  editor: BlockNoteEditor<any, any, any> | null,
 ) {
   const bridgeRef = useRef<MDBridge | null>(null)
 

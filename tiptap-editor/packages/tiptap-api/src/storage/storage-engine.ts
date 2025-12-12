@@ -8,34 +8,34 @@ export interface StorageEngine {
    * @param key 存储键名
    * @returns Promise<boolean> 保存是否成功
    */
-  save(content: string, key: string): Promise<boolean>
+  save: (content: string, key: string) => Promise<boolean>
 
   /**
    * 加载编辑器内容
    * @param key 存储键名
    * @returns Promise<string | null> 加载的内容，如果不存在则返回 null
    */
-  load(key: string): Promise<string | null>
+  load: (key: string) => Promise<string | null>
 
   /**
    * 删除存储的内容
    * @param key 存储键名
    * @returns Promise<boolean> 删除是否成功
    */
-  remove(key: string): Promise<boolean>
+  remove: (key: string) => Promise<boolean>
 
   /**
    * 检查存储的内容是否存在
    * @param key 存储键名
    * @returns Promise<boolean> 内容是否存在
    */
-  exists(key: string): Promise<boolean>
+  exists: (key: string) => Promise<boolean>
 
   /**
    * 清空所有存储
    * @returns Promise<boolean> 清空是否成功
    */
-  clear(): Promise<boolean>
+  clear: () => Promise<boolean>
 }
 
 /**

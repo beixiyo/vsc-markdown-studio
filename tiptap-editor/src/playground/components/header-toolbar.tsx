@@ -1,43 +1,39 @@
-// --- UI Primitives ---
-import { Spacer } from "tiptap-styles/ui"
-import {
-  ToolbarGroup,
-  ToolbarSeparator
-} from "tiptap-styles/ui"
+import type { CommentStore } from 'tiptap-comment'
+import type { OperateTestSuite } from '@/features/operate-tests'
 
-// --- Tiptap Node ---
-import "tiptap-comment/index.css"
-import "tiptap-trigger/index.css"
+import { CommentSidebar } from 'tiptap-comment/react'
+import { Spacer, ToolbarGroup, ToolbarSeparator } from 'tiptap-styles/ui'
 
-// --- Tiptap UI ---
-import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
-import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button"
-import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
-import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button"
-import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
-import {
-  ColorHighlightPopover, ColorHighlightPopoverButton
-} from "@/components/tiptap-ui/color-highlight-popover"
-import {
-  LinkPopover, LinkButton
-} from "@/components/tiptap-ui/link-popover"
-import { MarkButton } from "@/components/tiptap-ui/mark-button"
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button"
-import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button"
-import { OperateTestDropdownMenu } from "@/components/my-ui/operate-test-dropdown-menu"
-import type { OperateTestSuite } from "@/features/operate-tests"
-import { CommentSidebar } from "tiptap-comment/react"
-
-// --- Components ---
-import { ThemeToggle } from "./theme-toggle"
-
-import { CommentStore } from "tiptap-comment"
-import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
+import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
+import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
+import { BlockquoteButton } from '@/components/tiptap-ui/blockquote-button'
+import { CodeBlockButton } from '@/components/tiptap-ui/code-block-button'
+import {
+  ColorHighlightPopover,
+  ColorHighlightPopoverButton,
+} from '@/components/tiptap-ui/color-highlight-popover'
+// --- Tiptap UI ---
+import { HeadingDropdownMenu } from '@/components/tiptap-ui/heading-dropdown-menu'
+import { ImageUploadButton } from '@/components/tiptap-ui/image-upload-button'
+import {
+  LinkButton,
+  LinkPopover,
+} from '@/components/tiptap-ui/link-popover'
+import { ListDropdownMenu } from '@/components/tiptap-ui/list-dropdown-menu'
+import { MarkButton } from '@/components/tiptap-ui/mark-button'
 import { OutlineButton } from '@/components/tiptap-ui/outline-button'
 
+import { TextAlignButton } from '@/components/tiptap-ui/text-align-button'
 
-export const HeaderToolbar = ({
+import { UndoRedoButton } from '@/components/tiptap-ui/undo-redo-button'
+// --- Components ---
+import { ThemeToggle } from './theme-toggle'
+// --- Tiptap Node ---
+import 'tiptap-comment/index.css'
+import 'tiptap-trigger/index.css'
+
+export function HeaderToolbar({
   onHighlighterClick,
   onLinkClick,
   isMobile,
@@ -57,8 +53,7 @@ export const HeaderToolbar = ({
   onRunOperateSuite?: (suiteId: string) => void
   operateTestsRunning?: boolean
   operateTestsDisabled?: boolean
-}) => {
-
+}) {
   return (
     <>
       <Spacer />
@@ -73,7 +68,7 @@ export const HeaderToolbar = ({
       <ToolbarGroup>
         <HeadingDropdownMenu levels={ [1, 2, 3, 4] } portal={ isMobile } />
         <ListDropdownMenu
-          types={ ["bulletList", "orderedList", "taskList"] }
+          types={ ['bulletList', 'orderedList', 'taskList'] }
           portal={ isMobile }
         />
         <BlockquoteButton />
@@ -88,12 +83,16 @@ export const HeaderToolbar = ({
         <MarkButton type="strike" />
         <MarkButton type="code" />
         <MarkButton type="underline" />
-        { !isMobile ? (
-          <ColorHighlightPopover />
-        ) : (
-          <ColorHighlightPopoverButton onClick={ onHighlighterClick } />
-        ) }
-        { !isMobile ? <LinkPopover /> : <LinkButton onClick={ onLinkClick } /> }
+        { !isMobile
+          ? (
+              <ColorHighlightPopover />
+            )
+          : (
+              <ColorHighlightPopoverButton onClick={ onHighlighterClick } />
+            ) }
+        { !isMobile
+          ? <LinkPopover />
+          : <LinkButton onClick={ onLinkClick } /> }
       </ToolbarGroup>
 
       <ToolbarSeparator />

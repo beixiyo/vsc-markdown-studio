@@ -1,26 +1,21 @@
-import { forwardRef, useCallback } from "react"
+import type { ButtonProps } from 'tiptap-styles/ui'
 
-// --- Hooks ---
-import { useTiptapEditor } from "tiptap-react-hook"
+import type { UseCodeBlockConfig } from '@/components/tiptap-ui/code-block-button'
 
-// --- Lib ---
-import { parseShortcutKeys } from "tiptap-styles/utils"
+import { forwardRef, useCallback } from 'react'
 
-// --- Tiptap UI ---
-import type { UseCodeBlockConfig } from "@/components/tiptap-ui/code-block-button"
+import { useTiptapEditor } from 'tiptap-react-hook'
+import { Badge, Button } from 'tiptap-styles/ui'
+
+import { parseShortcutKeys } from 'tiptap-styles/utils'
 import {
   CODE_BLOCK_SHORTCUT_KEY,
   useCodeBlock,
-} from "@/components/tiptap-ui/code-block-button"
-
-// --- UI Primitives ---
-import type { ButtonProps } from "tiptap-styles/ui"
-import { Button } from "tiptap-styles/ui"
-import { Badge } from "tiptap-styles/ui"
+} from '@/components/tiptap-ui/code-block-button'
 
 export interface CodeBlockButtonProps
-  extends Omit<ButtonProps, "type">,
-    UseCodeBlockConfig {
+  extends Omit<ButtonProps, 'type'>,
+  UseCodeBlockConfig {
   /**
    * Optional text to display alongside the icon.
    */
@@ -60,7 +55,7 @@ export const CodeBlockButton = forwardRef<
       children,
       ...buttonProps
     },
-    ref
+    ref,
   ) => {
     const { editor } = useTiptapEditor(providedEditor)
     const {
@@ -80,10 +75,11 @@ export const CodeBlockButton = forwardRef<
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
-        if (event.defaultPrevented) return
+        if (event.defaultPrevented)
+          return
         handleToggle()
       },
-      [handleToggle, onClick]
+      [handleToggle, onClick],
     )
 
     if (!isVisible) {
@@ -94,30 +90,32 @@ export const CodeBlockButton = forwardRef<
       <Button
         type="button"
         data-style="ghost"
-        data-active-state={isActive ? "on" : "off"}
+        data-active-state={ isActive
+          ? 'on'
+          : 'off' }
         role="button"
-        disabled={!canToggle}
-        data-disabled={!canToggle}
-        tabIndex={-1}
-        aria-label={label}
-        aria-pressed={isActive}
+        disabled={ !canToggle }
+        data-disabled={ !canToggle }
+        tabIndex={ -1 }
+        aria-label={ label }
+        aria-pressed={ isActive }
         tooltip="Code Block"
-        onClick={handleClick}
-        {...buttonProps}
-        ref={ref}
+        onClick={ handleClick }
+        { ...buttonProps }
+        ref={ ref }
       >
         {children ?? (
           <>
             <Icon className="tiptap-button-icon" />
             {text && <span className="tiptap-button-text">{text}</span>}
             {showShortcut && (
-              <CodeBlockShortcutBadge shortcutKeys={shortcutKeys} />
+              <CodeBlockShortcutBadge shortcutKeys={ shortcutKeys } />
             )}
           </>
         )}
       </Button>
     )
-  }
+  },
 )
 
-CodeBlockButton.displayName = "CodeBlockButton"
+CodeBlockButton.displayName = 'CodeBlockButton'

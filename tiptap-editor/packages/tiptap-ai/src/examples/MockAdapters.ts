@@ -18,7 +18,9 @@ export function createMockStreamingAdapter(options: {
         return
       if (delayMs > 0)
         await sleep(delayMs)
-      yield { [ctx.mode === 'stream' ? 'delta' : 'text']: delta }
+      yield { [ctx.mode === 'stream'
+        ? 'delta'
+        : 'text']: delta }
     }
 
     if (finalText) {
@@ -46,4 +48,3 @@ export function createMockBatchAdapter(options: {
     return { text }
   }
 }
-

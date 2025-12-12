@@ -1,4 +1,4 @@
-import type { CommentData, ThreadData } from "@blocknote/core/comments";
+import type { CommentData, ThreadData } from '@blocknote/core/comments';
 export type CommentProps = {
     comment: CommentData;
     thread: ThreadData;
@@ -11,4 +11,4 @@ export type CommentProps = {
  * It's generally used in the `Thread` component for comments that have already been created.
  *
  */
-export declare const Comment: ({ comment, thread, showResolveButton, }: CommentProps) => import("react/jsx-runtime").JSX.Element | null;
+export declare function Comment({ comment, thread, showResolveButton, }: CommentProps): import("react/jsx-runtime").JSX.Element | null;

@@ -1,4 +1,4 @@
-import type { StorageEngine, StorageEngineOptions, StorageItem, StorageMetadata } from "./storage-engine"
+import type { StorageEngine, StorageEngineOptions, StorageItem, StorageMetadata } from './storage-engine'
 
 /**
  * localStorage 存储引擎实现
@@ -8,9 +8,9 @@ export class LocalStorageEngine implements StorageEngine {
 
   constructor(options: StorageEngineOptions = {}) {
     this.options = {
-      keyPrefix: options.keyPrefix || "",
+      keyPrefix: options.keyPrefix || '',
       enableCompression: options.enableCompression || false,
-      expiration: options.expiration || -1
+      expiration: options.expiration || -1,
     }
   }
 
@@ -34,7 +34,7 @@ export class LocalStorageEngine implements StorageEngine {
       return {
         ...existingMetadata,
         updatedAt: now,
-        expiresAt: expiration
+        expiresAt: expiration,
       }
     }
 
@@ -42,8 +42,8 @@ export class LocalStorageEngine implements StorageEngine {
       createdAt: now,
       updatedAt: now,
       expiresAt: expiration,
-      contentType: "text/markdown",
-      version: "1.0.0"
+      contentType: 'text/markdown',
+      version: '1.0.0',
     }
   }
 
@@ -51,7 +51,8 @@ export class LocalStorageEngine implements StorageEngine {
    * 检查内容是否过期
    */
   private isExpired(metadata: StorageMetadata): boolean {
-    if (!metadata.expiresAt) return false
+    if (!metadata.expiresAt)
+      return false
     return Date.now() > metadata.expiresAt
   }
 
@@ -68,7 +69,8 @@ export class LocalStorageEngine implements StorageEngine {
   private deserialize(data: string): StorageItem | null {
     try {
       return JSON.parse(data) as StorageItem
-    } catch {
+    }
+    catch {
       return null
     }
   }
@@ -77,7 +79,7 @@ export class LocalStorageEngine implements StorageEngine {
     try {
       const fullKey = this.getFullKey(key)
 
-      // 尝试获取现有元数据
+      /** 尝试获取现有元数据 */
       let existingMetadata: StorageMetadata | undefined
       const existingData = localStorage.getItem(fullKey)
       if (existingData) {
@@ -94,7 +96,7 @@ export class LocalStorageEngine implements StorageEngine {
       return true
     }
     catch (error) {
-      console.error("LocalStorage save failed:", error)
+      console.error('LocalStorage save failed:', error)
       return false
     }
   }
@@ -104,14 +106,16 @@ export class LocalStorageEngine implements StorageEngine {
       const fullKey = this.getFullKey(key)
       const data = localStorage.getItem(fullKey)
 
-      if (!data) return null
+      if (!data)
+        return null
 
       const item = this.deserialize(data)
-      if (!item) return null
+      if (!item)
+        return null
 
-      // 检查是否过期
+      /** 检查是否过期 */
       if (this.isExpired(item.metadata)) {
-        // 删除过期内容
+        /** 删除过期内容 */
         await this.remove(key)
         return null
       }
@@ -119,7 +123,7 @@ export class LocalStorageEngine implements StorageEngine {
       return item.content
     }
     catch (error) {
-      console.error("LocalStorage load failed:", error)
+      console.error('LocalStorage load failed:', error)
       return null
     }
   }
@@ -131,7 +135,7 @@ export class LocalStorageEngine implements StorageEngine {
       return true
     }
     catch (error) {
-      console.error("LocalStorage remove failed:", error)
+      console.error('LocalStorage remove failed:', error)
       return false
     }
   }
@@ -141,12 +145,14 @@ export class LocalStorageEngine implements StorageEngine {
       const fullKey = this.getFullKey(key)
       const data = localStorage.getItem(fullKey)
 
-      if (!data) return false
+      if (!data)
+        return false
 
       const item = this.deserialize(data)
-      if (!item) return false
+      if (!item)
+        return false
 
-      // 如果已过期，视为不存在
+      /** 如果已过期，视为不存在 */
       if (this.isExpired(item.metadata)) {
         await this.remove(key)
         return false
@@ -155,7 +161,7 @@ export class LocalStorageEngine implements StorageEngine {
       return true
     }
     catch (error) {
-      console.error("LocalStorage exists check failed:", error)
+      console.error('LocalStorage exists check failed:', error)
       return false
     }
   }
@@ -164,7 +170,7 @@ export class LocalStorageEngine implements StorageEngine {
     try {
       const keysToRemove: string[] = []
 
-      // 遍历所有 localStorage 键，找出匹配前缀的键
+      /** 遍历所有 localStorage 键，找出匹配前缀的键 */
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i)
         if (key && key.startsWith(this.options.keyPrefix)) {
@@ -172,13 +178,13 @@ export class LocalStorageEngine implements StorageEngine {
         }
       }
 
-      // 删除所有匹配的键
+      /** 删除所有匹配的键 */
       keysToRemove.forEach(key => localStorage.removeItem(key))
 
       return true
     }
     catch (error) {
-      console.error("LocalStorage clear failed:", error)
+      console.error('LocalStorage clear failed:', error)
       return false
     }
   }
@@ -203,8 +209,9 @@ export class LocalStorageEngine implements StorageEngine {
       }
 
       return keys
-    } catch (error) {
-      console.error("LocalStorage getAllKeys failed:", error)
+    }
+    catch (error) {
+      console.error('LocalStorage getAllKeys failed:', error)
       return []
     }
   }
@@ -217,20 +224,23 @@ export class LocalStorageEngine implements StorageEngine {
       const fullKey = this.getFullKey(key)
       const data = localStorage.getItem(fullKey)
 
-      if (!data) return null
+      if (!data)
+        return null
 
       const item = this.deserialize(data)
-      if (!item) return null
+      if (!item)
+        return null
 
-      // 检查是否过期
+      /** 检查是否过期 */
       if (this.isExpired(item.metadata)) {
         await this.remove(key)
         return null
       }
 
       return item.metadata
-    } catch (error) {
-      console.error("LocalStorage getMetadata failed:", error)
+    }
+    catch (error) {
+      console.error('LocalStorage getMetadata failed:', error)
       return null
     }
   }

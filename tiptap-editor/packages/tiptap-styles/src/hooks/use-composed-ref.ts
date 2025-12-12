@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useCallback, useRef } from "react"
+import { useCallback, useRef } from 'react'
 
 /**
  * 用户提供的 ref 类型，排除了字符串类型的 ref
@@ -18,11 +18,12 @@ type UserRef<T> =
  * @param value - 要设置的新值
  * @template T - ref 指向的元素类型
  */
-const updateRef = <T>(ref: NonNullable<UserRef<T>>, value: T | null) => {
-  if (typeof ref === "function") {
+function updateRef<T>(ref: NonNullable<UserRef<T>>, value: T | null) {
+  if (typeof ref === 'function') {
     ref(value)
-  } else if (ref && typeof ref === "object" && "current" in ref) {
-    // 安全赋值，不使用 MutableRefObject
+  }
+  else if (ref && typeof ref === 'object' && 'current' in ref) {
+    /** 安全赋值，不使用 MutableRefObject */
     ;(ref as { current: T | null }).current = value
   }
 }
@@ -48,33 +49,30 @@ const updateRef = <T>(ref: NonNullable<UserRef<T>>, value: T | null) => {
  * @param userRef - 用户提供的 ref，可以是函数、对象或 null/undefined
  * @returns 一个回调函数，可以传递给 React 元素的 ref 属性
  */
-export const useComposedRef = <T extends HTMLElement>(
-  libRef: React.RefObject<T | null>,
-  userRef: UserRef<T>
-) => {
+export function useComposedRef<T extends HTMLElement>(libRef: React.RefObject<T | null>, userRef: UserRef<T>) {
   const prevUserRef = useRef<UserRef<T>>(null)
 
   return useCallback(
     (instance: T | null) => {
-      // 更新库内部 ref
-      if (libRef && "current" in libRef) {
+      /** 更新库内部 ref */
+      if (libRef && 'current' in libRef) {
         ;(libRef as { current: T | null }).current = instance
       }
 
-      // 清理之前的用户 ref
+      /** 清理之前的用户 ref */
       if (prevUserRef.current) {
         updateRef(prevUserRef.current, null)
       }
 
-      // 更新当前用户 ref
+      /** 更新当前用户 ref */
       prevUserRef.current = userRef
 
-      // 更新新的用户 ref
+      /** 更新新的用户 ref */
       if (userRef) {
         updateRef(userRef, instance)
       }
     },
-    [libRef, userRef]
+    [libRef, userRef],
   )
 }
 

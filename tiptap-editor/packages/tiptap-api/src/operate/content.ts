@@ -5,10 +5,12 @@ import type { Content, Editor } from '@tiptap/core'
  */
 export function getEditorContent(editor: Editor) {
   const md = getEditorMarkdown(editor)
-  if (md) return md
+  if (md)
+    return md
 
   const json = getEditorJson(editor)
-  if (json) return json
+  if (json)
+    return json
   return null
 }
 
@@ -21,17 +23,20 @@ export function getEditorContent(editor: Editor) {
 export function setEditorContent(
   editor: Editor | null,
   content: Content,
-  emitUpdate: boolean = true
+  emitUpdate: boolean = true,
 ): boolean {
-  if (!editor) return false
+  if (!editor)
+    return false
 
   try {
     const cmds = editor?.commands
-    if (!cmds?.setContent) return false
+    if (!cmds?.setContent)
+      return false
 
     cmds.setContent(content, { emitUpdate })
     return true
-  } catch (error) {
+  }
+  catch (error) {
     console.error('设置内容失败:', error)
     return false
   }
@@ -41,7 +46,8 @@ export function setEditorContent(
  * 获取 HTML 格式内容
  */
 export function getEditorHTML(editor: Editor | null): string | null {
-  if (!editor) return null
+  if (!editor)
+    return null
 
   try {
     return editor?.getHTML?.() ?? null
@@ -58,13 +64,15 @@ export function getEditorHTML(editor: Editor | null): string | null {
 export function setEditorHTML(
   editor: Editor | null,
   html: string,
-  emitUpdate: boolean = true
+  emitUpdate: boolean = true,
 ): boolean {
-  if (!editor) return false
+  if (!editor)
+    return false
 
   try {
     const cmds = editor?.commands
-    if (!cmds?.setContent) return false
+    if (!cmds?.setContent)
+      return false
 
     cmds.setContent(html, { emitUpdate })
     return true
@@ -79,17 +87,18 @@ export function setEditorHTML(
  * 获取 Markdown 格式内容
  */
 export function getEditorMarkdown(editor: Editor | null): string | null {
-  if (!editor) return null
+  if (!editor)
+    return null
 
   try {
-    if (typeof editor.getMarkdown === "function") {
+    if (typeof editor.getMarkdown === 'function') {
       return editor.getMarkdown()
     }
 
     return null
   }
   catch (error) {
-    console.error("获取编辑器内容失败:", error)
+    console.error('获取编辑器内容失败:', error)
     return null
   }
 }
@@ -100,14 +109,17 @@ export function getEditorMarkdown(editor: Editor | null): string | null {
 export function setEditorMarkdown(
   editor: Editor | null,
   markdown: string,
-  emitUpdate: boolean = true
+  emitUpdate: boolean = true,
 ): boolean {
-  if (!editor) return false
+  if (!editor)
+    return false
 
   try {
     editor?.commands.setContent(markdown, {
-      contentType: typeof markdown === 'string' ? 'markdown' : 'json',
-      emitUpdate
+      contentType: typeof markdown === 'string'
+        ? 'markdown'
+        : 'json',
+      emitUpdate,
     })
     return true
   }
@@ -117,13 +129,14 @@ export function setEditorMarkdown(
 }
 
 export function getEditorJson(editor: Editor) {
-  if (!editor) return null
+  if (!editor)
+    return null
 
   try {
     return editor.getJSON()
   }
   catch (error) {
-    console.error("获取编辑器内容失败:", error)
+    console.error('获取编辑器内容失败:', error)
     return null
   }
 }

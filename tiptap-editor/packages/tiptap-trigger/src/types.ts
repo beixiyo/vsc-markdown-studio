@@ -133,5 +133,3 @@ export interface SuggestionPluginAPI {
    */
   subscribe: (listener: (state: SuggestionState) => void) => () => void
 }
-
-

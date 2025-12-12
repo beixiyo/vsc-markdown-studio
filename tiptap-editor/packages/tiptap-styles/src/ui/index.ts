@@ -1,4 +1,4 @@
-// 导入样式
+/** 导入样式 */
 import './badge/badge-colors.scss'
 import './badge/badge-group.scss'
 import './badge/badge.scss'
@@ -13,7 +13,7 @@ import './separator/separator.scss'
 import './toolbar/toolbar.scss'
 import './tooltip/tooltip.scss'
 
-// 导出组件
+/** 导出组件 */
 export * from './badge'
 export * from './button'
 export * from './card'

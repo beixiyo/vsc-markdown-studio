@@ -1,8 +1,9 @@
-"use client";
+'use client'
 
-import { mergeCSSClasses } from "@blocknote/core";
-import type { CommentData, ThreadData } from "@blocknote/core/comments";
-import { MouseEvent, ReactNode, useCallback, useState } from "react";
+import type { CommentData, ThreadData } from '@blocknote/core/comments'
+import type { MouseEvent, ReactNode } from 'react'
+import { mergeCSSClasses } from '@blocknote/core'
+import { useCallback, useState } from 'react'
 import {
   RiArrowGoBackFill,
   RiCheckFill,
@@ -10,23 +11,23 @@ import {
   RiEditFill,
   RiEmotionLine,
   RiMoreFill,
-} from "react-icons/ri";
+} from 'react-icons/ri'
 
-import { useComponentsContext } from "../../editor/ComponentsContext.js";
-import { useBlockNoteEditor } from "../../hooks/useBlockNoteEditor.js";
-import { useCreateBlockNote } from "../../hooks/useCreateBlockNote.js";
-import { useDictionary } from "../../i18n/dictionary.js";
-import { CommentEditor } from "./CommentEditor.js";
-import { EmojiPicker } from "./EmojiPicker.js";
-import { ReactionBadge } from "./ReactionBadge.js";
-import { defaultCommentEditorSchema } from "./defaultCommentEditorSchema.js";
-import { useUser } from "./useUsers.js";
+import { useComponentsContext } from '../../editor/ComponentsContext.js'
+import { useBlockNoteEditor } from '../../hooks/useBlockNoteEditor.js'
+import { useCreateBlockNote } from '../../hooks/useCreateBlockNote.js'
+import { useDictionary } from '../../i18n/dictionary.js'
+import { CommentEditor } from './CommentEditor.js'
+import { defaultCommentEditorSchema } from './defaultCommentEditorSchema.js'
+import { EmojiPicker } from './EmojiPicker.js'
+import { ReactionBadge } from './ReactionBadge.js'
+import { useUser } from './useUsers.js'
 
 export type CommentProps = {
-  comment: CommentData;
-  thread: ThreadData;
-  showResolveButton?: boolean;
-};
+  comment: CommentData
+  thread: ThreadData
+  showResolveButton?: boolean
+}
 
 /**
  * The Comment component displays a single comment with actions,
@@ -35,21 +36,21 @@ export type CommentProps = {
  * It's generally used in the `Thread` component for comments that have already been created.
  *
  */
-export const Comment = ({
+export function Comment({
   comment,
   thread,
   showResolveButton,
-}: CommentProps) => {
+}: CommentProps) {
   // TODO: if REST API becomes popular, all interactions (click handlers) should implement a loading state and error state
   // (or optimistic local updates)
 
-  const editor = useBlockNoteEditor();
+  const editor = useBlockNoteEditor()
 
   if (!editor.comments) {
-    throw new Error("Comments plugin not found");
+    throw new Error('Comments plugin not found')
   }
 
-  const dict = useDictionary();
+  const dict = useDictionary()
 
   const commentEditor = useCreateBlockNote(
     {
@@ -64,27 +65,27 @@ export const Comment = ({
       schema: editor.comments.commentEditorSchema || defaultCommentEditorSchema,
     },
     [comment.body],
-  );
+  )
 
-  const Components = useComponentsContext()!;
+  const Components = useComponentsContext()!
 
-  const [isEditing, setEditing] = useState(false);
-  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+  const [isEditing, setEditing] = useState(false)
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
 
   if (!editor.comments) {
-    throw new Error("Comments plugin not found");
+    throw new Error('Comments plugin not found')
   }
 
-  const threadStore = editor.comments.threadStore;
+  const threadStore = editor.comments.threadStore
 
   const handleEdit = useCallback(() => {
-    setEditing(true);
-  }, []);
+    setEditing(true)
+  }, [])
 
   const onEditCancel = useCallback(() => {
-    commentEditor.replaceBlocks(commentEditor.document, comment.body);
-    setEditing(false);
-  }, [commentEditor, comment.body]);
+    commentEditor.replaceBlocks(commentEditor.document, comment.body)
+    setEditing(false)
+  }, [commentEditor, comment.body])
 
   const onEditSubmit = useCallback(
     async (_event: MouseEvent) => {
@@ -94,19 +95,19 @@ export const Comment = ({
           body: commentEditor.document,
         },
         threadId: thread.id,
-      });
+      })
 
-      setEditing(false);
+      setEditing(false)
     },
     [comment, thread.id, commentEditor, threadStore],
-  );
+  )
 
   const onDelete = useCallback(async () => {
     await threadStore.deleteComment({
       commentId: comment.id,
       threadId: thread.id,
-    });
-  }, [comment, thread.id, threadStore]);
+    })
+  }, [comment, thread.id, threadStore])
 
   const onReactionSelect = useCallback(
     async (emoji: string) => {
@@ -115,219 +116,220 @@ export const Comment = ({
           threadId: thread.id,
           commentId: comment.id,
           emoji,
-        });
-      } else if (threadStore.auth.canDeleteReaction(comment, emoji)) {
+        })
+      }
+      else if (threadStore.auth.canDeleteReaction(comment, emoji)) {
         await threadStore.deleteReaction({
           threadId: thread.id,
           commentId: comment.id,
           emoji,
-        });
+        })
       }
     },
     [threadStore, comment, thread.id],
-  );
+  )
 
   const onResolve = useCallback(async () => {
     await threadStore.resolveThread({
       threadId: thread.id,
-    });
-  }, [thread.id, threadStore]);
+    })
+  }, [thread.id, threadStore])
 
   const onReopen = useCallback(async () => {
     await threadStore.unresolveThread({
       threadId: thread.id,
-    });
-  }, [thread.id, threadStore]);
+    })
+  }, [thread.id, threadStore])
 
-  const user = useUser(editor, comment.userId);
+  const user = useUser(editor, comment.userId)
 
   if (!comment.body) {
-    return null;
+    return null
   }
 
-  let actions: ReactNode | undefined = undefined;
-  const canAddReaction = threadStore.auth.canAddReaction(comment);
-  const canDeleteComment = threadStore.auth.canDeleteComment(comment);
-  const canEditComment = threadStore.auth.canUpdateComment(comment);
+  let actions: ReactNode | undefined
+  const canAddReaction = threadStore.auth.canAddReaction(comment)
+  const canDeleteComment = threadStore.auth.canDeleteComment(comment)
+  const canEditComment = threadStore.auth.canUpdateComment(comment)
 
-  const showResolveOrReopen =
-    showResolveButton &&
-    (thread.resolved
-      ? threadStore.auth.canUnresolveThread(thread)
-      : threadStore.auth.canResolveThread(thread));
+  const showResolveOrReopen
+    = showResolveButton
+      && (thread.resolved
+        ? threadStore.auth.canUnresolveThread(thread)
+        : threadStore.auth.canResolveThread(thread))
 
   if (!isEditing) {
     actions = (
       <Components.Generic.Toolbar.Root
-        className={mergeCSSClasses("bn-action-toolbar", "bn-comment-actions")}
-        variant={"action-toolbar"}
+        className={ mergeCSSClasses('bn-action-toolbar', 'bn-comment-actions') }
+        variant="action-toolbar"
       >
-        {canAddReaction && (
+        { canAddReaction && (
           <EmojiPicker
-            onEmojiSelect={(emoji: { native: string }) =>
-              onReactionSelect(emoji.native)
-            }
-            onOpenChange={setEmojiPickerOpen}
+            onEmojiSelect={ (emoji: { native: string }) =>
+              onReactionSelect(emoji.native) }
+            onOpenChange={ setEmojiPickerOpen }
           >
             <Components.Generic.Toolbar.Button
-              key={"add-reaction"}
-              mainTooltip={dict.comments.actions.add_reaction}
+              key="add-reaction"
+              mainTooltip={ dict.comments.actions.add_reaction }
               variant="compact"
             >
-              <RiEmotionLine size={16} />
+              <RiEmotionLine size={ 16 } />
             </Components.Generic.Toolbar.Button>
           </EmojiPicker>
-        )}
-        {showResolveOrReopen &&
-          (thread.resolved ? (
-            <Components.Generic.Toolbar.Button
-              key={"reopen"}
-              mainTooltip="Re-open"
-              variant="compact"
-              onClick={onReopen}
-            >
-              <RiArrowGoBackFill size={16} />
-            </Components.Generic.Toolbar.Button>
-          ) : (
-            <Components.Generic.Toolbar.Button
-              key={"resolve"}
-              mainTooltip={dict.comments.actions.resolve}
-              variant="compact"
-              onClick={onResolve}
-            >
-              <RiCheckFill size={16} />
-            </Components.Generic.Toolbar.Button>
-          ))}
-        {(canDeleteComment || canEditComment) && (
-          <Components.Generic.Menu.Root position={"bottom-start"}>
+        ) }
+        { showResolveOrReopen
+        && (thread.resolved
+          ? (
+              <Components.Generic.Toolbar.Button
+                key="reopen"
+                mainTooltip="Re-open"
+                variant="compact"
+                onClick={ onReopen }
+              >
+                <RiArrowGoBackFill size={ 16 } />
+              </Components.Generic.Toolbar.Button>
+            )
+          : (
+              <Components.Generic.Toolbar.Button
+                key="resolve"
+                mainTooltip={ dict.comments.actions.resolve }
+                variant="compact"
+                onClick={ onResolve }
+              >
+                <RiCheckFill size={ 16 } />
+              </Components.Generic.Toolbar.Button>
+            )) }
+        { (canDeleteComment || canEditComment) && (
+          <Components.Generic.Menu.Root position="bottom-start">
             <Components.Generic.Menu.Trigger>
               <Components.Generic.Toolbar.Button
-                key={"more-actions"}
-                mainTooltip={dict.comments.actions.more_actions}
+                key="more-actions"
+                mainTooltip={ dict.comments.actions.more_actions }
                 variant="compact"
               >
-                <RiMoreFill size={16} />
+                <RiMoreFill size={ 16 } />
               </Components.Generic.Toolbar.Button>
             </Components.Generic.Menu.Trigger>
-            <Components.Generic.Menu.Dropdown className={"bn-menu-dropdown"}>
-              {canEditComment && (
+            <Components.Generic.Menu.Dropdown className="bn-menu-dropdown">
+              { canEditComment && (
                 <Components.Generic.Menu.Item
-                  key={"edit-comment"}
-                  icon={<RiEditFill />}
-                  onClick={handleEdit}
+                  key="edit-comment"
+                  icon={ <RiEditFill /> }
+                  onClick={ handleEdit }
                 >
-                  {dict.comments.actions.edit_comment}
+                  { dict.comments.actions.edit_comment }
                 </Components.Generic.Menu.Item>
-              )}
-              {canDeleteComment && (
+              ) }
+              { canDeleteComment && (
                 <Components.Generic.Menu.Item
-                  key={"delete-comment"}
-                  icon={<RiDeleteBinFill />}
-                  onClick={onDelete}
+                  key="delete-comment"
+                  icon={ <RiDeleteBinFill /> }
+                  onClick={ onDelete }
                 >
-                  {dict.comments.actions.delete_comment}
+                  { dict.comments.actions.delete_comment }
                 </Components.Generic.Menu.Item>
-              )}
+              ) }
             </Components.Generic.Menu.Dropdown>
           </Components.Generic.Menu.Root>
-        )}
+        ) }
       </Components.Generic.Toolbar.Root>
-    );
+    )
   }
 
   const timeString = comment.createdAt.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-  });
+    month: 'short',
+    day: 'numeric',
+  })
 
   if (!comment.body) {
-    throw new Error("soft deletes are not yet supported");
+    throw new Error('soft deletes are not yet supported')
   }
 
   return (
     <Components.Comments.Comment
-      authorInfo={user ?? "loading"}
-      timeString={timeString}
-      edited={comment.updatedAt.getTime() !== comment.createdAt.getTime()}
-      showActions={"hover"}
-      actions={actions}
-      className={"bn-thread-comment"}
-      emojiPickerOpen={emojiPickerOpen}
+      authorInfo={ user ?? 'loading' }
+      timeString={ timeString }
+      edited={ comment.updatedAt.getTime() !== comment.createdAt.getTime() }
+      showActions="hover"
+      actions={ actions }
+      className="bn-thread-comment"
+      emojiPickerOpen={ emojiPickerOpen }
     >
       <CommentEditor
-        autoFocus={isEditing}
-        editor={commentEditor}
-        editable={isEditing}
+        autoFocus={ isEditing }
+        editor={ commentEditor }
+        editable={ isEditing }
         actions={
           comment.reactions.length > 0 || isEditing
             ? ({ isEmpty }) => (
                 <>
-                  {comment.reactions.length > 0 && !isEditing && (
+                  { comment.reactions.length > 0 && !isEditing && (
                     <Components.Generic.Badge.Group
-                      className={mergeCSSClasses(
-                        "bn-badge-group",
-                        "bn-comment-reactions",
-                      )}
+                      className={ mergeCSSClasses(
+                        'bn-badge-group',
+                        'bn-comment-reactions',
+                      ) }
                     >
-                      {comment.reactions.map((reaction) => (
+                      { comment.reactions.map(reaction => (
                         <ReactionBadge
-                          key={reaction.emoji}
-                          comment={comment}
-                          emoji={reaction.emoji}
-                          onReactionSelect={onReactionSelect}
+                          key={ reaction.emoji }
+                          comment={ comment }
+                          emoji={ reaction.emoji }
+                          onReactionSelect={ onReactionSelect }
                         />
-                      ))}
-                      {canAddReaction && (
+                      )) }
+                      { canAddReaction && (
                         <EmojiPicker
-                          onEmojiSelect={(emoji: { native: string }) =>
-                            onReactionSelect(emoji.native)
-                          }
-                          onOpenChange={setEmojiPickerOpen}
+                          onEmojiSelect={ (emoji: { native: string }) =>
+                            onReactionSelect(emoji.native) }
+                          onOpenChange={ setEmojiPickerOpen }
                         >
                           <Components.Generic.Badge.Root
-                            className={mergeCSSClasses(
-                              "bn-badge",
-                              "bn-comment-add-reaction",
-                            )}
-                            text={"+"}
-                            icon={<RiEmotionLine size={16} />}
-                            mainTooltip={dict.comments.actions.add_reaction}
+                            className={ mergeCSSClasses(
+                              'bn-badge',
+                              'bn-comment-add-reaction',
+                            ) }
+                            text="+"
+                            icon={ <RiEmotionLine size={ 16 } /> }
+                            mainTooltip={ dict.comments.actions.add_reaction }
                           />
                         </EmojiPicker>
-                      )}
+                      ) }
                     </Components.Generic.Badge.Group>
-                  )}
-                  {isEditing && (
+                  ) }
+                  { isEditing && (
                     <Components.Generic.Toolbar.Root
                       variant="action-toolbar"
-                      className={mergeCSSClasses(
-                        "bn-action-toolbar",
-                        "bn-comment-actions",
-                      )}
+                      className={ mergeCSSClasses(
+                        'bn-action-toolbar',
+                        'bn-comment-actions',
+                      ) }
                     >
                       <Components.Generic.Toolbar.Button
-                        mainTooltip={dict.comments.save_button_text}
+                        mainTooltip={ dict.comments.save_button_text }
                         variant="compact"
-                        onClick={onEditSubmit}
-                        isDisabled={isEmpty}
+                        onClick={ onEditSubmit }
+                        isDisabled={ isEmpty }
                       >
-                        {dict.comments.save_button_text}
+                        { dict.comments.save_button_text }
                       </Components.Generic.Toolbar.Button>
                       <Components.Generic.Toolbar.Button
-                        className={"bn-button"}
-                        mainTooltip={dict.comments.cancel_button_text}
+                        className="bn-button"
+                        mainTooltip={ dict.comments.cancel_button_text }
                         variant="compact"
-                        onClick={onEditCancel}
+                        onClick={ onEditCancel }
                       >
-                        {dict.comments.cancel_button_text}
+                        { dict.comments.cancel_button_text }
                       </Components.Generic.Toolbar.Button>
                     </Components.Generic.Toolbar.Root>
-                  )}
+                  ) }
                 </>
               )
             : undefined
         }
       />
     </Components.Comments.Comment>
-  );
-};
+  )
+}

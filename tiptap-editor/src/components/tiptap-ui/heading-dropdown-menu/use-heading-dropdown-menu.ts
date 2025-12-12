@@ -1,22 +1,22 @@
-"use client"
+'use client'
 
-import { useEffect, useState } from "react"
-import type { Editor } from "@tiptap/react"
+import type { Editor } from '@tiptap/react'
+import { useEffect, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from "tiptap-react-hook"
+import { useTiptapEditor } from 'tiptap-react-hook'
 
 // --- Icons ---
-import { HeadingIcon } from "tiptap-styles/icons"
+import { HeadingIcon } from 'tiptap-styles/icons'
 
 // --- Tiptap UI ---
 import {
-  headingIcons,
-  type Level,
-  isHeadingActive,
   canToggle,
+  headingIcons,
+  isHeadingActive,
+  type Level,
   shouldShowButton,
-} from "@/components/tiptap-ui/heading-button"
+} from '@/components/tiptap-ui/heading-button'
 
 /**
  * Configuration for the heading dropdown menu functionality
@@ -43,10 +43,11 @@ export interface UseHeadingDropdownMenuConfig {
  */
 export function getActiveHeadingLevel(
   editor: Editor | null,
-  levels: Level[] = [1, 2, 3, 4, 5, 6]
+  levels: Level[] = [1, 2, 3, 4, 5, 6],
 ): Level | undefined {
-  if (!editor || !editor.isEditable) return undefined
-  return levels.find((level) => isHeadingActive(editor, level))
+  if (!editor || !editor.isEditable)
+    return undefined
+  return levels.find(level => isHeadingActive(editor, level))
 }
 
 /**
@@ -103,20 +104,21 @@ export function useHeadingDropdownMenu(config?: UseHeadingDropdownMenuConfig) {
   const canToggleState = canToggle(editor)
 
   useEffect(() => {
-    if (!editor) return
+    if (!editor)
+      return
 
     const handleSelectionUpdate = () => {
       setIsVisible(
-        shouldShowButton({ editor, hideWhenUnavailable, level: levels })
+        shouldShowButton({ editor, hideWhenUnavailable, level: levels }),
       )
     }
 
     handleSelectionUpdate()
 
-    editor.on("selectionUpdate", handleSelectionUpdate)
+    editor.on('selectionUpdate', handleSelectionUpdate)
 
     return () => {
-      editor.off("selectionUpdate", handleSelectionUpdate)
+      editor.off('selectionUpdate', handleSelectionUpdate)
     }
   }, [editor, hideWhenUnavailable, levels])
 
@@ -126,7 +128,9 @@ export function useHeadingDropdownMenu(config?: UseHeadingDropdownMenuConfig) {
     isActive,
     canToggle: canToggleState,
     levels,
-    label: "Heading",
-    Icon: activeLevel ? headingIcons[activeLevel] : HeadingIcon,
+    label: 'Heading',
+    Icon: activeLevel
+      ? headingIcons[activeLevel]
+      : HeadingIcon,
   }
 }

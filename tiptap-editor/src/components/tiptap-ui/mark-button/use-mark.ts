@@ -1,29 +1,28 @@
-import { useCallback, useEffect, useState } from "react"
-import type { Editor } from "@tiptap/react"
+import type { Editor } from '@tiptap/react'
+import { useCallback, useEffect, useState } from 'react'
 
-// --- Hooks ---
-import { useTiptapEditor } from "tiptap-react-hook"
+import { useTiptapEditor } from 'tiptap-react-hook'
 
-// --- Lib ---
-import { isMarkInSchema, isNodeTypeSelected } from "tiptap-styles/utils"
+import {
+  BoldIcon,
+  Code2Icon,
+  ItalicIcon,
+  StrikeIcon,
+  SubscriptIcon,
+  SuperscriptIcon,
+  UnderlineIcon,
+} from 'tiptap-styles/icons'
 
-// --- Icons ---
-import { BoldIcon } from "tiptap-styles/icons"
-import { Code2Icon } from "tiptap-styles/icons"
-import { ItalicIcon } from "tiptap-styles/icons"
-import { StrikeIcon } from "tiptap-styles/icons"
-import { SubscriptIcon } from "tiptap-styles/icons"
-import { SuperscriptIcon } from "tiptap-styles/icons"
-import { UnderlineIcon } from "tiptap-styles/icons"
+import { isMarkInSchema, isNodeTypeSelected } from 'tiptap-styles/utils'
 
 export type Mark =
-  | "bold"
-  | "italic"
-  | "strike"
-  | "code"
-  | "underline"
-  | "superscript"
-  | "subscript"
+  | 'bold'
+  | 'italic'
+  | 'strike'
+  | 'code'
+  | 'underline'
+  | 'superscript'
+  | 'subscript'
 
 /**
  * Configuration for the mark functionality
@@ -59,21 +58,22 @@ export const markIcons = {
 }
 
 export const MARK_SHORTCUT_KEYS: Record<Mark, string> = {
-  bold: "mod+b",
-  italic: "mod+i",
-  underline: "mod+u",
-  strike: "mod+shift+s",
-  code: "mod+e",
-  superscript: "mod+.",
-  subscript: "mod+,",
+  bold: 'mod+b',
+  italic: 'mod+i',
+  underline: 'mod+u',
+  strike: 'mod+shift+s',
+  code: 'mod+e',
+  superscript: 'mod+.',
+  subscript: 'mod+,',
 }
 
 /**
  * Checks if a mark can be toggled in the current editor state
  */
 export function canToggleMark(editor: Editor | null, type: Mark): boolean {
-  if (!editor || !editor.isEditable) return false
-  if (!isMarkInSchema(type, editor) || isNodeTypeSelected(editor, ["image"]))
+  if (!editor || !editor.isEditable)
+    return false
+  if (!isMarkInSchema(type, editor) || isNodeTypeSelected(editor, ['image']))
     return false
 
   return editor.can().toggleMark(type)
@@ -83,7 +83,8 @@ export function canToggleMark(editor: Editor | null, type: Mark): boolean {
  * Checks if a mark is currently active
  */
 export function isMarkActive(editor: Editor | null, type: Mark): boolean {
-  if (!editor || !editor.isEditable) return false
+  if (!editor || !editor.isEditable)
+    return false
   return editor.isActive(type)
 }
 
@@ -91,8 +92,10 @@ export function isMarkActive(editor: Editor | null, type: Mark): boolean {
  * Toggles a mark in the editor
  */
 export function toggleMark(editor: Editor | null, type: Mark): boolean {
-  if (!editor || !editor.isEditable) return false
-  if (!canToggleMark(editor, type)) return false
+  if (!editor || !editor.isEditable)
+    return false
+  if (!canToggleMark(editor, type))
+    return false
 
   return editor.chain().focus().toggleMark(type).run()
 }
@@ -107,10 +110,12 @@ export function shouldShowButton(props: {
 }): boolean {
   const { editor, type, hideWhenUnavailable } = props
 
-  if (!editor || !editor.isEditable) return false
-  if (!isMarkInSchema(type, editor)) return false
+  if (!editor || !editor.isEditable)
+    return false
+  if (!isMarkInSchema(type, editor))
+    return false
 
-  if (hideWhenUnavailable && !editor.isActive("code")) {
+  if (hideWhenUnavailable && !editor.isActive('code')) {
     return canToggleMark(editor, type)
   }
 
@@ -175,7 +180,8 @@ export function useMark(config: UseMarkConfig) {
   const isActive = isMarkActive(editor, type)
 
   useEffect(() => {
-    if (!editor) return
+    if (!editor)
+      return
 
     const handleSelectionUpdate = () => {
       setIsVisible(shouldShowButton({ editor, type, hideWhenUnavailable }))
@@ -183,15 +189,16 @@ export function useMark(config: UseMarkConfig) {
 
     handleSelectionUpdate()
 
-    editor.on("selectionUpdate", handleSelectionUpdate)
+    editor.on('selectionUpdate', handleSelectionUpdate)
 
     return () => {
-      editor.off("selectionUpdate", handleSelectionUpdate)
+      editor.off('selectionUpdate', handleSelectionUpdate)
     }
   }, [editor, type, hideWhenUnavailable])
 
   const handleMark = useCallback(() => {
-    if (!editor) return false
+    if (!editor)
+      return false
 
     const success = toggleMark(editor, type)
     if (success) {

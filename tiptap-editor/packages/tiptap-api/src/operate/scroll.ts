@@ -1,6 +1,6 @@
+import type { Node as PMNode } from '@tiptap/pm/model'
 import type { Editor } from '@tiptap/react'
 import { TextSelection } from '@tiptap/pm/state'
-import type { Node as PMNode } from '@tiptap/pm/model'
 
 export interface ScrollToRangeOptions {
   /**
@@ -30,7 +30,7 @@ export interface ScrollToRangeOptions {
 export function scrollToRange(
   editor: Editor | null,
   pos: number,
-  options: ScrollToRangeOptions = {}
+  options: ScrollToRangeOptions = {},
 ): boolean {
   if (!editor || !editor.state || !editor.view) {
     return false
@@ -48,7 +48,7 @@ export function scrollToRange(
 
     pos = Math.max(1, Math.min(pos, doc.content.size))
 
-    // 方法1：使用 ProseMirror 的 scrollIntoView
+    /** 方法1：使用 ProseMirror 的 scrollIntoView */
     if (setSelection) {
       const $pos = doc.resolve(pos)
       const selection = TextSelection.near($pos)
@@ -56,7 +56,7 @@ export function scrollToRange(
       view.dispatch(tr)
     }
 
-    // 方法2：直接操作 DOM（当不需要设置选区时）
+    /** 方法2：直接操作 DOM（当不需要设置选区时） */
     const domAtPos = view.domAtPos(pos)
     if (domAtPos && domAtPos.node) {
       const domNode = domAtPos.node.nodeType === Node.TEXT_NODE
@@ -74,7 +74,8 @@ export function scrollToRange(
     }
 
     return false
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error scrolling to range:', error)
     return false
   }
@@ -92,7 +93,7 @@ export function scrollToRangeSelection(
   editor: Editor | null,
   from: number,
   to: number,
-  options: ScrollToRangeOptions = {}
+  options: ScrollToRangeOptions = {},
 ): boolean {
   if (!editor || !editor.state || !editor.view) {
     return false
@@ -108,7 +109,7 @@ export function scrollToRangeSelection(
     const { state, view } = editor
     const { doc } = state
 
-    // 验证位置是否有效
+    /** 验证位置是否有效 */
     if (from < 0 || to < 0 || from > doc.content.size || to > doc.content.size) {
       console.warn(`Invalid range: [${from}, ${to}]. Document size: ${doc.content.size}`)
       return false
@@ -120,9 +121,10 @@ export function scrollToRangeSelection(
       view.dispatch(tr)
     }
 
-    // 如果不设置选区，滚动到范围的开始位置
+    /** 如果不设置选区，滚动到范围的开始位置 */
     return scrollToRange(editor, from, { behavior, block, setSelection: false })
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error scrolling to range selection:', error)
     return false
   }
@@ -141,7 +143,7 @@ export function scrollToMark(
   editor: Editor | null,
   markId: string,
   markType: 'comment' | (string & {}) = 'comment',
-  options: ScrollToRangeOptions = {}
+  options: ScrollToRangeOptions = {},
 ): boolean {
   if (!editor || !editor.state || !editor.view) {
     return false
@@ -152,17 +154,17 @@ export function scrollToMark(
     const { doc } = state
     let foundPos: number | null = null
 
-    // 遍历文档查找具有指定 markId 的 mark
+    /** 遍历文档查找具有指定 markId 的 mark */
     doc.descendants((node: PMNode, pos: number) => {
       if (foundPos !== null) {
         return false // 已找到，停止遍历
       }
 
-      // 检查节点的 marks
+      /** 检查节点的 marks */
       if (node.marks && node.marks.length > 0) {
         for (const mark of node.marks) {
           if (mark.type.name === markType) {
-            // 检查 mark 的 attributes 中是否有匹配的 id
+            /** 检查 mark 的 attributes 中是否有匹配的 id */
             const markIdAttr = mark.attrs?.id || mark.attrs?.commentId || mark.attrs?.markId || mark.attrs[`${markType}Id`]
             if (markIdAttr === markId) {
               foundPos = pos
@@ -181,7 +183,8 @@ export function scrollToMark(
 
     console.warn(`Mark with id "${markId}" of type "${markType}" not found`)
     return false
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error scrolling to mark:', error)
     return false
   }
@@ -197,8 +200,8 @@ export function scrollToMark(
 function findTextPosition(
   editor: Editor | null,
   searchText: string,
-  caseSensitive: boolean = false
-): { from: number; to: number } | null {
+  caseSensitive: boolean = false,
+): { from: number, to: number } | null {
   if (!editor || !editor.state || !editor.view) {
     return null
   }
@@ -211,8 +214,12 @@ function findTextPosition(
     const { state } = editor
     const { doc } = state
     const fullText = doc.textContent
-    const searchPattern = caseSensitive ? searchText : searchText.toLowerCase()
-    const textToSearch = caseSensitive ? fullText : fullText.toLowerCase()
+    const searchPattern = caseSensitive
+      ? searchText
+      : searchText.toLowerCase()
+    const textToSearch = caseSensitive
+      ? fullText
+      : fullText.toLowerCase()
 
     const index = textToSearch.indexOf(searchPattern)
     if (index === -1) {
@@ -220,7 +227,7 @@ function findTextPosition(
       return null
     }
 
-    // 将文本索引转换为文档位置
+    /** 将文本索引转换为文档位置 */
     let currentTextPos = 0
     let foundFrom: number | null = null
     let foundTo: number | null = null
@@ -231,15 +238,17 @@ function findTextPosition(
       }
 
       if (node.isText && node.text) {
-        const nodeText = caseSensitive ? node.text : node.text.toLowerCase()
+        const nodeText = caseSensitive
+          ? node.text
+          : node.text.toLowerCase()
         const nodeTextLength = nodeText.length
 
-        // 检查文本是否在这个节点中
+        /** 检查文本是否在这个节点中 */
         if (
-          currentTextPos <= index &&
-          index < currentTextPos + nodeTextLength
+          currentTextPos <= index
+          && index < currentTextPos + nodeTextLength
         ) {
-          // 找到了包含目标文本的节点
+          /** 找到了包含目标文本的节点 */
           const offsetInNode = index - currentTextPos
           foundFrom = pos + offsetInNode
           foundTo = pos + offsetInNode + searchText.length
@@ -257,7 +266,8 @@ function findTextPosition(
     }
 
     return null
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error finding text position:', error)
     return null
   }
@@ -276,14 +286,14 @@ export function selectAndScrollToText(
   editor: Editor | null,
   searchText: string,
   options: ScrollToRangeOptions = {},
-  caseSensitive: boolean = false
+  caseSensitive: boolean = false,
 ): boolean {
   const position = findTextPosition(editor, searchText, caseSensitive)
   if (!position) {
     return false
   }
 
-  // 选择文本并滚动
+  /** 选择文本并滚动 */
   return scrollToRangeSelection(editor, position.from, position.to, {
     ...options,
     setSelection: true, // 强制设置选区
@@ -302,14 +312,13 @@ export function scrollToText(
   editor: Editor | null,
   searchText: string,
   options: ScrollToRangeOptions = {},
-  caseSensitive: boolean = false
+  caseSensitive: boolean = false,
 ): boolean {
   const position = findTextPosition(editor, searchText, caseSensitive)
   if (!position) {
     return false
   }
 
-  // 滚动到文本的开始位置
+  /** 滚动到文本的开始位置 */
   return scrollToRange(editor, position.from, options)
 }
-

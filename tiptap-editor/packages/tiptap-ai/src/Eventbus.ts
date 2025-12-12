@@ -176,8 +176,8 @@ type EventType<T> = T extends EventMap ? keyof T : T extends BaseKey ? T : never
 /** 条件类型：根据事件名获取参数类型 */
 type EventParams<T, K extends keyof any> = T extends EventMap
   ? K extends keyof T
-  ? T[K]
-  : any
+    ? T[K]
+    : any
   : any
 
 type BaseKey = keyof any

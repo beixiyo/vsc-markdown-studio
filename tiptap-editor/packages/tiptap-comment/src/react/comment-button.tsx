@@ -1,21 +1,21 @@
-import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 import type React from 'react'
-import { useTiptapEditor } from 'tiptap-react-hook'
-import { Button } from 'tiptap-styles/ui'
+import type { CommentButtonProps } from './comment-button.types'
 import {
-  useFloating,
   autoUpdate,
-  offset,
   flip,
+  offset,
   shift,
   useDismiss,
+  useFloating,
   useInteractions,
-  useMergeRefs
+  useMergeRefs,
 } from '@floating-ui/react'
-import { createComment, canCreateComment } from '../comment'
-import { CommentStore, type CommentAuthor } from '../comment-store'
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
+import { useTiptapEditor } from 'tiptap-react-hook'
+import { Button } from 'tiptap-styles/ui'
+import { canCreateComment, createComment } from '../comment'
+import { type CommentAuthor, CommentStore } from '../comment-store'
 import { CommentMain } from './comment-main'
-import type { CommentButtonProps } from './comment-button.types'
 
 /**
  * 评论创建按钮组件
@@ -31,7 +31,7 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
       children,
       ...buttonProps
     },
-    ref
+    ref,
   ) => {
     const { editor } = useTiptapEditor()
     const [isOpen, setIsOpen] = useState(false)
@@ -39,7 +39,7 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
     const buttonRef = useRef<HTMLButtonElement>(null)
 
     const [tempStore] = useState(
-      () => providedCommentStore || new CommentStore()
+      () => providedCommentStore || new CommentStore(),
     )
     const commentStore = providedCommentStore || tempStore
 
@@ -98,7 +98,8 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
         setContent('')
         setIsOpen(false)
         onOpenChange?.(false)
-      } else {
+      }
+      else {
         console.warn('评论创建失败')
       }
     }, [editor, commentStore, content, author, onCommentCreated, onOpenChange])
@@ -112,7 +113,8 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
-        if (event.defaultPrevented) return
+        if (event.defaultPrevented)
+          return
 
         if (!editor) {
           console.warn('编辑器未初始化')
@@ -128,7 +130,7 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
         setIsOpen(newIsOpen)
         onOpenChange?.(newIsOpen)
       },
-      [onClick, editor, isOpen, onOpenChange]
+      [onClick, editor, isOpen, onOpenChange],
     )
 
     useEffect(() => {
@@ -140,7 +142,9 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
       }
     }, [isOpen, editor, onOpenChange])
 
-    const canCreate = editor ? canCreateComment(editor) : false
+    const canCreate = editor
+      ? canCreateComment(editor)
+      : false
     const mergedRef = useMergeRefs([ref, buttonRef, refs.setReference])
 
     return (
@@ -155,7 +159,9 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
           onClick={ handleClick }
           disabled={ !canCreate }
           data-disabled={ !canCreate }
-          data-active-state={ isOpen ? 'on' : 'off' }
+          data-active-state={ isOpen
+            ? 'on'
+            : 'off' }
           { ...buttonProps }
           { ...getReferenceProps() }
           ref={ mergedRef }
@@ -180,8 +186,7 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
         ) }
       </>
     )
-  }
+  },
 )
 
 CommentButton.displayName = 'CommentButton'
-

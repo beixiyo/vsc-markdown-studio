@@ -33,6 +33,7 @@
     "@tiptap/markdown": "^3.13.0"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "lint": "eslint ./src --fix"
   }
 }

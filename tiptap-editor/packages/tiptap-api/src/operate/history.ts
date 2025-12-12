@@ -4,11 +4,13 @@ import type { Editor } from '@tiptap/core'
  * 撤销
  */
 export function undo(editor: Editor | null): boolean {
-  if (!editor) return false
+  if (!editor)
+    return false
 
   try {
     const chain = editor?.chain?.()
-    if (!chain) return false
+    if (!chain)
+      return false
     chain.focus()
     return chain.undo?.().run?.() ?? false
   }
@@ -22,11 +24,13 @@ export function undo(editor: Editor | null): boolean {
  * 重做
  */
 export function redo(editor: Editor | null): boolean {
-  if (!editor) return false
+  if (!editor)
+    return false
 
   try {
     const chain = editor?.chain?.()
-    if (!chain) return false
+    if (!chain)
+      return false
     chain.focus()
     return chain.redo?.().run?.() ?? false
   }
@@ -35,5 +39,3 @@ export function redo(editor: Editor | null): boolean {
     return false
   }
 }
-
-

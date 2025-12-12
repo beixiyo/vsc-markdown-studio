@@ -6,14 +6,16 @@ import type { Editor } from '@tiptap/core'
  * @param text 要插入的文本
  */
 export function insertText(editor: Editor | null, text: string): boolean {
-  if (!editor) return false
-  if (!text) return true
+  if (!editor)
+    return false
+  if (!text)
+    return true
 
   try {
     return editor.chain().focus().insertContent(text).run()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('插入文本失败:', error)
     return false
   }
 }
-

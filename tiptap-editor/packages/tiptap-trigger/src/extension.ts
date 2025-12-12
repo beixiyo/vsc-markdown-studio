@@ -1,6 +1,6 @@
-import { Extension } from '@tiptap/core'
 import type { Editor } from '@tiptap/core'
 import type { SuggestionPluginAPI, SuggestionTriggerOptions } from './types'
+import { Extension } from '@tiptap/core'
 import { ERROR_EXTENSION_API_NOT_AVAILABLE, ERROR_EXTENSION_NOT_MOUNTED, TRIGGER_EXTENSION_NAME } from './constans'
 import { createSuggestionPlugin } from './createSuggestionPlugin'
 
@@ -11,11 +11,11 @@ export const SuggestionTrigger = {
       name: TRIGGER_EXTENSION_NAME,
 
       addOptions: () => ({
-        triggers: []
+        triggers: [],
       }),
       addStorage: () => ({
         suggestionPluginKey: key,
-        getSuggestionAPI: getAPI
+        getSuggestionAPI: getAPI,
       }),
       addProseMirrorPlugins: () => [plugin],
 
@@ -83,7 +83,7 @@ export const SuggestionTrigger = {
         }
       },
     })
-  }
+  },
 }
 
 /**
@@ -91,7 +91,7 @@ export const SuggestionTrigger = {
  */
 export function getSuggestionPluginAPI(editor: Editor): SuggestionPluginAPI {
   const extension = editor.extensionManager.extensions.find(
-    (item) => item.name === TRIGGER_EXTENSION_NAME
+    item => item.name === TRIGGER_EXTENSION_NAME,
   ) as { storage?: Record<string, unknown> } | undefined
 
   if (!extension || !extension.storage) {
@@ -106,7 +106,6 @@ export function getSuggestionPluginAPI(editor: Editor): SuggestionPluginAPI {
 
   return getAPI()
 }
-
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {

@@ -8,9 +8,9 @@
  * @see plan/comment-system-architecture.md 了解架构详情
  */
 
-import type { Editor } from '@tiptap/react'
 import type { JSONContent } from '@tiptap/core'
-import { CommentStore, type Comment } from './comment-store'
+import type { Editor } from '@tiptap/react'
+import type { Comment, CommentStore } from './comment-store'
 import { syncCommentRanges } from './comment-sync'
 
 /**
@@ -48,16 +48,16 @@ export interface DocumentWithComments {
  */
 export function exportDocumentWithComments(
   editor: Editor | null,
-  commentStore: CommentStore
+  commentStore: CommentStore,
 ): DocumentWithComments {
   if (!editor) {
     throw new Error('编辑器实例不能为空')
   }
 
-  // 导出文档（自动包含 comment mark）
+  /** 导出文档（自动包含 comment mark） */
   const doc = editor.getJSON()
 
-  // 导出评论数据
+  /** 导出评论数据 */
   const comments = commentStore.getAllComments()
 
   return {
@@ -98,13 +98,13 @@ export function importDocumentWithComments(
   options?: {
     /** 是否立即触发 Plugin 重新扫描（默认：true） */
     triggerRescan?: boolean
-  }
+  },
 ): void {
   if (!editor) {
     throw new Error('编辑器实例不能为空')
   }
 
-  // 验证 JSON 结构
+  /** 验证 JSON 结构 */
   if (!json.doc || !Array.isArray(json.comments)) {
     throw new Error('无效的 JSON 格式：缺少 doc 或 comments 字段')
   }
@@ -116,15 +116,17 @@ export function importDocumentWithComments(
   commentStore.fromJSON(json.comments)
 
   // 3. 触发 Plugin 重新扫描评论范围
-  // 由于 setContent 会触发事务，Plugin 的 state.apply() 会自动重新扫描
-  // 但为了确保立即更新，我们可以手动触发一个空事务
+  /**
+   * 由于 setContent 会触发事务，Plugin 的 state.apply() 会自动重新扫描
+   * 但为了确保立即更新，我们可以手动触发一个空事务
+   */
   if (options?.triggerRescan !== false) {
-    // 触发一个空事务，确保 Plugin 立即重新扫描
+    /** 触发一个空事务，确保 Plugin 立即重新扫描 */
     const { tr } = editor.state
     editor.view.dispatch(tr)
 
     // 4. 同步评论范围与 Store 状态（检测边界情况）
-    // 检测并清理孤立的评论 mark，检测被删除的评论状态
+    /** 检测并清理孤立的评论 mark，检测被删除的评论状态 */
     syncCommentRanges(editor, commentStore)
   }
 }
@@ -148,7 +150,7 @@ export function importDocumentWithComments(
 export function exportDocumentWithCommentsAsString(
   editor: Editor | null,
   commentStore: CommentStore,
-  indent: number = 2
+  indent: number = 2,
 ): string {
   const json = exportDocumentWithComments(editor, commentStore)
   return JSON.stringify(json, null, indent)
@@ -177,18 +179,20 @@ export function importDocumentWithCommentsFromString(
   options?: {
     /** 是否立即触发 Plugin 重新扫描（默认：true） */
     triggerRescan?: boolean
-  }
+  },
 ): void {
   let json: DocumentWithComments
 
   try {
     json = JSON.parse(jsonString) as DocumentWithComments
-  } catch (error) {
+  }
+  catch (error) {
     throw new Error(
-      `无效的 JSON 格式: ${error instanceof Error ? error.message : String(error)}`
+      `无效的 JSON 格式: ${error instanceof Error
+        ? error.message
+        : String(error)}`,
     )
   }
 
   importDocumentWithComments(editor, commentStore, json, options)
 }
-

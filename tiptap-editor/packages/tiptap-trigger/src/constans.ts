@@ -1,5 +1,5 @@
-import { PluginKey } from '@tiptap/pm/state'
 import type { SuggestionState } from './types'
+import { PluginKey } from '@tiptap/pm/state'
 
 export const TRIGGER_EXTENSION_NAME = 'suggestionTrigger'
 export const TRIGGER_PLUGIN_KEY = new PluginKey<SuggestionState>(TRIGGER_EXTENSION_NAME)

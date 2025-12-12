@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useRef } from 'react'
 import type { KeyboardEvent } from 'react'
+import type { SuggestionItem } from '../../types'
 import {
-  FloatingPortal,
   autoUpdate,
   flip,
+  FloatingPortal,
   offset,
   shift,
   useDismiss,
   useFloating,
   useInteractions,
 } from '@floating-ui/react'
-import type { SuggestionItem } from '../../types'
+import { useEffect, useMemo, useRef } from 'react'
 
 export type SuggestionMenuProps = {
   open: boolean
@@ -114,15 +114,17 @@ export function SuggestionMenu({
 
     if (event.key === 'ArrowDown') {
       event.preventDefault()
-      const next = items.length === 0 ? 0 : (activeIndex + 1) % items.length
+      const next = items.length === 0
+        ? 0
+        : (activeIndex + 1) % items.length
       onActiveIndexChange(next)
       return
     }
 
     if (event.key === 'ArrowUp') {
       event.preventDefault()
-      const next =
-        items.length === 0
+      const next
+        = items.length === 0
           ? 0
           : (activeIndex - 1 + items.length) % items.length
       onActiveIndexChange(next)
@@ -156,7 +158,7 @@ export function SuggestionMenu({
         className="min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-[var(--tt-radius-md)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] text-[var(--tt-gray-light-900)] shadow-[var(--tt-shadow-elevated-md)] outline-none dark:text-[var(--tt-gray-dark-900)]"
         tabIndex={ -1 }
         onMouseDownCapture={ (event) => {
-          // 保持编辑器焦点，避免 focusout 立刻关闭菜单导致点击失效
+          /** 保持编辑器焦点，避免 focusout 立刻关闭菜单导致点击失效 */
           event.preventDefault()
           event.stopPropagation()
         } }
@@ -177,7 +179,9 @@ export function SuggestionMenu({
 
         { !loading && !error && items.length === 0 && (
           <div className="px-3 py-2 text-sm text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
-            { query ? '无匹配项' : '无可用项' }
+            { query
+              ? '无匹配项'
+              : '无可用项' }
           </div>
         ) }
 
@@ -207,11 +211,13 @@ export function SuggestionMenu({
                     <span className="text-sm font-medium text-[var(--tt-gray-light-900)] dark:text-[var(--tt-gray-dark-900)]">
                       { item.title }
                     </span>
-                    { item.subtitle ? (
-                      <span className="text-xs text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
-                        { item.subtitle }
-                      </span>
-                    ) : null }
+                    { item.subtitle
+                      ? (
+                          <span className="text-xs text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
+                            { item.subtitle }
+                          </span>
+                        )
+                      : null }
                   </div>
                 </button>
               )

@@ -1,5 +1,5 @@
-import { memo, useCallback } from 'react'
 import type { Editor } from '@tiptap/core'
+import { memo, useCallback } from 'react'
 import { scrollToRange } from 'tiptap-api'
 import { useMarkdownOutline } from 'tiptap-api/react'
 
@@ -11,7 +11,8 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
   const { outline } = useMarkdownOutline(editor)
 
   const handleJump = useCallback((position: number) => {
-    if (!editor) return
+    if (!editor)
+      return
     scrollToRange(editor, position, {
       behavior: 'smooth',
       block: 'center',
@@ -27,7 +28,10 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
           onClick={ () => handleJump(item.position) }
         >
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[var(--tt-gray-dark-400)]">H{ item.level }</span>
+            <span className="text-xs text-[var(--tt-gray-dark-400)]">
+              H
+              { item.level }
+            </span>
             <span className="truncate">{ item.text }</span>
           </div>
         </div>
@@ -58,4 +62,3 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
 })
 
 OutlinePanel.displayName = 'OutlinePanel'
-

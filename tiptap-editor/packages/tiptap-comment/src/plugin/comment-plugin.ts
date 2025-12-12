@@ -1,7 +1,7 @@
-import { Plugin, PluginKey } from '@tiptap/pm/state'
-import type { EditorState } from '@tiptap/pm/state'
-import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import type { Node } from '@tiptap/pm/model'
+import type { EditorState } from '@tiptap/pm/state'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
+import { Decoration, DecorationSet } from '@tiptap/pm/view'
 
 /**
  * 评论范围信息
@@ -57,10 +57,10 @@ export function createCommentPlugin(): Plugin<CommentPluginState> {
        * @returns 初始状态
        */
       init(_, instance): CommentPluginState {
-        // 扫描文档，查找所有 comment mark
+        /** 扫描文档，查找所有 comment mark */
         const ranges = scanCommentRanges(instance.doc)
 
-        // 计算装饰
+        /** 计算装饰 */
         const decorations = computeDecorations(instance.doc, ranges)
 
         return {
@@ -79,20 +79,26 @@ export function createCommentPlugin(): Plugin<CommentPluginState> {
        * @returns 新状态
        */
       apply(tr, _oldState): CommentPluginState {
-        // 重新扫描文档，获取实际存在的 comment mark
-        // 这可以捕获通过事务添加的新 mark，以及检测被删除的 mark
+        /**
+         * 重新扫描文档，获取实际存在的 comment mark
+         * 这可以捕获通过事务添加的新 mark，以及检测被删除的 mark
+         */
         const scannedRanges = scanCommentRanges(tr.doc)
 
-        // 使用扫描结果作为最终的范围（因为它反映了文档的当前状态）
-        // 这样可以确保删除评论时，对应的范围也会被正确移除
-        // 注意：扫描结果已经包含了所有实际存在的 mark，包括新增的和位置更新的
+        /**
+         * 使用扫描结果作为最终的范围（因为它反映了文档的当前状态）
+         * 这样可以确保删除评论时，对应的范围也会被正确移除
+         * 注意：扫描结果已经包含了所有实际存在的 mark，包括新增的和位置更新的
+         */
         const finalRanges = new Map<string, CommentRange>()
         for (const [commentId, scannedRange] of scannedRanges) {
           finalRanges.set(commentId, scannedRange)
         }
 
-        // 基于 finalRanges 重新构建 decorations，确保 decorations 与 ranges 完全一致
-        // 这样可以确保删除评论时，对应的 decorations 也会被正确清理
+        /**
+         * 基于 finalRanges 重新构建 decorations，确保 decorations 与 ranges 完全一致
+         * 这样可以确保删除评论时，对应的 decorations 也会被正确清理
+         */
         const decorations = computeDecorations(tr.doc, finalRanges)
 
         return {
@@ -124,17 +130,17 @@ export function createCommentPlugin(): Plugin<CommentPluginState> {
 function scanCommentRanges(doc: Node): Map<string, CommentRange> {
   const ranges = new Map<string, CommentRange>()
 
-  // 遍历文档的所有节点
+  /** 遍历文档的所有节点 */
   doc.descendants((node, pos) => {
-    // 只处理文本节点
+    /** 只处理文本节点 */
     if (!node.isText) {
       return true
     }
 
-    // 检查节点的 marks
+    /** 检查节点的 marks */
     if (node.marks && node.marks.length > 0) {
       for (const mark of node.marks) {
-        // 查找 comment mark
+        /** 查找 comment mark */
         if (mark.type.name === 'comment') {
           const commentId = mark.attrs?.commentId
 
@@ -142,23 +148,24 @@ function scanCommentRanges(doc: Node): Map<string, CommentRange> {
             const from = pos
             const to = pos + node.nodeSize
 
-            // 如果已存在该 commentId 的范围，尝试合并或更新
+            /** 如果已存在该 commentId 的范围，尝试合并或更新 */
             const existingRange = ranges.get(commentId)
 
             if (existingRange) {
-              // 如果新范围与现有范围相邻或重叠，合并它们
+              /** 如果新范围与现有范围相邻或重叠，合并它们 */
               if (
-                (from >= existingRange.from && from <= existingRange.to) ||
-                (to >= existingRange.from && to <= existingRange.to) ||
-                (from <= existingRange.to && to >= existingRange.from)
+                (from >= existingRange.from && from <= existingRange.to)
+                || (to >= existingRange.from && to <= existingRange.to)
+                || (from <= existingRange.to && to >= existingRange.from)
               ) {
                 ranges.set(commentId, {
                   commentId,
                   from: Math.min(existingRange.from, from),
                   to: Math.max(existingRange.to, to),
                 })
-              } else {
-                // 如果范围不重叠，保留较大的范围（或可以根据需求选择其他策略）
+              }
+              else {
+                /** 如果范围不重叠，保留较大的范围（或可以根据需求选择其他策略） */
                 const existingSize = existingRange.to - existingRange.from
                 const newSize = to - from
 
@@ -170,8 +177,9 @@ function scanCommentRanges(doc: Node): Map<string, CommentRange> {
                   })
                 }
               }
-            } else {
-              // 新范围，直接添加
+            }
+            else {
+              /** 新范围，直接添加 */
               ranges.set(commentId, {
                 commentId,
                 from,
@@ -197,22 +205,22 @@ function scanCommentRanges(doc: Node): Map<string, CommentRange> {
  */
 function computeDecorations(
   doc: Node,
-  ranges: Map<string, CommentRange>
+  ranges: Map<string, CommentRange>,
 ): DecorationSet {
   const decorations: Decoration[] = []
 
   for (const [commentId, range] of ranges) {
-    // 验证范围有效性
+    /** 验证范围有效性 */
     if (range.from >= range.to || range.from < 0 || range.to > doc.content.size) {
       continue
     }
 
-    // 创建内联装饰，用于高亮显示评论区域
+    /** 创建内联装饰，用于高亮显示评论区域 */
     const decoration = Decoration.inline(range.from, range.to, {
-      class:
-        'comment-highlight bg-[var(--tt-color-highlight-yellow)] border-b-2 border-b-[var(--tt-color-highlight-yellow-contrast)] ' +
-        'px-[2px] rounded-[var(--tt-radius-xxs)] cursor-pointer transition-[background-color,border-bottom-color] ' +
-        'duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)]',
+      'class':
+        'comment-highlight bg-[var(--tt-color-highlight-yellow)] border-b-2 border-b-[var(--tt-color-highlight-yellow-contrast)] '
+        + 'px-[2px] rounded-[var(--tt-radius-xxs)] cursor-pointer transition-[background-color,border-bottom-color] '
+        + 'duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)]',
       'data-comment-id': commentId,
     })
 
@@ -221,4 +229,3 @@ function computeDecorations(
 
   return DecorationSet.create(doc, decorations)
 }
-

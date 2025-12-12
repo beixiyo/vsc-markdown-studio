@@ -1,12 +1,9 @@
-import { memo, useState, useCallback } from 'react'
 import type React from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from 'tiptap-styles/ui'
-import { Input } from 'tiptap-styles/ui'
-import { Button } from 'tiptap-styles/ui'
-import { SparklesIcon } from 'tiptap-styles/icons'
-import { CornerDownLeftIcon } from 'tiptap-styles/icons'
-import { cn } from 'tiptap-styles/utils'
+import { memo, useCallback, useState } from 'react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-config'
+import { CornerDownLeftIcon, SparklesIcon } from 'tiptap-styles/icons'
+import { Button, Input, Popover, PopoverContent, PopoverTrigger } from 'tiptap-styles/ui'
+import { cn } from 'tiptap-styles/utils'
 
 /**
  * AI 输入弹窗属性
@@ -40,7 +37,9 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
     const [prompt, setPrompt] = useState('')
 
     const isControlled = controlledOpen !== undefined
-    const open = isControlled ? controlledOpen : internalOpen
+    const open = isControlled
+      ? controlledOpen
+      : internalOpen
 
     const handleOpenChange = useCallback(
       (newOpen: boolean) => {
@@ -52,11 +51,12 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
           setPrompt('')
         }
       },
-      [isControlled, onOpenChange]
+      [isControlled, onOpenChange],
     )
 
     const handleSubmit = useCallback(() => {
-      if (!prompt.trim() || disabled) return
+      if (!prompt.trim() || disabled)
+        return
       onSubmit?.(prompt.trim())
       setPrompt('')
       handleOpenChange(false)
@@ -73,27 +73,28 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault()
           handleSubmit()
-        } else if (e.key === 'Escape') {
+        }
+        else if (e.key === 'Escape') {
           e.preventDefault()
           handleCancel()
         }
       },
-      [handleSubmit, handleCancel]
+      [handleSubmit, handleCancel],
     )
 
     return (
-      <Popover open={open} onOpenChange={handleOpenChange}>
+      <Popover open={ open } onOpenChange={ handleOpenChange }>
         <PopoverTrigger asChild>{children}</PopoverTrigger>
         <PopoverContent
           align="start"
           side="top"
-          sideOffset={8}
-          className={cn(
+          sideOffset={ 8 }
+          className={ cn(
             'w-80 rounded-[var(--tt-radius-lg)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-0 shadow-[var(--tt-shadow-elevated-md)] backdrop-blur-[12px]',
-            className
-          )}
-          onOpenAutoFocus={(e) => e.preventDefault()}
-          {...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' }}
+            className,
+          ) }
+          onOpenAutoFocus={ e => e.preventDefault() }
+          { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
         >
           <div className="flex flex-col gap-3 p-3">
             <div className="flex items-center gap-2">
@@ -104,11 +105,11 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
             </div>
             <Input
               className="min-h-10 w-full rounded-[var(--tt-radius-md)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] px-3 py-2.5 text-sm text-[var(--tt-color-text-gray)] transition-[border-color,box-shadow] duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)] placeholder:text-[var(--tiptap-input-placeholder)] focus:border-[var(--tt-brand-color-500)] focus:shadow-[0_0_0_3px_var(--tt-selection-color)] focus:outline-none"
-              placeholder={placeholder}
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={disabled}
+              placeholder={ placeholder }
+              value={ prompt }
+              onChange={ e => setPrompt(e.target.value) }
+              onKeyDown={ handleKeyDown }
+              disabled={ disabled }
               autoFocus
             />
             <div className="flex items-center justify-between gap-3">
@@ -118,19 +119,19 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
               <div className="flex items-center gap-2">
                 <Button
                   type="button"
-                  onClick={handleCancel}
+                  onClick={ handleCancel }
                   data-style="ghost"
                   data-size="small"
-                  disabled={disabled}
+                  disabled={ disabled }
                 >
                   取消
                 </Button>
                 <Button
                   type="button"
-                  onClick={handleSubmit}
+                  onClick={ handleSubmit }
                   data-style="default"
                   data-size="small"
-                  disabled={!prompt.trim() || disabled}
+                  disabled={ !prompt.trim() || disabled }
                 >
                   <CornerDownLeftIcon className="tiptap-button-icon" />
                   提交
@@ -141,8 +142,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
         </PopoverContent>
       </Popover>
     )
-  }
+  },
 )
 
 AIInputPopover.displayName = 'AIInputPopover'
-

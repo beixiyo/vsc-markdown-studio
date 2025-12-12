@@ -1,29 +1,28 @@
-import { forwardRef, useCallback } from "react"
-
-// --- Lib ---
-import { parseShortcutKeys } from "tiptap-styles/utils"
-
-// --- Hooks ---
-import { useTiptapEditor } from "tiptap-react-hook"
+// --- UI Primitives ---
+import type { ButtonProps } from 'tiptap-styles/ui'
 
 // --- Tiptap UI ---
-import type { UseImageUploadConfig } from "@/components/tiptap-ui/image-upload-button"
+import type { UseImageUploadConfig } from '@/components/tiptap-ui/image-upload-button'
+
+import { forwardRef, useCallback } from 'react'
+
+// --- Hooks ---
+import { useTiptapEditor } from 'tiptap-react-hook'
+import { Badge, Button } from 'tiptap-styles/ui'
+
+// --- Lib ---
+import { parseShortcutKeys } from 'tiptap-styles/utils'
 import {
   IMAGE_UPLOAD_SHORTCUT_KEY,
   useImageUpload,
-} from "@/components/tiptap-ui/image-upload-button"
-
-// --- UI Primitives ---
-import type { ButtonProps } from "tiptap-styles/ui"
-import { Button } from "tiptap-styles/ui"
-import { Badge } from "tiptap-styles/ui"
+} from '@/components/tiptap-ui/image-upload-button'
 
 type IconProps = React.SVGProps<SVGSVGElement>
 type IconComponent = ({ className, ...props }: IconProps) => React.ReactElement
 
 export interface ImageUploadButtonProps
-  extends Omit<ButtonProps, "type">,
-    UseImageUploadConfig {
+  extends Omit<ButtonProps, 'type'>,
+  UseImageUploadConfig {
   /**
    * Optional text to display alongside the icon.
    */
@@ -68,7 +67,7 @@ export const ImageUploadButton = forwardRef<
       children,
       ...buttonProps
     },
-    ref
+    ref,
   ) => {
     const { editor } = useTiptapEditor(providedEditor)
     const {
@@ -88,10 +87,11 @@ export const ImageUploadButton = forwardRef<
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
-        if (event.defaultPrevented) return
+        if (event.defaultPrevented)
+          return
         handleImage()
       },
-      [handleImage, onClick]
+      [handleImage, onClick],
     )
 
     if (!isVisible) {
@@ -104,28 +104,30 @@ export const ImageUploadButton = forwardRef<
       <Button
         type="button"
         data-style="ghost"
-        data-active-state={isActive ? "on" : "off"}
+        data-active-state={ isActive
+          ? 'on'
+          : 'off' }
         role="button"
-        tabIndex={-1}
-        disabled={!canInsert}
-        data-disabled={!canInsert}
-        aria-label={label}
-        aria-pressed={isActive}
-        tooltip={label}
-        onClick={handleClick}
-        {...buttonProps}
-        ref={ref}
+        tabIndex={ -1 }
+        disabled={ !canInsert }
+        data-disabled={ !canInsert }
+        aria-label={ label }
+        aria-pressed={ isActive }
+        tooltip={ label }
+        onClick={ handleClick }
+        { ...buttonProps }
+        ref={ ref }
       >
         {children ?? (
           <>
             <RenderIcon className="tiptap-button-icon" />
             {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && <ImageShortcutBadge shortcutKeys={shortcutKeys} />}
+            {showShortcut && <ImageShortcutBadge shortcutKeys={ shortcutKeys } />}
           </>
         )}
       </Button>
     )
-  }
+  },
 )
 
-ImageUploadButton.displayName = "ImageUploadButton"
+ImageUploadButton.displayName = 'ImageUploadButton'

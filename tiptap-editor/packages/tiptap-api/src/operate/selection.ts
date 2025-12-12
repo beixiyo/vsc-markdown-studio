@@ -12,12 +12,12 @@ export function getSelectedText(editor: Editor | null): string {
 
   const { from, to } = editor.state.selection
 
-  // 如果没有选中内容（光标位置），返回空字符串
+  /** 如果没有选中内容（光标位置），返回空字符串 */
   if (from === to) {
     return ''
   }
 
-  // 使用 textBetween 提取文本，'\n' 是块级元素之间的分隔符
+  /** 使用 textBetween 提取文本，'\n' 是块级元素之间的分隔符 */
   return editor.state.doc.textBetween(from, to, '\n')
 }
 
@@ -39,9 +39,10 @@ export function hasSelectedText(editor: Editor | null): boolean {
  * 获取当前选区范围
  */
 export function getSelectionRange(
-  editor: Editor | null
-): { from: number; to: number } | null {
-  if (!editor || !editor.state.selection) return null
+  editor: Editor | null,
+): { from: number, to: number } | null {
+  if (!editor || !editor.state.selection)
+    return null
 
   const { from, to } = editor.state.selection
   return { from, to }
@@ -56,17 +57,18 @@ export function getSelectionRange(
 export function setSelectionRange(
   editor: Editor | null,
   from: number,
-  to: number
+  to: number,
 ): boolean {
-  if (!editor) return false
-  if (from < 0 || to < 0) return false
+  if (!editor)
+    return false
+  if (from < 0 || to < 0)
+    return false
 
   try {
     return editor.chain().focus().setTextSelection({ from, to }).run()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('设置选区失败:', error)
     return false
   }
 }
-
-

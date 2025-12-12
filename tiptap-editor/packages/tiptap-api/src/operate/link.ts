@@ -9,14 +9,17 @@ import type { Editor } from '@tiptap/core'
 export function createLink(
   editor: Editor | null,
   url: string,
-  text?: string
+  text?: string,
 ): boolean {
-  if (!editor) return false
-  if (!url) return false
+  if (!editor)
+    return false
+  if (!url)
+    return false
 
   try {
     const chain = (editor as any)?.chain?.()
-    if (!chain) return false
+    if (!chain)
+      return false
 
     chain.focus().extendMarkRange('link')
     chain.setLink({ href: url })
@@ -26,7 +29,8 @@ export function createLink(
     }
 
     return chain.run()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('创建链接失败:', error)
     return false
   }
@@ -36,7 +40,8 @@ export function createLink(
  * 获取当前选中的链接地址
  */
 export function getSelectedLinkUrl(editor: Editor | null): string | null {
-  if (!editor) return null
+  if (!editor)
+    return null
 
   try {
     const attrs = (editor as any)?.getAttributes?.('link')
@@ -44,10 +49,9 @@ export function getSelectedLinkUrl(editor: Editor | null): string | null {
       return String(attrs.href)
     }
     return null
-  } catch (error) {
+  }
+  catch (error) {
     console.error('获取链接地址失败:', error)
     return null
   }
 }
-
-

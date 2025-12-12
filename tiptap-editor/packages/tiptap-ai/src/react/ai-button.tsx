@@ -1,13 +1,13 @@
-import { forwardRef, memo, useCallback, useState } from 'react'
 import type React from 'react'
-import { useTiptapEditor } from 'tiptap-react-hook'
-import { Button } from 'tiptap-styles/ui'
-import { SparklesIcon } from 'tiptap-styles/icons'
-import { AIInputPopover } from './ai-input-popover'
-import { useAI } from './hooks/use-ai'
 import type { AIOrchestrator } from '../AIOrchestrator'
 import type { PreviewController } from '../PreviewController'
 import type { AIRequestMode } from '../types'
+import { forwardRef, memo, useCallback, useState } from 'react'
+import { useTiptapEditor } from 'tiptap-react-hook'
+import { SparklesIcon } from 'tiptap-styles/icons'
+import { Button } from 'tiptap-styles/ui'
+import { AIInputPopover } from './ai-input-popover'
+import { useAI } from './hooks/use-ai'
 
 /**
  * AI 按钮组件的属性
@@ -40,7 +40,7 @@ export const AIButton = memo(
         children,
         ...buttonProps
       },
-      ref
+      ref,
     ) => {
       const { editor } = useTiptapEditor(providedEditor)
       void _orchestrator
@@ -56,16 +56,17 @@ export const AIButton = memo(
         (prompt: string) => {
           handleTrigger(prompt)
         },
-        [handleTrigger]
+        [handleTrigger],
       )
 
       const handleButtonClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
           onClick?.(event)
-          if (event.defaultPrevented) return
+          if (event.defaultPrevented)
+            return
           setPopoverOpen(true)
         },
-        [onClick]
+        [onClick],
       )
 
       if (hideWhenUnavailable && !canTrigger) {
@@ -74,24 +75,26 @@ export const AIButton = memo(
 
       return (
         <AIInputPopover
-          open={popoverOpen}
-          onOpenChange={setPopoverOpen}
-          onSubmit={handlePopoverSubmit}
-          disabled={!canTrigger || isProcessing}
+          open={ popoverOpen }
+          onOpenChange={ setPopoverOpen }
+          onSubmit={ handlePopoverSubmit }
+          disabled={ !canTrigger || isProcessing }
         >
           <Button
             type="button"
             data-style="ghost"
-            data-active-state={isProcessing ? 'on' : 'off'}
-            disabled={!canTrigger || isProcessing}
-            data-disabled={!canTrigger || isProcessing}
+            data-active-state={ isProcessing
+              ? 'on'
+              : 'off' }
+            disabled={ !canTrigger || isProcessing }
+            data-disabled={ !canTrigger || isProcessing }
             role="button"
-            tabIndex={-1}
-            aria-label={label}
-            tooltip={label}
-            onClick={handleButtonClick}
-            {...buttonProps}
-            ref={ref}
+            tabIndex={ -1 }
+            aria-label={ label }
+            tooltip={ label }
+            onClick={ handleButtonClick }
+            { ...buttonProps }
+            ref={ ref }
           >
             {children ?? (
               <>
@@ -102,9 +105,8 @@ export const AIButton = memo(
           </Button>
         </AIInputPopover>
       )
-    }
-  )
+    },
+  ),
 )
 
 AIButton.displayName = 'AIButton'
-

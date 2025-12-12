@@ -1,9 +1,8 @@
-import { memo, useEffect, useState } from 'react'
-import { Button } from 'tiptap-styles/ui'
-import { CheckIcon } from 'tiptap-styles/icons'
-import { XIcon } from 'tiptap-styles/icons'
 import type { PreviewController } from '../PreviewController'
 import type { PreviewStatus } from '../PreviewStateMachine'
+import { memo, useEffect, useState } from 'react'
+import { CheckIcon, XIcon } from 'tiptap-styles/icons'
+import { Button } from 'tiptap-styles/ui'
 import { cn } from 'tiptap-styles/utils'
 
 /**
@@ -24,7 +23,8 @@ export const AIActionPanel = memo<AIActionPanelProps>(
     const [previewText, setPreviewText] = useState<string>('')
 
     useEffect(() => {
-      if (!controller) return
+      if (!controller)
+        return
 
       const unsubscribe = controller.subscribe((state) => {
         setStatus(state.status)
@@ -40,11 +40,11 @@ export const AIActionPanel = memo<AIActionPanelProps>(
     }, [controller])
 
     if (
-      status === 'idle' ||
-      status === 'error' ||
-      status === 'accepted' ||
-      status === 'rejected' ||
-      status === 'cancelled'
+      status === 'idle'
+      || status === 'error'
+      || status === 'accepted'
+      || status === 'rejected'
+      || status === 'cancelled'
     ) {
       return null
     }
@@ -63,7 +63,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
       <div
         className={ cn(
           'flex min-w-[12rem] items-center gap-2 rounded-[var(--tt-radius-lg)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] px-3 py-2 text-[var(--tt-gray-light-800)] shadow-[var(--tt-shadow-elevated-md)] dark:bg-[var(--tt-gray-dark-50)] dark:text-[var(--tt-gray-dark-900)]',
-          className
+          className,
         ) }
       >
         { status === 'processing' && (
@@ -110,8 +110,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
         ) }
       </div>
     )
-  }
+  },
 )
 
 AIActionPanel.displayName = 'AIActionPanel'
-

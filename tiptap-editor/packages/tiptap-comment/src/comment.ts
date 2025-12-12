@@ -8,9 +8,9 @@
  */
 
 import type { Editor } from '@tiptap/react'
-import { CommentStore, type Comment, type CommentAuthor } from './comment-store'
-import { commentPluginKey, type CommentRange } from './plugin'
+import type { Comment, CommentAuthor, CommentStore } from './comment-store'
 import { hasSelectedText } from 'tiptap-api'
+import { commentPluginKey, type CommentRange } from './plugin'
 
 /**
  * 创建评论的参数接口
@@ -64,28 +64,28 @@ export interface UpdateCommentParams {
 export function createComment(
   editor: Editor | null,
   commentStore: CommentStore,
-  params: CreateCommentParams
+  params: CreateCommentParams,
 ): Comment | null {
   if (!editor || !editor.isEditable) {
     return null
   }
 
-  // 获取选中范围
+  /** 获取选中范围 */
   const { from, to } = editor.state.selection
   const selectedFrom = params.from ?? from
   const selectedTo = params.to ?? to
 
-  // 验证选中范围
+  /** 验证选中范围 */
   if (selectedFrom === selectedTo) {
     console.warn('创建评论失败：未选中文本')
     return null
   }
 
-  // 生成 commentId
+  /** 生成 commentId */
   const commentId = `comment-${crypto.randomUUID()}`
 
   try {
-    // 在文档选中范围添加 comment mark
+    /** 在文档选中范围添加 comment mark */
     const success = editor
       .chain()
       .focus()
@@ -98,7 +98,7 @@ export function createComment(
       return null
     }
 
-    // 创建 Comment 实体
+    /** 创建 Comment 实体 */
     const now = Date.now()
     const comment: Comment = {
       id: commentId,
@@ -110,14 +110,15 @@ export function createComment(
       tags: params.tags,
     }
 
-    // 存储到 Store
+    /** 存储到 Store */
     commentStore.addComment(comment)
 
     // Plugin state 的 ranges 会自动更新（通过 Plugin 的 apply 方法）
-    // 因为我们已经通过 transaction 添加了 mark，Plugin 会在下次 apply 时检测到
+    /** 因为我们已经通过 transaction 添加了 mark，Plugin 会在下次 apply 时检测到 */
 
     return comment
-  } catch (error) {
+  }
+  catch (error) {
     console.error('创建评论失败:', error)
     return null
   }
@@ -144,22 +145,22 @@ export function createComment(
 export function deleteComment(
   editor: Editor | null,
   commentStore: CommentStore,
-  commentId: string
+  commentId: string,
 ): boolean {
   if (!editor || !editor.isEditable) {
     return false
   }
 
   try {
-    // 获取评论范围
+    /** 获取评论范围 */
     const range = getCommentRange(editor, commentId)
     if (!range) {
       console.warn(`删除评论失败：找不到评论范围，commentId: ${commentId}`)
-      // 即使找不到范围，也尝试从 Store 中删除
+      /** 即使找不到范围，也尝试从 Store 中删除 */
       return commentStore.deleteComment(commentId)
     }
 
-    // 从文档中移除 comment mark
+    /** 从文档中移除 comment mark */
     const { state } = editor
     const commentMarkType = state.schema.marks.comment
 
@@ -168,23 +169,25 @@ export function deleteComment(
       return commentStore.deleteComment(commentId)
     }
 
-    // 创建事务，移除特定 commentId 的 mark
-    // 需要遍历整个文档，因为评论范围可能不准确（如果范围被修改过）
+    /**
+     * 创建事务，移除特定 commentId 的 mark
+     * 需要遍历整个文档，因为评论范围可能不准确（如果范围被修改过）
+     */
     const { tr } = state
-    const positionsToUpdate: Array<{ from: number; to: number; marks: any[] }> = []
+    const positionsToUpdate: Array<{ from: number, to: number, marks: any[] }> = []
 
-    // 遍历整个文档，查找所有带有该 commentId 的文本节点
+    /** 遍历整个文档，查找所有带有该 commentId 的文本节点 */
     tr.doc.descendants((node, pos) => {
       if (node.isText && node.marks) {
-        // 查找带有该 commentId 的 mark
+        /** 查找带有该 commentId 的 mark */
         const hasTargetMark = node.marks.some(
-          (mark) => mark.type === commentMarkType && mark.attrs.commentId === commentId
+          mark => mark.type === commentMarkType && mark.attrs.commentId === commentId,
         )
 
         if (hasTargetMark) {
-          // 创建新的 mark 集合，排除掉要删除的 mark
+          /** 创建新的 mark 集合，排除掉要删除的 mark */
           const newMarks = node.marks.filter(
-            (mark) => !(mark.type === commentMarkType && mark.attrs.commentId === commentId)
+            mark => !(mark.type === commentMarkType && mark.attrs.commentId === commentId),
           )
 
           positionsToUpdate.push({
@@ -198,29 +201,30 @@ export function deleteComment(
       return true
     })
 
-    // 应用更改：先移除所有 comment mark，然后重新添加其他 mark
+    /** 应用更改：先移除所有 comment mark，然后重新添加其他 mark */
     for (const { from, to, marks } of positionsToUpdate) {
-      // 移除该范围内的所有 comment mark
+      /** 移除该范围内的所有 comment mark */
       tr.removeMark(from, to, commentMarkType)
 
-      // 重新添加其他 mark（包括其他 comment mark 和其他类型的 mark）
+      /** 重新添加其他 mark（包括其他 comment mark 和其他类型的 mark） */
       for (const mark of marks) {
         tr.addMark(from, to, mark)
       }
     }
 
-    // 应用事务
+    /** 应用事务 */
     if (positionsToUpdate.length > 0) {
       editor.view.dispatch(tr)
     }
 
-    // 从 Store 中删除评论实体
+    /** 从 Store 中删除评论实体 */
     const deleted = commentStore.deleteComment(commentId)
 
     // Plugin state 的 ranges 会自动更新（通过 Plugin 的 apply 方法）
 
     return deleted
-  } catch (error) {
+  }
+  catch (error) {
     console.error('删除评论失败:', error)
     return false
   }
@@ -248,12 +252,13 @@ export function deleteComment(
 export function updateComment(
   commentStore: CommentStore,
   commentId: string,
-  updates: UpdateCommentParams
+  updates: UpdateCommentParams,
 ): boolean {
   try {
     commentStore.updateComment(commentId, updates)
     return true
-  } catch (error) {
+  }
+  catch (error) {
     console.error('更新评论失败:', error)
     return false
   }
@@ -278,7 +283,7 @@ export function updateComment(
  */
 export function getCommentRange(
   editor: Editor | null,
-  commentId: string
+  commentId: string,
 ): CommentRange | null {
   if (!editor) {
     return null
@@ -384,32 +389,34 @@ export interface CreateReplyParams {
 export function createReply(
   editor: Editor | null,
   commentStore: CommentStore,
-  params: CreateReplyParams
+  params: CreateReplyParams,
 ): Comment | null {
   if (!editor || !editor.isEditable) {
     return null
   }
 
-  // 获取被回复的评论
+  /** 获取被回复的评论 */
   const parentComment = commentStore.getComment(params.replyToId)
   if (!parentComment) {
     console.warn(`创建回复失败：找不到被回复的评论，replyToId: ${params.replyToId}`)
     return null
   }
 
-  // 获取选中范围（如果提供了选中范围，则使用；否则复用被回复评论的范围）
+  /** 获取选中范围（如果提供了选中范围，则使用；否则复用被回复评论的范围） */
   const { from, to } = editor.state.selection
   const selectedFrom = params.from ?? from
   const selectedTo = params.to ?? to
 
-  // 生成 commentId
+  /** 生成 commentId */
   const commentId = `comment-${crypto.randomUUID()}`
 
   try {
-    // 如果用户选中了新的文本范围，则创建新的 comment mark
-    // 否则，复用被回复评论的范围（不创建新的 mark）
+    /**
+     * 如果用户选中了新的文本范围，则创建新的 comment mark
+     * 否则，复用被回复评论的范围（不创建新的 mark）
+     */
     if (selectedFrom !== selectedTo) {
-      // 在文档选中范围添加 comment mark
+      /** 在文档选中范围添加 comment mark */
       const success = editor
         .chain()
         .focus()
@@ -421,8 +428,9 @@ export function createReply(
         console.warn('创建回复失败：无法添加 comment mark')
         return null
       }
-    } else {
-      // 复用被回复评论的范围：获取被回复评论的范围，并创建新的 mark
+    }
+    else {
+      /** 复用被回复评论的范围：获取被回复评论的范围，并创建新的 mark */
       const parentRange = getCommentRange(editor, params.replyToId)
       if (parentRange) {
         const success = editor
@@ -437,13 +445,13 @@ export function createReply(
           return null
         }
       }
-      // 如果没有找到被回复评论的范围，仍然创建回复（不创建 mark）
+      /** 如果没有找到被回复评论的范围，仍然创建回复（不创建 mark） */
     }
 
-    // 创建回复评论实体
+    /** 创建回复评论实体 */
     const now = Date.now()
 
-    // 截断被回复的评论内容（用于展示引用，超过 50 字符显示省略号）
+    /** 截断被回复的评论内容（用于展示引用，超过 50 字符显示省略号） */
     const replyToContent = parentComment.content.length > 50
       ? `${parentComment.content.substring(0, 50)}...`
       : parentComment.content
@@ -454,24 +462,24 @@ export function createReply(
       author: params.author,
       createdAt: now,
       status: 'active',
-      // 回复相关字段
+      /** 回复相关字段 */
       replyTo: params.replyToId,
       replyToAuthor: parentComment.author,
       replyToContent,
-      // 扩展字段
+      /** 扩展字段 */
       mentions: params.mentions,
       tags: params.tags,
     }
 
-    // 存储到 Store
+    /** 存储到 Store */
     commentStore.addComment(reply)
 
     // Plugin state 的 ranges 会自动更新（通过 Plugin 的 apply 方法）
 
     return reply
-  } catch (error) {
+  }
+  catch (error) {
     console.error('创建回复失败:', error)
     return null
   }
 }
-

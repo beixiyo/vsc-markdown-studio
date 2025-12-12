@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 export function useWatchRef<T>(state: T) {
   const stateRef = useRef(state)

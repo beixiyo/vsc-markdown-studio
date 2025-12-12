@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import { memo, useMemo, useState, useCallback, useSyncExternalStore } from 'react'
 import type { Editor } from '@tiptap/react'
+import type { CommentStore } from '../comment-store'
+import { memo, useCallback, useMemo, useState, useSyncExternalStore } from 'react'
 import { useTiptapEditor } from 'tiptap-react-hook'
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from 'tiptap-styles/ui'
 import { cn } from 'tiptap-styles/utils'
-import { CommentStore } from '../comment-store'
 import { CommentItem } from './components/comment-item'
 
 /**
@@ -34,9 +34,9 @@ export const CommentSidebar = memo(({
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'resolved'>('all')
 
   const commentsSource = useSyncExternalStore(
-    (listener) => commentStore.subscribe(listener),
+    listener => commentStore.subscribe(listener),
     () => commentStore.getSnapshot(),
-    () => commentStore.getSnapshot()
+    () => commentStore.getSnapshot(),
   )
 
   const comments = useMemo(() => {
@@ -44,7 +44,8 @@ export const CommentSidebar = memo(({
 
     if (statusFilter === 'active') {
       allComments = commentStore.getCommentsByStatus('active')
-    } else if (statusFilter === 'resolved') {
+    }
+    else if (statusFilter === 'resolved') {
       allComments = commentStore.getCommentsByStatus('resolved')
     }
 
@@ -52,7 +53,7 @@ export const CommentSidebar = memo(({
   }, [commentStore, commentsSource, statusFilter])
 
   const handleUpdate = useCallback(() => {
-    // 由 Store 订阅触发重新渲染
+    /** 由 Store 订阅触发重新渲染 */
   }, [])
 
   return (
@@ -73,10 +74,10 @@ export const CommentSidebar = memo(({
       <PopoverContent
         aria-label="评论列表"
         align="end"
-        className={cn(
+        className={ cn(
           'w-[380px] max-w-[calc(100vw-32px)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-0 shadow-[var(--tt-shadow-elevated-md)]',
-          className
-        )}
+          className,
+        ) }
       >
         <div className="flex flex-col gap-4 p-4">
           <div className="flex items-start justify-between gap-2">
@@ -85,7 +86,9 @@ export const CommentSidebar = memo(({
                 评论面板
               </span>
               <span className="rounded-full bg-[var(--tt-brand-color-50)] px-2.5 py-1 text-xs font-semibold text-[var(--tt-brand-color-700)]">
-                { comments.length } 条
+                { comments.length }
+                {' '}
+                条
               </span>
             </div>
             <button
@@ -102,12 +105,12 @@ export const CommentSidebar = memo(({
               <button
                 type="button"
                 onClick={ () => setStatusFilter('all') }
-                className={cn(
+                className={ cn(
                   'rounded-full px-3 py-1.5 text-xs font-semibold transition',
                   statusFilter === 'all'
                     ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
-                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]'
-                )}
+                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
+                ) }
                 aria-label="显示所有评论"
               >
                 全部
@@ -115,12 +118,12 @@ export const CommentSidebar = memo(({
               <button
                 type="button"
                 onClick={ () => setStatusFilter('active') }
-                className={cn(
+                className={ cn(
                   'rounded-full px-3 py-1.5 text-xs font-semibold transition',
                   statusFilter === 'active'
                     ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
-                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]'
-                )}
+                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
+                ) }
                 aria-label="仅显示活跃评论"
               >
                 活跃
@@ -128,40 +131,46 @@ export const CommentSidebar = memo(({
               <button
                 type="button"
                 onClick={ () => setStatusFilter('resolved') }
-                className={cn(
+                className={ cn(
                   'rounded-full px-3 py-1.5 text-xs font-semibold transition',
                   statusFilter === 'resolved'
                     ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
-                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]'
-                )}
+                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
+                ) }
                 aria-label="仅显示已解决评论"
               >
                 已解决
               </button>
             </div>
             <span className="text-xs text-[var(--tt-color-text-gray)]">
-              共 { comments.length } 条
+              共
+              {' '}
+              { comments.length }
+              {' '}
+              条
             </span>
           </div>
 
           <div className="h-px w-full bg-[var(--tt-border-color)]" />
 
           <div className="max-h-[70vh] space-y-3 overflow-y-auto pr-1">
-            { comments.length === 0 ? (
-              <div className="flex items-center justify-center rounded-xl border border-dashed border-[var(--tt-border-color)] bg-[var(--tt-sidebar-bg-color)] px-3 py-6 text-sm text-[var(--tt-color-text-gray)]">
-                暂无评论，开始第一条讨论吧
-              </div>
-            ) : (
-              comments.map((comment) => (
-                <CommentItem
-                  key={ comment.id }
-                  comment={ comment }
-                  editor={ editor }
-                  commentStore={ commentStore }
-                  onUpdate={ handleUpdate }
-                />
-              ))
-            ) }
+            { comments.length === 0
+              ? (
+                  <div className="flex items-center justify-center rounded-xl border border-dashed border-[var(--tt-border-color)] bg-[var(--tt-sidebar-bg-color)] px-3 py-6 text-sm text-[var(--tt-color-text-gray)]">
+                    暂无评论，开始第一条讨论吧
+                  </div>
+                )
+              : (
+                  comments.map(comment => (
+                    <CommentItem
+                      key={ comment.id }
+                      comment={ comment }
+                      editor={ editor }
+                      commentStore={ commentStore }
+                      onUpdate={ handleUpdate }
+                    />
+                  ))
+                ) }
           </div>
         </div>
       </PopoverContent>
@@ -170,4 +179,3 @@ export const CommentSidebar = memo(({
 })
 
 CommentSidebar.displayName = 'CommentSidebar'
-

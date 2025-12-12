@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from 'react'
 import type { Editor as TiptapEditor } from '@tiptap/core'
-import { collectOperateTestCases, operateTestExecutor, type OperateTestSuite } from '../../features/operate-tests'
+import { useCallback, useMemo, useState } from 'react'
 import { createMarkdownOperate } from 'tiptap-api'
+import { collectOperateTestCases, operateTestExecutor, type OperateTestSuite } from '../../features/operate-tests'
 
 /**
  * operate 测试运行状态与触发方法
@@ -32,24 +32,29 @@ export function useOperateTests(
   const [operateRunning, setOperateRunning] = useState(false)
 
   const runAllOperateTests = useCallback(async () => {
-    if (!editor) return
+    if (!editor)
+      return
     setOperateRunning(true)
     try {
       const cases = collectOperateTestCases(operateTestSuites)
       await operateTestExecutor.runAll(cases, { editor, operate })
-    } finally {
+    }
+    finally {
       setOperateRunning(false)
     }
   }, [editor, operate, operateTestSuites])
 
   const runOperateSuite = useCallback(async (suiteId: string) => {
-    if (!editor) return
+    if (!editor)
+      return
     const suite = operateTestSuites.find(item => item.id === suiteId)
-    if (!suite) return
+    if (!suite)
+      return
     setOperateRunning(true)
     try {
       await operateTestExecutor.runAll(suite.cases, { editor, operate })
-    } finally {
+    }
+    finally {
       setOperateRunning(false)
     }
   }, [editor, operate, operateTestSuites])
@@ -60,4 +65,3 @@ export function useOperateTests(
     runOperateSuite,
   }
 }
-

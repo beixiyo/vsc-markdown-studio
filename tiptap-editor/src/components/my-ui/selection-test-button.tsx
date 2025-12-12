@@ -1,10 +1,9 @@
 'use client'
 
-import { memo, useCallback } from 'react'
 import type { Editor } from '@tiptap/react'
+import { memo, useCallback } from 'react'
+import { useSelection, useTiptapEditor } from 'tiptap-react-hook'
 import { Button } from 'tiptap-styles/ui'
-import { useTiptapEditor } from 'tiptap-react-hook'
-import { useSelection } from 'tiptap-react-hook'
 
 export interface SelectionTestButtonProps {
   /**
@@ -39,7 +38,7 @@ export const SelectionTestButton = memo<SelectionTestButtonProps>(
         选中文本
       </Button>
     )
-  }
+  },
 )
 
 SelectionTestButton.displayName = 'SelectionTestButton'

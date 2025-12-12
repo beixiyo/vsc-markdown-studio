@@ -1,22 +1,22 @@
 import type { Editor } from '@tiptap/core'
-import { useState, useEffect, useCallback } from 'react'
 import type { PreviewController } from '../../PreviewController'
 import type { AIRequestMode } from '../../types'
+import { useCallback, useEffect, useState } from 'react'
 import { getTiptapSelectionPayload } from '../../TiptapEditorBridge'
-
 
 /**
  * AI 功能 Hook，用于管理 AI 按钮的状态和操作
  */
 export function useAI(config: UseAIConfig): UseAIReturn {
-  const { editor, controller, mode = 'stream', } = config
+  const { editor, controller, mode = 'stream' } = config
 
   const [isProcessing, setIsProcessing] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
 
-  // 订阅控制器状态变化
+  /** 订阅控制器状态变化 */
   useEffect(() => {
-    if (!controller) return
+    if (!controller)
+      return
 
     const unsubscribe = controller.subscribe((state) => {
       setIsProcessing(state.status === 'processing')
@@ -26,22 +26,25 @@ export function useAI(config: UseAIConfig): UseAIReturn {
     return unsubscribe
   }, [controller])
 
-  // 检查是否可以触发 AI（需要选中文本）
+  /** 检查是否可以触发 AI（需要选中文本） */
   const canTrigger = useCallback(() => {
-    if (!editor || editor.isDestroyed) return false
+    if (!editor || editor.isDestroyed)
+      return false
     const { selection } = editor.state
     return !selection.empty
   }, [editor])
 
-  // 触发 AI 处理
+  /** 触发 AI 处理 */
   const handleTrigger = useCallback(
     (prompt?: string) => {
-      if (!editor || !controller || !canTrigger()) return
+      if (!editor || !controller || !canTrigger())
+        return
 
       const payload = getTiptapSelectionPayload(editor)
-      if (!payload) return
+      if (!payload)
+        return
 
-      // 如果有 prompt，添加到 meta 中
+      /** 如果有 prompt，添加到 meta 中 */
       if (prompt) {
         payload.meta = {
           ...payload.meta,
@@ -53,18 +56,20 @@ export function useAI(config: UseAIConfig): UseAIReturn {
         console.error('AI 处理失败:', err)
       })
     },
-    [editor, controller, mode, canTrigger]
+    [editor, controller, mode, canTrigger],
   )
 
-  // 接受预览
+  /** 接受预览 */
   const handleAccept = useCallback(() => {
-    if (!controller) return
+    if (!controller)
+      return
     controller.accept()
   }, [controller])
 
-  // 拒绝预览
+  /** 拒绝预览 */
   const handleReject = useCallback(() => {
-    if (!controller) return
+    if (!controller)
+      return
     controller.reject()
   }, [controller])
 

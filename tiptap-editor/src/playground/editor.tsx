@@ -1,42 +1,35 @@
-"use client"
+'use client'
 
-import { memo, useRef, useState } from 'react'
+import type { EditorProps, EditorUIProps } from './types'
 import { useCurrentEditor } from '@tiptap/react'
 
-// --- UI Primitives ---
-import { Toolbar } from 'tiptap-styles/ui'
+import { memo, useRef, useState } from 'react'
 
-// --- Tiptap UI ---
-import { LinkPopover } from '@/components/tiptap-ui/link-popover'
-import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
-import { CommentButton } from 'tiptap-comment/react'
-import { AIButton } from 'tiptap-ai/react'
-import { AIActionPanel } from 'tiptap-ai/react'
+import { AIActionPanel, AIButton } from 'tiptap-ai/react'
+import { CommentStore } from 'tiptap-comment'
+import { CommentButton, useCommentSync } from 'tiptap-comment/react'
 
-// --- Hooks ---
-import { useIsBreakpoint } from '@/hooks/use-is-breakpoint'
-import { useWindowSize } from '@/hooks/use-window-size'
-import { useCursorVisibility } from '@/hooks/use-cursor-visibility'
-import { useCommentSync } from 'tiptap-comment/react'
-
-// --- Components ---
 import { SelectionToolbar } from 'tiptap-comps'
+import { useAutoSave } from 'tiptap-react-hook'
+import { Toolbar } from 'tiptap-styles/ui'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 
-// --- API ---
-import { CommentStore } from 'tiptap-comment'
+import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
+import { LinkPopover } from '@/components/tiptap-ui/link-popover'
 
-import content from './data/content.json' with { type: 'json' }
-import { useAutoSave } from 'tiptap-react-hook'
-import { HeaderToolbar, MobileToolbarContent, TiptapEditor } from './components'
-import { useOperateTests } from './hooks/use-operate-tests'
-import { useMobileView } from './hooks/use-mobile-view'
-import { useAiQuickSource, useSlashSuggestion } from './hooks/suggestion-hooks'
-import { useAiSetup, useBindAi } from './hooks/ai-hooks'
-import type { EditorProps, EditorUIProps } from './types'
 import {
   operateTestSuites,
 } from '@/features/operate-tests'
+
+import { useCursorVisibility } from '@/hooks/use-cursor-visibility'
+import { useIsBreakpoint } from '@/hooks/use-is-breakpoint'
+import { useWindowSize } from '@/hooks/use-window-size'
+import { HeaderToolbar, MobileToolbarContent, TiptapEditor } from './components'
+import content from './data/content.json' with { type: 'json' }
+import { useAiSetup, useBindAi } from './hooks/ai-hooks'
+import { useAiQuickSource, useSlashSuggestion } from './hooks/suggestion-hooks'
+import { useMobileView } from './hooks/use-mobile-view'
+import { useOperateTests } from './hooks/use-operate-tests'
 
 /**
  * 内部组件：使用 EditorContext 获取 editor 实例，渲染所有 UI 组件
@@ -66,14 +59,14 @@ export const EditorUI = memo<EditorUIProps>(({
   const aiQuickSource = useAiQuickSource(editor, aiController)
   const suggestion = useSlashSuggestion(editor, aiQuickSource)
 
-  // 启用评论同步，检测评论范围状态
+  /** 启用评论同步，检测评论范围状态 */
   useCommentSync(editor, commentStore, {
     enabled: true,
     syncOnUndoRedo: true,
     debounceMs: 100,
   })
 
-  // 绑定 AI 集成
+  /** 绑定 AI 集成 */
   useBindAi(editor, aiController, aiOrchestrator)
 
   return (
@@ -83,36 +76,40 @@ export const EditorUI = memo<EditorUIProps>(({
         style={ {
           ...(isMobile
             ? {
-              bottom: `calc(100% - ${height - rect.y}px)`,
-            }
+                bottom: `calc(100% - ${height - rect.y}px)`,
+              }
             : {}),
         } }
       >
-        { mobileView === "main" ? (
-          <HeaderToolbar
-            onHighlighterClick={ () => setMobileView("highlighter") }
-            onLinkClick={ () => setMobileView("link") }
-            isMobile={ isMobile }
-            commentStore={ commentStore }
-            operateSuites={ operateTestSuites }
-            onRunAllOperateTests={ runAllOperateTests }
-            onRunOperateSuite={ runOperateSuite }
-            operateTestsRunning={ operateRunning }
-            operateTestsDisabled={ !editor }
-          />
-        ) : (
-          <MobileToolbarContent
-            type={ mobileView === "highlighter" ? "highlighter" : "link" }
-            onBack={ () => setMobileView("main") }
-          />
-        ) }
+        { mobileView === 'main'
+          ? (
+              <HeaderToolbar
+                onHighlighterClick={ () => setMobileView('highlighter') }
+                onLinkClick={ () => setMobileView('link') }
+                isMobile={ isMobile }
+                commentStore={ commentStore }
+                operateSuites={ operateTestSuites }
+                onRunAllOperateTests={ runAllOperateTests }
+                onRunOperateSuite={ runOperateSuite }
+                operateTestsRunning={ operateRunning }
+                operateTestsDisabled={ !editor }
+              />
+            )
+          : (
+              <MobileToolbarContent
+                type={ mobileView === 'highlighter'
+                  ? 'highlighter'
+                  : 'link' }
+                onBack={ () => setMobileView('main') }
+              />
+            ) }
       </Toolbar>
 
       {/* 测试通用 HoverTooltip */ }
       <EditorHoverTooltip editor={ editor } enabled={ false } />
 
       {/* 选中文本工具栏 */ }
-      <SelectionToolbar editor={ editor } enabled={ true }>
+      <SelectionToolbar editor={ editor } enabled>
         <LinkPopover editor={ editor } hideWhenUnavailable />
         <AIButton
           controller={ aiController }
@@ -132,7 +129,7 @@ export const EditorUI = memo<EditorUIProps>(({
       />
 
       {/* AI 操作面板 */ }
-      <AIActionPanel controller={ aiController } className='fixed bottom-4 left-1/2 -translate-x-1/2 z-50' />
+      <AIActionPanel controller={ aiController } className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" />
     </>
   )
 })

@@ -1,16 +1,16 @@
-"use client"
+'use client'
 
-import { useMemo, useEffect, useRef } from "react"
 import {
-  FloatingPortal,
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
   arrow,
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  offset,
   type Placement,
-} from "@floating-ui/react"
+  shift,
+  useFloating,
+} from '@floating-ui/react'
+import { useEffect, useMemo, useRef } from 'react'
 
 export interface GenericHoverTooltipProps {
   /** 是否启用 tooltip */
@@ -18,7 +18,7 @@ export interface GenericHoverTooltipProps {
   /** tooltip 内容 */
   content?: string | React.ReactNode
   /** 鼠标位置 */
-  mousePosition?: { x: number; y: number } | null
+  mousePosition?: { x: number, y: number } | null
   /** 自定义格式化函数 */
   formatContent?: (rawContent: unknown) => string | React.ReactNode
   /** tooltip 偏移量 */
@@ -43,14 +43,14 @@ export function HoverTooltip({
   mousePosition,
   formatContent,
   offsetDistance = 8,
-  placement = "top-start",
+  placement = 'top-start',
   showArrow = true,
-  className = "",
+  className = '',
   maxWidth = 300,
 }: GenericHoverTooltipProps) {
   const arrowRef = useRef<HTMLDivElement>(null)
 
-  // 使用 Floating UI 进行智能定位
+  /** 使用 Floating UI 进行智能定位 */
   const { refs, floatingStyles, middlewareData } = useFloating({
     placement,
     open: !!content && enabled,
@@ -58,22 +58,24 @@ export function HoverTooltip({
     middleware: [
       offset(offsetDistance),
       flip({
-        crossAxis: placement.includes("-"),
-        fallbackAxisSideDirection: "start",
+        crossAxis: placement.includes('-'),
+        fallbackAxisSideDirection: 'start',
         padding: 8,
       }),
       shift({ padding: 8 }),
-      ...(showArrow ? [arrow({ element: arrowRef })] : []),
+      ...(showArrow
+        ? [arrow({ element: arrowRef })]
+        : []),
     ],
   })
 
-  // 监听鼠标位置变化，更新虚拟参考元素
+  /** 监听鼠标位置变化，更新虚拟参考元素 */
   useEffect(() => {
     if (!enabled || !mousePosition) {
       return
     }
 
-    // 创建虚拟元素作为参考点
+    /** 创建虚拟元素作为参考点 */
     const virtualElement = {
       getBoundingClientRect: () => ({
         width: 0,
@@ -91,7 +93,7 @@ export function HoverTooltip({
     refs.setReference(virtualElement)
   }, [enabled, mousePosition, refs])
 
-  // 格式化显示内容
+  /** 格式化显示内容 */
   const displayContent = useMemo(() => {
     if (!content) {
       return null
@@ -101,47 +103,53 @@ export function HoverTooltip({
       return formatContent(content)
     }
 
-    if (typeof content === "string") {
+    if (typeof content === 'string') {
       return content
     }
 
     return content
   }, [content, formatContent])
 
-  // 如果没有内容或未启用，不显示 tooltip
+  /** 如果没有内容或未启用，不显示 tooltip */
   if (!content || !enabled || !mousePosition) {
     return null
   }
 
-  // 计算箭头位置
+  /** 计算箭头位置 */
   const arrowStyle = showArrow && middlewareData.arrow
     ? {
-        left: middlewareData.arrow.x != null ? `${middlewareData.arrow.x}px` : "",
-        top: middlewareData.arrow.y != null ? `${middlewareData.arrow.y}px` : "",
+        left: middlewareData.arrow.x != null
+          ? `${middlewareData.arrow.x}px`
+          : '',
+        top: middlewareData.arrow.y != null
+          ? `${middlewareData.arrow.y}px`
+          : '',
       }
     : {}
 
   const style = {
     ...floatingStyles,
-    maxWidth: typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth,
+    maxWidth: typeof maxWidth === 'number'
+      ? `${maxWidth}px`
+      : maxWidth,
   }
 
   return (
     <FloatingPortal>
       <div
-        ref={refs.setFloating}
-        className={`fixed py-2 px-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded text-xs leading-tight text-gray-800 dark:text-gray-200 break-words shadow-md z-50 pointer-events-none ${className}`}
-        style={style}
+        ref={ refs.setFloating }
+        className={ `fixed py-2 px-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded text-xs leading-tight text-gray-800 dark:text-gray-200 break-words shadow-md z-50 pointer-events-none ${className}` }
+        style={ style }
       >
         {displayContent}
         {showArrow && (
           <div
-            ref={arrowRef}
+            ref={ arrowRef }
             className="absolute w-2 h-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rotate-45 -translate-x-1/2 -translate-y-1/2"
-            style={{
+            style={ {
               ...arrowStyle,
-              clipPath: "polygon(0% 0%, 100% 100%, 0% 100%)",
-            }}
+              clipPath: 'polygon(0% 0%, 100% 100%, 0% 100%)',
+            } }
           />
         )}
       </div>

@@ -1,29 +1,22 @@
-import { useCallback, useState } from "react"
-import { type Editor } from "@tiptap/react"
+import type { Editor } from '@tiptap/react'
+// --- UI Primitives ---
+import type { ButtonProps } from 'tiptap-styles/ui'
+
+import { useCallback, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from "tiptap-react-hook"
+import { useTiptapEditor } from 'tiptap-react-hook'
 
 // --- Icons ---
-import { ChevronDownIcon } from "tiptap-styles/icons"
+import { ChevronDownIcon } from 'tiptap-styles/icons'
+
+import { Button, ButtonGroup, Card, CardBody, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from 'tiptap-styles/ui'
 
 // --- Tiptap UI ---
-import { ListButton, type ListType } from "@/components/tiptap-ui/list-button"
+import { ListButton, type ListType } from '@/components/tiptap-ui/list-button'
+import { useListDropdownMenu } from '@/components/tiptap-ui/list-dropdown-menu/use-list-dropdown-menu'
 
-import { useListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu/use-list-dropdown-menu"
-
-// --- UI Primitives ---
-import type { ButtonProps } from "tiptap-styles/ui"
-import { Button, ButtonGroup } from "tiptap-styles/ui"
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "tiptap-styles/ui"
-import { Card, CardBody } from "tiptap-styles/ui"
-
-export interface ListDropdownMenuProps extends Omit<ButtonProps, "type"> {
+export interface ListDropdownMenuProps extends Omit<ButtonProps, 'type'> {
   /**
    * The Tiptap editor instance.
    */
@@ -50,7 +43,7 @@ export interface ListDropdownMenuProps extends Omit<ButtonProps, "type"> {
 
 export function ListDropdownMenu({
   editor: providedEditor,
-  types = ["bulletList", "orderedList", "taskList"],
+  types = ['bulletList', 'orderedList', 'taskList'],
   hideWhenUnavailable = false,
   onOpenChange,
   portal = false,
@@ -59,8 +52,8 @@ export function ListDropdownMenu({
   const { editor } = useTiptapEditor(providedEditor)
   const [isOpen, setIsOpen] = useState(false)
 
-  const { filteredLists, canToggle, isActive, isVisible, Icon } =
-    useListDropdownMenu({
+  const { filteredLists, canToggle, isActive, isVisible, Icon }
+    = useListDropdownMenu({
       editor,
       types,
       hideWhenUnavailable,
@@ -71,7 +64,7 @@ export function ListDropdownMenu({
       setIsOpen(open)
       onOpenChange?.(open)
     },
-    [onOpenChange]
+    [onOpenChange],
   )
 
   if (!isVisible) {
@@ -79,36 +72,38 @@ export function ListDropdownMenu({
   }
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={handleOnOpenChange}>
+    <DropdownMenu open={ isOpen } onOpenChange={ handleOnOpenChange }>
       <DropdownMenuTrigger asChild>
         <Button
           type="button"
           data-style="ghost"
-          data-active-state={isActive ? "on" : "off"}
+          data-active-state={ isActive
+            ? 'on'
+            : 'off' }
           role="button"
-          tabIndex={-1}
-          disabled={!canToggle}
-          data-disabled={!canToggle}
+          tabIndex={ -1 }
+          disabled={ !canToggle }
+          data-disabled={ !canToggle }
           aria-label="List options"
           tooltip="List"
-          {...props}
+          { ...props }
         >
           <Icon className="tiptap-button-icon" />
           <ChevronDownIcon className="tiptap-button-dropdown-small" />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="start" portal={portal}>
+      <DropdownMenuContent align="start" portal={ portal }>
         <Card>
           <CardBody>
             <ButtonGroup>
-              {filteredLists.map((option) => (
-                <DropdownMenuItem key={option.type} asChild>
+              {filteredLists.map(option => (
+                <DropdownMenuItem key={ option.type } asChild>
                   <ListButton
-                    editor={editor}
-                    type={option.type}
-                    text={option.label}
-                    showTooltip={false}
+                    editor={ editor }
+                    type={ option.type }
+                    text={ option.label }
+                    showTooltip={ false }
                   />
                 </DropdownMenuItem>
               ))}

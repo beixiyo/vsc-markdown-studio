@@ -1,7 +1,7 @@
-import { memo } from 'react'
 import type React from 'react'
+import { memo } from 'react'
+import { CloseIcon, CornerDownLeftIcon } from 'tiptap-styles/icons'
 import { cn } from 'tiptap-styles/utils'
-import { CornerDownLeftIcon, CloseIcon } from 'tiptap-styles/icons'
 import { useIsBreakpoint } from '../hooks/use-is-breakpoint'
 
 /**
@@ -41,10 +41,12 @@ export const ReplyDialog = memo(({
 
   return (
     <div
-      className={cn(
+      className={ cn(
         'flex flex-col gap-3 rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]',
-        isMobile ? 'p-0 shadow-none' : 'p-4 shadow-[var(--tt-shadow-elevated-md)]'
-      )}
+        isMobile
+          ? 'p-0 shadow-none'
+          : 'p-4 shadow-[var(--tt-shadow-elevated-md)]',
+      ) }
     >
       { replyToPreview && (
         <div className="flex items-start gap-2 rounded-xl bg-[var(--tt-color-highlight-yellow)] px-3 py-2 text-sm text-[var(--tt-color-text-gray)] shadow-inner">
@@ -57,7 +59,7 @@ export const ReplyDialog = memo(({
         className="min-h-[84px] w-full rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-sidebar-bg-color)] px-3 py-2 text-sm text-[var(--tt-color-text-gray)] outline-none ring-0 transition duration-[var(--tt-transition-duration-default)] focus:border-[var(--tt-brand-color-400)] focus:ring-2 focus:ring-[var(--tt-brand-color-100)]"
         placeholder="输入回复内容..."
         value={ content }
-        onChange={ (e) => setContent(e.target.value) }
+        onChange={ e => setContent(e.target.value) }
         onKeyDown={ handleKeyDown }
         autoFocus
         rows={ 3 }
@@ -89,4 +91,3 @@ export const ReplyDialog = memo(({
 })
 
 ReplyDialog.displayName = 'ReplyDialog'
-

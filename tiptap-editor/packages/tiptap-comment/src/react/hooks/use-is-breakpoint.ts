@@ -7,7 +7,7 @@ type BreakpointMode = 'min' | 'max'
  */
 export function useIsBreakpoint(
   mode: BreakpointMode = 'max',
-  breakpoint = 768
+  breakpoint = 768,
 ) {
   const [matches, setMatches] = useState<boolean | undefined>(undefined)
 
@@ -27,4 +27,3 @@ export function useIsBreakpoint(
 
   return !!matches
 }
-

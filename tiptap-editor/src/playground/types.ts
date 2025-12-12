@@ -1,7 +1,8 @@
-import type { RefObject } from 'react'
-import type { SpeakerClick, SpeakerMap } from './extensions'
 import type { Editor } from '@tiptap/core'
+import type { UseEditorOptions } from '@tiptap/react'
+import type { RefObject } from 'react'
 import type { CommentStore } from 'tiptap-comment'
+import type { SpeakerClick, SpeakerMap } from './extensions'
 
 /**
  * 简单编辑器的配置项
@@ -47,11 +48,8 @@ export type EditorContentProps = {
    * 自定义 style
    */
   style?: React.CSSProperties
-  /**
-   * 编辑器内容更新时的回调
-   */
-  onUpdate?: (props: { editor: import('@tiptap/react').Editor }) => void
 }
+& UseEditorOptions
 
 /**
  * 演示用编辑器 UI 组合 props，外部可自由组装
