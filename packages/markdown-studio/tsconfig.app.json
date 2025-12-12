@@ -27,11 +27,11 @@
       "@/*": ["./src/*"],
       "notify": ["../notify/src"],
       "@blocknote/core": ["../../blocknote/core/src"],
-      "markdown-operate": ["../markdown-operate/src"],
-      "custom-blocknote-checklist": ["../../custom-blocknote/checklist/src"],
-      "custom-blocknote-speaker": ["../../custom-blocknote/speaker/src"],
-      "custom-blocknote-gradient-styles": ["../../custom-blocknote/gradient-styles/src"],
-      "custom-blocknote-markdown-extensions": ["../../custom-blocknote/markdown-extensions/src"]
+      "markdown-operate": ["../../blocknote/markdown-operate/src"],
+      "custom-blocknote-checklist": ["../../blocknote/custom-blocknote/checklist/src"],
+      "custom-blocknote-speaker": ["../../blocknote/custom-blocknote/speaker/src"],
+      "custom-blocknote-gradient-styles": ["../../blocknote/custom-blocknote/gradient-styles/src"],
+      "custom-blocknote-markdown-extensions": ["../../blocknote/custom-blocknote/markdown-extensions/src"]
     }
   },
   "include": ["src"]

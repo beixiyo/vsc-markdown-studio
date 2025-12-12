@@ -1,4 +1,7 @@
-:root {
+:root,
+:root.light,
+html,
+html.light {
   --defaultTextColor: #0a0a0a;
   --defaultBgColor: #fff;
   --primaryTextColor: #fff;
@@ -50,7 +53,8 @@
   --slateBorderColor: #64748B;
 }
 
-.dark {
+:root.dark,
+html.dark {
   --defaultTextColor: #fff;
   --defaultBgColor: #171717;
   --primaryTextColor: #0a0a0a;

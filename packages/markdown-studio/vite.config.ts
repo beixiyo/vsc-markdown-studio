@@ -40,11 +40,11 @@ export default defineConfig(({ command }) => {
           '@blocknote/code-block': fileURLToPath(new URL('../../blocknote/code-block/src', import.meta.url)),
           '@blocknote/mantine': fileURLToPath(new URL('../../blocknote/mantine/src', import.meta.url)),
 
-          'custom-blocknote-ai': fileURLToPath(new URL('../../custom-blocknote/ai/src', import.meta.url)),
-          'custom-blocknote-mermaid': fileURLToPath(new URL('../../custom-blocknote/mermaid/src', import.meta.url)),
-          'custom-blocknote-gradient-styles': fileURLToPath(new URL('../../custom-blocknote/gradient-styles/src', import.meta.url)),
-          'custom-blocknote-exts-basic': fileURLToPath(new URL('../../custom-blocknote/exts-basic/src', import.meta.url)),
-          'custom-blocknote-speaker': fileURLToPath(new URL('../../custom-blocknote/speaker/src', import.meta.url)),
+          'custom-blocknote-ai': fileURLToPath(new URL('../../blocknote/custom-blocknote/ai/src', import.meta.url)),
+          'custom-blocknote-mermaid': fileURLToPath(new URL('../../blocknote/custom-blocknote/mermaid/src', import.meta.url)),
+          'custom-blocknote-gradient-styles': fileURLToPath(new URL('../../blocknote/custom-blocknote/gradient-styles/src', import.meta.url)),
+          'custom-blocknote-exts-basic': fileURLToPath(new URL('../../blocknote/custom-blocknote/exts-basic/src', import.meta.url)),
+          'custom-blocknote-speaker': fileURLToPath(new URL('../../blocknote/custom-blocknote/speaker/src', import.meta.url)),
         })
       },
     },

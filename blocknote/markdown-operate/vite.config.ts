@@ -8,7 +8,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@blocknote/core': fileURLToPath(new URL('../../blocknote/core/src', import.meta.url)),
+      '@blocknote/core': fileURLToPath(new URL('../core/src', import.meta.url)),
     },
   },
 

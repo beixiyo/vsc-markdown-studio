@@ -1,4 +1,3 @@
 packages:
   - 'packages/*'
-  - 'blocknote/*'
-  - 'custom-blocknote/*'
+  - 'blocknote/**'

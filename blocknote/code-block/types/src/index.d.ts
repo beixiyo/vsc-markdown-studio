@@ -194,5 +194,5 @@ export declare const codeBlockOptions: {
             aliases: string[];
         };
     };
-    createHighlighter: () => Promise<import("@shikijs/types").HighlighterGeneric<import("./shiki.bundle.js").BundledLanguage, import("./shiki.bundle.js").BundledTheme>>;
+    createHighlighter: () => Promise<import("@shikijs/core").HighlighterGeneric<import("./shiki.bundle.js").BundledLanguage, import("./shiki.bundle.js").BundledTheme>>;
 };
