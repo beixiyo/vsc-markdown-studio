@@ -3,8 +3,8 @@
 import { memo, useEffect } from 'react'
 import { EditorContent, EditorContext } from '@tiptap/react'
 
-import { useDefaultEditor } from './hooks/use-default-editor'
-import type { EditorContentProps } from './types'
+import { useDefaultEditor } from '../hooks/use-default-editor'
+import type { EditorContentProps } from '../types'
 
 export const TiptapEditor = memo<EditorContentProps>(({
   data,

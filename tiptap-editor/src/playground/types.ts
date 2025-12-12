@@ -1,6 +1,7 @@
 import type { RefObject } from 'react'
 import type { SpeakerClick, SpeakerMap } from './extensions'
 import type { Editor } from '@tiptap/core'
+import type { CommentStore } from 'tiptap-comment'
 
 /**
  * 简单编辑器的配置项
@@ -50,4 +51,34 @@ export type EditorContentProps = {
    * 编辑器内容更新时的回调
    */
   onUpdate?: (props: { editor: import('@tiptap/react').Editor }) => void
+}
+
+/**
+ * 演示用编辑器 UI 组合 props，外部可自由组装
+ */
+export type EditorUIProps = {
+  /**
+   * 是否为移动端，影响工具栏布局
+   */
+  isMobile: boolean
+  /**
+   * 视口高度，用于计算悬浮位置
+   */
+  height: number
+  /**
+   * 移动端工具栏当前视图
+   */
+  mobileView: 'main' | 'highlighter' | 'link'
+  /**
+   * 切换移动端工具栏视图
+   */
+  setMobileView: (view: 'main' | 'highlighter' | 'link') => void
+  /**
+   * 评论存储实例
+   */
+  commentStore: CommentStore
+  /**
+   * 工具栏 ref，用于遮挡处理
+   */
+  toolbarRef: RefObject<HTMLDivElement | null>
 }

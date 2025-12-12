@@ -65,7 +65,7 @@ export default defineConfig(({ command }) => {
     },
     build: {
       lib: {
-        entry: path.resolve(__dirname, './src/components/playground/index.ts'),
+        entry: path.resolve(__dirname, './src/playground/index.ts'),
         formats: ['es', 'cjs'],
         fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
       },

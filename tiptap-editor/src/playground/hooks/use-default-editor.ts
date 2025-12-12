@@ -1,6 +1,6 @@
 import { useEditor, type UseEditorOptions } from '@tiptap/react'
 import { createExtensions, type SpeakerMap, type SpeakerClick } from '../extensions'
-import { createHandleClick } from './click-handlers'
+import { createHandleClick } from '../utils'
 
 
 type UseDefaultOptions = UseEditorOptions & {

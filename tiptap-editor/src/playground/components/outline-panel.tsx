@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import type { Editor } from '@tiptap/core'
 import { scrollToRange } from 'tiptap-api'
-import { useMarkdownOutline } from './hooks/use-markdown-outline'
+import { useMarkdownOutline } from '../hooks/use-markdown-outline'
 
 type OutlinePanelProps = {
   editor: Editor | null

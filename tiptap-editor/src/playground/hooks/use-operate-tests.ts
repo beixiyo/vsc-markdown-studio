@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import type { Editor as TiptapEditor } from '@tiptap/core'
-import { collectOperateTestCases, operateTestExecutor, type OperateTestSuite } from '@/features/operate-tests'
+import { collectOperateTestCases, operateTestExecutor, type OperateTestSuite } from '../../features/operate-tests'
 import { createMarkdownOperate } from 'tiptap-api'
 
 /**

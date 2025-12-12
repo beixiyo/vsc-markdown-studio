@@ -29,7 +29,7 @@ import type { OperateTestSuite } from "@/features/operate-tests"
 import { CommentSidebar } from "tiptap-comment/react"
 
 // --- Components ---
-import { ThemeToggle } from "@/components/playground/theme-toggle"
+import { ThemeToggle } from "./theme-toggle"
 
 import { CommentStore } from "tiptap-comment"
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'

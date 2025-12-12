@@ -1,4 +1,4 @@
-import { Editor } from '@/components/playground/editor'
+import { Editor } from '@/playground/editor'
 
 export default function App() {
   return <Editor

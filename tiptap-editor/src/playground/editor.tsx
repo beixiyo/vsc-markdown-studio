@@ -28,29 +28,20 @@ import { CommentStore } from 'tiptap-comment'
 
 import content from './data/content.json' with { type: 'json' }
 import { useAutoSave } from 'tiptap-react-hook'
-import { HeaderToolbar } from './header-toolbar'
-import { MobileToolbarContent } from './toolbar-mobile-content'
+import { HeaderToolbar, MobileToolbarContent, TiptapEditor } from './components'
 import { useOperateTests } from './hooks/use-operate-tests'
 import { useMobileView } from './hooks/use-mobile-view'
 import { useAiQuickSource, useSlashSuggestion } from './hooks/suggestion-hooks'
 import { useAiSetup, useBindAi } from './hooks/ai-hooks'
-import type { EditorProps } from './types'
+import type { EditorProps, EditorUIProps } from './types'
 import {
   operateTestSuites,
 } from '@/features/operate-tests'
-import { TiptapEditor } from './tiptap-editor'
 
 /**
  * 内部组件：使用 EditorContext 获取 editor 实例，渲染所有 UI 组件
  */
-const EditorUI = memo<{
-  isMobile: boolean
-  height: number
-  mobileView: 'main' | 'highlighter' | 'link'
-  setMobileView: (view: 'main' | 'highlighter' | 'link') => void
-  commentStore: CommentStore
-  toolbarRef: React.RefObject<HTMLDivElement | null>
-}>(({
+export const EditorUI = memo<EditorUIProps>(({
   isMobile,
   height,
   mobileView,
@@ -148,6 +139,10 @@ const EditorUI = memo<{
 
 EditorUI.displayName = 'EditorUI'
 
+/**
+ * 演示版编辑器：集成所有 UI 能力，适合快速体验
+ * 若需自定义组合，请直接使用 TiptapEditor + 各 UI 组件自行拼装
+ */
 export const Editor = memo<EditorProps>(({
   initialMarkdown,
   speakerMap,

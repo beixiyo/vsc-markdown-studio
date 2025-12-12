@@ -13,7 +13,7 @@ import {
   FloatingPortal,
 } from '@floating-ui/react'
 import { ListIcon } from 'tiptap-styles/icons'
-import { OutlinePanel } from '@/components/playground/outline-panel'
+import { OutlinePanel } from '@/playground/components/outline-panel'
 import type { ButtonProps } from 'tiptap-styles/ui'
 
 export interface OutlineButtonProps extends Omit<ButtonProps, 'type'> {
