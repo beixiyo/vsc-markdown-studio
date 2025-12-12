@@ -1,4 +1,6 @@
+import type { RefObject } from 'react'
 import type { SpeakerClick, SpeakerMap } from './extensions'
+import type { Editor } from '@tiptap/core'
 
 /**
  * 简单编辑器的配置项
@@ -22,6 +24,7 @@ export type EditorProps = {
  * 编辑器内容组件的配置项（纯净版本，不包含 toolbar 等 UI）
  */
 export type EditorContentProps = {
+  ref?: RefObject<Editor | null>
   data?: string | object
   /**
    * Speaker 映射表，键为 originalLabel

@@ -16,7 +16,8 @@
         "types": "./dist/src/components/playground/index.d.ts",
         "default": "./dist/index.js"
       }
-    }
+    },
+    "./index.css": "./dist/index.css"
   },
   "files": [
     "dist"

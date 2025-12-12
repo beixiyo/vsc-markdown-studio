@@ -14,6 +14,7 @@ export const TiptapEditor = memo<EditorContentProps>(({
   className,
   style,
   onUpdate,
+  ref
 }) => {
   const contentType = typeof data === 'string' ? 'markdown' : 'json'
   const editor = useDefaultEditor({
@@ -36,6 +37,12 @@ export const TiptapEditor = memo<EditorContentProps>(({
       { contentType }
     )
   }, [editor, data])
+
+  useEffect(() => {
+    if (ref) {
+      ref.current = editor
+    }
+  }, [editor, ref])
 
   return (
     <EditorContext.Provider value={ { editor } }>
