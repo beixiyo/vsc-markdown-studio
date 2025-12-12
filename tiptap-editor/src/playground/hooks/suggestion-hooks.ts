@@ -5,10 +5,10 @@ import { getTiptapSelectionPayload } from 'tiptap-ai'
 import { createBasicSlashItems, SlashMenuSource, type SuggestionItem, type SuggestionSource } from 'tiptap-trigger'
 import { type SuggestionConfig, useSuggestion } from 'tiptap-trigger/react'
 
-export function useAiQuickSource(editor: Editor | null, aiController: AiController | null) {
-  return useMemo<SuggestionSource | null>(() => {
+export function useAiQuickSource(editor: Editor | null, aiController?: AiController) {
+  return useMemo<SuggestionSource | undefined>(() => {
     if (!editor || !aiController) {
-      return null
+      return undefined
     }
 
     const buildItem = (
@@ -46,7 +46,7 @@ export function useAiQuickSource(editor: Editor | null, aiController: AiControll
   }, [editor, aiController])
 }
 
-export function useSlashSuggestion(editor: Editor | null, aiQuickSource: SuggestionSource | null) {
+export function useSlashSuggestion(editor: Editor | null, aiQuickSource?: SuggestionSource) {
   const suggestionConfig = useMemo<SuggestionConfig>(() => {
     if (!editor) {
       return {} as SuggestionConfig
