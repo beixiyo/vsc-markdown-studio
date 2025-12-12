@@ -1,4 +1,4 @@
-import { Editor } from '@/components/tiptap-templates/editor'
+import { Editor } from '@/components/playground/editor'
 
 export default function App() {
   return <Editor

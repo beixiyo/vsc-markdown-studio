@@ -264,9 +264,7 @@ export function createTiptapEditorBridge(editor: Editor): EditorBridge {
           undo: () => {
             if (editor && !editor.isDestroyed) {
               // 使用 tiptap 的撤销能力（需要 History extension）
-              // @ts-expect-error - undo 命令由 History extension 提供，类型可能不完整
               if (editor.can().undo()) {
-                // @ts-expect-error - undo 命令由 History extension 提供，类型可能不完整
                 editor.chain().undo().run()
               }
             }
@@ -298,9 +296,7 @@ export function createTiptapEditorBridge(editor: Editor): EditorBridge {
         undo: () => {
           if (editor && !editor.isDestroyed) {
             // 使用 tiptap 的撤销能力（需要 History extension）
-            // @ts-expect-error - undo 命令由 History extension 提供，类型可能不完整
             if (editor.can().undo()) {
-              // @ts-expect-error - undo 命令由 History extension 提供，类型可能不完整
               editor.chain().undo().run()
             }
           }

@@ -12,7 +12,13 @@
     "types": [
       "vite/client"
     ],
+
+    "outDir": "dist",
     "skipLibCheck": true,
+    "declaration": true,
+    "declarationDir": "dist",
+    "composite": false,
+
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
@@ -24,6 +30,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],

@@ -13,7 +13,7 @@
 
 import type { Editor } from '@tiptap/react'
 import { CommentStore } from './comment-store'
-import { commentPluginKey, CommentRange } from './plugin'
+import { commentPluginKey, type CommentRange } from './plugin'
 
 /**
  * 评论范围同步结果

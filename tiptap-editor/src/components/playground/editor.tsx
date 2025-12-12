@@ -1,7 +1,7 @@
 "use client"
 
-import { memo, useEffect, useRef, useState } from 'react'
-import { EditorContent, EditorContext } from '@tiptap/react'
+import { memo, useRef, useState } from 'react'
+import { useCurrentEditor } from '@tiptap/react'
 
 // --- UI Primitives ---
 import { Toolbar } from 'tiptap-styles/ui'
@@ -30,56 +30,50 @@ import content from './data/content.json' with { type: 'json' }
 import { useAutoSave } from 'tiptap-react-hook'
 import { HeaderToolbar } from './header-toolbar'
 import { MobileToolbarContent } from './toolbar-mobile-content'
-import { useAiQuickSource, useSlashSuggestion } from './hooks/suggestion-hooks'
-import { useAiSetup, useBindAi } from './hooks/ai-hooks'
 import { useOperateTests } from './hooks/use-operate-tests'
 import { useMobileView } from './hooks/use-mobile-view'
+import { useAiQuickSource, useSlashSuggestion } from './hooks/suggestion-hooks'
+import { useAiSetup, useBindAi } from './hooks/ai-hooks'
 import type { EditorProps } from './types'
 import {
   operateTestSuites,
 } from '@/features/operate-tests'
-import { useDefaultEditor } from './hooks/use-default-editor'
+import { TiptapEditor } from './tiptap-editor'
 
-
-export const Editor = memo<EditorProps>(({
-  initialMarkdown,
-  speakerMap,
-  onSpeakerClick,
+/**
+ * 内部组件：使用 EditorContext 获取 editor 实例，渲染所有 UI 组件
+ */
+const EditorUI = memo<{
+  isMobile: boolean
+  height: number
+  mobileView: 'main' | 'highlighter' | 'link'
+  setMobileView: (view: 'main' | 'highlighter' | 'link') => void
+  commentStore: CommentStore
+  toolbarRef: React.RefObject<HTMLDivElement | null>
+}>(({
+  isMobile,
+  height,
+  mobileView,
+  setMobileView,
+  commentStore,
+  toolbarRef,
 }) => {
-  const isMobile = useIsBreakpoint()
-  const { height } = useWindowSize()
-  const { mobileView, setMobileView } = useMobileView(isMobile)
-
-  const toolbarRef = useRef<HTMLDivElement>(null)
-  const [commentStore] = useState(() => new CommentStore())
+  const { editor } = useCurrentEditor()
   const { aiOrchestrator, aiController } = useAiSetup()
 
-  const { debouncedSave, markdown } = useAutoSave({ storageKey: 'tiptap-editor-content' })
-  const data = initialMarkdown || content || markdown || ''
-  const contentType = typeof data === 'string'
-    ? 'markdown'
-    : 'json'
-
-  const editor = useDefaultEditor({
-    speakerMap,
-    onSpeakerClick,
-    // 编辑器初始内容（从 JSON 文件导入或 Markdown 字符串）
-    content: data,
-    // 明确告诉 Tiptap 当前内容类型，Markdown 字符串会被正确解析
-    contentType,
-    // 监听编辑器内容更新，自动保存到 localStorage
-    onUpdate: ({ editor }) => {
-      debouncedSave(editor)
-    },
+  const rect = useCursorVisibility({
+    editor: editor || null,
+    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   })
+
+  const {
+    operateRunning,
+    runAllOperateTests,
+    runOperateSuite,
+  } = useOperateTests(editor || null, operateTestSuites)
 
   const aiQuickSource = useAiQuickSource(editor, aiController)
   const suggestion = useSlashSuggestion(editor, aiQuickSource)
-
-  const rect = useCursorVisibility({
-    editor,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
-  })
 
   // 启用评论同步，检测评论范围状态
   useCommentSync(editor, commentStore, {
@@ -91,25 +85,8 @@ export const Editor = memo<EditorProps>(({
   // 绑定 AI 集成
   useBindAi(editor, aiController, aiOrchestrator)
 
-  useEffect(() => {
-    if (!editor || !initialMarkdown) {
-      return
-    }
-    editor.commands.setContent(
-      initialMarkdown,
-      { contentType: 'markdown' }
-    )
-  }, [editor, initialMarkdown])
-
-  const {
-    operateRunning,
-    runAllOperateTests,
-    runOperateSuite,
-  } = useOperateTests(editor, operateTestSuites)
-
-
   return (
-    <EditorContext.Provider value={ { editor } }>
+    <>
       <Toolbar
         ref={ toolbarRef }
         style={ {
@@ -140,12 +117,6 @@ export const Editor = memo<EditorProps>(({
         ) }
       </Toolbar>
 
-      <EditorContent
-        editor={ editor }
-        role="presentation"
-        className="max-w-3xl mx-auto"
-      />
-
       {/* 测试通用 HoverTooltip */ }
       <EditorHoverTooltip editor={ editor } enabled={ false } />
 
@@ -171,7 +142,46 @@ export const Editor = memo<EditorProps>(({
 
       {/* AI 操作面板 */ }
       <AIActionPanel controller={ aiController } className='fixed bottom-4 left-1/2 -translate-x-1/2 z-50' />
-    </EditorContext.Provider>
+    </>
+  )
+})
+
+EditorUI.displayName = 'EditorUI'
+
+export const Editor = memo<EditorProps>(({
+  initialMarkdown,
+  speakerMap,
+  onSpeakerClick,
+}) => {
+  const isMobile = useIsBreakpoint()
+  const { height } = useWindowSize()
+  const { mobileView, setMobileView } = useMobileView(isMobile)
+
+  const toolbarRef = useRef<HTMLDivElement>(null)
+  const [commentStore] = useState(() => new CommentStore())
+
+  const { debouncedSave, markdown } = useAutoSave({ storageKey: 'tiptap-editor-content' })
+  const data = initialMarkdown || content || markdown || ''
+
+  return (
+    <TiptapEditor
+      data={ data }
+      speakerMap={ speakerMap }
+      onSpeakerClick={ onSpeakerClick }
+      className="max-w-3xl mx-auto"
+      onUpdate={ ({ editor }) => {
+        debouncedSave(editor)
+      } }
+    >
+      <EditorUI
+        isMobile={ isMobile }
+        height={ height }
+        mobileView={ mobileView }
+        setMobileView={ setMobileView }
+        commentStore={ commentStore }
+        toolbarRef={ toolbarRef }
+      />
+    </TiptapEditor>
   )
 })
 
