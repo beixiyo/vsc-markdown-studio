@@ -8,7 +8,7 @@
 import { useEffect } from 'react'
 import type { Editor } from '@tiptap/react'
 import { CommentStore } from '../../comment-store'
-import { syncCommentRanges } from '../../comment-sync'
+import { syncCommentRanges, type CommentSyncResult } from '../../comment-sync'
 
 /**
  * 评论同步选项
@@ -57,6 +57,15 @@ export function useCommentSync(
 
     let timeoutId: ReturnType<typeof setTimeout> | null = null
 
+    // 应用同步结果：当文档中已无评论 mark 时，删除 Store 中对应的评论，避免数据与 UI 脱节
+    const applySyncResult = (result: CommentSyncResult) => {
+      if (result.deleted.length > 0) {
+        result.deleted.forEach((commentId) => {
+          commentStore.deleteComment(commentId)
+        })
+      }
+    }
+
     // 同步函数（带防抖）
     const sync = () => {
       if (timeoutId) {
@@ -64,7 +73,8 @@ export function useCommentSync(
       }
 
       timeoutId = setTimeout(() => {
-        syncCommentRanges(editor, commentStore)
+        const result = syncCommentRanges(editor, commentStore)
+        applySyncResult(result)
       }, debounceMs)
     }
 
@@ -77,7 +87,8 @@ export function useCommentSync(
 
       if (isUndoRedo && syncOnUndoRedo) {
         // 撤销/重做后立即同步（不使用防抖）
-        syncCommentRanges(editor, commentStore)
+        const result = syncCommentRanges(editor, commentStore)
+        applySyncResult(result)
       } else {
         // 普通更新使用防抖
         sync()
