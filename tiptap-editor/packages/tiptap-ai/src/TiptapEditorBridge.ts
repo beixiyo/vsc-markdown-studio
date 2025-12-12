@@ -9,9 +9,6 @@ const PREVIEW_DECORATION_CLASSES = 'bg-gradient-to-r from-amber-400/20 to-emeral
 const PROCESSING_DECORATION_CLASSES = 'bg-gradient-to-r from-blue-500/15 to-purple-600/15 border-b-2 border-blue-500/40 animate-pulse'
 const ERROR_DECORATION_CLASSES = 'bg-red-500/15 border-b-2 border-red-500/50 rounded-sm'
 
-/** 全局装饰状态管理（简化实现，实际生产环境建议使用 Extension） */
-let globalDecorationSet: DecorationSet = DecorationSet.empty
-
 /**
  * 创建预览装饰插件（需要在编辑器初始化时添加）
  * @example
@@ -33,18 +30,16 @@ export function createAIPreviewDecorationPlugin() {
         /** 如果事务包含预览装饰更新，使用新的装饰集 */
         const meta = tr.getMeta(PREVIEW_DECORATION_KEY)
         if (meta !== undefined) {
-          globalDecorationSet = meta
           return meta
         }
         /** 否则映射现有装饰 */
         const mapped = set.map(tr.mapping, tr.doc)
-        globalDecorationSet = mapped
         return mapped
       },
     },
     props: {
-      decorations: () => {
-        return globalDecorationSet
+      decorations: (state) => {
+        return PREVIEW_DECORATION_KEY.getState(state)
       },
     },
   })
@@ -289,7 +284,7 @@ export function createTiptapEditorBridge(editor: Editor): EditorBridge {
       if (!editor || editor.isDestroyed || from < 0 || to < 0 || from >= to)
         return
 
-      const previewText = preview.text || ''
+      const previewText = preview.text || preview.delta || ''
       if (!previewText)
         return
 

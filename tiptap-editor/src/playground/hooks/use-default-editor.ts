@@ -30,7 +30,7 @@ export function useDefaultEditor(options: UseDefaultOptions) {
         /** 无障碍标签：供屏幕阅读器使用 */
         'aria-label': 'Main content area, start typing to enter text.',
         /** 编辑器根元素的 CSS 类名 */
-        'class': 'flex-1 p-10 sm:p-12',
+        'class': '',
       },
       // Selected 的文本可被点击插入取消 Selected 状态
       handleClick: createHandleClick(),

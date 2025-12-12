@@ -39,7 +39,7 @@ export const Editor = memo<EditorProps>(({
       data={ data }
       speakerMap={ speakerMap }
       onSpeakerClick={ onSpeakerClick }
-      className="max-w-3xl mx-auto"
+      className="max-w-3xl mx-auto p-10"
       onUpdate={ ({ editor }) => {
         debouncedSave(editor)
       } }

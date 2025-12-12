@@ -89,6 +89,7 @@ export class AIOrchestrator {
 
     this.abortRunning('new request')
     this.abortController = new AbortController()
+    this.latestPreview = {}
 
     this.bus.emit('start', { payload, mode })
 

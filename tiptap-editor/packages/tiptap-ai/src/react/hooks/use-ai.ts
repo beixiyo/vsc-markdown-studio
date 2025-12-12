@@ -12,6 +12,13 @@ export function useAI(config: UseAIConfig): UseAIReturn {
 
   const [isProcessing, setIsProcessing] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
+  const computeCanTrigger = useCallback(() => {
+    if (!editor || editor.isDestroyed)
+      return false
+    const { selection } = editor.state
+    return !selection.empty
+  }, [editor])
+  const [canTriggerState, setCanTriggerState] = useState(() => computeCanTrigger())
 
   /** 订阅控制器状态变化 */
   useEffect(() => {
@@ -27,17 +34,30 @@ export function useAI(config: UseAIConfig): UseAIReturn {
   }, [controller])
 
   /** 检查是否可以触发 AI（需要选中文本） */
-  const canTrigger = useCallback(() => {
-    if (!editor || editor.isDestroyed)
-      return false
-    const { selection } = editor.state
-    return !selection.empty
-  }, [editor])
+  useEffect(() => {
+    setCanTriggerState(computeCanTrigger())
+    if (!editor)
+      return
+
+    const handleSelectionUpdate = () => { setCanTriggerState(computeCanTrigger()) }
+    const handleTransaction = () => { setCanTriggerState(computeCanTrigger()) }
+    const handleDestroy = () => { setCanTriggerState(false) }
+
+    editor.on('selectionUpdate', handleSelectionUpdate)
+    editor.on('transaction', handleTransaction)
+    editor.on('destroy', handleDestroy)
+
+    return () => {
+      editor.off('selectionUpdate', handleSelectionUpdate)
+      editor.off('transaction', handleTransaction)
+      editor.off('destroy', handleDestroy)
+    }
+  }, [editor, computeCanTrigger])
 
   /** 触发 AI 处理 */
   const handleTrigger = useCallback(
     (prompt?: string) => {
-      if (!editor || !controller || !canTrigger())
+      if (!editor || !controller || !computeCanTrigger())
         return
 
       const payload = getTiptapSelectionPayload(editor)
@@ -56,7 +76,7 @@ export function useAI(config: UseAIConfig): UseAIReturn {
         console.error('AI 处理失败:', err)
       })
     },
-    [editor, controller, mode, canTrigger],
+    [editor, controller, mode, computeCanTrigger],
   )
 
   /** 接受预览 */
@@ -80,7 +100,7 @@ export function useAI(config: UseAIConfig): UseAIReturn {
       : 'AI 增强'
 
   return {
-    canTrigger: canTrigger(),
+    canTrigger: canTriggerState,
     isProcessing,
     isPreview,
     handleTrigger,
