@@ -1,0 +1,38 @@
+{
+  "name": "tiptap-speaker-node",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "tiptap-config": "workspace:*",
+    "@tiptap/pm": "^3.13.0"
+  },
+  "peerDependencies": {
+    "@tiptap/core": "^3.13.0",
+    "@tiptap/markdown": "^3.13.0"
+  },
+  "devDependencies": {
+    "@tiptap/markdown": "^3.13.0"
+  },
+  "scripts": {
+    "build": "vite build"
+  }
+}

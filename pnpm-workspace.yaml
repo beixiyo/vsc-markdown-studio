@@ -1,3 +1,5 @@
 packages:
   - 'packages/*'
+  - '!packages/vsc-markdown-studio' # 暂不打包 VSCode 插件
   - 'blocknote/**'
+  - 'tiptap-editor/**'

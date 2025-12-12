@@ -1,0 +1,55 @@
+.tiptap.ProseMirror {
+  h1,
+  h2,
+  h3,
+  h4 {
+    position: relative;
+    color: inherit;
+    font-style: inherit;
+
+    &:first-child,
+    &:first-of-type {
+      margin-top: 0;
+    }
+
+    /* Heading placeholder 样式 */
+    &.is-empty[data-placeholder]:has(
+        > .ProseMirror-trailingBreak:only-child
+      )::before {
+      content: attr(data-placeholder);
+      pointer-events: none;
+      height: 0;
+      position: absolute;
+      width: 100%;
+      text-align: inherit;
+      left: 0;
+      right: 0;
+      color: var(--placeholder-color, #adb5bd);
+      opacity: 0.6;
+    }
+  }
+
+  h1 {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-top: 3em;
+  }
+
+  h2 {
+    font-size: 1.25em;
+    font-weight: 700;
+    margin-top: 2.5em;
+  }
+
+  h3 {
+    font-size: 1.125em;
+    font-weight: 600;
+    margin-top: 2em;
+  }
+
+  h4 {
+    font-size: 1em;
+    font-weight: 600;
+    margin-top: 2em;
+  }
+}

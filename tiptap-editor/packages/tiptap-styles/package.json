@@ -1,0 +1,48 @@
+{
+  "name": "tiptap-styles",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/icons/index.cjs",
+  "module": "./dist/icons/index.js",
+  "types": "./dist/icons/index.d.ts",
+  "exports": {
+    "./index.css": "./dist/index.css",
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js"
+    },
+    "./tiptap-node": {
+      "types": "./dist/tiptap-node/index.d.ts",
+      "import": "./dist/tiptap-node/index.js"
+    },
+    "./ui": {
+      "types": "./dist/ui/index.d.ts",
+      "import": "./dist/ui/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@tiptap/extension-horizontal-rule": "^3.13.0",
+    "@floating-ui/react": "^0.27.16",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-popover": "^1.1.15",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "peerDependencies": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "@tiptap/pm": "^3.13.0",
+    "@tiptap/react": "^3.13.0"
+  }
+}

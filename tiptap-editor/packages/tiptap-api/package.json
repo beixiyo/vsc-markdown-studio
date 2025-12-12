@@ -1,0 +1,42 @@
+{
+  "name": "tiptap-api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "lodash.throttle": "^4.1.1"
+  },
+  "peerDependencies": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "@tiptap/react": "^3.13.0",
+    "@tiptap/core": "^3.13.0",
+    "@tiptap/pm": "^3.13.0",
+    "@tiptap/markdown": "^3.13.0",
+    "@tiptap/starter-kit": "^3.13.0"
+  },
+  "devDependencies": {
+    "@types/lodash.throttle": "^4.1.9"
+  },
+  "scripts": {
+    "build": "vite build"
+  }
+}

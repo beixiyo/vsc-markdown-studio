@@ -1,0 +1,6 @@
+import 'tiptap-config/tailwind.css'
+export * from './plugin'
+export * from './comment-store'
+export * from './comment'
+export * from './comment-sync'
+export * from './comment-export'

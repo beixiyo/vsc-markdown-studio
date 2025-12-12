@@ -1,0 +1,30 @@
+import { useEffect, useState } from 'react'
+
+type BreakpointMode = 'min' | 'max'
+
+/**
+ * 断点检测 Hook，用于判断当前视口是否满足给定条件
+ */
+export function useIsBreakpoint(
+  mode: BreakpointMode = 'max',
+  breakpoint = 768
+) {
+  const [matches, setMatches] = useState<boolean | undefined>(undefined)
+
+  useEffect(() => {
+    const query = mode === 'min'
+      ? `(min-width: ${breakpoint}px)`
+      : `(max-width: ${breakpoint - 1}px)`
+
+    const mql = window.matchMedia(query)
+    const onChange = (e: MediaQueryListEvent) => setMatches(e.matches)
+
+    setMatches(mql.matches)
+    mql.addEventListener('change', onChange)
+
+    return () => mql.removeEventListener('change', onChange)
+  }, [mode, breakpoint])
+
+  return !!matches
+}
+

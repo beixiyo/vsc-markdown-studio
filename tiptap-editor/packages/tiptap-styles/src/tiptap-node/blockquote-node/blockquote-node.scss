@@ -1,0 +1,53 @@
+.tiptap.ProseMirror {
+  --blockquote-bg-color: var(--tt-gray-light-900);
+
+  .dark & {
+    --blockquote-bg-color: var(--tt-gray-dark-900);
+  }
+}
+
+/* =====================
+     BLOCKQUOTE
+     ===================== */
+.tiptap.ProseMirror {
+  blockquote {
+    position: relative;
+    padding-left: 1em;
+    padding-top: 0.375em;
+    padding-bottom: 0.375em;
+    margin: 1.5rem 0;
+
+    p {
+      margin-top: 0;
+
+      /* Blockquote 内段落 placeholder 样式 */
+      &.is-empty[data-placeholder]:has(
+          > .ProseMirror-trailingBreak:only-child
+        )::before {
+        content: attr(data-placeholder);
+        pointer-events: none;
+        height: 0;
+        position: absolute;
+        width: 100%;
+        text-align: inherit;
+        left: 0;
+        right: 0;
+        color: var(--placeholder-color, #adb5bd);
+        opacity: 0.6;
+      }
+    }
+
+    /* Blockquote 左侧装饰线 */
+    &::before {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0.25em;
+      background-color: var(--blockquote-bg-color);
+      content: "";
+      border-radius: 0;
+    }
+  }
+}

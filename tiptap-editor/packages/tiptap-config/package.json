@@ -1,0 +1,15 @@
+{
+  "type": "module",
+  "name": "tiptap-config",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tailwind.css": "./tailwind.css"
+  },
+  "scripts": {
+    "lint": "eslint ./src --fix"
+  }
+}

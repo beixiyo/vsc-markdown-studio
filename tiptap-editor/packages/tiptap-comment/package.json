@@ -1,0 +1,52 @@
+{
+  "name": "tiptap-comment",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./index.css": "./dist/index.css",
+    "./react": {
+      "require": {
+        "types": "./dist/react/index.d.ts",
+        "default": "./dist/react/index.cjs"
+      },
+      "import": {
+        "types": "./dist/react/index.d.ts",
+        "default": "./dist/react/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "tiptap-api": "workspace:*",
+    "tiptap-react-hook": "workspace:*",
+    "tiptap-config": "workspace:*",
+    "tiptap-styles": "workspace:*"
+  },
+  "peerDependencies": {
+    "@tiptap/react": "^3.13.0",
+    "@tiptap/core": "^3.13.0",
+    "@tiptap/pm": "^3.13.0",
+    "@floating-ui/react": "^0.27.16",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "scripts": {
+    "build": "vite build"
+  }
+}

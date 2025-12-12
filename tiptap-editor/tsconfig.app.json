@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "types": [
+      "vite/client"
+    ],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "tiptap-styles": ["./packages/tiptap-styles/src/index.ts"],
+      "tiptap-styles/icons": ["./packages/tiptap-styles/src/icons/index.ts"],
+      "tiptap-styles/tiptap-node": ["./packages/tiptap-styles/src/tiptap-node/index.ts"],
+      "tiptap-styles/ui": ["./packages/tiptap-styles/src/ui/index.ts"],
+      "tiptap-styles/utils": ["./packages/tiptap-styles/src/utils/index.ts"],
+
+      "tiptap-ai": ["./packages/tiptap-ai/src/index.ts"],
+      "tiptap-ai/react": ["./packages/tiptap-ai/src/react/index.ts"],
+
+      "tiptap-comment": ["./packages/tiptap-comment/src/index.ts"],
+      "tiptap-comment/react": ["./packages/tiptap-comment/src/react/index.ts"],
+
+      "tiptap-api": ["./packages/tiptap-api/src/index.ts"],
+      "tiptap-react-hook": ["./packages/tiptap-react-hook/src/index.ts"],
+      "tiptap-trigger": ["./packages/tiptap-trigger/src/index.ts"],
+      "tiptap-trigger/react": ["./packages/tiptap-trigger/src/react/index.ts"],
+
+      "tiptap-speaker-node": ["./packages/tiptap-speaker-node/src/index.ts"],
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
