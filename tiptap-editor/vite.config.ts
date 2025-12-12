@@ -41,6 +41,7 @@ export default defineConfig(({ command }) => {
       alias: {
         '@': path.resolve(__dirname, './src'),
         ...(command === 'serve' && {
+          'tiptap-api/react': path.resolve(__dirname, './packages/tiptap-api/src/react/index.ts'),
           'tiptap-api': path.resolve(__dirname, './packages/tiptap-api/src/index.ts'),
           'tiptap-react-hook': path.resolve(__dirname, './packages/tiptap-react-hook/src/index.ts'),
 

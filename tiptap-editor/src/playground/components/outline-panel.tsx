@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import type { Editor } from '@tiptap/core'
 import { scrollToRange } from 'tiptap-api'
-import { useMarkdownOutline } from '../hooks/use-markdown-outline'
+import { useMarkdownOutline } from 'tiptap-api/react'
 
 type OutlinePanelProps = {
   editor: Editor | null
@@ -49,10 +49,7 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
   }
 
   return (
-    <div className="w-64 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]/80 p-3 shadow-sm">
-      <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--tt-gray-dark-500)]">
-        大纲
-      </div>
+    <div className="w-56 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]/80 p-2 shadow-sm">
       <div className="max-h-[70vh] overflow-auto pr-1">
         { renderItems(outline) }
       </div>
