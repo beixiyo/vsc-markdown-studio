@@ -76,7 +76,7 @@ export default defineConfig(({ command }) => {
             'react',
             'react-dom',
           ]
-          return id.startsWith('@tiptap') || react.some(r => id === r)
+          return react.some(r => id === r)
         },
         output: {
           assetFileNames: (assetInfo) => {
