@@ -61,6 +61,9 @@ export function useSuggestion(
     let retryTimer: number | null = null
     let addedTriggerIds: string[] = []
     let disposed = false
+    let retryCount = 0
+    const maxRetry = 50
+    const retryDelay = 16
 
     const setup = () => {
       if (disposed) {
@@ -76,7 +79,12 @@ export function useSuggestion(
           error instanceof Error
           && (error.message === ERROR_EXTENSION_API_NOT_AVAILABLE || error.message === ERROR_EXTENSION_NOT_MOUNTED)
         ) {
-          retryTimer = window.setTimeout(setup, 1)
+          if (retryCount >= maxRetry) {
+            console.error(ERROR_EXTENSION_NOT_MOUNTED, error)
+            return
+          }
+          retryCount += 1
+          retryTimer = window.setTimeout(setup, retryDelay)
           return
         }
         console.error(ERROR_EXTENSION_NOT_MOUNTED, error)
@@ -254,6 +262,10 @@ export function useSuggestion(
 
     const handleKeydown = (event: KeyboardEvent) => {
       if (!state.active) {
+        return
+      }
+
+      if (items.length === 0) {
         return
       }
 

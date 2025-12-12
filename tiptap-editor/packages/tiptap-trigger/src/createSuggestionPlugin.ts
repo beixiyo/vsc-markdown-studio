@@ -290,12 +290,16 @@ export function createSuggestionPlugin(): {
       }
 
       const trigger = triggers.get(triggerId)
+      if (!trigger || trigger.allowProgrammaticOpen === false) {
+        return
+      }
+
       const { state, dispatch } = view
 
       const tr = state.tr.setMeta(TRIGGER_PLUGIN_KEY, {
         type: 'open',
         triggerId,
-        deleteTriggerCharacter: options?.deleteTriggerCharacter ?? trigger?.deleteTriggerCharacterOnSelect,
+        deleteTriggerCharacter: options?.deleteTriggerCharacter ?? trigger.deleteTriggerCharacterOnSelect,
         ignoreQueryLength: options?.ignoreQueryLength,
       })
 
