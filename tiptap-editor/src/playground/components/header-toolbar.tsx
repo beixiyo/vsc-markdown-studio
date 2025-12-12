@@ -33,30 +33,27 @@ import { ThemeToggle } from './theme-toggle'
 import 'tiptap-comment/index.css'
 import 'tiptap-trigger/index.css'
 
-export function HeaderToolbar({
-  onHighlighterClick,
-  onLinkClick,
-  isMobile,
-  commentStore,
-  operateSuites,
-  onRunAllOperateTests,
-  onRunOperateSuite,
-  operateTestsRunning = false,
-  operateTestsDisabled = false,
-}: {
-  onHighlighterClick: () => void
-  onLinkClick: () => void
-  isMobile: boolean
-  commentStore: CommentStore
-  operateSuites?: OperateTestSuite[]
-  onRunAllOperateTests?: () => void
-  onRunOperateSuite?: (suiteId: string) => void
-  operateTestsRunning?: boolean
-  operateTestsDisabled?: boolean
-}) {
+export function HeaderToolbar(props: HeaderToolbarProps) {
+  const {
+    onHighlighterClick = (() => { }),
+    onLinkClick = (() => { }),
+    isMobile = false,
+    commentStore,
+    operateSuites,
+    onRunAllOperateTests,
+    onRunOperateSuite,
+    operateTestsRunning = false,
+    operateTestsDisabled = false,
+    showTestButtons = false,
+  } = props
+
   return (
     <>
       <Spacer />
+
+      <ToolbarGroup>
+        <OutlineButton />
+      </ToolbarGroup>
 
       <ToolbarGroup>
         <UndoRedoButton action="undo" />
@@ -85,11 +82,11 @@ export function HeaderToolbar({
         <MarkButton type="underline" />
         { !isMobile
           ? (
-              <ColorHighlightPopover />
-            )
+            <ColorHighlightPopover />
+          )
           : (
-              <ColorHighlightPopoverButton onClick={ onHighlighterClick } />
-            ) }
+            <ColorHighlightPopoverButton onClick={ onHighlighterClick } />
+          ) }
         { !isMobile
           ? <LinkPopover />
           : <LinkButton onClick={ onLinkClick } /> }
@@ -115,12 +112,12 @@ export function HeaderToolbar({
 
       <ToolbarGroup>
         <ImageUploadButton text="Add" />
-        <CommentSidebar commentStore={ commentStore } />
+        { commentStore && <CommentSidebar commentStore={ commentStore } /> }
       </ToolbarGroup>
 
       <ToolbarSeparator />
 
-      <ToolbarGroup>
+      { showTestButtons && <ToolbarGroup>
         <OperateTestDropdownMenu
           suites={ operateSuites }
           portal={ isMobile }
@@ -131,9 +128,8 @@ export function HeaderToolbar({
         />
         <SelectionTestButton />
         <ScrollTestButton />
-
-        <OutlineButton />
       </ToolbarGroup>
+      }
 
       <Spacer />
 
@@ -144,4 +140,17 @@ export function HeaderToolbar({
       </ToolbarGroup>
     </>
   )
+}
+
+export type HeaderToolbarProps = {
+  onHighlighterClick?: () => void
+  onLinkClick?: () => void
+  isMobile?: boolean
+  commentStore?: CommentStore
+  operateSuites?: OperateTestSuite[]
+  onRunAllOperateTests?: () => void
+  onRunOperateSuite?: (suiteId: string) => void
+  operateTestsRunning?: boolean
+  operateTestsDisabled?: boolean
+  showTestButtons?: boolean
 }

@@ -68,33 +68,34 @@ export const EditorUI = memo<EditorUIProps>(({
         style={ {
           ...(isMobile
             ? {
-                bottom: `calc(100% - ${height - rect.y}px)`,
-              }
+              bottom: `calc(100% - ${height - rect.y}px)`,
+            }
             : {}),
         } }
       >
         { mobileView === 'main'
           ? (
-              <HeaderToolbar
-                onHighlighterClick={ () => setMobileView('highlighter') }
-                onLinkClick={ () => setMobileView('link') }
-                isMobile={ isMobile }
-                commentStore={ commentStore }
-                operateSuites={ operateTestSuites }
-                onRunAllOperateTests={ runAllOperateTests }
-                onRunOperateSuite={ runOperateSuite }
-                operateTestsRunning={ operateRunning }
-                operateTestsDisabled={ !editor }
-              />
-            )
+            <HeaderToolbar
+              onHighlighterClick={ () => setMobileView('highlighter') }
+              onLinkClick={ () => setMobileView('link') }
+              isMobile={ isMobile }
+              commentStore={ commentStore }
+              operateSuites={ operateTestSuites }
+              onRunAllOperateTests={ runAllOperateTests }
+              onRunOperateSuite={ runOperateSuite }
+              operateTestsRunning={ operateRunning }
+              operateTestsDisabled={ !editor }
+              showTestButtons
+            />
+          )
           : (
-              <MobileToolbarContent
-                type={ mobileView === 'highlighter'
-                  ? 'highlighter'
-                  : 'link' }
-                onBack={ () => setMobileView('main') }
-              />
-            ) }
+            <MobileToolbarContent
+              type={ mobileView === 'highlighter'
+                ? 'highlighter'
+                : 'link' }
+              onBack={ () => setMobileView('main') }
+            />
+          ) }
       </Toolbar>
 
       {/* 测试 HoverTooltip */ }

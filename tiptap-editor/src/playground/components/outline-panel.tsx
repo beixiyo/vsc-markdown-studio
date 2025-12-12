@@ -28,7 +28,7 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
           onClick={ () => handleJump(item.position) }
         >
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[var(--tt-gray-dark-400)]">
+            <span className="text-xs text-[var(--tt-color-text-gray)]">
               H
               { item.level }
             </span>
@@ -53,7 +53,7 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
   }
 
   return (
-    <div className="w-56 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]/80 p-2 shadow-sm">
+    <div className="w-56 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]/80 p-2 shadow-sm bg-[var(--tt-bg-color)]">
       <div className="max-h-[70vh] overflow-auto pr-1">
         { renderItems(outline) }
       </div>

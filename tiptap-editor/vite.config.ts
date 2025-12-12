@@ -71,10 +71,13 @@ export default defineConfig(({ command }) => {
         fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
       },
       rollupOptions: {
-        external: [
-          'react',
-          'react-dom',
-        ],
+        external: (id) => {
+          const react = [
+            'react',
+            'react-dom',
+          ]
+          return id.startsWith('@tiptap') || react.some(r => id === r)
+        },
         output: {
           assetFileNames: (assetInfo) => {
             const isCss = assetInfo.names.some(name => name.endsWith('.css'))
