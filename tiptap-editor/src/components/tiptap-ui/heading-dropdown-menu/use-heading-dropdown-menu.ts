@@ -4,7 +4,7 @@ import type { Editor } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 
 // --- Icons ---
 import { HeadingIcon } from 'tiptap-styles/icons'

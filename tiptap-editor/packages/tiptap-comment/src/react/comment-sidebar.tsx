@@ -3,7 +3,7 @@
 import type { Editor } from '@tiptap/react'
 import type { CommentStore } from '../comment-store'
 import { memo, useCallback, useMemo, useState, useSyncExternalStore } from 'react'
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import {
   Popover,
   PopoverContent,

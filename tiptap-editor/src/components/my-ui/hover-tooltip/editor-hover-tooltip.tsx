@@ -1,7 +1,7 @@
 import type { Placement } from '@floating-ui/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getHoverContentFromCoords, type HoverContent } from 'tiptap-api'
-import { useThrottledCallback } from 'tiptap-react-hook'
+import { useThrottledCallback } from 'tiptap-api/react'
 import { HoverTooltip } from './hover-tooltip'
 
 /**

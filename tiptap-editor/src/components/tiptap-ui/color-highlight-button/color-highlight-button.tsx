@@ -4,7 +4,7 @@ import type { UseColorHighlightConfig } from '@/components/tiptap-ui/color-highl
 
 import { forwardRef, useCallback, useMemo } from 'react'
 
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import { Badge, Button } from 'tiptap-styles/ui'
 
 import { parseShortcutKeys } from 'tiptap-styles/utils'

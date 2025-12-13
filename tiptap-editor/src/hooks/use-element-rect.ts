@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { useThrottledCallback } from 'tiptap-react-hook'
+import { useThrottledCallback } from 'tiptap-api/react'
 
 /**
  * 元素边界矩形的状态类型，排除了 DOMRect 的 toJSON 方法

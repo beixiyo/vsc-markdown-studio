@@ -5,7 +5,7 @@ import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { useCallback, useEffect, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 
 // --- Icons ---
 import { BlockquoteIcon } from 'tiptap-styles/icons'

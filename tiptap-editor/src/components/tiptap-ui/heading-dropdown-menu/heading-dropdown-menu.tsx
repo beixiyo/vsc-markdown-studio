@@ -6,7 +6,7 @@ import type { UseHeadingDropdownMenuConfig } from '@/components/tiptap-ui/headin
 import { forwardRef, useCallback, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 // --- Icons ---
 import { ChevronDownIcon } from 'tiptap-styles/icons'
 import { Button, ButtonGroup, Card, CardBody, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from 'tiptap-styles/ui'

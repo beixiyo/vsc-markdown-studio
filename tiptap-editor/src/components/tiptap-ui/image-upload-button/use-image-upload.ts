@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 // --- Icons ---
 import { ImagePlusIcon } from 'tiptap-styles/icons'
 

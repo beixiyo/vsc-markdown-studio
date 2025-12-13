@@ -6,7 +6,7 @@ import type {
   UseColorHighlightConfig,
 } from '@/components/tiptap-ui/color-highlight-button'
 import { forwardRef, useMemo, useRef, useState } from 'react'
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import { BanIcon, HighlighterIcon } from 'tiptap-styles/icons'
 
 import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Popover, PopoverContent, PopoverTrigger, Separator } from 'tiptap-styles/ui'

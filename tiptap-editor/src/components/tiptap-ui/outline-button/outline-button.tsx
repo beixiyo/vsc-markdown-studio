@@ -11,7 +11,7 @@ import {
   useMergeRefs,
 } from '@floating-ui/react'
 import { forwardRef, useCallback, useState } from 'react'
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import { ListIcon } from 'tiptap-styles/icons'
 import { Button } from 'tiptap-styles/ui'
 import { OutlinePanel } from '@/playground/components/outline-panel'

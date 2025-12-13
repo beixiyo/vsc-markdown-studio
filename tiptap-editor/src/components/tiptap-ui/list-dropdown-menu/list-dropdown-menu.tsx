@@ -5,7 +5,7 @@ import type { ButtonProps } from 'tiptap-styles/ui'
 import { useCallback, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 
 // --- Icons ---
 import { ChevronDownIcon } from 'tiptap-styles/icons'

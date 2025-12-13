@@ -4,7 +4,7 @@ import type { UseCodeBlockConfig } from '@/components/tiptap-ui/code-block-butto
 
 import { forwardRef, useCallback } from 'react'
 
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import { Badge, Button } from 'tiptap-styles/ui'
 
 import { parseShortcutKeys } from 'tiptap-styles/utils'

@@ -6,7 +6,7 @@ import type { Mark, UseMarkConfig } from '@/components/tiptap-ui/mark-button'
 
 import { forwardRef, useCallback } from 'react'
 
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import { Badge, Button } from 'tiptap-styles/ui'
 
 import { parseShortcutKeys } from 'tiptap-styles/utils'

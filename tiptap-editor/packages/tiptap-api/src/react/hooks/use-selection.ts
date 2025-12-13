@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
-import { getSelectedText, hasSelectedText } from 'tiptap-api'
+import { getSelectedText, hasSelectedText } from '../../operate'
 import { useTiptapEditor } from './use-tiptap-editor'
 
 export interface UseSelectionConfig {

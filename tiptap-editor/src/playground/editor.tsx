@@ -6,7 +6,7 @@ import { memo, useRef, useState } from 'react'
 
 import { CommentStore } from 'tiptap-comment'
 
-import { useAutoSave } from 'tiptap-react-hook'
+import { useAutoSave } from 'tiptap-api/react'
 
 import { useIsBreakpoint } from '@/hooks/use-is-breakpoint'
 import { useWindowSize } from '@/hooks/use-window-size'

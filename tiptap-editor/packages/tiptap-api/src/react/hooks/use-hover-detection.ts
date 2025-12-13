@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { getHoverContentFromCoords, type HoverContent } from 'tiptap-api'
+import { getHoverContentFromCoords, type HoverContent } from '../../operate'
 import { useThrottledCallback } from './use-throttled-callback'
 
 export interface UseHoverDetectionConfig {

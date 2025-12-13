@@ -12,7 +12,7 @@ import type {
 import { forwardRef, useCallback } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import { Badge, Button } from 'tiptap-styles/ui'
 
 // --- Lib ---

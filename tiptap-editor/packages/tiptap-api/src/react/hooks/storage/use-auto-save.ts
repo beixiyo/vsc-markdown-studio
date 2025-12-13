@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
-import { getEditorContent } from 'tiptap-api'
+import { getEditorContent } from '../../../operate'
 import { useTiptapEditor } from '../use-tiptap-editor'
 import { useStorageSave, type UseStorageSaveOptions } from './use-storage-save'
 

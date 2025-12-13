@@ -11,7 +11,7 @@ import {
   useMergeRefs,
 } from '@floating-ui/react'
 import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import { Button } from 'tiptap-styles/ui'
 import { canCreateComment, createComment } from '../comment'
 import { type CommentAuthor, CommentStore } from '../comment-store'

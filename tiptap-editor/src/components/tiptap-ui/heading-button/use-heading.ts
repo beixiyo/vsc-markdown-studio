@@ -3,7 +3,7 @@
 import type { Editor } from '@tiptap/react'
 import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { useCallback, useEffect, useState } from 'react'
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 
 import {
   HeadingFiveIcon,

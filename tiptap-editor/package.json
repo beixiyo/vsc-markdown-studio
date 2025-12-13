@@ -52,7 +52,6 @@
     "tiptap-api": "workspace:*",
     "tiptap-ai": "workspace:*",
     "tiptap-comment": "workspace:*",
-    "tiptap-react-hook": "workspace:*",
     "tiptap-trigger": "workspace:*",
     "tiptap-styles": "workspace:*",
     "tiptap-speaker-node": "workspace:*",

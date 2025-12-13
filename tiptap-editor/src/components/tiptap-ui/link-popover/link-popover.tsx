@@ -5,7 +5,7 @@ import type { ButtonProps } from 'tiptap-styles/ui'
 import type { UseLinkPopoverConfig } from '@/components/tiptap-ui/link-popover'
 import { forwardRef, useCallback, useEffect, useState } from 'react'
 
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import {
   CornerDownLeftIcon,
   ExternalLinkIcon,

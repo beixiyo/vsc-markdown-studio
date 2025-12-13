@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useThrottledCallback } from 'tiptap-react-hook'
+import { useThrottledCallback } from 'tiptap-api/react'
 
 export interface WindowSizeState {
   /**

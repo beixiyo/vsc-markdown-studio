@@ -32,7 +32,6 @@
     "dist"
   ],
   "dependencies": {
-    "tiptap-react-hook": "workspace:*",
     "tiptap-styles": "workspace:*",
     "tiptap-config": "workspace:*"
   },

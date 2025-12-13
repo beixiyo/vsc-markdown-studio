@@ -1,6 +1,7 @@
 import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useRef } from 'react'
-import { getEditorContent, LocalStorageEngine, type StorageEngine } from 'tiptap-api'
+import { LocalStorageEngine, type StorageEngine } from '../../../storage'
+import { getEditorContent } from '../../../operate'
 
 /** 默认存储键名 */
 const DEFAULT_STORAGE_KEY = '@@STORAGE_KEY'

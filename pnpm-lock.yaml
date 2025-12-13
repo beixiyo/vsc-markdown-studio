@@ -723,9 +723,6 @@ importers:
       tiptap-comps:
         specifier: workspace:*
         version: link:packages/tiptap-comps
-      tiptap-react-hook:
-        specifier: workspace:*
-        version: link:packages/tiptap-react-hook
       tiptap-speaker-node:
         specifier: workspace:*
         version: link:packages/tiptap-speaker-node
@@ -763,9 +760,6 @@ importers:
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
-      tiptap-react-hook:
-        specifier: workspace:*
-        version: link:../tiptap-react-hook
       tiptap-styles:
         specifier: workspace:*
         version: link:../tiptap-styles
@@ -827,9 +821,6 @@ importers:
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
-      tiptap-react-hook:
-        specifier: workspace:*
-        version: link:../tiptap-react-hook
       tiptap-styles:
         specifier: workspace:*
         version: link:../tiptap-styles
@@ -854,39 +845,11 @@ importers:
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
-      tiptap-react-hook:
-        specifier: workspace:*
-        version: link:../tiptap-react-hook
       tiptap-styles:
         specifier: workspace:*
         version: link:../tiptap-styles
 
   tiptap-editor/packages/tiptap-config: {}
-
-  tiptap-editor/packages/tiptap-react-hook:
-    dependencies:
-      '@tiptap/markdown':
-        specifier: ^3.13.0
-        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
-      '@tiptap/react':
-        specifier: ^3.13.0
-        version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      lodash.throttle:
-        specifier: ^4.1.1
-        version: 4.1.1
-      react:
-        specifier: ^19.2.1
-        version: 19.2.3
-      react-dom:
-        specifier: ^19.2.1
-        version: 19.2.3(react@19.2.3)
-      tiptap-api:
-        specifier: workspace:*
-        version: link:../tiptap-api
-    devDependencies:
-      '@types/lodash.throttle':
-        specifier: ^4.1.9
-        version: 4.1.9
 
   tiptap-editor/packages/tiptap-speaker-node:
     dependencies:

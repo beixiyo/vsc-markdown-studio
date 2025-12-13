@@ -1,7 +1,7 @@
 import type { ChainedCommands, Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
 
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 
 import {
   AlignCenterIcon,

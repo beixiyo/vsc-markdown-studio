@@ -48,7 +48,6 @@
 
       "tiptap-api": ["./packages/tiptap-api/src/index.ts"],
       "tiptap-api/react": ["./packages/tiptap-api/src/react/index.ts"],
-      "tiptap-react-hook": ["./packages/tiptap-react-hook/src/index.ts"],
       "tiptap-trigger": ["./packages/tiptap-trigger/src/index.ts"],
       "tiptap-trigger/react": ["./packages/tiptap-trigger/src/react/index.ts"],
 

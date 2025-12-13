@@ -15,7 +15,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { hasSelectedText } from 'tiptap-api'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-config'
-import { useTiptapEditor } from 'tiptap-react-hook'
+import { useTiptapEditor } from 'tiptap-api/react'
 import { cn } from 'tiptap-styles/utils'
 
 export interface SelectionToolbarProps {
