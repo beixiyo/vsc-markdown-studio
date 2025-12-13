@@ -2,7 +2,7 @@ import type React from 'react'
 import { memo } from 'react'
 import { CloseIcon, CornerDownLeftIcon } from 'tiptap-styles/icons'
 import { cn } from 'tiptap-styles/utils'
-import { useIsBreakpoint } from '../hooks/use-is-breakpoint'
+import { useIsBreakpoint } from 'tiptap-api/react'
 
 /**
  * 评论编辑弹窗属性

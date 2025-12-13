@@ -4,7 +4,7 @@ import type { ButtonProps } from 'tiptap-styles/ui'
 import type {
   HighlightColor,
   UseColorHighlightConfig,
-} from '@/components/tiptap-ui/color-highlight-button'
+} from '../color-highlight-button/use-color-highlight'
 import { forwardRef, useMemo, useRef, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { BanIcon, HighlighterIcon } from 'tiptap-styles/icons'
@@ -14,10 +14,10 @@ import {
   ColorHighlightButton,
   pickHighlightColorsByValue,
   useColorHighlight,
-} from '@/components/tiptap-ui/color-highlight-button'
+} from '../color-highlight-button'
 
 import { useIsBreakpoint } from 'tiptap-api/react'
-import { useMenuNavigation } from '@/hooks/use-menu-navigation'
+import { useMenuNavigation } from '../../../hooks/use-menu-navigation'
 
 export interface ColorHighlightPopoverContentProps {
   /**

@@ -2,7 +2,7 @@
 
 import type { Editor } from '@tiptap/react'
 import type { ButtonProps } from 'tiptap-styles/ui'
-import type { UseLinkPopoverConfig } from '@/components/tiptap-ui/link-popover'
+import type { UseLinkPopoverConfig } from './use-link-popover'
 import { forwardRef, useCallback, useEffect, useState } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
@@ -14,7 +14,7 @@ import {
 } from 'tiptap-styles/icons'
 import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Input, InputGroup, Popover, PopoverContent, PopoverTrigger, Separator } from 'tiptap-styles/ui'
 
-import { useLinkPopover } from '@/components/tiptap-ui/link-popover'
+import { useLinkPopover } from './use-link-popover'
 import { useIsBreakpoint } from 'tiptap-api/react'
 
 export interface LinkMainProps {

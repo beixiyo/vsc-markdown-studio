@@ -8,7 +8,7 @@ import { CommentStore } from 'tiptap-comment'
 
 import { useAutoSave } from 'tiptap-api/react'
 
-import { useIsBreakpoint } from '@/hooks/use-is-breakpoint'
+import { useIsBreakpoint } from 'tiptap-api/react'
 import { useWindowSize } from '@/hooks/use-window-size'
 import { TiptapEditor } from './components'
 import content from './data/content.json' with { type: 'json' }
