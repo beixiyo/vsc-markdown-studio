@@ -9,9 +9,9 @@ import {
   ListIcon,
   ListOrderedIcon,
   ListTodoIcon,
-} from 'tiptap-styles/icons'
+} from '../../../icons'
 
-import { isNodeInSchema } from 'tiptap-styles/utils'
+import { isNodeInSchema } from '../../../utils'
 
 import {
   canToggleList,

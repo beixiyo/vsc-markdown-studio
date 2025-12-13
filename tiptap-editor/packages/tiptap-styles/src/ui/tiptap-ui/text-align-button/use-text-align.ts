@@ -8,12 +8,12 @@ import {
   AlignJustifyIcon,
   AlignLeftIcon,
   AlignRightIcon,
-} from 'tiptap-styles/icons'
+} from '../../../icons'
 
 import {
   isExtensionAvailable,
   isNodeTypeSelected,
-} from 'tiptap-styles/utils'
+} from '../../../utils'
 
 export type TextAlign = 'left' | 'center' | 'right' | 'justify'
 

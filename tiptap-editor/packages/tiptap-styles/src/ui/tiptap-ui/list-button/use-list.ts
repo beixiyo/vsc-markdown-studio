@@ -12,7 +12,7 @@ import {
   ListIcon,
   ListOrderedIcon,
   ListTodoIcon,
-} from 'tiptap-styles/icons'
+} from '../../../icons'
 
 // --- Lib ---
 import {
@@ -21,7 +21,7 @@ import {
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
-} from 'tiptap-styles/utils'
+} from '../../../utils'
 
 export type ListType = 'bulletList' | 'orderedList' | 'taskList'
 

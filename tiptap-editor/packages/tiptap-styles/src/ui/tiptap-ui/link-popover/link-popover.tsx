@@ -1,7 +1,7 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 import type { UseLinkPopoverConfig } from './use-link-popover'
 import { forwardRef, useCallback, useEffect, useState } from 'react'
 
@@ -11,8 +11,8 @@ import {
   ExternalLinkIcon,
   LinkIcon,
   TrashIcon,
-} from 'tiptap-styles/icons'
-import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Input, InputGroup, Popover, PopoverContent, PopoverTrigger, Separator } from 'tiptap-styles/ui'
+} from '../../../icons'
+import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Input, InputGroup, Popover, PopoverContent, PopoverTrigger, Separator } from '../../index'
 
 import { useLinkPopover } from './use-link-popover'
 import { useIsBreakpoint } from 'tiptap-api/react'

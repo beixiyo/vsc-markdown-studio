@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
 // --- Icons ---
-import { HeadingIcon } from 'tiptap-styles/icons'
+import { HeadingIcon } from '../../../icons'
 
 // --- Tiptap UI ---
 import {

@@ -1,6 +1,5 @@
 import '../index.css'
 
-export * from './components'
 // UI 组件（可自行组合）
 export * from './editor'
 export * from './editor-ui'

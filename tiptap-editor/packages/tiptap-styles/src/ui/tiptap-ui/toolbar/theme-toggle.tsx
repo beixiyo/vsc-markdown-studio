@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 // --- Icons ---
-import { MoonStarIcon, SunIcon } from 'tiptap-styles/icons'
-import { Button } from 'tiptap-styles/ui'
+import { MoonStarIcon, SunIcon } from '../../../icons'
+import { Button } from '../../index'
 
 export function ThemeToggle() {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
@@ -45,3 +45,4 @@ export function ThemeToggle() {
     </Button>
   )
 }
+

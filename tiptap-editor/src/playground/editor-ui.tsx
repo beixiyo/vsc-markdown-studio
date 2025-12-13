@@ -4,24 +4,30 @@ import { useCurrentEditor } from '@tiptap/react'
 import { memo } from 'react'
 
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
-import { CommentButton, useCommentSync } from 'tiptap-comment/react'
+import { CommentButton, CommentSidebar, useCommentSync } from 'tiptap-comment/react'
 
 import { SelectionToolbar } from 'tiptap-comps'
 import { Toolbar } from 'tiptap-styles/ui'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
-import { LinkPopover } from '@/components/tiptap-ui/link-popover'
+import { LinkPopover, ToolbarGroup } from 'tiptap-styles/ui'
+import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
+import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
+import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
 
 import {
   operateTestSuites,
 } from '@/features/operate-tests'
 
-import { useCursorVisibility } from '@/hooks/use-cursor-visibility'
-import { HeaderToolbar, MobileToolbarContent } from './components'
+import { useCursorVisibility } from 'tiptap-api/react'
+import { HeaderToolbar, MobileToolbarContent } from 'tiptap-styles/ui'
 import { useAiSetup, useBindAi } from './hooks/ai-hooks'
 import { useAiQuickSource, useSlashSuggestion } from './hooks/suggestion-hooks'
 import { useOperateTests } from './hooks/use-operate-tests'
+
+import 'tiptap-comment/index.css'
+import 'tiptap-trigger/index.css'
 
 /**
  * 内部组件：使用 EditorContext 获取 editor 实例，渲染所有 UI 组件
@@ -79,14 +85,23 @@ export const EditorUI = memo<EditorUIProps>(({
               onHighlighterClick={ () => setMobileView('highlighter') }
               onLinkClick={ () => setMobileView('link') }
               isMobile={ isMobile }
-              commentStore={ commentStore }
-              operateSuites={ operateTestSuites }
-              onRunAllOperateTests={ runAllOperateTests }
-              onRunOperateSuite={ runOperateSuite }
-              operateTestsRunning={ operateRunning }
-              operateTestsDisabled={ !editor }
-              showTestButtons
-            />
+            >
+              <ToolbarGroup>
+                { commentStore && <CommentSidebar commentStore={ commentStore } /> }
+              </ToolbarGroup>
+              <ToolbarGroup>
+                <OperateTestDropdownMenu
+                  suites={ operateTestSuites }
+                  portal={ isMobile }
+                  onRunAll={ runAllOperateTests }
+                  onRunSuite={ runOperateSuite }
+                  running={ operateRunning }
+                  disabled={ !editor }
+                />
+                <SelectionTestButton />
+                <ScrollTestButton />
+              </ToolbarGroup>
+            </HeaderToolbar>
           )
           : (
             <MobileToolbarContent

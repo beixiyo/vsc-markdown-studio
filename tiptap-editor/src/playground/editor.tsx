@@ -9,8 +9,8 @@ import { CommentStore } from 'tiptap-comment'
 import { useAutoSave } from 'tiptap-api/react'
 
 import { useIsBreakpoint } from 'tiptap-api/react'
-import { useWindowSize } from '@/hooks/use-window-size'
-import { TiptapEditor } from './components'
+import { useWindowSize } from 'tiptap-api/react'
+import { TiptapEditor } from './tiptap-editor'
 import content from './data/content.json' with { type: 'json' }
 import { EditorUI } from './editor-ui'
 import { useMobileView } from './hooks/use-mobile-view'

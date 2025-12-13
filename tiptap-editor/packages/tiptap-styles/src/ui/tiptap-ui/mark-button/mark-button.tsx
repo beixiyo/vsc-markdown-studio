@@ -1,15 +1,15 @@
 'use client'
 
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 
 import type { Mark, UseMarkConfig } from './use-mark'
 
 import { forwardRef, useCallback } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Badge, Button } from 'tiptap-styles/ui'
+import { Badge, Button } from '../../index'
 
-import { parseShortcutKeys } from 'tiptap-styles/utils'
+import { parseShortcutKeys } from '../../../utils'
 import { MARK_SHORTCUT_KEYS, useMark } from './use-mark'
 
 export interface MarkButtonProps

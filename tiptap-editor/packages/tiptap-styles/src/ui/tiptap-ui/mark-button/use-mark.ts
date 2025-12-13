@@ -11,9 +11,9 @@ import {
   SubscriptIcon,
   SuperscriptIcon,
   UnderlineIcon,
-} from 'tiptap-styles/icons'
+} from '../../../icons'
 
-import { isMarkInSchema, isNodeTypeSelected } from 'tiptap-styles/utils'
+import { isMarkInSchema, isNodeTypeSelected } from '../../../utils'
 
 export type Mark =
   | 'bold'

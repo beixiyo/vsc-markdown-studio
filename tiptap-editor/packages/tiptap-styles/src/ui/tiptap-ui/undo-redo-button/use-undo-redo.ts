@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
 
-import { Redo2Icon, Undo2Icon } from 'tiptap-styles/icons'
-import { isNodeTypeSelected } from 'tiptap-styles/utils'
+import { Redo2Icon, Undo2Icon } from '../../../icons'
+import { isNodeTypeSelected } from '../../../utils'
 
 export type UndoRedoAction = 'undo' | 'redo'
 

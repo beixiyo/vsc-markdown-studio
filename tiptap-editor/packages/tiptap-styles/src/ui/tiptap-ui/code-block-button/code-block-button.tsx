@@ -1,13 +1,13 @@
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 
 import type { UseCodeBlockConfig } from './use-code-block'
 
 import { forwardRef, useCallback } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Badge, Button } from 'tiptap-styles/ui'
+import { Badge, Button } from '../../index'
 
-import { parseShortcutKeys } from 'tiptap-styles/utils'
+import { parseShortcutKeys } from '../../../utils'
 import {
   CODE_BLOCK_SHORTCUT_KEY,
   useCodeBlock,

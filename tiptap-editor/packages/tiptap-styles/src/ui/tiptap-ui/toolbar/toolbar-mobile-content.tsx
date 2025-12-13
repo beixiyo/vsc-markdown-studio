@@ -1,8 +1,10 @@
 import { memo } from 'react'
-import { ArrowLeftIcon, HighlighterIcon, LinkIcon } from 'tiptap-styles/icons'
-import { Button, ToolbarGroup, ToolbarSeparator } from 'tiptap-styles/ui'
-import { ColorHighlightPopoverContent } from '@/components/tiptap-ui/color-highlight-popover'
-import { LinkContent } from '@/components/tiptap-ui/link-popover'
+import { ArrowLeftIcon, HighlighterIcon, LinkIcon } from '../../../icons'
+import {
+  Button, ToolbarGroup, ToolbarSeparator,
+  ColorHighlightPopoverContent,
+  LinkContent,
+} from '../../index'
 
 export type MobileToolbarContentProps = {
   type: 'highlighter' | 'link'
@@ -33,3 +35,4 @@ export const MobileToolbarContent = memo<MobileToolbarContentProps>((props) => {
 })
 
 MobileToolbarContent.displayName = 'MobileToolbarContent'
+

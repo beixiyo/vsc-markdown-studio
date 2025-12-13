@@ -1,5 +1,5 @@
 // --- UI Primitives ---
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 
 import type { UseHeadingDropdownMenuConfig } from './use-heading-dropdown-menu'
 
@@ -8,8 +8,8 @@ import { forwardRef, useCallback, useState } from 'react'
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
 // --- Icons ---
-import { ChevronDownIcon } from 'tiptap-styles/icons'
-import { Button, ButtonGroup, Card, CardBody, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from 'tiptap-styles/ui'
+import { ChevronDownIcon } from '../../../icons'
+import { Button, ButtonGroup, Card, CardBody, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../index'
 
 // --- Tiptap UI ---
 import { HeadingButton } from '../heading-button'

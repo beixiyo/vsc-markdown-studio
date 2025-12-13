@@ -3,7 +3,7 @@ import { memo, useCallback } from 'react'
 import { scrollToRange } from 'tiptap-api'
 import { useMarkdownOutline } from 'tiptap-api/react'
 
-type OutlinePanelProps = {
+export type OutlinePanelProps = {
   editor: Editor | null
 }
 

@@ -7,10 +7,10 @@ import { useHotkeys } from 'react-hotkeys-hook'
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
 // --- Icons ---
-import { ImagePlusIcon } from 'tiptap-styles/icons'
+import { ImagePlusIcon } from '../../../icons'
 
 // --- Lib ---
-import { isExtensionAvailable } from 'tiptap-styles/utils'
+import { isExtensionAvailable } from '../../../utils'
 
 import { useIsBreakpoint } from 'tiptap-api/react'
 

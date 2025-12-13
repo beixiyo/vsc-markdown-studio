@@ -1,12 +1,12 @@
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 
 import type { UseBlockquoteConfig } from './use-blockquote'
 import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
-import { Badge, Button } from 'tiptap-styles/ui'
+import { Badge, Button } from '../../index'
 
-import { parseShortcutKeys } from 'tiptap-styles/utils'
+import { parseShortcutKeys } from '../../../utils'
 import {
   BLOCKQUOTE_SHORTCUT_KEY,
   useBlockquote,

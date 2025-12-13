@@ -1,4 +1,4 @@
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 import {
   autoUpdate,
   flip,
@@ -12,9 +12,9 @@ import {
 } from '@floating-ui/react'
 import { forwardRef, useCallback, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { ListIcon } from 'tiptap-styles/icons'
+import { ListIcon } from '../../../icons'
 import { Button } from '../..'
-import { OutlinePanel } from '@/playground/components/outline-panel'
+import { OutlinePanel } from './outline-panel'
 
 export interface OutlineButtonProps extends Omit<ButtonProps, 'type'> {
   /**

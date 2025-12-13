@@ -1,5 +1,5 @@
 // --- UI Primitives ---
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 
 // --- Tiptap UI ---
 import type { UseImageUploadConfig } from './use-image-upload'
@@ -8,10 +8,10 @@ import { forwardRef, useCallback } from 'react'
 
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Badge, Button } from 'tiptap-styles/ui'
+import { Badge, Button } from '../../index'
 
 // --- Lib ---
-import { parseShortcutKeys } from 'tiptap-styles/utils'
+import { parseShortcutKeys } from '../../../utils'
 import {
   IMAGE_UPLOAD_SHORTCUT_KEY,
   useImageUpload,

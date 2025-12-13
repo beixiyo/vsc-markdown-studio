@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
 // --- Icons ---
-import { CodeBlockIcon } from 'tiptap-styles/icons'
+import { CodeBlockIcon } from '../../../icons'
 
 // --- Lib ---
 import {
@@ -17,7 +17,7 @@ import {
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
-} from 'tiptap-styles/utils'
+} from '../../../utils'
 
 export const CODE_BLOCK_SHORTCUT_KEY = 'mod+alt+c'
 

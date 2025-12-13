@@ -1,6 +1,6 @@
 'use client'
 
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 
 import type {
   UndoRedoAction,
@@ -10,9 +10,9 @@ import type {
 import { forwardRef, useCallback } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Badge, Button } from 'tiptap-styles/ui'
+import { Badge, Button } from '../../index'
 
-import { parseShortcutKeys } from 'tiptap-styles/utils'
+import { parseShortcutKeys } from '../../../utils'
 import {
   UNDO_REDO_SHORTCUT_KEYS,
   useUndoRedo,

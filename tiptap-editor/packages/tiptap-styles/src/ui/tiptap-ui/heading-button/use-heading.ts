@@ -12,14 +12,14 @@ import {
   HeadingSixIcon,
   HeadingThreeIcon,
   HeadingTwoIcon,
-} from 'tiptap-styles/icons'
+} from '../../../icons'
 import {
   findNodePosition,
   isNodeInSchema,
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
-} from 'tiptap-styles/utils'
+} from '../../../utils'
 
 export type Level = 1 | 2 | 3 | 4 | 5 | 6
 

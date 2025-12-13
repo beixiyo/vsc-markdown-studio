@@ -1,5 +1,5 @@
 // --- UI Primitives ---
-import type { ButtonProps } from 'tiptap-styles/ui'
+import type { ButtonProps } from '../../index'
 
 // --- Tiptap UI ---
 import type {
@@ -10,9 +10,9 @@ import type {
 import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
-import { Badge, Button } from 'tiptap-styles/ui'
+import { Badge, Button } from '../../index'
 // --- Lib ---
-import { parseShortcutKeys } from 'tiptap-styles/utils'
+import { parseShortcutKeys } from '../../../utils'
 import {
   HEADING_SHORTCUT_KEYS,
   useHeading,

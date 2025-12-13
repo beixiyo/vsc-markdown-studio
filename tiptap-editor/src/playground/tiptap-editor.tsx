@@ -1,10 +1,10 @@
 'use client'
 
-import type { EditorContentProps } from '../types'
+import type { EditorContentProps } from './types'
 import { EditorContent, EditorContext } from '@tiptap/react'
 
 import { memo, useEffect } from 'react'
-import { useDefaultEditor } from '../hooks/use-default-editor'
+import { useDefaultEditor } from './hooks/use-default-editor'
 
 export const TiptapEditor = memo<EditorContentProps>(({
   data,
