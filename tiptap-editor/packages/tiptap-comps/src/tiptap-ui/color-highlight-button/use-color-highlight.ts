@@ -5,7 +5,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
+
 // --- Icons ---
 import { HighlighterIcon } from '../../icons'
 
@@ -14,8 +15,6 @@ import {
   isMarkInSchema,
   isNodeTypeSelected,
 } from '../../utils'
-
-import { useIsBreakpoint } from 'tiptap-api/react'
 
 export const COLOR_HIGHLIGHT_SHORTCUT_KEY = 'mod+shift+h'
 export const HIGHLIGHT_COLORS = [

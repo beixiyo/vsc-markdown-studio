@@ -6,31 +6,25 @@ import { memo } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { CommentButton, CommentSidebar, useCommentSync } from 'tiptap-comment/react'
 
-import { SelectionToolbar } from 'tiptap-comps'
-import { Toolbar } from 'tiptap-comps'
+import { LinkPopover, SelectionToolbar, ToolbarGroup } from 'tiptap-comps'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
-import { LinkPopover, ToolbarGroup } from 'tiptap-comps'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
 
-import {
-  operateTestSuites,
-} from '@/features/operate-tests'
+import { operateTestSuites } from '@/features/operate-tests'
 
-import { useCursorVisibility } from 'tiptap-api/react'
-import { HeaderToolbar, MobileToolbarContent } from 'tiptap-comps'
-import { useAiSetup, useBindAi } from './hooks/ai-hooks'
-import { useAiQuickSource, useSlashSuggestion } from './hooks/suggestion-hooks'
-import { useOperateTests } from './hooks/use-operate-tests'
+import { EditorUI as BaseEditorUI } from '../editor/editor-ui'
+import { useAiQuickSource, useAiSetup, useBindAi, useSlashSuggestion } from '../editor/hooks'
+import { useOperateTests } from '../features/operate-tests/use-operate-tests'
 
 import 'tiptap-comment/index.css'
 import 'tiptap-trigger/index.css'
 
 /**
- * 内部组件：使用 EditorContext 获取 editor 实例，渲染所有 UI 组件
+ * 演示用编辑器 UI：使用通用的 BaseEditorUI，通过 children 传递额外的插件功能
  */
 export const EditorUI = memo<EditorUIProps>(({
   isMobile,
@@ -42,11 +36,6 @@ export const EditorUI = memo<EditorUIProps>(({
 }) => {
   const { editor } = useCurrentEditor()
   const { aiOrchestrator, aiController } = useAiSetup()
-
-  const rect = useCursorVisibility({
-    editor: editor || null,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
-  })
 
   const {
     operateRunning,
@@ -69,49 +58,29 @@ export const EditorUI = memo<EditorUIProps>(({
 
   return (
     <>
-      <Toolbar
-        ref={ toolbarRef }
-        style={ {
-          ...(isMobile
-            ? {
-              bottom: `calc(100% - ${height - rect.y}px)`,
-            }
-            : {}),
-        } }
+      <BaseEditorUI
+        isMobile={ isMobile }
+        height={ height }
+        mobileView={ mobileView }
+        setMobileView={ setMobileView }
+        toolbarRef={ toolbarRef }
       >
-        { mobileView === 'main'
-          ? (
-            <HeaderToolbar
-              onHighlighterClick={ () => setMobileView('highlighter') }
-              onLinkClick={ () => setMobileView('link') }
-              isMobile={ isMobile }
-            >
-              <ToolbarGroup>
-                { commentStore && <CommentSidebar commentStore={ commentStore } /> }
-              </ToolbarGroup>
-              <ToolbarGroup>
-                <OperateTestDropdownMenu
-                  suites={ operateTestSuites }
-                  portal={ isMobile }
-                  onRunAll={ runAllOperateTests }
-                  onRunSuite={ runOperateSuite }
-                  running={ operateRunning }
-                  disabled={ !editor }
-                />
-                <SelectionTestButton />
-                <ScrollTestButton />
-              </ToolbarGroup>
-            </HeaderToolbar>
-          )
-          : (
-            <MobileToolbarContent
-              type={ mobileView === 'highlighter'
-                ? 'highlighter'
-                : 'link' }
-              onBack={ () => setMobileView('main') }
-            />
-          ) }
-      </Toolbar>
+        <ToolbarGroup>
+          { commentStore && <CommentSidebar commentStore={ commentStore } /> }
+        </ToolbarGroup>
+        <ToolbarGroup>
+          <OperateTestDropdownMenu
+            suites={ operateTestSuites }
+            portal={ isMobile }
+            onRunAll={ runAllOperateTests }
+            onRunSuite={ runOperateSuite }
+            running={ operateRunning }
+            disabled={ !editor }
+          />
+          <SelectionTestButton />
+          <ScrollTestButton />
+        </ToolbarGroup>
+      </BaseEditorUI>
 
       {/* 测试 HoverTooltip */ }
       <EditorHoverTooltip editor={ editor } enabled={ false } />

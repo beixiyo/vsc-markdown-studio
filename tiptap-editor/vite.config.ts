@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
-import path, { dirname } from 'path'
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import react from '@vitejs/plugin-react'
 import { codeInspectorPlugin } from 'code-inspector-plugin'
-import { fileURLToPath } from 'url'
+import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 
 const filename = fileURLToPath(new URL(import.meta.url).href)
@@ -20,12 +20,12 @@ export default defineConfig(({ command }) => {
       react(),
       dts({ tsconfigPath: './tsconfig.app.json' }),
       /**
-        * @link https://www.npmjs.com/package/react-devtools
-        * ```bash
-        * npm install -g react-devtools
-        * react-devtools
-        * ```
-        */
+       * @link https://www.npmjs.com/package/react-devtools
+       * ```bash
+       * npm install -g react-devtools
+       * react-devtools
+       * ```
+       */
       {
         name: 'react-devtools-inject',
         apply: 'serve', // 仅在开发服务器模式下应用
@@ -58,17 +58,19 @@ export default defineConfig(({ command }) => {
           'tiptap-trigger': path.resolve(__dirname, './packages/tiptap-trigger/src/index.ts'),
 
           'tiptap-speaker-node': path.resolve(__dirname, './packages/tiptap-speaker-node/src/index.ts'),
-        })
-      }
+        }),
+      },
     },
     server: {
       host: '0.0.0.0',
     },
     build: {
       lib: {
-        entry: path.resolve(__dirname, './src/playground/index.ts'),
+        entry: path.resolve(__dirname, './src/editor/index.ts'),
         formats: ['es', 'cjs'],
-        fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
+        fileName: (format, entryName) => `${entryName}.${format === 'es'
+          ? 'js'
+          : 'cjs'}`,
       },
       rollupOptions: {
         external: (id) => {
@@ -76,7 +78,7 @@ export default defineConfig(({ command }) => {
             'react',
             'react-dom',
           ]
-          return react.some(r => id === r)
+          return react.includes(id)
         },
         output: {
           assetFileNames: (assetInfo) => {

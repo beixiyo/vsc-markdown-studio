@@ -1,23 +1,21 @@
 import type { Editor } from '@tiptap/react'
 import type { ButtonProps } from '../../ui'
 
+import { forwardRef, useMemo, useRef, useState } from 'react'
+import { useIsBreakpoint, useMenuNavigation, useTiptapEditor } from 'tiptap-api/react'
+
+import { BanIcon, HighlighterIcon } from '../../icons'
+import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Popover, PopoverContent, PopoverTrigger, Separator } from '../../ui'
+
 import {
   ColorHighlightButton,
   type HighlightColor,
   type UseColorHighlightConfig,
 } from '../color-highlight-button'
-import { forwardRef, useMemo, useRef, useState } from 'react'
-import { useTiptapEditor } from 'tiptap-api/react'
-import { BanIcon, HighlighterIcon } from '../../icons'
-
-import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Popover, PopoverContent, PopoverTrigger, Separator } from '../../ui'
 import {
   pickHighlightColorsByValue,
   useColorHighlight,
 } from '../color-highlight-button/use-color-highlight'
-
-import { useIsBreakpoint } from 'tiptap-api/react'
-import { useMenuNavigation } from 'tiptap-api/react'
 
 export interface ColorHighlightPopoverContentProps {
   /**

@@ -1,8 +1,8 @@
 import type { PreviewController } from '../PreviewController'
 import type { PreviewStatus } from '../PreviewStateMachine'
 import { memo, useEffect, useState } from 'react'
-import { CheckIcon, XIcon } from 'tiptap-comps/icons'
 import { Button } from 'tiptap-comps'
+import { CheckIcon, XIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 
 /**

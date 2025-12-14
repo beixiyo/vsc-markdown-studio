@@ -1,7 +1,5 @@
 import type { OperateTestSuite } from '@/features/operate-tests'
 import { useMemo } from 'react'
-import { ChevronDownIcon } from 'tiptap-comps/icons'
-
 import {
   Button,
   ButtonGroup,
@@ -12,6 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'tiptap-comps'
+
+import { ChevronDownIcon } from 'tiptap-comps/icons'
 
 type OperateTestDropdownMenuProps = {
   suites?: OperateTestSuite[]

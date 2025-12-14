@@ -1,7 +1,9 @@
 import { memo } from 'react'
 import { ArrowLeftIcon, HighlighterIcon, LinkIcon } from '../../icons'
 import {
-  Button, ToolbarGroup, ToolbarSeparator,
+  Button,
+  ToolbarGroup,
+  ToolbarSeparator,
 } from '../../ui'
 import {
   ColorHighlightPopoverContent,
@@ -37,4 +39,3 @@ export const MobileToolbarContent = memo<MobileToolbarContentProps>((props) => {
 })
 
 MobileToolbarContent.displayName = 'MobileToolbarContent'
-

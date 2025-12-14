@@ -1,18 +1,19 @@
 import { useEditor, type UseEditorOptions } from '@tiptap/react'
-import { createExtensions, type SpeakerClick, type SpeakerMap } from '../extensions'
+import { createExtensions } from '../extensions'
 import { createHandleClick } from '../utils'
 
-type UseDefaultOptions = UseEditorOptions & {
-  speakerMap?: SpeakerMap
-  onSpeakerClick?: SpeakerClick
-}
-
-export function useDefaultEditor(options: UseDefaultOptions) {
+export function useDefaultEditor(options: UseEditorOptions) {
   const {
-    speakerMap,
-    onSpeakerClick,
+    extensions: userExtensions,
+    editorProps,
     ...restOptions
   } = options
+
+  const {
+    attributes,
+    handleClick,
+    ...restEditorProps
+  } = editorProps || {}
 
   const editor = useEditor({
     /** 延迟渲染：等待所有扩展初始化完成后再渲染，避免闪烁 */
@@ -31,16 +32,18 @@ export function useDefaultEditor(options: UseDefaultOptions) {
         'aria-label': 'Main content area, start typing to enter text.',
         /** 编辑器根元素的 CSS 类名 */
         'class': '',
+        ...attributes,
       },
-      // Selected 的文本可被点击插入取消 Selected 状态
-      handleClick: createHandleClick(),
+      /** Selected 的文本可被点击插入取消 Selected 状态 */
+      handleClick: handleClick || createHandleClick(),
+      ...restEditorProps,
     },
 
     /** 扩展列表：定义编辑器的所有功能 */
-    extensions: createExtensions({
-      speakerMap,
-      onSpeakerClick,
-    }),
+    extensions: [
+      ...createExtensions(),
+      ...(userExtensions || []),
+    ],
     ...restOptions,
   })
 

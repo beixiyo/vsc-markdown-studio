@@ -1,19 +1,21 @@
 'use client'
 
 import type { EditorProps } from './types'
+import { memo, useEffect, useRef, useState } from 'react'
+import { AI } from 'tiptap-ai'
+import { useAutoSave, useIsBreakpoint, useWindowSize } from 'tiptap-api/react'
 
-import { memo, useRef, useState } from 'react'
+import { CommentMark, CommentStore } from 'tiptap-comment'
+import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-config'
+import { SpeakerNode } from 'tiptap-speaker-node'
 
-import { CommentStore } from 'tiptap-comment'
+import { HorizontalRule, ImageUploadNode } from 'tiptap-styles/tiptap-node'
 
-import { useAutoSave } from 'tiptap-api/react'
-
-import { useIsBreakpoint } from 'tiptap-api/react'
-import { useWindowSize } from 'tiptap-api/react'
-import { TiptapEditor } from './tiptap-editor'
+import { SuggestionTrigger } from 'tiptap-trigger'
+import { TiptapEditor } from '../editor'
+import { useDefaultEditor, useMobileView } from '../editor/hooks'
 import content from './data/content.json' with { type: 'json' }
 import { EditorUI } from './editor-ui'
-import { useMobileView } from './hooks/use-mobile-view'
 
 /**
  * 演示版编辑器：集成所有 UI 能力，适合快速体验
@@ -33,16 +35,63 @@ export const Editor = memo<EditorProps>(({
 
   const { debouncedSave, markdown } = useAutoSave({ storageKey: 'tiptap-editor-content' })
   const data = initialMarkdown || content || markdown || ''
+  const contentType = typeof data === 'string'
+    ? 'markdown'
+    : 'json'
+
+  const editor = useDefaultEditor({
+    /** 编辑器初始内容（从 JSON 文件导入或 Markdown 字符串） */
+    content: data || '',
+    /** 明确告诉 Tiptap 当前内容类型，Markdown 字符串会被正确解析 */
+    contentType,
+    onUpdate(props) {
+      debouncedSave(props.editor)
+    },
+    extensions: [
+      /** AI 预览装饰扩展 */
+      AI,
+      /** 自定义水平线节点 */
+      HorizontalRule,
+      /** Slash / Suggestion 扩展 */
+      SuggestionTrigger.configure(),
+      /** 图片上传节点扩展 */
+      ImageUploadNode.configure({
+        /** 仅接受图片文件 */
+        accept: 'image/*',
+        /** 最大文件大小限制 */
+        maxSize: MAX_FILE_SIZE,
+        /** 最多上传 3 个文件 */
+        limit: 3,
+        /** 上传处理函数 */
+        upload: handleImageUpload,
+        /** 上传失败时的错误处理 */
+        onError: error => console.error('Upload failed:', error),
+      }),
+      /** 评论系统扩展（包含 Mark 和 Plugin） */
+      CommentMark,
+      /** Speaker 自定义节点：解析 [speaker:X]，附带 data-speaker-* 属性 */
+      SpeakerNode.configure({
+        className: 'font-semibold cursor-pointer',
+        speakerMap: speakerMap || {},
+        onClick: onSpeakerClick,
+      }),
+    ],
+  })
+
+  useEffect(() => {
+    if (!editor || !data) {
+      return
+    }
+    editor.commands.setContent(
+      data,
+      { contentType },
+    )
+  }, [editor, data, contentType])
 
   return (
     <TiptapEditor
-      data={ data }
-      speakerMap={ speakerMap }
-      onSpeakerClick={ onSpeakerClick }
+      editor={ editor }
       className="max-w-3xl mx-auto p-10"
-      onUpdate={ ({ editor }) => {
-        debouncedSave(editor)
-      } }
     >
       <EditorUI
         isMobile={ isMobile }

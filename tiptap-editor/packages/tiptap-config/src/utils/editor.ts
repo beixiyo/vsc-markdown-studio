@@ -3,8 +3,8 @@
  */
 import type { Editor } from '@tiptap/react'
 import {
-  TextSelection,
   Selection,
+  TextSelection,
 } from '@tiptap/pm/state'
 
 /**

@@ -5,7 +5,7 @@ import type { ButtonProps } from '../../ui'
 import type { UseLinkPopoverConfig } from './use-link-popover'
 import { forwardRef, useCallback, useEffect, useState } from 'react'
 
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
 import {
   CornerDownLeftIcon,
   ExternalLinkIcon,
@@ -15,7 +15,6 @@ import {
 import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Input, InputGroup, Popover, PopoverContent, PopoverTrigger, Separator } from '../../ui'
 
 import { useLinkPopover } from './use-link-popover'
-import { useIsBreakpoint } from 'tiptap-api/react'
 
 export interface LinkMainProps {
   /**

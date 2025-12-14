@@ -3,8 +3,8 @@
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewWrapper } from '@tiptap/react'
 import { useRef, useState } from 'react'
-import { CloseIcon } from 'tiptap-comps/icons'
 import { Button } from 'tiptap-comps'
+import { CloseIcon } from 'tiptap-comps/icons'
 import { cn, focusNextNode, isValidPosition } from 'tiptap-config'
 import './image-upload-node.scss'
 

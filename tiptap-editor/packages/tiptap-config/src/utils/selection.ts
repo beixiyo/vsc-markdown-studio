@@ -2,10 +2,12 @@
  * 选择相关工具函数
  */
 import type { Node as PMNode } from '@tiptap/pm/model'
+import type {
+  Selection,
+} from '@tiptap/pm/state'
 import {
   AllSelection,
   NodeSelection,
-  Selection,
   TextSelection,
 } from '@tiptap/pm/state'
 import { cellAround, CellSelection } from '@tiptap/pm/tables'

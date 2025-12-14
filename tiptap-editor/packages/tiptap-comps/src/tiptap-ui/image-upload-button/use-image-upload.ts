@@ -5,14 +5,13 @@ import { useCallback, useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
+
 // --- Icons ---
 import { ImagePlusIcon } from '../../icons'
 
 // --- Lib ---
 import { isExtensionAvailable } from '../../utils'
-
-import { useIsBreakpoint } from 'tiptap-api/react'
 
 export const IMAGE_UPLOAD_SHORTCUT_KEY = 'mod+shift+i'
 

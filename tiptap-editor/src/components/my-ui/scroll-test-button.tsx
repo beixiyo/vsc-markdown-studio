@@ -10,8 +10,8 @@ import {
   selectAndScrollToText,
 } from 'tiptap-api'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { ChevronDownIcon, CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { Button, Card, CardBody, CardItemGroup, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Input, InputGroup, Separator } from 'tiptap-comps'
+import { ChevronDownIcon, CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 
 export interface ScrollTestButtonProps {
   /**

@@ -1,8 +1,8 @@
 import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 import { useComposedRef } from 'tiptap-api/react'
-import { useMenuNavigation } from './use-menu-navigation'
 import { cn } from '../../utils'
 import { Separator } from '../separator'
+import { useMenuNavigation } from './use-menu-navigation'
 import './toolbar.scss'
 
 type BaseProps = React.HTMLAttributes<HTMLDivElement>

@@ -3,8 +3,8 @@
  */
 import type { Node as PMNode } from '@tiptap/pm/model'
 import type { Transaction } from '@tiptap/pm/state'
+import type { Editor } from '@tiptap/react'
 import { TextSelection } from '@tiptap/pm/state'
-import { type Editor } from '@tiptap/react'
 
 /**
  * 检查值是否为有效数字（非 null、undefined 或 NaN）

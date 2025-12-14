@@ -1,9 +1,8 @@
 import type React from 'react'
 import { memo, useCallback, useState } from 'react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-config'
-import { CornerDownLeftIcon, SparklesIcon } from 'tiptap-comps/icons'
 import { Button, Input, Popover, PopoverContent, PopoverTrigger } from 'tiptap-comps'
-import { cn } from 'tiptap-config'
+import { CornerDownLeftIcon, SparklesIcon } from 'tiptap-comps/icons'
+import { cn, SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-config'
 
 /**
  * AI 输入弹窗属性

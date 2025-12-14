@@ -1,5 +1,7 @@
 import {
-  Spacer, ToolbarGroup, ToolbarSeparator,
+  Spacer,
+  ToolbarGroup,
+  ToolbarSeparator,
 } from '../../ui'
 import {
   BlockquoteButton,
@@ -21,8 +23,8 @@ import { ThemeToggle } from './theme-toggle'
 
 export function HeaderToolbar(props: HeaderToolbarProps) {
   const {
-    onHighlighterClick = (() => { }),
-    onLinkClick = (() => { }),
+    onHighlighterClick = () => { },
+    onLinkClick = () => { },
     isMobile = false,
     children,
   } = props
@@ -62,11 +64,11 @@ export function HeaderToolbar(props: HeaderToolbarProps) {
         <MarkButton type="underline" />
         { !isMobile
           ? (
-            <ColorHighlightPopover />
-          )
+              <ColorHighlightPopover />
+            )
           : (
-            <ColorHighlightPopoverButton onClick={ onHighlighterClick } />
-          ) }
+              <ColorHighlightPopoverButton onClick={ onHighlighterClick } />
+            ) }
         { !isMobile
           ? <LinkPopover />
           : <LinkButton onClick={ onLinkClick } /> }
@@ -112,4 +114,4 @@ export type HeaderToolbarProps = {
   onLinkClick?: () => void
   isMobile?: boolean
 }
-  & React.PropsWithChildren<React.HTMLAttributes<HTMLElement>>
+& React.PropsWithChildren<React.HTMLAttributes<HTMLElement>>

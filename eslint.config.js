@@ -116,7 +116,7 @@ export default antfu({
   ignores: [
     'dist',
     'public',
-    'node_modules',
+    '**/node_modules/**',
     '**/*.json',
     '**/*.jsonc',
     '**/*.json5',

@@ -1,7 +1,7 @@
 import type { Editor as TiptapEditor } from '@tiptap/core'
 import { useCallback, useMemo, useState } from 'react'
 import { createMarkdownOperate } from 'tiptap-api'
-import { collectOperateTestCases, operateTestExecutor, type OperateTestSuite } from '../../features/operate-tests'
+import { collectOperateTestCases, operateTestExecutor, type OperateTestSuite } from '.'
 
 /**
  * operate 测试运行状态与触发方法
