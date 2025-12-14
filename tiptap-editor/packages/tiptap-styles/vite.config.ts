@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import pkg from './package.json' with { type: 'json' }
+import basePkg from '../../package.json' with { type: 'json' }
 
 export default defineConfig({
   plugins: [
@@ -15,10 +16,8 @@ export default defineConfig({
     cssCodeSplit: false,
     lib: {
       entry: {
-        icons: fileURLToPath(new URL('./src/icons/index.ts', import.meta.url)),
         styles: fileURLToPath(new URL('./src/styles/index.scss', import.meta.url)),
         'tiptap-node': fileURLToPath(new URL('./src/tiptap-node/index.ts', import.meta.url)),
-        ui: fileURLToPath(new URL('./src/ui/index.ts', import.meta.url)),
         utils: fileURLToPath(new URL('./src/utils/index.ts', import.meta.url)),
       },
       formats: ['es', 'cjs'],
@@ -31,9 +30,9 @@ export default defineConfig({
       external: (id) => {
         const allDeps = [
           ...Object.keys(pkg.peerDependencies || {}),
+          ...Object.keys(basePkg.dependencies || {}),
         ]
-        // NOTE: tiptap pm 必须是单实例，所以不能外部化
-        return allDeps.some((dep) => id === dep) || id.includes('@tiptap')
+        return allDeps.some(dep => id === dep) || id.includes('@tiptap/')
       },
       output: {
         assetFileNames: (assetInfo) => {

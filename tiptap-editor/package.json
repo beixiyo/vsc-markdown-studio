@@ -33,31 +33,32 @@
     "@tiptap/core": "^3.13.0",
     "@tiptap/extension-highlight": "^3.13.0",
     "@tiptap/extension-image": "^3.13.0",
-    "@tiptap/markdown": "^3.13.0",
     "@tiptap/extension-list": "^3.13.0",
+    "@tiptap/extension-placeholder": "^3.13.0",
     "@tiptap/extension-subscript": "^3.13.0",
     "@tiptap/extension-superscript": "^3.13.0",
     "@tiptap/extension-text-align": "^3.13.0",
     "@tiptap/extension-typography": "^3.13.0",
-    "@tiptap/extension-placeholder": "^3.13.0",
     "@tiptap/extensions": "^3.13.0",
+    "@tiptap/markdown": "^3.13.0",
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
     "@tiptap/starter-kit": "^3.13.0",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.5.4",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hotkeys-hook": "^5.2.1",
-    "tiptap-api": "workspace:*",
+    "tailwind-merge": "^2.5.4",
     "tiptap-ai": "workspace:*",
+    "tiptap-api": "workspace:*",
     "tiptap-comment": "workspace:*",
-    "tiptap-trigger": "workspace:*",
-    "tiptap-styles": "workspace:*",
+    "tiptap-comps": "workspace:*",
     "tiptap-speaker-node": "workspace:*",
-    "tiptap-comps": "workspace:*"
+    "tiptap-styles": "workspace:*",
+    "tiptap-trigger": "workspace:*"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.1.1"
+    "@vitejs/plugin-react": "^5.1.1",
+    "depcheck": "^1.4.7"
   }
 }

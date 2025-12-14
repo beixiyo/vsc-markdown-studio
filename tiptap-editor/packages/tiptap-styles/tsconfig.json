@@ -8,11 +8,6 @@
     "declaration": true,
     "declarationDir": "dist",
     "jsx": "react-jsx",
-    "composite": false,
-    "types": [
-      "@tiptap/starter-kit",
-      "@tiptap/extension-horizontal-rule",
-      "@tiptap/extension-text-align"
-    ]
+    "composite": false
   }
 }

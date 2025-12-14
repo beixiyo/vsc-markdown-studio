@@ -16,21 +16,34 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       }
-    }
+    },
+    "./icons": {
+      "require": {
+        "types": "./dist/icons/index.d.ts",
+        "default": "./dist/icons/index.cjs"
+      },
+      "import": {
+        "types": "./dist/icons/index.d.ts",
+        "default": "./dist/icons/index.js"
+      }
+    },
+    "./index.css": "./dist/index.css"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
     "tiptap-api": "workspace:*",
-    "tiptap-styles": "workspace:*",
     "tiptap-config": "workspace:*"
   },
   "peerDependencies": {
-    "@floating-ui/react": "^0.27.16",
     "@tiptap/react": "^3.13.0",
     "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "react-dom": "^19.2.1",
+    "@tiptap/starter-kit": "^3.13.0",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@tiptap/extension-text-align": "^3.13.0"
   },
   "scripts": {
     "build": "vite build",

@@ -7,11 +7,11 @@ import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { CommentButton, CommentSidebar, useCommentSync } from 'tiptap-comment/react'
 
 import { SelectionToolbar } from 'tiptap-comps'
-import { Toolbar } from 'tiptap-styles/ui'
+import { Toolbar } from 'tiptap-comps'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
-import { LinkPopover, ToolbarGroup } from 'tiptap-styles/ui'
+import { LinkPopover, ToolbarGroup } from 'tiptap-comps'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
@@ -21,7 +21,7 @@ import {
 } from '@/features/operate-tests'
 
 import { useCursorVisibility } from 'tiptap-api/react'
-import { HeaderToolbar, MobileToolbarContent } from 'tiptap-styles/ui'
+import { HeaderToolbar, MobileToolbarContent } from 'tiptap-comps'
 import { useAiSetup, useBindAi } from './hooks/ai-hooks'
 import { useAiQuickSource, useSlashSuggestion } from './hooks/suggestion-hooks'
 import { useOperateTests } from './hooks/use-operate-tests'

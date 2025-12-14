@@ -38,7 +38,6 @@
     "tiptap-styles": "workspace:*"
   },
   "peerDependencies": {
-    "@floating-ui/react": "^0.27.16",
     "@tiptap/core": "^3.13.0",
     "@tiptap/pm": "^3.13.0",
     "react": "^19.2.1",

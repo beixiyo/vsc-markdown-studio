@@ -33,7 +33,8 @@
   ],
   "dependencies": {
     "tiptap-styles": "workspace:*",
-    "tiptap-config": "workspace:*"
+    "tiptap-config": "workspace:*",
+    "tiptap-comps": "workspace:*"
   },
   "peerDependencies": {
     "@tiptap/react": "^3.13.0",

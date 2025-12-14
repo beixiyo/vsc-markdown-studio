@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { SuggestionItem, SuggestionItemContext, SuggestionSource, SuggestionSourceParams } from '../types'
 import { createElement } from 'react'
-import { AlignLeftIcon, BlockquoteIcon, HeadingOneIcon, HeadingTwoIcon, ListIcon, ListOrderedIcon } from 'tiptap-styles/icons'
+import { AlignLeftIcon, BlockquoteIcon, HeadingOneIcon, HeadingTwoIcon, ListIcon, ListOrderedIcon } from 'tiptap-comps/icons'
 
 type SlashAction = (editor: Editor, context: SuggestionItemContext) => void | Promise<void>
 

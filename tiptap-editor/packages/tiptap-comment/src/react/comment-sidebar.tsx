@@ -8,7 +8,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from 'tiptap-styles/ui'
+} from 'tiptap-comps'
 import { cn } from 'tiptap-styles/utils'
 import { CommentItem } from './components/comment-item'
 

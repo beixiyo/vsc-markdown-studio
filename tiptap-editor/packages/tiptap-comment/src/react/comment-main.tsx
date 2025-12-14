@@ -1,7 +1,7 @@
 import type React from 'react'
 import { memo, useCallback } from 'react'
-import { CloseIcon, CornerDownLeftIcon } from 'tiptap-styles/icons'
-import { Button } from 'tiptap-styles/ui'
+import { CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
+import { Button } from 'tiptap-comps'
 import { cn } from 'tiptap-styles/utils'
 
 export type CommentMainProps = {

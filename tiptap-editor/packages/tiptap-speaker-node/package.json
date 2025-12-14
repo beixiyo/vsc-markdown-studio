@@ -29,9 +29,6 @@
     "@tiptap/core": "^3.13.0",
     "@tiptap/markdown": "^3.13.0"
   },
-  "devDependencies": {
-    "@tiptap/markdown": "^3.13.0"
-  },
   "scripts": {
     "build": "vite build",
     "lint": "eslint ./src --fix"
