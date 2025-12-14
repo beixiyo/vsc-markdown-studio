@@ -32,7 +32,8 @@
     "@tiptap/extension-horizontal-rule": "^3.13.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.4",
-    "tiptap-comps": "workspace:*"
+    "tiptap-comps": "workspace:*",
+    "tiptap-config": "workspace:*"
   },
   "peerDependencies": {
     "react": "^19.2.1",

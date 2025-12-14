@@ -3,7 +3,7 @@ import type { PreviewStatus } from '../PreviewStateMachine'
 import { memo, useEffect, useState } from 'react'
 import { CheckIcon, XIcon } from 'tiptap-comps/icons'
 import { Button } from 'tiptap-comps'
-import { cn } from 'tiptap-styles/utils'
+import { cn } from 'tiptap-config'
 
 /**
  * AI 操作面板的属性

@@ -723,6 +723,9 @@ importers:
       tiptap-comps:
         specifier: workspace:*
         version: link:packages/tiptap-comps
+      tiptap-config:
+        specifier: workspace:*
+        version: link:packages/tiptap-config
       tiptap-speaker-node:
         specifier: workspace:*
         version: link:packages/tiptap-speaker-node
@@ -861,7 +864,26 @@ importers:
         specifier: workspace:*
         version: link:../tiptap-config
 
-  tiptap-editor/packages/tiptap-config: {}
+  tiptap-editor/packages/tiptap-config:
+    dependencies:
+      '@tiptap/pm':
+        specifier: ^3.13.0
+        version: 3.13.0
+      '@tiptap/react':
+        specifier: ^3.13.0
+        version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      react:
+        specifier: ^19.2.1
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.3(react@19.2.3)
+      tailwind-merge:
+        specifier: ^2.5.4
+        version: 2.6.0
 
   tiptap-editor/packages/tiptap-speaker-node:
     dependencies:
@@ -904,6 +926,9 @@ importers:
       tiptap-comps:
         specifier: workspace:*
         version: link:../tiptap-comps
+      tiptap-config:
+        specifier: workspace:*
+        version: link:../tiptap-config
 
   tiptap-editor/packages/tiptap-trigger:
     dependencies:

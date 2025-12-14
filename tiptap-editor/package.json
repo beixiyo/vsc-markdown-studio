@@ -55,6 +55,7 @@
     "tiptap-comps": "workspace:*",
     "tiptap-speaker-node": "workspace:*",
     "tiptap-styles": "workspace:*",
+    "tiptap-config": "workspace:*",
     "tiptap-trigger": "workspace:*"
   },
   "devDependencies": {

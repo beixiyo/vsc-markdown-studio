@@ -1,6 +1,6 @@
 import type { EditorView } from '@tiptap/pm/view'
 import { TextSelection } from '@tiptap/pm/state'
-import { sanitizeUrl } from 'tiptap-styles/utils'
+import { sanitizeUrl } from 'tiptap-config'
 
 /**
  * 处理 Ctrl/Cmd 点击链接的场景，安全打开新窗口

@@ -3,13 +3,41 @@
   "name": "tiptap-config",
   "version": "0.0.1",
   "private": true,
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    },
     "./tailwind.css": "./tailwind.css"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "vite build",
     "lint": "eslint ./src --fix"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "peerDependencies": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "@tiptap/pm": "^3.13.0",
+    "@tiptap/react": "^3.13.0"
   }
 }

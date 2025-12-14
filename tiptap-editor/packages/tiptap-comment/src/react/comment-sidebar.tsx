@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from 'tiptap-comps'
-import { cn } from 'tiptap-styles/utils'
+import { cn } from 'tiptap-config'
 import { CommentItem } from './components/comment-item'
 
 /**

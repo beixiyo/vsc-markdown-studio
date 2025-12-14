@@ -17,7 +17,7 @@ import { HorizontalRule, ImageUploadNode } from 'tiptap-styles/tiptap-node'
 import {
   handleImageUpload,
   MAX_FILE_SIZE,
-} from 'tiptap-styles/utils'
+} from 'tiptap-config'
 import { SuggestionTrigger } from 'tiptap-trigger'
 
 import 'tiptap-comment/index.css'
