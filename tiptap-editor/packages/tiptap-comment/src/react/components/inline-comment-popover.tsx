@@ -1,7 +1,15 @@
 import type { Editor } from '@tiptap/react'
-import type { CommentStore } from '../../comment-store'
-import type { Comment } from '../../comment-store'
-import { memo, useMemo } from 'react'
+import type { Comment, CommentStore } from '../../comment-store'
+import {
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react'
+import { memo, useEffect, useMemo } from 'react'
+import { getSelectionRect } from 'tiptap-api'
 import { CloseIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { CommentItem } from './comment-item'
@@ -20,6 +28,10 @@ export type InlineCommentPopoverProps = {
    */
   inlineCommentRect: DOMRect | null
   /**
+   * 评论对应的文档范围（实时计算定位，避免滚动时位置陈旧）
+   */
+  inlineCommentRange?: { from: number, to: number } | null
+  /**
    * 关闭内联评论浮层
    */
   closeInlineComment: () => void
@@ -31,14 +43,6 @@ export type InlineCommentPopoverProps = {
    * 评论 Store
    */
   commentStore: CommentStore | null
-  /**
-   * 外部传入的浮层 left 坐标
-   */
-  left?: number
-  /**
-   * 外部传入的浮层 top 坐标
-   */
-  top?: number
   /**
    * 外部传入的浮层最大高度
    */
@@ -60,51 +64,94 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
     inlineComment,
     inlineThread,
     inlineCommentRect,
+    inlineCommentRange,
     closeInlineComment,
     editor,
     commentStore,
-    left: leftProp,
-    top: topProp,
     maxHeight: maxHeightProp,
     className,
   } = props
 
-  const {
-    left,
-    top,
-    maxHeight,
-  } = useMemo(() => {
+  /** 计算最新的评论区域 rect，用于 Floating UI 定位 */
+  const getCurrentRect = useMemo(() => {
+    return () => {
+      if (inlineCommentRange && editor) {
+        const rect = getSelectionRect(editor, inlineCommentRange.from, inlineCommentRange.to)
+        if (rect)
+          return rect
+      }
+      return inlineCommentRect
+    }
+  }, [editor, inlineCommentRange, inlineCommentRect])
+
+  /**
+   * 将评论对应的 DOMRect 转成 Floating UI 的虚拟元素
+   * 这样就可以使用 autoUpdate，在滚动/窗口变化时自动更新位置，避免闪烁
+   */
+  const virtualElement = useMemo(() => {
+    const rect = getCurrentRect()
+    if (!rect) {
+      return null
+    }
+
+    return {
+      getBoundingClientRect: () => getCurrentRect() ?? new DOMRect(0, 0, 0, 0),
+      contextElement: editor?.view?.dom,
+    }
+  }, [getCurrentRect, editor])
+
+  /**
+   * Floating UI 定位中间件
+   * - offset: 与选中区域保持 8px 间距
+   * - flip / shift: 自动避免遮挡视口边缘
+   */
+  const middleware = useMemo(
+    () => [
+      offset(8),
+      flip({
+        fallbackAxisSideDirection: 'start',
+        padding: 8,
+      }),
+      shift({
+        padding: 8,
+      }),
+    ],
+    [],
+  )
+
+  /**
+   * 使用 Floating UI 进行智能定位
+   * 交给 autoUpdate 监听滚动、窗口变化等，保证浮层跟随页面滚动且不闪烁
+   */
+  const { refs, floatingStyles } = useFloating({
+    placement: 'bottom-start',
+    whileElementsMounted: autoUpdate,
+    middleware,
+  })
+
+  /** 绑定虚拟元素为 reference */
+  useEffect(() => {
+    if (virtualElement) {
+      refs.setReference(virtualElement)
+    }
+  }, [virtualElement, refs])
+
+  const maxHeight = useMemo(() => {
     if (typeof window === 'undefined') {
       return {
-        left: leftProp ?? 0,
-        top: topProp ?? 0,
         maxHeight: maxHeightProp ?? 0,
       }
     }
 
-    if (leftProp != null && topProp != null && maxHeightProp != null) {
-      return {
-        left: leftProp,
-        top: topProp,
-        maxHeight: maxHeightProp,
-      }
-    }
-
-    const maxWidth = 360
     const viewportPadding = 12
     const minPopupHeight = 180
     const maxPopupHeight = 520
 
-    const safeRect = inlineCommentRect ?? new DOMRect(
+    const safeRect = getCurrentRect() ?? new DOMRect(
       viewportPadding,
       viewportPadding,
       0,
       0,
-    )
-
-    const computedLeft = Math.min(
-      Math.max(viewportPadding, safeRect.left),
-      Math.max(viewportPadding, window.innerWidth - maxWidth),
     )
 
     const targetTop = safeRect.bottom + 8
@@ -121,60 +168,58 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
     const computedMaxHeight = window.innerHeight - computedTop - viewportPadding
 
     return {
-      left: leftProp ?? computedLeft,
-      top: topProp ?? computedTop,
       maxHeight: maxHeightProp ?? computedMaxHeight,
     }
-  }, [inlineCommentRect, leftProp, topProp, maxHeightProp])
+  }, [getCurrentRect, maxHeightProp])
 
-  if (!inlineComment || !inlineCommentRect || !editor || !commentStore) {
+  if (!inlineComment || !getCurrentRect() || !editor || !commentStore) {
     return null
   }
 
   return (
-    <div
-      className={ cn(
-        'fixed z-[1000] max-w-[360px] overflow-y-auto',
-        className,
-      ) }
-      style={ {
-        left,
-        top,
-        maxHeight,
-      } }
-    >
-      <div className="rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] shadow-[var(--tt-shadow-elevated-lg)]">
-        <div className="flex items-center justify-between border-b border-[var(--tt-border-color)] px-3 py-2 text-xs text-[var(--tt-color-text-gray)]">
-          <span>当前评论</span>
-          <button
-            type="button"
-            onClick={ () => {
-              closeInlineComment()
-            } }
-            aria-label="关闭当前评论"
-            className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
-          >
-            <CloseIcon className="h-4 w-4" />
-          </button>
-        </div>
+    <FloatingPortal>
+      <div
+        ref={ refs.setFloating }
+        className={ cn(
+          'bn-inline-comment-popover z-[1000] max-w-[360px] overflow-y-auto',
+          className,
+        ) }
+        style={ {
+          ...floatingStyles,
+          maxHeight: maxHeight.maxHeight,
+        } }
+      >
+        <div className="rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] shadow-[var(--tt-shadow-elevated-lg)]">
+          <div className="flex items-center justify-between border-b border-[var(--tt-border-color)] px-3 py-2 text-xs text-[var(--tt-color-text-gray)]">
+            <span>当前评论</span>
+            <button
+              type="button"
+              onClick={ () => {
+                closeInlineComment()
+              } }
+              aria-label="关闭当前评论"
+              className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
+            >
+              <CloseIcon className="h-4 w-4" />
+            </button>
+          </div>
 
-        <div className="p-3 space-y-3">
-          { inlineThread.map(comment => (
-            <CommentItem
-              key={ comment.id }
-              comment={ comment }
-              editor={ editor }
-              commentStore={ commentStore }
-              onUpdate={ () => {} }
-              isActive={ comment.id === inlineComment.id }
-            />
-          )) }
+          <div className="p-3 space-y-3">
+            { inlineThread.map(comment => (
+              <CommentItem
+                key={ comment.id }
+                comment={ comment }
+                editor={ editor }
+                commentStore={ commentStore }
+                onUpdate={ () => {} }
+                isActive={ comment.id === inlineComment.id }
+              />
+            )) }
+          </div>
         </div>
       </div>
-    </div>
+    </FloatingPortal>
   )
 })
 
 InlineCommentPopover.displayName = 'InlineCommentPopover'
-
-

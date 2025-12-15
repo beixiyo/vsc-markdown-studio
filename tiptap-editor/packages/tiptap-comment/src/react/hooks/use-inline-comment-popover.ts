@@ -16,6 +16,7 @@ export function useInlineCommentPopover(params: {
   const { editor, commentStore, onInlineOpen, onInlineClose } = params
   const [inlineCommentId, setInlineCommentId] = useState<string | null>(null)
   const [inlineCommentRect, setInlineCommentRect] = useState<DOMRect | null>(null)
+  const [inlineCommentRange, setInlineCommentRange] = useState<{ from: number, to: number } | null>(null)
 
   const commentSnapshot = useSyncExternalStore(
     listener => commentStore?.subscribe(listener) ?? (() => {}),
@@ -47,6 +48,9 @@ export function useInlineCommentPopover(params: {
 
       setInlineCommentId(commentId)
       setInlineCommentRect(rect)
+      setInlineCommentRange(range
+        ? { from: range.from, to: range.to }
+        : null)
       onInlineOpen?.(commentId)
     }
 
@@ -67,6 +71,7 @@ export function useInlineCommentPopover(params: {
     if (!exists) {
       setInlineCommentId(null)
       setInlineCommentRect(null)
+      setInlineCommentRange(null)
       onInlineClose?.()
     }
   }, [inlineCommentId, commentSnapshot, onInlineClose])
@@ -74,6 +79,7 @@ export function useInlineCommentPopover(params: {
   const closeInlineComment = () => {
     setInlineCommentId(null)
     setInlineCommentRect(null)
+    setInlineCommentRange(null)
     onInlineClose?.()
   }
 
@@ -97,6 +103,7 @@ export function useInlineCommentPopover(params: {
   return {
     inlineCommentId,
     inlineCommentRect,
+    inlineCommentRange,
     inlineComment,
     inlineThread,
     closeInlineComment,

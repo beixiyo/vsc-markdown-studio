@@ -56,6 +56,7 @@ export const EditorUI = memo<EditorUIProps>(({
     inlineComment,
     inlineThread,
     inlineCommentRect,
+    inlineCommentRange,
     closeInlineComment,
   } = useInlineCommentPopover({
     editor,
@@ -139,6 +140,7 @@ export const EditorUI = memo<EditorUIProps>(({
         inlineComment={ inlineComment }
         inlineThread={ inlineThread }
         inlineCommentRect={ inlineCommentRect }
+        inlineCommentRange={ inlineCommentRange }
         closeInlineComment={ closeInlineComment }
         editor={ editor }
         commentStore={ commentStore }
