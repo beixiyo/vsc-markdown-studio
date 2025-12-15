@@ -58,38 +58,13 @@ export default defineConfig(({ command }) => {
           'tiptap-trigger': path.resolve(__dirname, './packages/tiptap-trigger/src/index.ts'),
 
           'tiptap-speaker-node': path.resolve(__dirname, './packages/tiptap-speaker-node/src/index.ts'),
+
+          'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
         }),
       },
     },
     server: {
       host: '0.0.0.0',
-    },
-    build: {
-      lib: {
-        entry: path.resolve(__dirname, './src/editor/index.ts'),
-        formats: ['es', 'cjs'],
-        fileName: (format, entryName) => `${entryName}.${format === 'es'
-          ? 'js'
-          : 'cjs'}`,
-      },
-      rollupOptions: {
-        external: (id) => {
-          const react = [
-            'react',
-            'react-dom',
-          ]
-          return react.includes(id)
-        },
-        output: {
-          assetFileNames: (assetInfo) => {
-            const isCss = assetInfo.names.some(name => name.endsWith('.css'))
-            if (isCss) {
-              return 'index.css'
-            }
-            return '[name][extname]'
-          },
-        },
-      },
     },
   }
 })

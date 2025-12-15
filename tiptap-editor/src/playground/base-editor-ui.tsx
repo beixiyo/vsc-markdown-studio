@@ -1,8 +1,6 @@
 import type { BaseEditorUIProps } from './types'
 import { useCurrentEditor } from '@tiptap/react'
-
 import { memo } from 'react'
-
 import { useCursorVisibility } from 'tiptap-api/react'
 import { HeaderToolbar, MobileToolbarContent, Toolbar } from 'tiptap-comps'
 
@@ -10,7 +8,7 @@ import { HeaderToolbar, MobileToolbarContent, Toolbar } from 'tiptap-comps'
  * 通用编辑器 UI 组件：提供基础的 Toolbar 功能
  * 通过 children 可以传递自定义的工具栏内容和额外的 UI 组件
  */
-export const EditorUI = memo<BaseEditorUIProps>(({
+export const BaseEditorUI = memo<BaseEditorUIProps>(({
   isMobile,
   height,
   mobileView,
@@ -60,4 +58,5 @@ export const EditorUI = memo<BaseEditorUIProps>(({
   )
 })
 
-EditorUI.displayName = 'EditorUI'
+BaseEditorUI.displayName = 'BaseEditorUI'
+

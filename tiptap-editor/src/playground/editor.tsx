@@ -12,8 +12,7 @@ import { SpeakerNode } from 'tiptap-speaker-node'
 import { HorizontalRule, ImageUploadNode } from 'tiptap-styles/tiptap-node'
 
 import { SuggestionTrigger } from 'tiptap-trigger'
-import { TiptapEditor } from '../editor'
-import { useDefaultEditor, useMobileView } from '../editor/hooks'
+import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 import content from './data/content.json' with { type: 'json' }
 import { EditorUI } from './editor-ui'
 

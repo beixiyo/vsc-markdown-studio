@@ -15,7 +15,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 import { Button } from 'tiptap-comps'
 import { canCreateComment, createComment } from '../comment'
 import { type CommentAuthor, CommentStore } from '../comment-store'
-import { CommentMain } from './comment-main'
+import { CommentMain } from './components/comment-main'
 
 /**
  * 评论创建按钮组件

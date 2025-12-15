@@ -62,6 +62,36 @@ export type EditorContentProps = {
 & UseEditorOptions
 
 /**
+ * 通用编辑器 UI 组件的 props（基础版本，不包含额外插件功能）
+ */
+export type BaseEditorUIProps = {
+  /**
+   * 是否为移动端，影响工具栏布局
+   */
+  isMobile: boolean
+  /**
+   * 视口高度，用于计算悬浮位置
+   */
+  height: number
+  /**
+   * 移动端工具栏当前视图
+   */
+  mobileView: 'main' | 'highlighter' | 'link'
+  /**
+   * 切换移动端工具栏视图
+   */
+  setMobileView: (view: 'main' | 'highlighter' | 'link') => void
+  /**
+   * 工具栏 ref，用于遮挡处理
+   */
+  toolbarRef: RefObject<HTMLDivElement | null>
+  /**
+   * 自定义工具栏内容和额外的 UI 组件
+   */
+  children?: React.ReactNode
+}
+
+/**
  * 演示用编辑器 UI 组合 props，外部可自由组装
  */
 export type EditorUIProps = {

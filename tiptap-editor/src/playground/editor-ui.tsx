@@ -16,8 +16,8 @@ import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
 
 import { operateTestSuites } from '@/features/operate-tests'
 
-import { EditorUI as BaseEditorUI } from '../editor/editor-ui'
-import { useAiQuickSource, useAiSetup, useBindAi, useSlashSuggestion } from '../editor/hooks'
+import { BaseEditorUI } from './base-editor-ui'
+import { useAiQuickSource, useAiSetup, useBindAi, useSlashSuggestion } from './hooks'
 import { useOperateTests } from '../features/operate-tests/use-operate-tests'
 
 import 'tiptap-comment/index.css'

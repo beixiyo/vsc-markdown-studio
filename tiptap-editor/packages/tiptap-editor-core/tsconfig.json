@@ -1,0 +1,19 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist",
+    "jsx": "react-jsx",
+    "composite": false,
+    "types": [
+      "@tiptap/starter-kit",
+      "@tiptap/markdown"
+    ]
+  },
+  "include": [
+    "src"
+  ]
+}
+

@@ -1,5 +1,6 @@
-export * from './editor-ui'
+export * from './extensions'
 export * from './hooks'
 export * from './tiptap-editor'
 export * from './types'
 export * from './utils'
+

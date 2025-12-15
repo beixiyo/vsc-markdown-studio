@@ -1,5 +1,5 @@
 {
-  "name": "tiptap-editor",
+  "name": "tiptap-editor-core",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -9,27 +9,24 @@
   "exports": {
     ".": {
       "require": {
-        "types": "./dist/src/components/playground/index.d.ts",
+        "types": "./dist/index.d.ts",
         "default": "./dist/index.cjs"
       },
       "import": {
-        "types": "./dist/src/components/playground/index.d.ts",
+        "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       }
-    },
-    "./index.css": "./dist/index.css"
+    }
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
-    "preview": "vite preview",
     "lint": "eslint ./src --fix"
   },
-  "dependencies": {
-    "@floating-ui/react": "^0.27.16",
+  "dependencies": {},
+  "peerDependencies": {
     "@tiptap/core": "^3.13.0",
     "@tiptap/extension-highlight": "^3.13.0",
     "@tiptap/extension-image": "^3.13.0",
@@ -45,21 +42,7 @@
     "@tiptap/react": "^3.13.0",
     "@tiptap/starter-kit": "^3.13.0",
     "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "react-hotkeys-hook": "^5.2.1",
-    "tailwind-merge": "^2.5.4",
-    "tiptap-ai": "workspace:*",
-    "tiptap-api": "workspace:*",
-    "tiptap-comment": "workspace:*",
-    "tiptap-comps": "workspace:*",
-    "tiptap-editor-core": "workspace:*",
-    "tiptap-speaker-node": "workspace:*",
-    "tiptap-styles": "workspace:*",
-    "tiptap-config": "workspace:*",
-    "tiptap-trigger": "workspace:*"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^5.1.1",
-    "depcheck": "^1.4.7"
+    "react-dom": "^19.2.1"
   }
 }
+

@@ -50,3 +50,4 @@ export function useBindAi(editor: Editor | null, aiController: AiController | nu
     }
   }, [editor, aiController, aiOrchestrator])
 }
+

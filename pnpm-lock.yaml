@@ -723,6 +723,9 @@ importers:
       tiptap-config:
         specifier: workspace:*
         version: link:packages/tiptap-config
+      tiptap-editor-core:
+        specifier: workspace:*
+        version: link:packages/tiptap-editor-core
       tiptap-speaker-node:
         specifier: workspace:*
         version: link:packages/tiptap-speaker-node
@@ -881,6 +884,57 @@ importers:
       tailwind-merge:
         specifier: ^2.5.4
         version: 2.6.0
+
+  tiptap-editor/packages/tiptap-editor-core:
+    dependencies:
+      '@tiptap/core':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/pm@3.13.0)
+      '@tiptap/extension-highlight':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))
+      '@tiptap/extension-image':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))
+      '@tiptap/extension-list':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
+      '@tiptap/extension-placeholder':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/extensions@3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0))
+      '@tiptap/extension-subscript':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
+      '@tiptap/extension-superscript':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
+      '@tiptap/extension-text-align':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))
+      '@tiptap/extension-typography':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))
+      '@tiptap/extensions':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
+      '@tiptap/markdown':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
+      '@tiptap/pm':
+        specifier: ^3.13.0
+        version: 3.13.0
+      '@tiptap/react':
+        specifier: ^3.13.0
+        version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@tiptap/starter-kit':
+        specifier: ^3.13.0
+        version: 3.13.0
+      react:
+        specifier: ^19.2.1
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.3(react@19.2.3)
 
   tiptap-editor/packages/tiptap-speaker-node:
     dependencies:
