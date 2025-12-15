@@ -3,9 +3,8 @@ import { useCurrentEditor } from '@tiptap/react'
 
 import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
-import { CommentButton, CommentItem, CommentSidebar, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
+import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
 import { LinkPopover, SelectionToolbar, ToolbarGroup } from 'tiptap-comps'
-import { CloseIcon } from 'tiptap-comps/icons'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
@@ -136,50 +135,14 @@ export const EditorUI = memo<EditorUIProps>(({
       {/* AI 操作面板 */ }
       <AIActionPanel controller={ aiController } className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" />
 
-      { inlineComment && inlineCommentRect && typeof window !== 'undefined' && (
-        <div
-          className="fixed z-[1000] max-w-[360px]"
-          style={ {
-            left: Math.min(
-              Math.max(12, inlineCommentRect.left),
-              Math.max(12, window.innerWidth - 360),
-            ),
-            top: Math.min(
-              inlineCommentRect.bottom + 8,
-              window.innerHeight - 12,
-            ),
-          } }
-        >
-          <div className="rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] shadow-[var(--tt-shadow-elevated-lg)]">
-            <div className="flex items-center justify-between border-b border-[var(--tt-border-color)] px-3 py-2 text-xs text-[var(--tt-color-text-gray)]">
-              <span>当前评论</span>
-              <button
-                type="button"
-                onClick={ () => {
-                  closeInlineComment()
-                } }
-                aria-label="关闭当前评论"
-                className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
-              >
-                <CloseIcon className="h-4 w-4" />
-              </button>
-            </div>
-
-            <div className="p-3 space-y-3">
-              { inlineThread.map(comment => (
-                <CommentItem
-                  key={ comment.id }
-                  comment={ comment }
-                  editor={ editor }
-                  commentStore={ commentStore }
-                  onUpdate={ () => {} }
-                  isActive={ comment.id === inlineComment.id }
-                />
-              )) }
-            </div>
-          </div>
-        </div>
-      ) }
+      <InlineCommentPopover
+        inlineComment={ inlineComment }
+        inlineThread={ inlineThread }
+        inlineCommentRect={ inlineCommentRect }
+        closeInlineComment={ closeInlineComment }
+        editor={ editor }
+        commentStore={ commentStore }
+      />
     </>
   )
 })
