@@ -2,10 +2,8 @@ import type { EditorUIProps } from './types'
 import { useCurrentEditor } from '@tiptap/react'
 
 import { memo } from 'react'
-
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { CommentButton, CommentSidebar, useCommentSync } from 'tiptap-comment/react'
-
 import { LinkPopover, SelectionToolbar, ToolbarGroup } from 'tiptap-comps'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 
@@ -13,15 +11,11 @@ import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
-
 import { operateTestSuites } from '@/features/operate-tests'
 
 import { BaseEditorUI } from './base-editor-ui'
 import { useAiQuickSource, useAiSetup, useBindAi, useSlashSuggestion } from './hooks'
 import { useOperateTests } from '../features/operate-tests/use-operate-tests'
-
-import 'tiptap-comment/index.css'
-import 'tiptap-trigger/index.css'
 
 /**
  * 演示用编辑器 UI：使用通用的 BaseEditorUI，通过 children 传递额外的插件功能
