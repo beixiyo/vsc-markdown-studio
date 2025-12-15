@@ -1,7 +1,7 @@
 import { forwardRef, Fragment, useMemo } from 'react'
 
 // --- Lib ---
-import { cn, parseShortcutKeys } from '../../utils'
+import { cn, parseShortcutKeys } from 'tiptap-config'
 
 // --- Tiptap UI Primitive ---
 import {

@@ -5,9 +5,9 @@ import type { UseCodeBlockConfig } from './use-code-block'
 import { forwardRef, useCallback } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Badge, Button } from '../../ui'
+import { parseShortcutKeys } from 'tiptap-config'
 
-import { parseShortcutKeys } from '../../utils'
+import { Badge, Button } from '../../ui'
 import {
   CODE_BLOCK_SHORTCUT_KEY,
   useCodeBlock,

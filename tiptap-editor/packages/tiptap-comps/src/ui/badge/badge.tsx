@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { cn } from '../../utils'
+import { cn } from 'tiptap-config'
 import './badge-colors.scss'
 import './badge-group.scss'
 import './badge.scss'

@@ -10,9 +10,9 @@ import type {
 import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
-import { Badge, Button } from '../../ui'
 // --- Lib ---
-import { parseShortcutKeys } from '../../utils'
+import { parseShortcutKeys } from 'tiptap-config'
+import { Badge, Button } from '../../ui'
 import {
   HEADING_SHORTCUT_KEYS,
   useHeading,

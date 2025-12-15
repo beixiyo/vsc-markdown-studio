@@ -7,13 +7,6 @@ import { useCallback, useEffect, useState } from 'react'
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
 
-// --- Icons ---
-import {
-  ListIcon,
-  ListOrderedIcon,
-  ListTodoIcon,
-} from '../../icons'
-
 // --- Lib ---
 import {
   findNodePosition,
@@ -21,7 +14,14 @@ import {
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
-} from '../../utils'
+} from 'tiptap-config'
+
+// --- Icons ---
+import {
+  ListIcon,
+  ListOrderedIcon,
+  ListTodoIcon,
+} from '../../icons'
 
 export type ListType = 'bulletList' | 'orderedList' | 'taskList'
 

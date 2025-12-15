@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
 
+import { isMarkInSchema, isNodeTypeSelected } from 'tiptap-config'
+
 import {
   BoldIcon,
   Code2Icon,
@@ -12,8 +14,6 @@ import {
   SuperscriptIcon,
   UnderlineIcon,
 } from '../../icons'
-
-import { isMarkInSchema, isNodeTypeSelected } from '../../utils'
 
 export type Mark =
   | 'bold'

@@ -10,9 +10,9 @@ import type {
 import { forwardRef, useCallback } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Badge, Button } from '../../ui'
+import { parseShortcutKeys } from 'tiptap-config'
 
-import { parseShortcutKeys } from '../../utils'
+import { Badge, Button } from '../../ui'
 import {
   UNDO_REDO_SHORTCUT_KEYS,
   useUndoRedo,

@@ -1,4 +1,4 @@
-import { cn } from '../../utils'
+import { cn } from 'tiptap-config'
 import './input.scss'
 
 function Input({ className, type, ...props }: React.ComponentProps<'input'>) {

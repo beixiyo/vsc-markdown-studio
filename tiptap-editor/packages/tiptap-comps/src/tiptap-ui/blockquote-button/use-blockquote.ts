@@ -7,9 +7,6 @@ import { useCallback, useEffect, useState } from 'react'
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
 
-// --- Icons ---
-import { BlockquoteIcon } from '../../icons'
-
 // --- UI Utils ---
 import {
   findNodePosition,
@@ -17,7 +14,10 @@ import {
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
-} from '../../utils'
+} from 'tiptap-config'
+
+// --- Icons ---
+import { BlockquoteIcon } from '../../icons'
 
 export const BLOCKQUOTE_SHORTCUT_KEY = 'mod+shift+b'
 

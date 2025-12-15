@@ -5,9 +5,9 @@ import type { UseColorHighlightConfig } from './use-color-highlight'
 import { forwardRef, useCallback, useMemo } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Badge, Button } from '../../ui'
+import { parseShortcutKeys } from 'tiptap-config'
 
-import { parseShortcutKeys } from '../../utils'
+import { Badge, Button } from '../../ui'
 import {
   COLOR_HIGHLIGHT_SHORTCUT_KEY,
   useColorHighlight,

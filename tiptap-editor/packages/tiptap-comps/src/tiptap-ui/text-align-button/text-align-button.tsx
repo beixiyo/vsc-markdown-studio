@@ -13,10 +13,10 @@ import { forwardRef, useCallback } from 'react'
 
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Badge, Button } from '../../ui'
-
 // --- Lib ---
-import { parseShortcutKeys } from '../../utils'
+import { parseShortcutKeys } from 'tiptap-config'
+
+import { Badge, Button } from '../../ui'
 import {
   TEXT_ALIGN_SHORTCUT_KEYS,
   useTextAlign,

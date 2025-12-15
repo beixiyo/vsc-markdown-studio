@@ -4,16 +4,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
 import {
+  isExtensionAvailable,
+  isNodeTypeSelected,
+} from 'tiptap-config'
+
+import {
   AlignCenterIcon,
   AlignJustifyIcon,
   AlignLeftIcon,
   AlignRightIcon,
 } from '../../icons'
-
-import {
-  isExtensionAvailable,
-  isNodeTypeSelected,
-} from '../../utils'
 
 export type TextAlign = 'left' | 'center' | 'right' | 'justify'
 

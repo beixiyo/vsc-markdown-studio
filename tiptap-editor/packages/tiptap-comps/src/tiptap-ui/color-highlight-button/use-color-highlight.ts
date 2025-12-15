@@ -7,14 +7,14 @@ import { useHotkeys } from 'react-hotkeys-hook'
 // --- Hooks ---
 import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
 
-// --- Icons ---
-import { HighlighterIcon } from '../../icons'
-
 // --- Lib ---
 import {
   isMarkInSchema,
   isNodeTypeSelected,
-} from '../../utils'
+} from 'tiptap-config'
+
+// --- Icons ---
+import { HighlighterIcon } from '../../icons'
 
 export const COLOR_HIGHLIGHT_SHORTCUT_KEY = 'mod+shift+h'
 export const HIGHLIGHT_COLORS = [

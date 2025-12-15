@@ -7,11 +7,11 @@ import { useHotkeys } from 'react-hotkeys-hook'
 // --- Hooks ---
 import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
 
+// --- Lib ---
+import { isExtensionAvailable } from 'tiptap-config'
+
 // --- Icons ---
 import { ImagePlusIcon } from '../../icons'
-
-// --- Lib ---
-import { isExtensionAvailable } from '../../utils'
 
 export const IMAGE_UPLOAD_SHORTCUT_KEY = 'mod+shift+i'
 

@@ -5,13 +5,13 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
 
+import { isNodeInSchema } from 'tiptap-config'
+
 import {
   ListIcon,
   ListOrderedIcon,
   ListTodoIcon,
 } from '../../icons'
-
-import { isNodeInSchema } from '../../utils'
 
 import {
   canToggleList,
