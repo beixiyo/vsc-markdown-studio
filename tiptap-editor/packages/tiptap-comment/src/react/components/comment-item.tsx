@@ -2,7 +2,8 @@ import type { Editor } from '@tiptap/react'
 import type { Comment, CommentAuthor, CommentStore } from '../../comment-store'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { scrollToRangeSelection } from 'tiptap-api'
-import { BanIcon, TrashIcon } from 'tiptap-comps/icons'
+import { BanIcon, CornerDownLeftIcon, EditIcon, LocateIcon, TrashIcon } from 'tiptap-comps/icons'
+import { Tooltip, TooltipContent, TooltipTrigger } from 'tiptap-comps'
 import { cn } from 'tiptap-config'
 import { createReply, deleteComment, updateComment } from '../../comment'
 import { commentPluginKey } from '../../plugin'
@@ -229,6 +230,7 @@ export const CommentItem = memo(({
     && 'border-[var(--tt-color-green-inc-3)] bg-[var(--tt-color-green-inc-5)]/70',
     isActive && 'border-[var(--tt-brand-color-400)] shadow-[var(--tt-shadow-elevated-lg)]',
   )
+  const iconButtonClass = 'flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)] disabled:cursor-not-allowed disabled:opacity-50'
 
   if (isEditing) {
     return (
@@ -289,72 +291,101 @@ export const CommentItem = memo(({
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={ handleJumpToComment }
-            disabled={ comment.status === 'resolved' }
-            className={ cn(
-              'flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)] disabled:cursor-not-allowed disabled:opacity-50',
-              comment.status === 'resolved' && 'cursor-not-allowed opacity-50',
-            ) }
-            aria-label="跳转到评论位置"
-            title="跳转到评论位置"
-          >
-            <span className="text-[11px] font-semibold">定位</span>
-          </button>
+          <Tooltip delay={ 100 }>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={ handleJumpToComment }
+                disabled={ comment.status === 'resolved' }
+                className={ cn(
+                  iconButtonClass,
+                  comment.status === 'resolved' && 'cursor-not-allowed opacity-50',
+                ) }
+                aria-label="跳转到评论位置"
+                title="跳转到评论位置"
+              >
+                <LocateIcon className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent portal={ false }>定位</TooltipContent>
+          </Tooltip>
 
           { comment.status === 'active' && (
             <>
-              <button
-                type="button"
-                onClick={ handleEdit }
-                className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]"
-                aria-label="编辑评论"
-                title="编辑评论"
-              >
-                编辑
-              </button>
-              <button
-                type="button"
-                onClick={ handleReply }
-                className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]"
-                aria-label="回复评论"
-                title="回复评论"
-              >
-                回复
-              </button>
+              <Tooltip delay={ 100 }>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={ handleEdit }
+                    className={ iconButtonClass }
+                    aria-label="编辑评论"
+                    title="编辑评论"
+                  >
+                    <EditIcon className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent portal={ false }>编辑</TooltipContent>
+              </Tooltip>
+              <Tooltip delay={ 100 }>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={ handleReply }
+                    className={ iconButtonClass }
+                    aria-label="回复评论"
+                    title="回复评论"
+                  >
+                    <CornerDownLeftIcon className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent portal={ false }>回复</TooltipContent>
+              </Tooltip>
             </>
           ) }
 
-          <button
-            type="button"
-            onClick={ handleToggleStatus }
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)] disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label={ comment.status === 'active'
-              ? '已解决'
-              : '重新打开' }
-            title={ comment.status === 'active'
-              ? '标记为已解决'
-              : '重新打开' }
-          >
-            { comment.status === 'active'
-              ? (
-                  <BanIcon className="h-4 w-4" />
-                )
-              : (
-                  <TrashIcon className="h-4 w-4" />
-                )}
-          </button>
+          <Tooltip delay={ 100 }>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={ handleToggleStatus }
+                className={ iconButtonClass }
+                aria-label={ comment.status === 'active'
+                  ? '已解决'
+                  : '重新打开' }
+                title={ comment.status === 'active'
+                  ? '标记为已解决'
+                  : '重新打开' }
+              >
+                { comment.status === 'active'
+                  ? (
+                      <BanIcon className="h-4 w-4" />
+                    )
+                  : (
+                      <TrashIcon className="h-4 w-4" />
+                    )}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent portal={ false }>
+              { comment.status === 'active'
+                ? '标记为已解决'
+                : '重新打开' }
+            </TooltipContent>
+          </Tooltip>
 
-          <button
-            type="button"
-            onClick={ handleDelete }
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)] disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="永久删除评论"
-            title="永久删除评论"
-          >
-            <TrashIcon className="h-4 w-4" />
-          </button>
+          <Tooltip delay={ 100 }>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={ handleDelete }
+                className={ iconButtonClass }
+                aria-label="永久删除评论"
+                title="永久删除评论"
+              >
+                <TrashIcon className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent portal={ false }>删除评论</TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
