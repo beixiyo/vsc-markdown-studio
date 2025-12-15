@@ -29,4 +29,3 @@ export const TiptapEditor = memo<EditorContentProps>(({
 })
 
 TiptapEditor.displayName = 'TiptapEditor'
-

@@ -77,4 +77,3 @@ export function createHandleClick() {
     return false
   }
 }
-

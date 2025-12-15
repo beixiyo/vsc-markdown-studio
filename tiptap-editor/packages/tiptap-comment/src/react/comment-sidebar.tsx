@@ -2,7 +2,7 @@
 
 import type { Editor } from '@tiptap/react'
 import type { CommentStore } from '../comment-store'
-import { memo, useCallback, useMemo, useState, useSyncExternalStore } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import {
   Popover,
@@ -19,6 +19,22 @@ export interface CommentSidebarProps {
   commentStore: CommentStore
   editor?: Editor | null
   className?: string
+  /**
+   * 是否展示评论面板（受控）
+   */
+  open?: boolean
+  /**
+   * 默认展开状态（非受控）
+   */
+  defaultOpen?: boolean
+  /**
+   * 展开状态变更回调
+   */
+  onOpenChange?: (open: boolean) => void
+  /**
+   * 需要在列表中定位的评论 ID
+   */
+  activeCommentId?: string
 }
 
 /**
@@ -28,10 +44,19 @@ export const CommentSidebar = memo(({
   commentStore,
   editor: providedEditor,
   className,
+  open,
+  defaultOpen,
+  onOpenChange,
+  activeCommentId,
 }: CommentSidebarProps) => {
   const { editor } = useTiptapEditor(providedEditor)
-  const [isOpen, setIsOpen] = useState(false)
+  const isControlled = typeof open === 'boolean'
+  const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false)
+  const isOpen = isControlled
+    ? open as boolean
+    : internalOpen
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'resolved'>('all')
+  const listRef = useRef<HTMLDivElement>(null)
 
   const commentsSource = useSyncExternalStore(
     listener => commentStore.subscribe(listener),
@@ -56,8 +81,34 @@ export const CommentSidebar = memo(({
     /** 由 Store 订阅触发重新渲染 */
   }, [])
 
+  const handleOpenChange = useCallback((next: boolean) => {
+    if (!isControlled) {
+      setInternalOpen(next)
+    }
+    onOpenChange?.(next)
+  }, [isControlled, onOpenChange])
+
+  useEffect(() => {
+    if (!isOpen || !activeCommentId) {
+      return
+    }
+
+    const container = listRef.current
+    if (!container) {
+      return
+    }
+
+    const target = container.querySelector<HTMLElement>(`[data-comment-id="${activeCommentId}"]`)
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }, [activeCommentId, isOpen, comments.length])
+
   return (
-    <Popover open={ isOpen } onOpenChange={ setIsOpen }>
+    <Popover open={ isOpen } onOpenChange={ handleOpenChange }>
       <PopoverTrigger asChild>
         <button
           type="button"
@@ -93,7 +144,7 @@ export const CommentSidebar = memo(({
             </div>
             <button
               type="button"
-              onClick={ () => setIsOpen(false) }
+              onClick={ () => handleOpenChange(false) }
               className="text-xs font-semibold text-[var(--tt-color-text-gray)] transition hover:text-[var(--tt-color-text-blue)]"
             >
               关闭
@@ -153,7 +204,10 @@ export const CommentSidebar = memo(({
 
           <div className="h-px w-full bg-[var(--tt-border-color)]" />
 
-          <div className="max-h-[70vh] space-y-3 overflow-y-auto pr-1">
+          <div
+            ref={ listRef }
+            className="max-h-[70vh] space-y-3 overflow-y-auto pr-1"
+          >
             { comments.length === 0
               ? (
                   <div className="flex items-center justify-center rounded-xl border border-dashed border-[var(--tt-border-color)] bg-[var(--tt-sidebar-bg-color)] px-3 py-6 text-sm text-[var(--tt-color-text-gray)]">
@@ -168,6 +222,7 @@ export const CommentSidebar = memo(({
                       editor={ editor }
                       commentStore={ commentStore }
                       onUpdate={ handleUpdate }
+                      isActive={ activeCommentId === comment.id }
                     />
                   ))
                 ) }

@@ -30,4 +30,3 @@ export type EditorContentProps = {
    */
   style?: React.CSSProperties
 }
-

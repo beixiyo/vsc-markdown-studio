@@ -49,4 +49,3 @@ export function useDefaultEditor(options: UseEditorOptions) {
 
   return editor
 }
-

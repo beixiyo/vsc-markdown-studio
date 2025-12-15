@@ -22,4 +22,3 @@ export function useMobileView(isMobile: boolean) {
     setMobileView,
   }
 }
-

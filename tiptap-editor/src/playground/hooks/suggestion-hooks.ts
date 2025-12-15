@@ -72,4 +72,3 @@ export function useSlashSuggestion(editor: Editor | null, aiQuickSource?: Sugges
 
   return useSuggestion(editor, suggestionConfig)
 }
-

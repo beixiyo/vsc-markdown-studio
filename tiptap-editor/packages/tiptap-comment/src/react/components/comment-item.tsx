@@ -24,6 +24,7 @@ export type CommentItemProps = {
   editor: Editor | null
   commentStore: CommentStore
   onUpdate: () => void
+  isActive?: boolean
 }
 
 export const CommentItem = memo(({
@@ -31,6 +32,7 @@ export const CommentItem = memo(({
   editor,
   commentStore,
   onUpdate,
+  isActive = false,
 }: CommentItemProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(comment.content)
@@ -225,6 +227,7 @@ export const CommentItem = memo(({
     'rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-4 shadow-[var(--tt-shadow-elevated-md)] transition duration-[var(--tt-transition-duration-default)] hover:shadow-[var(--tt-shadow-elevated-md)]',
     comment.status === 'resolved'
     && 'border-[var(--tt-color-green-inc-3)] bg-[var(--tt-color-green-inc-5)]/70',
+    isActive && 'border-[var(--tt-brand-color-400)] shadow-[var(--tt-shadow-elevated-lg)]',
   )
 
   if (isEditing) {
@@ -261,7 +264,13 @@ export const CommentItem = memo(({
   }
 
   return (
-    <div className={ containerClass }>
+    <div
+      className={ containerClass }
+      data-comment-id={ comment.id }
+      data-active={ isActive
+        ? 'true'
+        : 'false' }
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">

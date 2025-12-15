@@ -59,4 +59,3 @@ export const BaseEditorUI = memo<BaseEditorUIProps>(({
 })
 
 BaseEditorUI.displayName = 'BaseEditorUI'
-
