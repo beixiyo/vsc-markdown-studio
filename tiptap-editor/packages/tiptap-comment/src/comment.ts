@@ -410,51 +410,14 @@ export function createReply(
     return null
   }
 
-  /** 获取选中范围（如果提供了选中范围，则使用；否则复用被回复评论的范围） */
-  const { from, to } = editor.state.selection
-  const selectedFrom = params.from ?? from
-  const selectedTo = params.to ?? to
-
   /** 生成 commentId */
   const commentId = `comment-${crypto.randomUUID()}`
 
   try {
     /**
-     * 如果用户选中了新的文本范围，则创建新的 comment mark
-     * 否则，复用被回复评论的范围（不创建新的 mark）
+     * 回复不应覆盖原有标注，否则会导致父评论被替换。
+     * 因此在创建回复时不对文档 mark 做任何修改，只创建回复实体。
      */
-    if (selectedFrom !== selectedTo) {
-      /** 在文档选中范围添加 comment mark */
-      const success = editor
-        .chain()
-        .focus()
-        .setTextSelection({ from: selectedFrom, to: selectedTo })
-        .setMark('comment', { commentId })
-        .run()
-
-      if (!success) {
-        console.warn('创建回复失败：无法添加 comment mark')
-        return null
-      }
-    }
-    else {
-      /** 复用被回复评论的范围：获取被回复评论的范围，并创建新的 mark */
-      const parentRange = getCommentRange(editor, params.replyToId)
-      if (parentRange) {
-        const success = editor
-          .chain()
-          .focus()
-          .setTextSelection({ from: parentRange.from, to: parentRange.to })
-          .setMark('comment', { commentId })
-          .run()
-
-        if (!success) {
-          console.warn('创建回复失败：无法添加 comment mark')
-          return null
-        }
-      }
-      /** 如果没有找到被回复评论的范围，仍然创建回复（不创建 mark） */
-    }
 
     /** 创建回复评论实体 */
     const now = Date.now()

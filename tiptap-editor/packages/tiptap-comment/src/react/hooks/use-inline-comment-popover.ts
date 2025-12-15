@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import type { CommentStore } from '../../comment-store'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { getSelectionRect } from 'tiptap-api'
 import { commentPluginKey } from '../../plugin'
 
@@ -16,6 +16,12 @@ export function useInlineCommentPopover(params: {
   const { editor, commentStore, onInlineOpen, onInlineClose } = params
   const [inlineCommentId, setInlineCommentId] = useState<string | null>(null)
   const [inlineCommentRect, setInlineCommentRect] = useState<DOMRect | null>(null)
+
+  const commentSnapshot = useSyncExternalStore(
+    listener => commentStore?.subscribe(listener) ?? (() => {}),
+    () => commentStore?.getSnapshot() ?? [],
+    () => commentStore?.getSnapshot() ?? [],
+  )
 
   useEffect(() => {
     if (!editor) {
@@ -57,13 +63,13 @@ export function useInlineCommentPopover(params: {
       return
     }
 
-    const exists = commentStore?.getComment(inlineCommentId)
+    const exists = commentSnapshot.some(comment => comment.id === inlineCommentId)
     if (!exists) {
       setInlineCommentId(null)
       setInlineCommentRect(null)
       onInlineClose?.()
     }
-  }, [inlineCommentId, commentStore, onInlineClose])
+  }, [inlineCommentId, commentSnapshot, onInlineClose])
 
   const closeInlineComment = () => {
     setInlineCommentId(null)
@@ -71,14 +77,28 @@ export function useInlineCommentPopover(params: {
     onInlineClose?.()
   }
 
-  const inlineComment = inlineCommentId
-    ? commentStore?.getComment(inlineCommentId) || null
-    : null
+  const inlineComment = useMemo(() => {
+    if (!inlineCommentId) {
+      return null
+    }
+    return commentSnapshot.find(comment => comment.id === inlineCommentId) || null
+  }, [commentSnapshot, inlineCommentId])
+
+  const inlineThread = useMemo(() => {
+    if (!inlineCommentId) {
+      return []
+    }
+    /** 将父评论放在首位，其余为直接回复 */
+    return commentSnapshot
+      .filter(comment => comment.id === inlineCommentId || comment.replyTo === inlineCommentId)
+      .sort((a, b) => a.createdAt - b.createdAt)
+  }, [commentSnapshot, inlineCommentId])
 
   return {
     inlineCommentId,
     inlineCommentRect,
     inlineComment,
+    inlineThread,
     closeInlineComment,
   }
 }

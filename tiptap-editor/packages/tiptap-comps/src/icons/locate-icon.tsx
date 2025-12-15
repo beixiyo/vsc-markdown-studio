@@ -24,4 +24,3 @@ export const LocateIcon = memo(({ className, ...props }: SvgProps) => {
 })
 
 LocateIcon.displayName = 'LocateIcon'
-

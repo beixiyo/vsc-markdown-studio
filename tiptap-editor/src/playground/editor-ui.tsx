@@ -5,6 +5,7 @@ import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { CommentButton, CommentItem, CommentSidebar, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
 import { LinkPopover, SelectionToolbar, ToolbarGroup } from 'tiptap-comps'
+import { CloseIcon } from 'tiptap-comps/icons'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
@@ -54,6 +55,7 @@ export const EditorUI = memo<EditorUIProps>(({
 
   const {
     inlineComment,
+    inlineThread,
     inlineCommentRect,
     closeInlineComment,
   } = useInlineCommentPopover({
@@ -156,20 +158,24 @@ export const EditorUI = memo<EditorUIProps>(({
                 onClick={ () => {
                   closeInlineComment()
                 } }
-                className="rounded px-2 py-1 text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-color-text-blue)]"
+                aria-label="关闭当前评论"
+                className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
               >
-                关闭
+                <CloseIcon className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="p-3">
-              <CommentItem
-                comment={ inlineComment }
-                editor={ editor }
-                commentStore={ commentStore }
-                onUpdate={ () => {} }
-                isActive
-              />
+            <div className="p-3 space-y-3">
+              { inlineThread.map(comment => (
+                <CommentItem
+                  key={ comment.id }
+                  comment={ comment }
+                  editor={ editor }
+                  commentStore={ commentStore }
+                  onUpdate={ () => {} }
+                  isActive={ comment.id === inlineComment.id }
+                />
+              )) }
             </div>
           </div>
         </div>

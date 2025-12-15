@@ -2,8 +2,8 @@ import type { Editor } from '@tiptap/react'
 import type { Comment, CommentAuthor, CommentStore } from '../../comment-store'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { scrollToRangeSelection } from 'tiptap-api'
-import { BanIcon, CornerDownLeftIcon, EditIcon, LocateIcon, TrashIcon } from 'tiptap-comps/icons'
 import { Tooltip, TooltipContent, TooltipTrigger } from 'tiptap-comps'
+import { BanIcon, CornerDownLeftIcon, EditIcon, LocateIcon, TrashIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { createReply, deleteComment, updateComment } from '../../comment'
 import { commentPluginKey } from '../../plugin'
@@ -230,7 +230,7 @@ export const CommentItem = memo(({
     && 'border-[var(--tt-color-green-inc-3)] bg-[var(--tt-color-green-inc-5)]/70',
     isActive && 'border-[var(--tt-brand-color-400)] shadow-[var(--tt-shadow-elevated-lg)]',
   )
-  const iconButtonClass = 'flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)] disabled:cursor-not-allowed disabled:opacity-50'
+  const iconButtonClass = 'flex size-8 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] disabled:cursor-not-allowed disabled:opacity-50'
 
   if (isEditing) {
     return (
@@ -301,8 +301,6 @@ export const CommentItem = memo(({
                   iconButtonClass,
                   comment.status === 'resolved' && 'cursor-not-allowed opacity-50',
                 ) }
-                aria-label="跳转到评论位置"
-                title="跳转到评论位置"
               >
                 <LocateIcon className="h-4 w-4" />
               </button>
@@ -318,8 +316,6 @@ export const CommentItem = memo(({
                     type="button"
                     onClick={ handleEdit }
                     className={ iconButtonClass }
-                    aria-label="编辑评论"
-                    title="编辑评论"
                   >
                     <EditIcon className="h-4 w-4" />
                   </button>
@@ -332,8 +328,6 @@ export const CommentItem = memo(({
                     type="button"
                     onClick={ handleReply }
                     className={ iconButtonClass }
-                    aria-label="回复评论"
-                    title="回复评论"
                   >
                     <CornerDownLeftIcon className="h-4 w-4" />
                   </button>
@@ -349,12 +343,6 @@ export const CommentItem = memo(({
                 type="button"
                 onClick={ handleToggleStatus }
                 className={ iconButtonClass }
-                aria-label={ comment.status === 'active'
-                  ? '已解决'
-                  : '重新打开' }
-                title={ comment.status === 'active'
-                  ? '标记为已解决'
-                  : '重新打开' }
               >
                 { comment.status === 'active'
                   ? (
@@ -378,8 +366,6 @@ export const CommentItem = memo(({
                 type="button"
                 onClick={ handleDelete }
                 className={ iconButtonClass }
-                aria-label="永久删除评论"
-                title="永久删除评论"
               >
                 <TrashIcon className="h-4 w-4" />
               </button>
@@ -393,8 +379,7 @@ export const CommentItem = memo(({
         <button
           type="button"
           onClick={ handleJumpToReplyTo }
-          className="mt-3 flex w-full items-center gap-2 rounded-xl bg-[var(--tt-color-highlight-blue)] px-3 py-2 text-left text-sm text-[var(--tt-color-text-blue)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)]"
-          aria-label={ `跳转到被回复的评论：${comment.replyToAuthor.name}` }
+          className="mt-3 flex w-full items-center gap-2 rounded-xl bg-[var(--tt-color-highlight-brown)] px-3 py-2 text-left text-sm text-[var(--tt-color-text-blue)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)]"
         >
           <span className="text-[12px] font-semibold">
             @

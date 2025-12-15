@@ -24,4 +24,3 @@ export const EditIcon = memo(({ className, ...props }: SvgProps) => {
 })
 
 EditIcon.displayName = 'EditIcon'
-

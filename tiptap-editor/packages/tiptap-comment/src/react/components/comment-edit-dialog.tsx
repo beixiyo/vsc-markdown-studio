@@ -1,6 +1,5 @@
 import type React from 'react'
 import { memo } from 'react'
-import { useIsBreakpoint } from 'tiptap-api/react'
 import { CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 

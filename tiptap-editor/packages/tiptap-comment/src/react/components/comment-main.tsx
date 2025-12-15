@@ -1,7 +1,7 @@
 import type React from 'react'
 import { memo, useCallback } from 'react'
 import { Button } from 'tiptap-comps'
-import { CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
+import { CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 
 export type CommentMainProps = {
@@ -68,7 +68,9 @@ export const CommentMain = memo((props: CommentMainProps) => {
       aria-label="添加评论"
     >
       <div className="flex flex-col gap-3 p-4 max-[480px]:p-3">
-        <div className="text-sm font-semibold text-[var(--tt-color-text-primary)]">添加评论</div>
+        <div className="text-sm font-semibold text-[var(--tt-color-text-primary)] flex justify-between">
+          <span>添加评论</span>
+        </div>
         <textarea
           className="min-h-[80px] w-full resize-y rounded-[var(--tt-radius-md)] border border-[var(--tt-border-color)] bg-[var(--tt-color-surface-default)] p-3 text-sm leading-6 text-[var(--tt-color-text-primary)] transition-[border-color,box-shadow] duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)] placeholder:text-[var(--tt-color-text-tertiary)] focus:border-[var(--tt-brand-color-500)] focus:shadow-[0_0_0_3px_var(--tt-selection-color)] focus:outline-none"
           placeholder="输入评论内容..."
@@ -97,16 +99,6 @@ export const CommentMain = memo((props: CommentMainProps) => {
             提交评论
           </Button>
         </div>
-
-        <Button
-          type="button"
-          onClick={ cancel }
-          title="取消 (Esc)"
-          data-style="ghost"
-          className="inline-flex items-center justify-center gap-1.5 rounded-[var(--tt-radius-md)] px-2.5 py-2"
-        >
-          <CloseIcon className="h-4 w-4" />
-        </Button>
       </div>
     </div>
   )

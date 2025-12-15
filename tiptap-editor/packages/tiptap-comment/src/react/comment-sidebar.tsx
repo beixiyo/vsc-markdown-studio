@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from 'tiptap-comps'
+import { CloseIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { CommentItem } from './components/comment-item'
 
@@ -142,12 +143,14 @@ export const CommentSidebar = memo(({
                 条
               </span>
             </div>
+
             <button
               type="button"
               onClick={ () => handleOpenChange(false) }
-              className="text-xs font-semibold text-[var(--tt-color-text-gray)] transition hover:text-[var(--tt-color-text-blue)]"
+              aria-label="关闭评论面板"
+              className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
             >
-              关闭
+              <CloseIcon className="h-4 w-4" />
             </button>
           </div>
 
