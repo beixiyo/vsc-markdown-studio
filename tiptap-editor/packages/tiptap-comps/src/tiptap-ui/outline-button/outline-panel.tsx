@@ -46,14 +46,14 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
 
   if (outline.length === 0) {
     return (
-      <div className="w-64 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]/80 p-3 text-sm shadow-sm text-[var(--tt-gray-dark-400)]">
+      <div className="w-64 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-3 text-sm shadow-sm text-[var(--tt-gray-dark-400)]">
         暂无标题
       </div>
     )
   }
 
   return (
-    <div className="w-56 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]/80 p-2 shadow-sm bg-[var(--tt-bg-color)]">
+    <div className="w-56 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-2 shadow-sm">
       <div className="max-h-[70vh] overflow-auto pr-1">
         { renderItems(outline) }
       </div>
