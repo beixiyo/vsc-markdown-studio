@@ -854,6 +854,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.13.0
         version: 3.13.0
+      hooks:
+        specifier: workspace:*
+        version: link:../../../packages/hooks
       react:
         specifier: ^19.2.1
         version: 19.2.3
