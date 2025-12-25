@@ -62,14 +62,14 @@ export const AIActionPanel = memo<AIActionPanelProps>(
     return (
       <div
         className={ cn(
-          'flex min-w-[12rem] items-center gap-2 rounded-[var(--tt-radius-lg)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] px-3 py-2 text-[var(--tt-gray-light-800)] shadow-[var(--tt-shadow-elevated-md)] dark:bg-[var(--tt-gray-dark-50)] dark:text-[var(--tt-gray-dark-900)]',
+          'flex min-w-[12rem] items-center gap-2 rounded-[var(--tt-radius-lg)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] px-3 py-2 text-[var(--text-color-primary)] shadow-[var(--tt-shadow-elevated-md)] dark:bg-[var(--bg-color-primary)] dark:text-[var(--text-color-primary)]',
           className,
         ) }
       >
         { status === 'processing' && (
           <div className="flex items-center gap-2">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--tt-brand-color-500)] border-t-transparent" />
-            <span className="text-sm text-[var(--tt-gray-light-700)] dark:text-[var(--tt-gray-dark-700)]">
+            <span className="text-sm text-[var(--text-color-primary)] dark:text-[var(--text-color-primary)]">
               AI 处理中...
             </span>
           </div>

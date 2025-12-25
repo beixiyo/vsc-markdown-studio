@@ -24,7 +24,7 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
     return items.map(item => (
       <div key={ item.id } style={ { marginLeft: depth * 12 } }>
         <div
-          className="cursor-pointer rounded px-2 py-1 text-sm transition-colors text-[var(--tt-gray-dark-500)] hover:bg-[var(--tt-sidebar-bg-color)]"
+          className="cursor-pointer rounded px-2 py-1 text-sm transition-colors text-[var(--text-color-secondary)] hover:bg-[var(--tt-sidebar-bg-color)]"
           onClick={ () => handleJump(item.position) }
         >
           <div className="flex items-center gap-2">
@@ -46,7 +46,7 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
 
   if (outline.length === 0) {
     return (
-      <div className="w-64 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-3 text-sm shadow-sm text-[var(--tt-gray-dark-400)]">
+      <div className="w-64 shrink-0 rounded-xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-3 text-sm shadow-sm text-[var(--text-color-disabled)]">
         暂无标题
       </div>
     )

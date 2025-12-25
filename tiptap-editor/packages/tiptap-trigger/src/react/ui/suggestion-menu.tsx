@@ -11,6 +11,7 @@ import {
   useInteractions,
 } from '@floating-ui/react'
 import { useEffect, useMemo, useRef } from 'react'
+import { cn } from 'tiptap-config'
 
 export type SuggestionMenuProps = {
   open: boolean
@@ -155,7 +156,11 @@ export function SuggestionMenu({
           listRef.current = node
         } }
         style={ floatingStyles }
-        className="min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-[var(--tt-radius-md)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] text-[var(--tt-gray-light-900)] shadow-[var(--tt-shadow-elevated-md)] outline-none dark:text-[var(--tt-gray-dark-900)]"
+        className={cn(
+          'min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-[var(--tt-radius-md)]',
+          'border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]',
+          'text-[var(--text-color-primary)] shadow-[var(--tt-shadow-elevated-md)] outline-none',
+        )}
         tabIndex={ -1 }
         onMouseDownCapture={ (event) => {
           /** 保持编辑器焦点，避免 focusout 立刻关闭菜单导致点击失效 */
@@ -166,19 +171,19 @@ export function SuggestionMenu({
         { ...getFloatingProps() }
       >
         { loading && (
-          <div className="px-3 py-2 text-sm text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
+          <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
             加载中…
           </div>
         ) }
 
         { !loading && error && (
-          <div className="px-3 py-2 text-sm text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
+          <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
             { error.message || '加载失败' }
           </div>
         ) }
 
         { !loading && !error && items.length === 0 && (
-          <div className="px-3 py-2 text-sm text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
+          <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
             { query
               ? '无匹配项'
               : '无可用项' }
@@ -186,7 +191,7 @@ export function SuggestionMenu({
         ) }
 
         { !loading && !error && items.length > 0 && (
-          <div className="">
+          <>
             { items.map((item, index) => {
               const active = index === activeIndex
               return (
@@ -198,22 +203,25 @@ export function SuggestionMenu({
                   } }
                   onMouseEnter={ () => onActiveIndexChange(index) }
                   onClick={ () => onSelect(index) }
-                  className={
+                  className={cn(
+                    'flex w-full items-start gap-3 px-3 py-2 text-left',
+                    'text-[var(--text-color-primary)]',
+                    'transition-all duration-300 hover:bg-[var(--bg-color-hover)]',
                     active
-                      ? 'flex w-full items-start gap-3 px-3 py-2 text-left text-[var(--tt-gray-light-900)] bg-[var(--tt-gray-light-a-200)] transition-[background-color] duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)] dark:text-[var(--tt-gray-dark-900)] dark:bg-[var(--tt-gray-dark-a-200)]'
-                      : 'flex w-full items-start gap-3 px-3 py-2 text-left text-[var(--tt-gray-light-900)] bg-transparent border-0 cursor-pointer transition-[background-color] duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)] hover:bg-[var(--tt-gray-light-a-100)] dark:text-[var(--tt-gray-dark-900)] dark:hover:bg-[var(--tt-gray-dark-a-100)]'
-                  }
+                      ? 'bg-[var(--bg-color-hover)]'
+                      : 'bg-transparent border-0 cursor-pointer',
+                  )}
                 >
-                  <div className="mt-[2px] flex h-5 w-5 flex-shrink-0 items-center justify-center text-[var(--tt-gray-light-700)] dark:text-[var(--tt-gray-dark-600)]">
+                  <div className="mt-[2px] flex h-5 w-5 flex-shrink-0 items-center justify-center text-[var(--text-color-primary)]">
                     { item.icon ?? <span className="h-5 w-5" /> }
                   </div>
                   <div className="flex flex-1 flex-col">
-                    <span className="text-sm font-medium text-[var(--tt-gray-light-900)] dark:text-[var(--tt-gray-dark-900)]">
+                    <span className="text-sm font-medium text-[var(--text-color-primary)]">
                       { item.title }
                     </span>
                     { item.subtitle
                       ? (
-                          <span className="text-xs text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
+                          <span className="text-xs text-[var(--text-color-secondary)]">
                             { item.subtitle }
                           </span>
                         )
@@ -222,7 +230,7 @@ export function SuggestionMenu({
                 </button>
               )
             }) }
-          </div>
+          </>
         ) }
       </div>
     </FloatingPortal>
