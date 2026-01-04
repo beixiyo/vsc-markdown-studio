@@ -156,11 +156,11 @@ export function SuggestionMenu({
           listRef.current = node
         } }
         style={ floatingStyles }
-        className={cn(
+        className={ cn(
           'min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-[var(--tt-radius-md)]',
           'border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]',
           'text-[var(--text-color-primary)] shadow-[var(--tt-shadow-elevated-md)] outline-none',
-        )}
+        ) }
         tabIndex={ -1 }
         onMouseDownCapture={ (event) => {
           /** 保持编辑器焦点，避免 focusout 立刻关闭菜单导致点击失效 */
@@ -203,14 +203,14 @@ export function SuggestionMenu({
                   } }
                   onMouseEnter={ () => onActiveIndexChange(index) }
                   onClick={ () => onSelect(index) }
-                  className={cn(
+                  className={ cn(
                     'flex w-full items-start gap-3 px-3 py-2 text-left',
                     'text-[var(--text-color-primary)]',
                     'transition-all duration-300 hover:bg-[var(--bg-color-hover)]',
                     active
                       ? 'bg-[var(--bg-color-hover)]'
                       : 'bg-transparent border-0 cursor-pointer',
-                  )}
+                  ) }
                 >
                   <div className="mt-[2px] flex h-5 w-5 flex-shrink-0 items-center justify-center text-[var(--text-color-primary)]">
                     { item.icon ?? <span className="h-5 w-5" /> }

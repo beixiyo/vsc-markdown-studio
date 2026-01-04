@@ -16,7 +16,7 @@
 ::-webkit-scrollbar-thumb {
   /* 滑块背景色 */
   background-color: var(--scrollbarThumb);
-  transition: background-color .3s;
+  transition: background-color 0.3s;
   cursor: pointer;
   /* 滑块圆角 */
   border-radius: 6px;

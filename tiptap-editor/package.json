@@ -30,7 +30,10 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
+    "@hocuspocus/provider": "^2.15.0",
     "@tiptap/core": "^3.13.0",
+    "@tiptap/extension-collaboration": "^3.13.0",
+    "@tiptap/extension-collaboration-caret": "^3.13.0",
     "@tiptap/extension-highlight": "^3.13.0",
     "@tiptap/extension-image": "^3.13.0",
     "@tiptap/extension-list": "^3.13.0",
@@ -52,11 +55,12 @@
     "tiptap-api": "workspace:*",
     "tiptap-comment": "workspace:*",
     "tiptap-comps": "workspace:*",
+    "tiptap-config": "workspace:*",
     "tiptap-editor-core": "workspace:*",
     "tiptap-speaker-node": "workspace:*",
     "tiptap-styles": "workspace:*",
-    "tiptap-config": "workspace:*",
-    "tiptap-trigger": "workspace:*"
+    "tiptap-trigger": "workspace:*",
+    "yjs": "^13.6.27"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.1",

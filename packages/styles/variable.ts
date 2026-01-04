@@ -1,170 +1,202 @@
 export default {
   light: {
-    // 🌈 主色调 —— 品牌色/交互色
+    // 🪟 背景色 —— 与 Figma 对齐
+    background: '255 255 255', // Bg Primary #FFFFFF
+    backgroundSecondary: '245 245 245', // Bg Secondary #F5F5F5
+    backgroundTertiary: '232 232 232', // Bg Tertiary #E8E8E8
+    backgroundQuaternary: '222 222 222', // Bg Quaternary #DEDEDE
 
-    // 默认的背景色、文字色，类似 Vercel 风格
-    defaultTextColor: '#0a0a0a',
-    defaultBgColor: '#fff',
-    primaryTextColor: '#fff',
-    primaryBgColor: '#171717',
+    // ✍️ 文字颜色 —— 分级控制（按设计稿更新）
+    textPrimary: '0 0 0', // #000000
+    textSecondary: '0 0 0', // #000000 70% (通过 alpha 控制)
+    textTertiary: '0 0 0', // #000000 60% (通过 alpha 控制)
+    textQuaternary: '0 0 0', // #000000 30% (通过 alpha 控制)
+    textDisabled: '0 0 0', // #000000 10% (通过 alpha 控制)
 
-    // 描边/幽灵按钮的 hover 背景色
-    outlineHoverBg: '#f3f4f6',
-
-    // 🪟 背景色 —— 白底 + 微灰，打造留白与层级感
-    background: '#ffffff',
-    backgroundSubtle: '#f9fafb',
-
-    // ✍️ 文字颜色 —— 分级控制
-    textPrimary: '#111827',
-    textSecondary: '#6b7280',
-    textDisabled: '#9ca3af',
-
-    // 📏 边框 —— 超克制使用
-    border: '#ebebeb',
-    borderStrong: '#d1d5db',
+    // 📏 边框 —— 按设计稿更新
+    border: '238 238 238',
+    borderSecondary: '222 222 222', // Border Secondary #EBEBEB
+    borderStrong: '166 166 166',
 
     // 🖌️ 阴影 —— 极简投影，克制使用
-    shadow: 'rgba(0, 0, 0, 0.05)',
-    shadowStrong: 'rgba(0, 0, 0, 0.1)',
+    shadow: '166 166 166',
+    shadowAlpha: '0.01',
+    shadowStrong: '20 20 20',
 
     // 📜 滚动条 —— 轨道与滑块
     scrollbarTrack: 'transparent',
     scrollbarThumb: 'rgba(0, 0, 0, 0.2)',
     scrollbarThumbHover: 'rgba(0, 0, 0, 0.35)',
 
-    // 状态色
-    success: '#10B981',
-    successBg: '#ECFDF5',
-    info: '#3B82F6',
-    infoBg: '#EFF6FF',
-    danger: '#EF4444',
-    dangerBg: '#FEF2F2',
-    warning: '#F59E0B',
-    warningBg: '#FEF3C7',
+    // 状态色（与 Figma 状态色对齐）
+    success: '52 199 89', // 状态 / 绿 #34c759
+    successBg: '236 253 245',
+    info: '65 156 255', // 状态 / 蓝 #419cff
+    infoBg: '239 246 255',
+    danger: '255 86 94', // 状态 / 红 #ff565e
+    dangerBg: '254 242 242',
+    warning: '250 193 65', // 状态 / 黄 #fac141
+    warningBg: '254 243 199',
+
+    // 品牌与导航背景（来自 Figma 变量）
+    brand: '85 96 245', // #5560F5
+    navBg: '255 255 255', // Figma 全局 / W Nav #ffffff
+
+    // 按钮颜色
+    buttonPrimary: '0 0 0', // Button Primary #000000
+    buttonSecondary: '245 245 245', // Button Secondary #F5F5F5
+    buttonTertiary: '255 255 255', // Button Tertiary #FFFFFF
+
+    // 系统色（System 彩色）
+    systemRed: '255 86 94', // 红 #FF565E
+    systemOrange: '255 151 74', // 橙 #FF974A
+    systemYellow: '250 193 65', // 黄 #FAC141
+    systemGreen: '52 199 89', // 绿 #34C759
+    systemBlue: '65 156 255', // 蓝 #419CFF
+    systemPurple: '233 56 246', // 紫 #E938F6
 
     // 绿色调色
-    greenTextColor: '#059669',
-    greenBgColor: '#ECFDF5',
-    greenBorderColor: '#10B981',
+    toningGreenTextColor: '#059669',
+    toningGreenBgColor: '#ECFDF5',
+    toningGreenBorderColor: '#10B981',
 
     // 蓝色调色
-    blueTextColor: '#2563EB',
-    blueBgColor: '#EFF6FF',
-    blueBorderColor: '#3B82F6',
+    toningBlueTextColor: '#2563EB',
+    toningBlueBgColor: '#EFF6FF',
+    toningBlueBorderColor: '#3B82F6',
 
     // 紫色调色
-    purpleTextColor: '#9333EA',
-    purpleBgColor: '#FAF5FF',
-    purpleBorderColor: '#A855F7',
+    toningPurpleTextColor: '#9333EA',
+    toningPurpleBgColor: '#FAF5FF',
+    toningPurpleBorderColor: '#A855F7',
 
     // 橙色调色
-    orangeTextColor: '#EA580C',
-    orangeBgColor: '#FFF7ED',
-    orangeBorderColor: '#F97316',
+    toningOrangeTextColor: '#EA580C',
+    toningOrangeBgColor: '#FFF7ED',
+    toningOrangeBorderColor: '#F97316',
 
     // 红色调色
-    redTextColor: '#DC2626',
-    redBgColor: '#FEF2F2',
-    redBorderColor: '#EF4444',
+    toningRedTextColor: '#DC2626',
+    toningRedBgColor: '#FEF2F2',
+    toningRedBorderColor: '#EF4444',
 
     // 黄色调色
-    yellowTextColor: '#D97706',
-    yellowBgColor: '#FEF3C7',
-    yellowBorderColor: '#F59E0B',
+    toningYellowTextColor: '#D97706',
+    toningYellowBgColor: '#FEF3C7',
+    toningYellowBorderColor: '#F59E0B',
 
     // 灰色调色
-    grayTextColor: '#6B7280',
-    grayBgColor: '#F3F4F6',
-    grayBorderColor: '#9CA3AF',
+    toningGrayTextColor: '#6B7280',
+    toningGrayBgColor: '#F3F4F6',
+    toningGrayBorderColor: '#9CA3AF',
 
     // 石板色调色
-    slateTextColor: '#374151',
-    slateBgColor: '#f3f4f6',
-    slateBorderColor: '#64748B',
+    toningSlateTextColor: '#374151',
+    toningSlateBgColor: '#f3f4f6',
+    toningSlateBorderColor: '#64748B',
+
+    // 骨架屏颜色 token（light）
+    skeletonBase: '245 246 248',
+    skeletonHighlight: '233 236 239',
   },
   dark: {
-    // 🌈 主色调 —— 深色背景下的品牌点缀
-
-    // 默认的背景色、文字色，类似 Vercel 风格
-    defaultTextColor: '#fff',
-    defaultBgColor: '#171717',
-    primaryTextColor: '#0a0a0a',
-    primaryBgColor: '#fff',
-
-    // 描边/幽灵按钮的 hover 背景色
-    outlineHoverBg: '#374151',
-
     // 🪟 背景色 —— 以深灰为主，避免死黑
-    background: '#000000',
-    backgroundSubtle: '#0A0A0A',
+    background: '0 0 0',
+    backgroundSecondary: '20 20 20',
+    backgroundTertiary: '30 30 30',
+    backgroundQuaternary: '40 40 40',
 
     // ✍️ 文字颜色 —— 反转对比
-    textPrimary: '#f9fafb',
-    textSecondary: '#9ca3af',
-    textDisabled: '#6b7280',
+    textPrimary: '249 250 251',
+    textSecondary: '156 163 175',
+    textTertiary: '156 163 175',
+    textQuaternary: '107 114 128',
+    textDisabled: '107 114 128',
 
     // 📏 边框 —— 用于组件分界
-    border: '#292932',
-    borderStrong: '#4b5563',
+    border: '33 33 33',
+    borderSecondary: '63 63 63',
+    borderStrong: '77 77 77',
 
-    // 🖌️ 阴影 —— 更柔和扩散型
-    shadow: 'rgba(0, 0, 0, 0.4)',
-    shadowStrong: 'rgba(0, 0, 0, 0.6)',
+    // 🖌️ 阴影 —— 始终使用黑色
+    shadow: '0 0 0',
+    shadowAlpha: '0.06',
+    shadowStrong: '0 0 0',
 
     // 📜 滚动条 —— 轨道与滑块
     scrollbarTrack: 'transparent',
     scrollbarThumb: 'rgba(255, 255, 255, 0.2)',
     scrollbarThumbHover: 'rgba(255, 255, 255, 0.35)',
 
-    // 状态色
-    success: '#10B981',
-    successBg: '#064E3B',
-    info: '#3B82F6',
-    infoBg: '#1E3A8A',
-    danger: '#EF4444',
-    dangerBg: '#7F1D1D',
-    warning: '#FBBF24',
-    warningBg: '#78350F',
+    // 状态色（深色，与 Figma 状态色对齐）
+    success: '48 209 88', // #30D158
+    successBg: '6 78 59',
+    info: '65 156 255', // #419CFF
+    infoBg: '30 58 138',
+    danger: '255 86 94', // #FF565E
+    dangerBg: '127 29 29',
+    warning: '255 197 66', // #FFC542
+    warningBg: '120 53 15',
+
+    // 品牌与导航背景（暗色占位，需根据 Figma 暗色稿再精调）
+    brand: '85 96 245', // #5560F5
+    navBg: '0 0 0', // Figma 全局 / B Nav #000000
+
+    // 按钮颜色（需要根据设计稿调整）
+    buttonPrimary: '255 255 255',
+    buttonSecondary: '40 40 40',
+    buttonTertiary: '20 20 20',
+
+    // 系统色（System 彩色）
+    systemRed: '255 86 94', // 红 #FF565E
+    systemOrange: '255 151 74', // 橙 #FF974A
+    systemYellow: '255 197 66', // 黄 #FFC542
+    systemGreen: '48 209 88', // 绿 #30D158
+    systemBlue: '65 156 255', // 蓝 #419CFF
+    systemPurple: '233 56 246', // 紫 #E938F6
 
     // 绿色调色
-    greenTextColor: '#34D399',
-    greenBgColor: '#064E3B',
-    greenBorderColor: '#065F46',
+    toningGreenTextColor: '#34D399',
+    toningGreenBgColor: '#064E3B',
+    toningGreenBorderColor: '#065F46',
 
     // 蓝色调色
-    blueTextColor: '#60A5FA',
-    blueBgColor: '#1E3A8A',
-    blueBorderColor: '#2563EB',
+    toningBlueTextColor: '#60A5FA',
+    toningBlueBgColor: '#1E3A8A',
+    toningBlueBorderColor: '#2563EB',
 
     // 紫色调色
-    purpleTextColor: '#A78BFA',
-    purpleBgColor: '#4C1D95',
-    purpleBorderColor: '#7E22CE',
+    toningPurpleTextColor: '#A78BFA',
+    toningPurpleBgColor: '#4C1D95',
+    toningPurpleBorderColor: '#7E22CE',
 
     // 橙色调色
-    orangeTextColor: '#FB923C',
-    orangeBgColor: '#7C2D12',
-    orangeBorderColor: '#C2410C',
+    toningOrangeTextColor: '#FB923C',
+    toningOrangeBgColor: '#7C2D12',
+    toningOrangeBorderColor: '#C2410C',
 
     // 红色调色
-    redTextColor: '#F87171',
-    redBgColor: '#7F1D1D',
-    redBorderColor: '#B91C1C',
+    toningRedTextColor: '#F87171',
+    toningRedBgColor: '#7F1D1D',
+    toningRedBorderColor: '#B91C1C',
 
     // 黄色调色
-    yellowTextColor: '#FBBF24',
-    yellowBgColor: '#78350F',
-    yellowBorderColor: '#B45309',
+    toningYellowTextColor: '#FBBF24',
+    toningYellowBgColor: '#78350F',
+    toningYellowBorderColor: '#B45309',
 
     // 灰色调色
-    grayTextColor: '#9CA3AF',
-    grayBgColor: '#1F2937',
-    grayBorderColor: '#4B5563',
+    toningGrayTextColor: '#9CA3AF',
+    toningGrayBgColor: '#1F2937',
+    toningGrayBorderColor: '#4B5563',
 
     // 石板色调色
-    slateTextColor: '#E5E7EB',
-    slateBgColor: '#0F172A',
-    slateBorderColor: '#334155',
+    toningSlateTextColor: '#E5E7EB',
+    toningSlateBgColor: '#0F172A',
+    toningSlateBorderColor: '#334155',
+
+    // 骨架屏颜色 token（dark）
+    skeletonBase: '28 28 30',
+    skeletonHighlight: '50 50 60',
   }
 }

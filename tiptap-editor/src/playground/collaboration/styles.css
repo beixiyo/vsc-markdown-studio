@@ -1,0 +1,32 @@
+/* 协同编辑光标样式 */
+.tiptap.ProseMirror {
+  /* 远程用户光标 */
+  .collaboration-carets__caret {
+    border-left: 1px solid currentColor;
+    border-right: 1px solid currentColor;
+    margin-left: -1px;
+    margin-right: -1px;
+    pointer-events: none;
+    position: relative;
+    word-break: normal;
+    color: white;
+  }
+
+  /* 用户名标签 */
+  .collaboration-carets__label {
+    border-radius: var(--tt-radius-xs) var(--tt-radius-xs) var(--tt-radius-xs) 0;
+    color: currentColor;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    left: -1px;
+    color: white;
+    line-height: normal;
+    padding: 0.1rem 0.3rem;
+    position: absolute;
+    top: -1.4em;
+    user-select: none;
+    white-space: nowrap;
+  }
+}
+
