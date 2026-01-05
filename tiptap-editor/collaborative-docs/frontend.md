@@ -7,6 +7,9 @@
 - **后端服务器**: 需要使用 `@hocuspocus/cli@2.15.0` 启动服务器
   ```bash
   npx @hocuspocus/cli@2.15.0 --port 8080
+
+  # or use sqlite save
+  npx @hocuspocus/cli@2.15.0 --port 8080 --sqlite ./collaborative.sqlite
   ```
 
 - **前端依赖**: 需要安装 `@hocuspocus/provider@^2.15.0`
