@@ -147,8 +147,8 @@ export function SelectionToolbar({
     }
   }, [hasSelection, enabled, virtualElement, refs])
 
-  /** 显示工具栏（在鼠标松开后） */
-  const showToolbar = () => {
+  /** 统一更新工具栏显示状态 */
+  const updateToolbarState = useCallback(() => {
     if (updateTimeoutRef.current) {
       clearTimeout(updateTimeoutRef.current)
     }
@@ -161,20 +161,9 @@ export function SelectionToolbar({
       }
 
       const has = hasSelectedText(editor)
-
-      if (has) {
-        setHasSelection(true)
-      }
-      else {
-        setHasSelection(false)
-      }
+      setHasSelection(has)
     }, 0)
-  }
-
-  /** 隐藏工具栏 */
-  const hideToolbar = () => {
-    setHasSelection(false)
-  }
+  }, [editor])
 
   /** 监听事件 */
   useEffect(() => {
@@ -189,7 +178,7 @@ export function SelectionToolbar({
     const handleMouseUp = (event: MouseEvent) => {
       /** 检查事件是否发生在编辑器内 */
       if (editorElement.contains(event.target as Node)) {
-        showToolbar()
+        updateToolbarState()
       }
     }
 
@@ -207,48 +196,69 @@ export function SelectionToolbar({
         ? target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}]`)
         : null
 
-      /** 如果点击的不是编辑器、不是工具栏本身、也不是需要保持打开的区域，则隐藏工具栏 */
+      /** 如果点击的不是编辑器、不是工具栏本身、也不是需要保持打开的区域，则更新工具栏状态 */
       if (
         !editorElement.contains(target)
         && !toolbarElement.contains(target)
         && !keepOpenElement
       ) {
-        hideToolbar()
+        updateToolbarState()
       }
     }
 
-    /** 监听选中变化（当选择被清除时隐藏工具栏） */
+    /** 监听选中变化（每次选择变化时都更新工具栏状态） */
     const handleSelectionUpdate = () => {
-      if (!hasSelectedText(editor)) {
-        hideToolbar()
-      }
+      updateToolbarState()
     }
 
-    /** 监听文档更新（可能影响选中位置） */
+    /** 监听文档更新（可能影响选中位置，每次更新时都检查工具栏状态） */
     const handleUpdate = () => {
       // Floating UI 使用 autoUpdate 自动感知布局变化
-      /** 这里只根据是否还有选中文本决定是否隐藏 */
-      if (!hasSelectedText(editor)) {
-        hideToolbar()
+      /** 每次更新时都检查选择状态，确保工具栏正确显示/隐藏 */
+      updateToolbarState()
+    }
+
+    /** 监听键盘事件（支持键盘选择文本） */
+    const handleKeyUp = (event: KeyboardEvent) => {
+      /** 检查编辑器是否获得焦点 */
+      const isEditorFocused = editorElement === document.activeElement
+        || editorElement.contains(document.activeElement)
+
+      if (!isEditorFocused) {
+        return
+      }
+
+      /** 检查是否是选择相关的按键（Shift + 方向键、Ctrl/Cmd + A 等） */
+      const isSelectionKey = event.shiftKey
+        || (event.ctrlKey || event.metaKey) && event.key === 'a'
+        || event.key === 'ArrowLeft'
+        || event.key === 'ArrowRight'
+        || event.key === 'ArrowUp'
+        || event.key === 'ArrowDown'
+
+      if (isSelectionKey) {
+        updateToolbarState()
       }
     }
 
     /** 添加事件监听器 */
     document.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('click', handleClick, true)
+    document.addEventListener('keyup', handleKeyUp)
     editor.on('selectionUpdate', handleSelectionUpdate)
     editor.on('update', handleUpdate)
 
     return () => {
       document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('click', handleClick, true)
+      document.removeEventListener('keyup', handleKeyUp)
       editor.off('selectionUpdate', handleSelectionUpdate)
       editor.off('update', handleUpdate)
       if (updateTimeoutRef.current) {
         clearTimeout(updateTimeoutRef.current)
       }
     }
-  }, [enabled, editor, editorSelector])
+  }, [enabled, editor, editorSelector, updateToolbarState])
 
   /** 如果没有选中或未启用，不显示工具栏 */
   if (!hasSelection || !enabled || !virtualElement) {

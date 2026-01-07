@@ -7,7 +7,7 @@ export default function App() {
   const [mode, setMode] = useState<'editor' | 'collaboration'>('editor')
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen">
       <div className="flex gap-2 p-4 border-b border-[var(--tt-border-color)]">
         <Button
           onClick={ () => setMode('editor') }
@@ -31,20 +31,18 @@ export default function App() {
         </Button>
       </div>
 
-      <div className="flex-1 overflow-hidden">
-        { mode === 'editor'
-          ? <Editor
-            // initialMarkdown="[speaker:1] 和 [speaker:2]"
-              speakerMap={ {
-                1: { name: 'Alice', id: 'u1' },
-                2: { name: 'Bob', id: 'u2' },
-              } }
-              onSpeakerClick={ (attrs) => {
-                console.log('speaker click', attrs)
-              } }
-            />
-          : <CollaborationSplitPane /> }
-      </div>
+      { mode === 'editor'
+        ? <Editor
+          // initialMarkdown="[speaker:1] 和 [speaker:2]"
+          speakerMap={ {
+            1: { name: 'Alice', id: 'u1' },
+            2: { name: 'Bob', id: 'u2' },
+          } }
+          onSpeakerClick={ (attrs) => {
+            console.log('speaker click', attrs)
+          } }
+        />
+        : <CollaborationSplitPane /> }
     </div>
   )
 }

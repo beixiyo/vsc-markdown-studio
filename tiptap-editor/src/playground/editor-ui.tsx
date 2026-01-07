@@ -16,6 +16,7 @@ import { operateTestSuites } from '@/features/operate-tests'
 import { useOperateTests } from '../features/operate-tests/use-operate-tests'
 import { BaseEditorUI } from './base-editor-ui'
 import { useAiQuickSource, useAiSetup, useBindAi, useSlashSuggestion } from './hooks'
+import { SelectionToolbarContent } from './selection-toolbar-content'
 
 /**
  * 演示用编辑器 UI：使用通用的 BaseEditorUI，通过 children 传递额外的插件功能
@@ -115,14 +116,16 @@ export const EditorUI = memo<EditorUIProps>(({
 
       {/* 选中文本工具栏 */ }
       <SelectionToolbar editor={ editor } enabled>
-        <LinkPopover editor={ editor } hideWhenUnavailable />
-        <AIButton
-          controller={ aiController }
-          orchestrator={ aiOrchestrator }
-          mode="stream"
-          hideWhenUnavailable
-        />
-        <CommentButton commentStore={ commentStore } />
+        <SelectionToolbarContent isMobile={ isMobile }>
+          <LinkPopover editor={ editor } hideWhenUnavailable />
+          <AIButton
+            controller={ aiController }
+            orchestrator={ aiOrchestrator }
+            mode="stream"
+            hideWhenUnavailable
+          />
+          <CommentButton commentStore={ commentStore } />
+        </SelectionToolbarContent>
       </SelectionToolbar>
 
       {/* Slash Suggestion 菜单 */ }
