@@ -1,15 +1,17 @@
 import { memo } from 'react'
 import {
+  ToolbarGroup,
+  ToolbarSeparator,
+} from '../../ui'
+import {
   CodeBlockButton,
   ColorHighlightPopover,
   ImageUploadButton,
   MarkButton,
   TextAlignButton,
   TextFormatDropdownMenu,
-  ToolbarGroup,
-  ToolbarSeparator,
   UndoRedoButton,
-} from 'tiptap-comps'
+} from '../index'
 
 export type SelectionToolbarContentProps = {
   /**

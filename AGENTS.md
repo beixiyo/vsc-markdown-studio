@@ -19,6 +19,7 @@
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/tiptap-ui/`
 - **新增组件**:
   - `outline-button/` - 大纲按钮组件
+  - `selection-toolbar-content/` - 选中文本工具栏内容组件，提供常用的文本格式化功能预设（包含撤销/重做、文本格式、文本样式、高亮、代码块、角标、对齐、图片等）
   - `text-format-dropdown-menu/` - 文本格式下拉菜单组件（包含 `text-format-dropdown-menu.tsx`, `use-text-format-dropdown-menu.ts`）
   - `toolbar/` - 工具栏组件（包含 `header-toolbar.tsx`, `theme-toggle.tsx`, `toolbar-mobile-content.tsx`）
 
