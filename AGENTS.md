@@ -12,13 +12,14 @@
 
 #### 1. Icons (图标组件)
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/icons/`
-- **变化**: 图标数量从 37 个增加到 42 个
-- **新增图标**: `check-icon.tsx`, `edit-icon.tsx`, `locate-icon.tsx`, `sparkles-icon.tsx`, `x-icon.tsx`
+- **变化**: 图标数量从 37 个增加到 43 个
+- **新增图标**: `check-icon.tsx`, `edit-icon.tsx`, `locate-icon.tsx`, `sparkles-icon.tsx`, `text-format-icon.tsx`, `x-icon.tsx`
 
 #### 2. UI Components (UI组件)
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/tiptap-ui/`
 - **新增组件**:
   - `outline-button/` - 大纲按钮组件
+  - `text-format-dropdown-menu/` - 文本格式下拉菜单组件（包含 `text-format-dropdown-menu.tsx`, `use-text-format-dropdown-menu.ts`）
   - `toolbar/` - 工具栏组件（包含 `header-toolbar.tsx`, `theme-toggle.tsx`, `toolbar-mobile-content.tsx`）
 
 #### 3. UI Primitives (基础UI组件)

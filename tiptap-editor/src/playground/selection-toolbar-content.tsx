@@ -1,13 +1,11 @@
 import { memo } from 'react'
 import {
-  BlockquoteButton,
   CodeBlockButton,
   ColorHighlightPopover,
-  HeadingDropdownMenu,
   ImageUploadButton,
-  ListDropdownMenu,
   MarkButton,
   TextAlignButton,
+  TextFormatDropdownMenu,
   ToolbarGroup,
   ToolbarSeparator,
   UndoRedoButton,
@@ -28,7 +26,6 @@ export type SelectionToolbarContentProps = {
 export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
   isMobile = false,
   children,
-  ...props
 }) => {
   return (
     <>
@@ -40,26 +37,14 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
 
       <ToolbarSeparator />
 
-      {/* 标题 H1-H4 */}
+      {/* 文本格式：标题、段落、列表、任务、引用 */}
       <ToolbarGroup>
-        <HeadingDropdownMenu levels={ [1, 2, 3, 4] } portal={ isMobile } />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      {/* 列表：无序/有序/任务 */}
-      <ToolbarGroup>
-        <ListDropdownMenu
-          types={ ['bulletList', 'orderedList', 'taskList'] }
+        <TextFormatDropdownMenu
+          headingLevels={ [1, 2, 3] }
+          listTypes={ ['bulletList', 'orderedList', 'taskList'] }
           portal={ isMobile }
+          hideWhenUnavailable
         />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      {/* 引用 */}
-      <ToolbarGroup>
-        <BlockquoteButton hideWhenUnavailable />
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -119,4 +104,3 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
 })
 
 SelectionToolbarContent.displayName = 'SelectionToolbarContent'
-

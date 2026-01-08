@@ -81,6 +81,16 @@ export function canToggleBlockquote(
 }
 
 /**
+ * Checks if blockquote is currently active
+ */
+export function isBlockquoteActive(editor: Editor | null): boolean {
+  if (!editor || !editor.isEditable)
+    return false
+
+  return editor.isActive('blockquote')
+}
+
+/**
  * Toggles blockquote formatting for a specific node or the current selection
  */
 export function toggleBlockquote(editor: Editor | null): boolean {
