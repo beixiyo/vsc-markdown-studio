@@ -27,6 +27,7 @@ export const EditorUI = memo<EditorUIProps>(({
   setMobileView,
   commentStore,
   toolbarRef,
+  readonly = false,
 }) => {
   const { editor } = useCurrentEditor()
   const { aiOrchestrator, aiController } = useAiSetup()
@@ -72,81 +73,89 @@ export const EditorUI = memo<EditorUIProps>(({
 
   return (
     <>
-      <BaseEditorUI
-        isMobile={ isMobile }
-        height={ height }
-        mobileView={ mobileView }
-        setMobileView={ setMobileView }
-        toolbarRef={ toolbarRef }
-      >
-        <ToolbarGroup>
-          { commentStore && (
-            <CommentSidebar
-              commentStore={ commentStore }
-              editor={ editor }
-              open={ commentSidebarOpen }
-              onOpenChange={ (openPanel) => {
-                setCommentSidebarOpen(openPanel)
-                if (!openPanel) {
-                  setActiveCommentId(null)
-                  closeInlineComment()
-                }
-              } }
-              activeCommentId={ activeCommentId ?? undefined }
+      { !readonly && (
+        <BaseEditorUI
+          isMobile={ isMobile }
+          height={ height }
+          mobileView={ mobileView }
+          setMobileView={ setMobileView }
+          toolbarRef={ toolbarRef }
+        >
+          <ToolbarGroup>
+            { commentStore && (
+              <CommentSidebar
+                commentStore={ commentStore }
+                editor={ editor }
+                open={ commentSidebarOpen }
+                onOpenChange={ (openPanel) => {
+                  setCommentSidebarOpen(openPanel)
+                  if (!openPanel) {
+                    setActiveCommentId(null)
+                    closeInlineComment()
+                  }
+                } }
+                activeCommentId={ activeCommentId ?? undefined }
+              />
+            ) }
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <OperateTestDropdownMenu
+              suites={ operateTestSuites }
+              portal={ isMobile }
+              onRunAll={ runAllOperateTests }
+              onRunSuite={ runOperateSuite }
+              running={ operateRunning }
+              disabled={ !editor }
             />
-          ) }
-        </ToolbarGroup>
-        <ToolbarGroup>
-          <OperateTestDropdownMenu
-            suites={ operateTestSuites }
-            portal={ isMobile }
-            onRunAll={ runAllOperateTests }
-            onRunSuite={ runOperateSuite }
-            running={ operateRunning }
-            disabled={ !editor }
-          />
-          <SelectionTestButton />
-          <ScrollTestButton />
-        </ToolbarGroup>
-      </BaseEditorUI>
+            <SelectionTestButton />
+            <ScrollTestButton />
+          </ToolbarGroup>
+        </BaseEditorUI>
+      ) }
 
       {/* 测试 HoverTooltip */ }
       <EditorHoverTooltip editor={ editor } enabled={ false } />
 
-      {/* 选中文本工具栏 */ }
-      <SelectionToolbar editor={ editor } enabled>
-        <SelectionToolbarContent isMobile={ isMobile }>
-          <LinkPopover editor={ editor } hideWhenUnavailable />
-          <AIButton
-            controller={ aiController }
-            orchestrator={ aiOrchestrator }
-            mode="stream"
-            hideWhenUnavailable
+      { !readonly && (
+        <>
+          {/* 选中文本工具栏 */ }
+          <SelectionToolbar editor={ editor } enabled>
+            <SelectionToolbarContent isMobile={ isMobile }>
+              <LinkPopover editor={ editor } hideWhenUnavailable />
+              <AIButton
+                controller={ aiController }
+                orchestrator={ aiOrchestrator }
+                mode="stream"
+                hideWhenUnavailable
+              />
+              <CommentButton commentStore={ commentStore } />
+            </SelectionToolbarContent>
+          </SelectionToolbar>
+
+          {/* Slash Suggestion 菜单 */ }
+          <SuggestionMenu
+            { ...suggestion }
+            onActiveIndexChange={ suggestion.setActiveIndex }
+            onSelect={ suggestion.selectItem }
+            onClose={ suggestion.close }
           />
-          <CommentButton commentStore={ commentStore } />
-        </SelectionToolbarContent>
-      </SelectionToolbar>
 
-      {/* Slash Suggestion 菜单 */ }
-      <SuggestionMenu
-        { ...suggestion }
-        onActiveIndexChange={ suggestion.setActiveIndex }
-        onSelect={ suggestion.selectItem }
-        onClose={ suggestion.close }
-      />
+          {/* AI 操作面板 */ }
+          <AIActionPanel controller={ aiController } className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" />
+        </>
+      ) }
 
-      {/* AI 操作面板 */ }
-      <AIActionPanel controller={ aiController } className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" />
-
-      <InlineCommentPopover
-        inlineComment={ inlineComment }
-        inlineThread={ inlineThread }
-        inlineCommentRect={ inlineCommentRect }
-        inlineCommentRange={ inlineCommentRange }
-        closeInlineComment={ closeInlineComment }
-        editor={ editor }
-        commentStore={ commentStore }
-      />
+      { !readonly && (
+        <InlineCommentPopover
+          inlineComment={ inlineComment }
+          inlineThread={ inlineThread }
+          inlineCommentRect={ inlineCommentRect }
+          inlineCommentRange={ inlineCommentRange }
+          closeInlineComment={ closeInlineComment }
+          editor={ editor }
+          commentStore={ commentStore }
+        />
+      ) }
     </>
   )
 })

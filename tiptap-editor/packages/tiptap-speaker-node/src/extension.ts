@@ -6,6 +6,7 @@ import { Plugin } from '@tiptap/pm/state'
 const DEFAULT_TAG = 'strong'
 const TOKEN_NAME = 'speaker'
 const TOKEN_REGEX = /^\[speaker:([^\]]+?)\]/
+const HTML_TAG_REGEX = /^<speaker>([^<]+?)<\/speaker>/
 
 function buildDataAttributes(attrs: Partial<SpeakerAttributes>) {
   const dataAttrs: Record<string, string> = {}
@@ -58,9 +59,23 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
     return {
       originalLabel: {
         default: '',
+        /**
+         * 解析原始标签文本
+         * 会解析以下内容：
+         * 1. 带有 data-speaker-original-label 属性的元素，从该属性中获取值
+         * 2. <speaker> 标签，从标签的文本内容中获取值
+         */
         parseHTML: (element) => {
-          const value = element.getAttribute('data-speaker-original-label')
-          return value ?? ''
+          /** 优先从 data 属性获取 */
+          const dataAttr = element.getAttribute('data-speaker-original-label')
+          if (dataAttr) {
+            return dataAttr
+          }
+          /** 如果标签名是 speaker，从标签内容获取 */
+          if (element.tagName.toLowerCase() === 'speaker') {
+            return element.textContent?.trim() || ''
+          }
+          return ''
         },
         renderHTML: (attrs) => {
           if (!attrs.originalLabel) {
@@ -73,6 +88,10 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       },
       name: {
         default: null,
+        /**
+         * 解析说话者名称
+         * 会解析元素上 data-speaker-name 属性的值
+         */
         parseHTML: element => element.getAttribute('data-speaker-name'),
         renderHTML: (attrs) => {
           if (!attrs.name) {
@@ -85,6 +104,10 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       },
       id: {
         default: null,
+        /**
+         * 解析说话者 ID
+         * 会解析元素上 data-speaker-id 属性的值
+         */
         parseHTML: element => element.getAttribute('data-speaker-id'),
         renderHTML: (attrs) => {
           if (!attrs.id) {
@@ -97,6 +120,10 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       },
       label: {
         default: null,
+        /**
+         * 解析说话者标签
+         * 会解析元素上 data-speaker-label 属性的值
+         */
         parseHTML: element => element.getAttribute('data-speaker-label'),
         renderHTML: (attrs) => {
           if (!attrs.label) {
@@ -110,6 +137,13 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
     }
   },
 
+  /**
+   * 定义节点级别的 HTML 解析规则
+   * 会解析以下 HTML 元素：
+   * 1. 带有 data-speaker-original-label 属性的自定义标签（如 <strong>, <span> 等，由 renderTag 选项决定）
+   * 2. 带有 data-speaker-original-label 属性的任意元素
+   * 3. <speaker> 标签，从标签的文本内容中提取 originalLabel 属性
+   */
   parseHTML() {
     const tag = this.options.renderTag ?? DEFAULT_TAG
     return [
@@ -118,6 +152,21 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       },
       {
         tag: '[data-speaker-original-label]',
+      },
+      {
+        tag: 'speaker',
+        getAttrs: (node) => {
+          if (typeof node === 'string') {
+            return false
+          }
+          const element = node as HTMLElement
+          const textContent = element.textContent?.trim() || ''
+          return textContent
+            ? {
+                originalLabel: textContent,
+              }
+            : false
+        },
       },
     ]
   },
@@ -170,23 +219,68 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
     }
   },
 
+  /**
+   * Markdown 标记化器
+   * 用于解析 Markdown 文本中的 Speaker 标记
+   * 支持两种格式：
+   * 1. [speaker:标签名] - 方括号格式
+   * 2. <speaker>标签名</speaker> - HTML 标签格式
+   */
   markdownTokenizer: {
     name: TOKEN_NAME,
     level: 'inline',
-    start: (src: string) => src.indexOf('[speaker:'),
+    /**
+     * 查找 Markdown 文本中 Speaker 标记的起始位置
+     * 会查找 [speaker: 或 <speaker> 的第一个出现位置
+     */
+    start: (src: string) => {
+      const bracketIndex = src.indexOf('[speaker:')
+      const tagIndex = src.indexOf('<speaker>')
+      if (bracketIndex === -1 && tagIndex === -1) {
+        return -1
+      }
+      if (bracketIndex === -1) {
+        return tagIndex
+      }
+      if (tagIndex === -1) {
+        return bracketIndex
+      }
+      return Math.min(bracketIndex, tagIndex)
+    },
+    /**
+     * 将匹配到的文本标记化为 Token
+     * 优先解析 [speaker:X] 格式，如果不存在则解析 <speaker>X</speaker> 格式
+     * 返回的 token.value 包含标签名（方括号或标签内容中的文本）
+     */
     tokenize: (src: string) => {
-      const match = TOKEN_REGEX.exec(src)
-      if (!match) {
-        return undefined
+      /** 优先匹配 [speaker:X] 格式 */
+      const bracketMatch = TOKEN_REGEX.exec(src)
+      if (bracketMatch) {
+        return {
+          type: TOKEN_NAME,
+          raw: bracketMatch[0],
+          value: bracketMatch[1],
+        }
       }
-      return {
-        type: TOKEN_NAME,
-        raw: match[0],
-        value: match[1],
+      /** 匹配 <speaker>X</speaker> 格式 */
+      const tagMatch = HTML_TAG_REGEX.exec(src)
+      if (tagMatch) {
+        return {
+          type: TOKEN_NAME,
+          raw: tagMatch[0],
+          value: tagMatch[1],
+        }
       }
+      return undefined
     },
   },
 
+  /**
+   * 解析 Markdown 标记为 Speaker 节点
+   * 会解析以下 Markdown 格式：
+   * 1. [speaker:标签名] - 方括号格式，标签名作为 originalLabel
+   * 2. <speaker>标签名</speaker> - HTML 标签格式，标签名作为 originalLabel
+   */
   parseMarkdown: (token) => {
     return {
       type: 'speaker',
