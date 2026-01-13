@@ -50,6 +50,9 @@
       "tiptap-trigger": ["./packages/tiptap-trigger/src/index.ts"],
       "tiptap-trigger/react": ["./packages/tiptap-trigger/src/react/index.ts"],
 
+      "tiptap-comps": ["./packages/tiptap-comps/src/index.ts"],
+      "tiptap-comps/icons": ["./packages/tiptap-comps/src/icons/index.ts"],
+
       "tiptap-speaker-node": ["./packages/tiptap-speaker-node/src/index.ts"],
 
       "tiptap-editor-core": ["./packages/tiptap-editor-core/src/index.ts"]

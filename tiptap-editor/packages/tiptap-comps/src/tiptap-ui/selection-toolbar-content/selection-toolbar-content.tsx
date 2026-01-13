@@ -8,7 +8,7 @@ import {
   ColorHighlightPopover,
   ImageUploadButton,
   MarkButton,
-  TextAlignButton,
+  TextAlignDropdownMenu,
   TextFormatDropdownMenu,
   UndoRedoButton,
 } from '../index'
@@ -86,10 +86,11 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
 
       {/* 对齐：左对齐、居中、右对齐、两端对齐 */}
       <ToolbarGroup>
-        <TextAlignButton align="left" hideWhenUnavailable />
-        <TextAlignButton align="center" hideWhenUnavailable />
-        <TextAlignButton align="right" hideWhenUnavailable />
-        <TextAlignButton align="justify" hideWhenUnavailable />
+        <TextAlignDropdownMenu
+          types={ ['left', 'center', 'right', 'justify'] }
+          portal={ isMobile }
+          hideWhenUnavailable
+        />
       </ToolbarGroup>
 
       <ToolbarSeparator />

@@ -57,6 +57,10 @@ export default defineConfig(({ command }) => {
           'tiptap-trigger/react': path.resolve(__dirname, './packages/tiptap-trigger/src/react/index.ts'),
           'tiptap-trigger': path.resolve(__dirname, './packages/tiptap-trigger/src/index.ts'),
 
+          'tiptap-comps/index.css': path.resolve(__dirname, './packages/tiptap-comps/dist/index.css'),
+          'tiptap-comps/icons': path.resolve(__dirname, './packages/tiptap-comps/src/icons/index.ts'),
+          'tiptap-comps': path.resolve(__dirname, './packages/tiptap-comps/src/index.ts'),
+
           'tiptap-speaker-node': path.resolve(__dirname, './packages/tiptap-speaker-node/src/index.ts'),
 
           'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
