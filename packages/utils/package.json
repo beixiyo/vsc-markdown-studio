@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "lint": "eslint ./src --fix"
+    "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
     "config": "workspace:*"

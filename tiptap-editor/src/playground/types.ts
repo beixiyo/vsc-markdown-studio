@@ -30,6 +30,10 @@ export type EditorProps = {
    * 点击 Speaker 时触发
    */
   onSpeakerClick?: SpeakerClick
+  /**
+   * 是否只读模式，默认为 false（可编辑）
+   */
+  readonly?: boolean
 }
 
 /**
@@ -119,4 +123,8 @@ export type EditorUIProps = {
    * 工具栏 ref，用于遮挡处理
    */
   toolbarRef: RefObject<HTMLDivElement | null>
+  /**
+   * 是否只读模式，默认为 false（可编辑）
+   */
+  readonly?: boolean
 }

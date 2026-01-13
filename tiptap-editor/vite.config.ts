@@ -53,6 +53,10 @@ export default defineConfig(({ command }) => {
           'tiptap-comment/react': path.resolve(__dirname, './packages/tiptap-comment/src/react/index.ts'),
           'tiptap-comment': path.resolve(__dirname, './packages/tiptap-comment/src/index.ts'),
 
+          'tiptap-mermaid/react': path.resolve(__dirname, './packages/tiptap-mermaid/src/react/index.ts'),
+          'tiptap-mermaid/index.css': path.resolve(__dirname, './packages/tiptap-mermaid/dist/index.css'),
+          'tiptap-mermaid': path.resolve(__dirname, './packages/tiptap-mermaid/src/index.ts'),
+
           'tiptap-trigger/index.css': path.resolve(__dirname, './packages/tiptap-trigger/dist/index.css'),
           'tiptap-trigger/react': path.resolve(__dirname, './packages/tiptap-trigger/src/react/index.ts'),
           'tiptap-trigger': path.resolve(__dirname, './packages/tiptap-trigger/src/index.ts'),

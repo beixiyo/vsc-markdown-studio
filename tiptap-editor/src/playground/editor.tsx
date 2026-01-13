@@ -1,16 +1,17 @@
 'use client'
 
 import type { EditorProps } from './types'
+import { isStr } from '@jl-org/tool'
 import { memo, useEffect, useRef, useState } from 'react'
 import { AI } from 'tiptap-ai'
-import { useAutoSave, useIsBreakpoint, useWindowSize } from 'tiptap-api/react'
 
+import { useAutoSave, useIsBreakpoint, useWindowSize } from 'tiptap-api/react'
 import { CommentMark, CommentStore } from 'tiptap-comment'
 import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-config'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 
-import { SpeakerNode } from 'tiptap-speaker-node'
-
+import { MermaidNode } from 'tiptap-mermaid'
+import { preprocessSpeakerTags, SpeakerNode } from 'tiptap-speaker-node'
 import { HorizontalRule, ImageUploadNode } from 'tiptap-styles/tiptap-node'
 import { SuggestionTrigger } from 'tiptap-trigger'
 import content from './data/content.json' with { type: 'json' }
@@ -24,6 +25,7 @@ export const Editor = memo<EditorProps>(({
   initialMarkdown,
   speakerMap,
   onSpeakerClick,
+  readonly = false,
 }) => {
   const isMobile = useIsBreakpoint()
   const { height } = useWindowSize()
@@ -43,6 +45,8 @@ export const Editor = memo<EditorProps>(({
     content: data || '',
     /** 明确告诉 Tiptap 当前内容类型，Markdown 字符串会被正确解析 */
     contentType,
+    /** 是否可编辑：只读模式下为 false */
+    editable: !readonly,
     onUpdate(props) {
       debouncedSave(props.editor)
     },
@@ -53,6 +57,8 @@ export const Editor = memo<EditorProps>(({
       HorizontalRule,
       /** Slash / Suggestion 扩展 */
       SuggestionTrigger.configure(),
+      /** Mermaid 图表节点扩展 */
+      MermaidNode.configure(),
       /** 图片上传节点扩展 */
       ImageUploadNode.configure({
         /** 仅接受图片文件 */
@@ -82,10 +88,20 @@ export const Editor = memo<EditorProps>(({
       return
     }
     editor.commands.setContent(
-      data,
+      isStr(data)
+        ? preprocessSpeakerTags(data)
+        : data,
       { contentType },
     )
   }, [editor, data, contentType])
+
+  /** 动态切换只读状态 */
+  useEffect(() => {
+    if (!editor) {
+      return
+    }
+    editor.setEditable(!readonly)
+  }, [editor, readonly])
 
   return (
     <TiptapEditor
@@ -99,6 +115,7 @@ export const Editor = memo<EditorProps>(({
         setMobileView={ setMobileView }
         commentStore={ commentStore }
         toolbarRef={ toolbarRef }
+        readonly={ readonly }
       />
     </TiptapEditor>
   )

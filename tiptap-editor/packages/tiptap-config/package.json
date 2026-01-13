@@ -28,7 +28,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "lint": "eslint ./src --fix"
+    "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
     "clsx": "^2.1.1",

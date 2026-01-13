@@ -1,3 +1,3 @@
 export * from './extension'
-export * from './transform'
+export * from './mermaid-node'
 export * from './types'

@@ -735,6 +735,9 @@ importers:
       tiptap-editor-core:
         specifier: workspace:*
         version: link:packages/tiptap-editor-core
+      tiptap-mermaid:
+        specifier: workspace:*
+        version: link:packages/tiptap-mermaid
       tiptap-speaker-node:
         specifier: workspace:*
         version: link:packages/tiptap-speaker-node
@@ -953,6 +956,33 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
+
+  tiptap-editor/packages/tiptap-mermaid:
+    dependencies:
+      '@tiptap/core':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/pm@3.13.0)
+      '@tiptap/markdown':
+        specifier: ^3.13.0
+        version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
+      '@tiptap/pm':
+        specifier: ^3.13.0
+        version: 3.13.0
+      '@tiptap/react':
+        specifier: ^3.13.0
+        version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      mermaid:
+        specifier: ^11.12.2
+        version: 11.12.2
+      react:
+        specifier: ^19.2.1
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.3(react@19.2.3)
+      tiptap-config:
+        specifier: workspace:*
+        version: link:../tiptap-config
 
   tiptap-editor/packages/tiptap-speaker-node:
     dependencies:
