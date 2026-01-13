@@ -45,6 +45,9 @@
       "tiptap-comment": ["./packages/tiptap-comment/src/index.ts"],
       "tiptap-comment/react": ["./packages/tiptap-comment/src/react/index.ts"],
 
+      "tiptap-mermaid": ["./packages/tiptap-mermaid/src/index.ts"],
+      "tiptap-mermaid/react": ["./packages/tiptap-mermaid/src/react/index.ts"],
+
       "tiptap-api": ["./packages/tiptap-api/src/index.ts"],
       "tiptap-api/react": ["./packages/tiptap-api/src/react/index.ts"],
       "tiptap-trigger": ["./packages/tiptap-trigger/src/index.ts"],

@@ -10,6 +10,7 @@ import { CommentMark, CommentStore } from 'tiptap-comment'
 import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-config'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 
+import { MermaidNode } from 'tiptap-mermaid'
 import { preprocessSpeakerTags, SpeakerNode } from 'tiptap-speaker-node'
 import { HorizontalRule, ImageUploadNode } from 'tiptap-styles/tiptap-node'
 import { SuggestionTrigger } from 'tiptap-trigger'
@@ -56,6 +57,8 @@ export const Editor = memo<EditorProps>(({
       HorizontalRule,
       /** Slash / Suggestion 扩展 */
       SuggestionTrigger.configure(),
+      /** Mermaid 图表节点扩展 */
+      MermaidNode.configure(),
       /** 图片上传节点扩展 */
       ImageUploadNode.configure({
         /** 仅接受图片文件 */

@@ -43,7 +43,7 @@
     "---build---": "",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint ./src --fix"
+    "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
     "@blocknote/code-block": "workspace:*",

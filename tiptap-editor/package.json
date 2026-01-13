@@ -26,7 +26,7 @@
     "build": "vite build",
     "dev": "vite",
     "preview": "vite preview",
-    "lint": "eslint ./src --fix"
+    "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
@@ -57,6 +57,7 @@
     "tiptap-comps": "workspace:*",
     "tiptap-config": "workspace:*",
     "tiptap-editor-core": "workspace:*",
+    "tiptap-mermaid": "workspace:*",
     "tiptap-speaker-node": "workspace:*",
     "tiptap-styles": "workspace:*",
     "tiptap-trigger": "workspace:*",

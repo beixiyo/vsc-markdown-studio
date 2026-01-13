@@ -4,7 +4,7 @@ import { useCurrentEditor } from '@tiptap/react'
 import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { LinkPopover, SelectionToolbar, SelectionToolbarContent, ToolbarGroup } from 'tiptap-comps'
+import { Button, LinkPopover, SelectionToolbar, SelectionToolbarContent, ToolbarGroup } from 'tiptap-comps'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
@@ -107,6 +107,24 @@ export const EditorUI = memo<EditorUIProps>(({
               running={ operateRunning }
               disabled={ !editor }
             />
+            <Button
+              onClick={ () => {
+                if (editor) {
+                  const markdown = `\`\`\`mermaid
+sequenceDiagram
+    Alice->>Bob: Hello Bob!
+    Bob-->>Alice: Hello Alice!
+    Alice->>Bob: How are you?
+    Bob-->>Alice: I'm fine, thanks!
+\`\`\``
+                  editor.commands.setContent(markdown, { contentType: 'markdown' })
+                }
+              } }
+              disabled={ !editor }
+              title="插入 Mermaid 时序图"
+            >
+              Mermaid
+            </Button>
             <SelectionTestButton />
             <ScrollTestButton />
           </ToolbarGroup>
