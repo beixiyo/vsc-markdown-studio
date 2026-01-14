@@ -2,4 +2,5 @@
 @import 'tiptap-comment/index.css';
 @import 'tiptap-trigger/index.css';
 @import 'tiptap-comps/index.css';
+@import 'tiptap-mermaid/index.css';
 @import './playground/collaboration/styles.css';
