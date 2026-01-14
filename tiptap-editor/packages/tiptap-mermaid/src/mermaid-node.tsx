@@ -62,7 +62,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
     y,
     scale,
     onTransformChange: handleTransformChange,
-    enabled: !isEditing && editor?.isEditable && !!code,
+    enabled: !isEditing && !!code,
   })
 
   return (
@@ -79,7 +79,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
           selected
             ? 'border border-[var(--tt-brand-color-500)] dark:border-[var(--tt-brand-color-400)]'
             : 'border border-[var(--tt-gray-light-a-200)] dark:border-[var(--tt-gray-dark-a-200)]',
-          !isEditing && editor?.isEditable && !!code && 'cursor-move',
+          !isEditing && !!code && 'cursor-move',
           isDragging && 'cursor-grabbing',
         ) }
         onMouseDown={ handleMouseDown }
