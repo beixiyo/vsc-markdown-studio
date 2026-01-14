@@ -16,6 +16,7 @@ import { operateTestSuites } from '@/features/operate-tests'
 import { useOperateTests } from '../features/operate-tests/use-operate-tests'
 import { BaseEditorUI } from './base-editor-ui'
 import { useAiQuickSource, useAiSetup, useBindAi, useSlashSuggestion } from './hooks'
+import { unSelect } from 'tiptap-api'
 
 /**
  * 演示用编辑器 UI：使用通用的 BaseEditorUI，通过 children 传递额外的插件功能
@@ -118,6 +119,7 @@ sequenceDiagram
     Bob-->>Alice: I'm fine, thanks!
 \`\`\``
                   editor.commands.setContent(markdown, { contentType: 'markdown' })
+                  unSelect(editor)
                 }
               } }
               disabled={ !editor }

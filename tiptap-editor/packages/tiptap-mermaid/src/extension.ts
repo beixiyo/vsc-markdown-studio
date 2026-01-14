@@ -1,4 +1,5 @@
 import type { MermaidOptions } from './types'
+import { uniqueId } from '@jl-org/tool'
 import { Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { MermaidNodeComponent } from './mermaid-node'
@@ -10,13 +11,9 @@ import { MermaidNodeComponent } from './mermaid-node'
  */
 export const MermaidNode = Node.create<MermaidOptions>({
   name: 'mermaid',
-
   group: 'block',
-
-  draggable: true,
-
-  selectable: true,
-
+  draggable: false,
+  selectable: false,
   atom: true,
 
   addOptions() {
@@ -30,28 +27,28 @@ export const MermaidNode = Node.create<MermaidOptions>({
       code: {
         default: '',
         parseHTML: (element) => {
-          return element.getAttribute('data-code') || ''
+          return element.getAttribute('data-mermaid-code') || ''
         },
         renderHTML: (attrs) => {
           if (!attrs.code) {
             return {}
           }
           return {
-            'data-code': attrs.code,
+            'data-mermaid-code': attrs.code,
           }
         },
       },
       id: {
         default: '',
         parseHTML: (element) => {
-          return element.getAttribute('data-id') || ''
+          return element.getAttribute('data-mermaid-id') || ''
         },
         renderHTML: (attrs) => {
           if (!attrs.id) {
             return {}
           }
           return {
-            'data-id': attrs.id,
+            'data-mermaid-id': attrs.id,
           }
         },
       },
@@ -85,9 +82,9 @@ export const MermaidNode = Node.create<MermaidOptions>({
 
   addCommands() {
     return {
-      setMermaid: (code: string) =>
+      insertMermaid: (code: string) =>
         ({ commands }) => {
-          const id = `mermaid-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+          const id = `mermaid-${uniqueId()}`
           return commands.insertContent({
             type: this.name,
             attrs: {
@@ -137,7 +134,7 @@ export const MermaidNode = Node.create<MermaidOptions>({
    */
   parseMarkdown: (token) => {
     const code = token.text || ''
-    const id = `mermaid-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const id = `mermaid-${uniqueId()}`
 
     return {
       type: 'mermaid',
@@ -164,7 +161,7 @@ declare module '@tiptap/core' {
        * 插入 Mermaid 图表
        * @param code Mermaid 代码
        */
-      setMermaid: (code: string) => ReturnType
+      insertMermaid: (code: string) => ReturnType
     }
   }
 }

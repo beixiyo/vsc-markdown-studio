@@ -22,7 +22,9 @@
     "dist"
   ],
   "dependencies": {
+    "hooks": "workspace:*",
     "tiptap-config": "workspace:*",
+    "tiptap-comps": "workspace:*",
     "mermaid": "^11.12.2"
   },
   "peerDependencies": {

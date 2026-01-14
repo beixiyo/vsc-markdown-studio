@@ -1,145 +1,154 @@
 'use client'
 
 import type { NodeViewProps } from '@tiptap/react'
-import { uniqueId } from '@jl-org/tool'
 import { NodeViewWrapper } from '@tiptap/react'
-import mermaid from 'mermaid'
-import { useEffect, useRef, useState } from 'react'
+import { Button } from 'tiptap-comps'
+import { CheckIcon, EditIcon, XIcon } from 'tiptap-comps/icons'
+import { cn } from 'tiptap-config'
+import { useMermaidEditor } from './hooks/use-mermaid-editor'
+import { useMermaidRenderer } from './hooks/use-mermaid-renderer'
 
-/** 初始化 mermaid（只执行一次） */
-let mermaidInitialized = false
-if (typeof window !== 'undefined' && !mermaidInitialized) {
-  mermaid.initialize({ startOnLoad: false })
-  mermaidInitialized = true
-}
-
-export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected }) => {
-  /** 专门用于渲染 Mermaid SVG 的容器，避免与 React 管理的 DOM 冲突 */
-  const renderContainerRef = useRef<HTMLDivElement>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isRendering, setIsRendering] = useState(false)
+export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, updateAttributes, editor }) => {
   const code = node.attrs.code || ''
 
-  useEffect(() => {
-    if (!code || !renderContainerRef.current) {
-      return
-    }
+  const {
+    isEditing,
+    editCode,
+    textareaRef,
+    handleEdit,
+    handleSave,
+    handleCancel,
+    handleKeyDown,
+    setEditCode,
+  } = useMermaidEditor({
+    code,
+    updateAttributes,
+  })
 
-    let cancelled = false
-
-    const renderMermaid = async () => {
-      if (!renderContainerRef.current || cancelled) {
-        return
-      }
-
-      setIsRendering(true)
-      setError(null)
-
-      try {
-        /** 生成唯一的 ID */
-        const id = `mermaid-${uniqueId()}`
-
-        /** 使用 mermaid.render API（更安全，避免 DOM 时序问题） */
-        if (typeof mermaid.render === 'function') {
-          const { svg } = await mermaid.render(id, code)
-          if (renderContainerRef.current && !cancelled) {
-            renderContainerRef.current.innerHTML = svg
-            setError(null)
-          }
-        }
-        else if (typeof mermaid.run === 'function') {
-          /** 使用 mermaid.run API（需要等待 DOM 更新） */
-          renderContainerRef.current.innerHTML = ''
-          const mermaidDiv = document.createElement('div')
-          mermaidDiv.className = 'mermaid'
-          mermaidDiv.id = id
-          mermaidDiv.textContent = code
-          renderContainerRef.current.appendChild(mermaidDiv)
-
-          /** 等待下一个 tick 确保 DOM 已更新 */
-          await new Promise(resolve => requestAnimationFrame(resolve))
-
-          if (renderContainerRef.current && !cancelled) {
-            await mermaid.run({
-              nodes: [mermaidDiv],
-              suppressErrors: false,
-            })
-          }
-        }
-        else {
-          throw new TypeError('Mermaid API 不可用：需要 mermaid.render 或 mermaid.run')
-        }
-      }
-      catch (err) {
-        const errorMessage = err instanceof Error
-          ? err.message
-          : '渲染失败'
-        setError(errorMessage)
-        console.error('Mermaid render error:', err)
-      }
-      finally {
-        if (!cancelled) {
-          setIsRendering(false)
-        }
-      }
-    }
-
-    renderMermaid()
-
-    return () => {
-      cancelled = true
-      /** 清理时清空渲染容器，避免 React 清理时找不到节点 */
-      if (renderContainerRef.current) {
-        renderContainerRef.current.innerHTML = ''
-      }
-    }
-  }, [code])
+  /** 使用渲染 Hook（仅在非编辑模式下渲染） */
+  const {
+    renderContainerRef,
+    isRendering,
+    error,
+    retryRender,
+  } = useMermaidRenderer({
+    code,
+    node,
+    isEditing,
+  })
 
   return (
     <NodeViewWrapper
-      className={ `mermaid-node-wrapper ${selected
-        ? 'selected'
-        : ''}` }
+      className={ cn('mermaid-node-wrapper', selected && 'selected') }
       data-mermaid="true"
     >
       <div
-        className="mermaid-container"
-        style={ {
-          minHeight: '100px',
-          padding: '16px',
-          border: selected
-            ? '2px solid #3b82f6'
-            : '1px solid #e5e7eb',
-          borderRadius: '8px',
-          backgroundColor: '#f9fafb',
-        } }
+        className={ cn(
+          'mermaid-container min-h-[100px] p-4 relative rounded-[var(--tt-radius-md)]',
+          'bg-[var(--tt-gray-light-50)] dark:bg-[var(--tt-gray-dark-50)]',
+          'transition-colors duration-[var(--tt-transition-duration-default)]',
+          selected
+            ? 'border border-[var(--tt-brand-color-500)] dark:border-[var(--tt-brand-color-400)]'
+            : 'border border-[var(--tt-gray-light-a-200)] dark:border-[var(--tt-gray-dark-a-200)]',
+        ) }
       >
-        {isRendering && (
-          <div style={ { textAlign: 'center', color: '#6b7280' } }>
-            正在渲染图表...
+        {/** 编辑按钮工具栏 */}
+        {!isEditing && editor?.isEditable && (
+          <div className="absolute top-2 right-2 flex gap-1 z-10">
+            <Button
+              type="button"
+              onClick={ handleEdit }
+              tooltip="编辑 Mermaid 代码"
+              className="p-1.5"
+              data-style="ghost"
+            >
+              <EditIcon className="w-4 h-4" />
+            </Button>
           </div>
         )}
-        {error && (
-          <div
-            style={ {
-              padding: '12px',
-              backgroundColor: '#fee2e2',
-              border: '1px solid #fecaca',
-              borderRadius: '4px',
-              color: '#991b1b',
-            } }
-          >
-            <strong>渲染错误：</strong>
-            {error}
+
+        {isEditing ? (
+          <div className="flex flex-col gap-2">
+            <textarea
+              ref={ textareaRef }
+              value={ editCode }
+              onChange={ e => setEditCode(e.target.value) }
+              onKeyDown={ handleKeyDown }
+              placeholder="请输入 Mermaid 代码..."
+              className={ cn(
+                'w-full min-h-[200px] p-3',
+                'border border-[var(--tt-gray-light-a-200)] dark:border-[var(--tt-gray-dark-a-200)]',
+                'rounded-[var(--tt-radius-xs)]',
+                'font-mono text-sm leading-normal resize-none',
+                'bg-[var(--white)] dark:bg-[var(--tt-gray-dark-50)]',
+                'text-[var(--tt-gray-light-900)] dark:text-[var(--tt-gray-dark-900)]',
+                'transition-colors duration-[var(--tt-transition-duration-default)]',
+                'placeholder:text-[var(--tt-gray-light-400)] dark:placeholder:text-[var(--tt-gray-dark-400)]',
+                'focus:border-[var(--tt-gray-light-a-300)] dark:focus:border-[var(--tt-gray-dark-a-300)]',
+              ) }
+            />
+            <div className="flex gap-2 justify-end">
+              <Button
+                type="button"
+                onClick={ handleCancel }
+                data-style="ghost"
+                className="flex items-center gap-1.5"
+              >
+                <XIcon className="w-4 h-4" />
+                取消
+              </Button>
+              <Button
+                type="button"
+                onClick={ handleSave }
+                data-appearance="emphasized"
+                className="flex items-center gap-1.5"
+              >
+                <CheckIcon className="w-4 h-4" />
+                保存
+              </Button>
+            </div>
           </div>
+        ) : (
+          <>
+            {isRendering && (
+              <div className="text-center text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
+                正在渲染图表...
+              </div>
+            )}
+            {error && (
+              <div
+                className={ cn(
+                  'p-3 rounded-[var(--tt-radius-xs)]',
+                  'bg-[var(--tt-color-red-inc-5)] dark:bg-[var(--tt-color-red-dec-5)]',
+                  'border border-[var(--tt-color-red-inc-2)] dark:border-[var(--tt-color-red-dec-3)]',
+                  'text-[var(--tt-color-red-dec-3)] dark:text-[var(--tt-color-red-inc-2)]',
+                ) }
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <strong>渲染错误：</strong>
+                    {error}
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={ retryRender }
+                    data-style="ghost"
+                    className="text-xs px-2 py-1"
+                  >
+                    重试
+                  </Button>
+                </div>
+              </div>
+            )}
+            {!code && (
+              <div className="text-center text-[var(--tt-gray-light-400)] dark:text-[var(--tt-gray-dark-400)] py-5">
+                请输入 Mermaid 代码
+              </div>
+            )}
+            {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */}
+            <div ref={ renderContainerRef } />
+          </>
         )}
-        {!code && (
-          <div style={ { textAlign: 'center', color: '#9ca3af', padding: '20px' } }>
-            请输入 Mermaid 代码
-          </div>
-        )}
-        {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */}
-        <div ref={ renderContainerRef } />
       </div>
     </NodeViewWrapper>
   )
