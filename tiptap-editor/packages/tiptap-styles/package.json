@@ -19,7 +19,8 @@
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js"
-    }
+    },
+    "./tailwind.config.mjs": "./tailwind.config.mjs"
   },
   "files": [
     "dist"
