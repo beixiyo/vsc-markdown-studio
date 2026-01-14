@@ -141,7 +141,15 @@ export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, 
               </div>
             )}
             {!code && (
-              <div className="text-center text-[var(--tt-gray-light-400)] dark:text-[var(--tt-gray-dark-400)] py-5">
+              <div
+                onClick={ editor?.isEditable
+                  ? handleEdit
+                  : undefined }
+                className={ cn(
+                  'text-center text-[var(--tt-gray-light-400)] dark:text-[var(--tt-gray-dark-400)] py-5',
+                  editor?.isEditable && 'cursor-pointer hover:text-[var(--tt-gray-light-500)] dark:hover:text-[var(--tt-gray-dark-500)] transition-colors',
+                ) }
+              >
                 请输入 Mermaid 代码
               </div>
             )}

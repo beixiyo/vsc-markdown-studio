@@ -16,7 +16,9 @@ export function useMermaidEditor({
   updateAttributes,
 }: UseMermaidEditorOptions) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [isEditing, setIsEditing] = useState(false)
+
+  /** 如果初始 code 为空，自动进入编辑模式 */
+  const [isEditing, setIsEditing] = useState(() => !code)
   const [editCode, setEditCode] = useState('')
 
   /** 当进入编辑模式时，聚焦到 textarea */
