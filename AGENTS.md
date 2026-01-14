@@ -21,7 +21,13 @@
   - `outline-button/` - 大纲按钮组件
   - `selection-toolbar-content/` - 选中文本工具栏内容组件，提供常用的文本格式化功能预设（包含撤销/重做、文本格式、文本样式、高亮、代码块、角标、对齐、图片等）
   - `text-format-dropdown-menu/` - 文本格式下拉菜单组件（包含 `text-format-dropdown-menu.tsx`, `use-text-format-dropdown-menu.ts`）
+    - 支持 Level 1-6 的标题级别配置（`headingLevels` 类型为 `Level[]`，默认值 `[1, 2, 3]`）
+  - `text-align-dropdown-menu/` - 文本对齐下拉菜单组件，统一管理文本对齐选项
   - `toolbar/` - 工具栏组件（包含 `header-toolbar.tsx`, `theme-toggle.tsx`, `toolbar-mobile-content.tsx`）
+    - `header-toolbar.tsx` 已重构：统一使用合并的下拉菜单（`TextFormatDropdownMenu` 和 `TextAlignDropdownMenu`）替代分离的组件
+- **已删除组件**:
+  - `heading-dropdown-menu/` - 已被 `TextFormatDropdownMenu` 替代
+  - `list-dropdown-menu/` - 已被 `TextFormatDropdownMenu` 替代
 
 #### 3. UI Primitives (基础UI组件)
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/ui/`

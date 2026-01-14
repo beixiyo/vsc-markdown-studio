@@ -24,7 +24,7 @@ import {
 
 import { BlockquoteButton } from '../blockquote-button'
 // --- Tiptap UI ---
-import { HeadingButton } from '../heading-button'
+import { HeadingButton, type Level } from '../heading-button'
 import { ListButton } from '../list-button'
 import { useTextFormatDropdownMenu } from './use-text-format-dropdown-menu'
 
@@ -38,7 +38,7 @@ export interface TextFormatDropdownMenuProps
    * Available heading levels to show in the dropdown
    * @default [1, 2, 3]
    */
-  headingLevels?: (1 | 2 | 3)[]
+  headingLevels?: Level[]
   /**
    * Available list types to show in the dropdown
    * @default ['bulletList', 'orderedList', 'taskList']

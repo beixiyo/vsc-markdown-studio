@@ -4,18 +4,16 @@ import {
   ToolbarSeparator,
 } from '../../ui'
 import {
-  BlockquoteButton,
   CodeBlockButton,
   ColorHighlightPopover,
   ColorHighlightPopoverButton,
-  HeadingDropdownMenu,
   ImageUploadButton,
   LinkButton,
   LinkPopover,
-  ListDropdownMenu,
   MarkButton,
   OutlineButton,
-  TextAlignButton,
+  TextAlignDropdownMenu,
+  TextFormatDropdownMenu,
   UndoRedoButton,
 } from '../index'
 
@@ -45,12 +43,11 @@ export function HeaderToolbar(props: HeaderToolbarProps) {
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <HeadingDropdownMenu levels={ [1, 2, 3, 4] } portal={ isMobile } />
-        <ListDropdownMenu
-          types={ ['bulletList', 'orderedList', 'taskList'] }
+        <TextFormatDropdownMenu
+          headingLevels={ [1, 2, 3, 4] }
+          listTypes={ ['bulletList', 'orderedList', 'taskList'] }
           portal={ isMobile }
         />
-        <BlockquoteButton />
         <CodeBlockButton />
       </ToolbarGroup>
 
@@ -84,10 +81,10 @@ export function HeaderToolbar(props: HeaderToolbarProps) {
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <TextAlignButton align="left" />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
+        <TextAlignDropdownMenu
+          types={ ['left', 'center', 'right', 'justify'] }
+          portal={ isMobile }
+        />
       </ToolbarGroup>
 
       <ToolbarSeparator />
