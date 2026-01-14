@@ -68,6 +68,8 @@ export default defineConfig(({ command }) => {
           'tiptap-speaker-node': path.resolve(__dirname, './packages/tiptap-speaker-node/src/index.ts'),
 
           'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
+
+          'hooks': path.resolve(__dirname, '../packages/hooks/src/index.ts'),
         }),
       },
     },
