@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { SuggestionItem, SuggestionItemContext, SuggestionSource, SuggestionSourceParams } from '../types'
 import { createElement } from 'react'
-import { AlignLeftIcon, BlockquoteIcon, HeadingOneIcon, HeadingTwoIcon, ListIcon, ListOrderedIcon } from 'tiptap-comps/icons'
+import { AlignLeftIcon, BlockquoteIcon, HeadingOneIcon, HeadingTwoIcon, ListIcon, ListOrderedIcon, SparklesIcon } from 'tiptap-comps/icons'
 
 type SlashAction = (editor: Editor, context: SuggestionItemContext) => void | Promise<void>
 
@@ -120,6 +120,16 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
       icon: createElement(BlockquoteIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
         exec('toggleBlockquote')
+      },
+    },
+    {
+      id: 'mermaid',
+      title: 'Mermaid',
+      subtitle: '图表',
+      aliases: ['graph', 'diagram', 'flow'],
+      icon: createElement(SparklesIcon, { className: 'h-5 w-5 text-purple-500' }),
+      onSelect: () => {
+        exec('insertMermaid', '')
       },
     },
   ]

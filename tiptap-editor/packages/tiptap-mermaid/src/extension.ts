@@ -1,6 +1,6 @@
 import type { MermaidOptions } from './types'
 import { uniqueId } from '@jl-org/tool'
-import { Node } from '@tiptap/core'
+import { Node, nodeInputRule } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { MermaidNodeComponent } from './mermaid-node'
 
@@ -78,6 +78,18 @@ export const MermaidNode = Node.create<MermaidOptions>({
 
   addNodeView() {
     return ReactNodeViewRenderer(MermaidNodeComponent)
+  },
+
+  addInputRules() {
+    return [
+      nodeInputRule({
+        find: /^```mermaid[\s\n]$/,
+        type: this.type,
+        getAttributes: () => ({
+          id: `mermaid-${uniqueId()}`,
+        }),
+      }),
+    ]
   },
 
   addCommands() {
