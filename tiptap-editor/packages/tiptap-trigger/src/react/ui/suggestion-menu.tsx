@@ -1,4 +1,3 @@
-import type { KeyboardEvent } from 'react'
 import type { SuggestionItem } from '../../types'
 import {
   autoUpdate,
@@ -10,7 +9,7 @@ import {
   useFloating,
   useInteractions,
 } from '@floating-ui/react'
-import { useEffect, useMemo, useRef } from 'react'
+import { forwardRef, memo, useEffect, useMemo, useRef } from 'react'
 import { cn } from 'tiptap-config'
 
 export type SuggestionMenuProps = {
@@ -23,7 +22,6 @@ export type SuggestionMenuProps = {
   query: string
   onActiveIndexChange: (index: number) => void
   onSelect: (index: number) => void | Promise<void>
-  onClose: () => void
 }
 
 const defaultRect: DOMRect = {
@@ -40,7 +38,7 @@ const defaultRect: DOMRect = {
   },
 }
 
-export function SuggestionMenu({
+export const SuggestionMenu = memo(({
   open,
   items,
   activeIndex,
@@ -50,10 +48,7 @@ export function SuggestionMenu({
   query,
   onActiveIndexChange,
   onSelect,
-  onClose,
-}: SuggestionMenuProps) {
-  const listRef = useRef<HTMLDivElement | null>(null)
-
+}: SuggestionMenuProps) => {
   const virtualElement = useMemo(() => {
     if (!referenceRect) {
       return null
@@ -93,13 +88,6 @@ export function SuggestionMenu({
     if (!open) {
       return
     }
-    listRef.current?.focus()
-  }, [open])
-
-  useEffect(() => {
-    if (!open) {
-      return
-    }
     const target = itemRefs.current[activeIndex]
     if (target) {
       target.scrollIntoView({
@@ -108,42 +96,6 @@ export function SuggestionMenu({
     }
   }, [activeIndex, open])
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (!open) {
-      return
-    }
-
-    if (event.key === 'ArrowDown') {
-      event.preventDefault()
-      const next = items.length === 0
-        ? 0
-        : (activeIndex + 1) % items.length
-      onActiveIndexChange(next)
-      return
-    }
-
-    if (event.key === 'ArrowUp') {
-      event.preventDefault()
-      const next
-        = items.length === 0
-          ? 0
-          : (activeIndex - 1 + items.length) % items.length
-      onActiveIndexChange(next)
-      return
-    }
-
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      onSelect(activeIndex)
-      return
-    }
-
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      onClose()
-    }
-  }
-
   if (!open || !referenceRect) {
     return null
   }
@@ -151,10 +103,7 @@ export function SuggestionMenu({
   return (
     <FloatingPortal>
       <div
-        ref={ (node) => {
-          refs.setFloating(node)
-          listRef.current = node
-        } }
+        ref={ refs.setFloating }
         style={ floatingStyles }
         className={ cn(
           'min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-[var(--tt-radius-md)]',
@@ -167,7 +116,6 @@ export function SuggestionMenu({
           event.preventDefault()
           event.stopPropagation()
         } }
-        onKeyDown={ handleKeyDown }
         { ...getFloatingProps() }
       >
         { loading && (
@@ -192,49 +140,69 @@ export function SuggestionMenu({
 
         { !loading && !error && items.length > 0 && (
           <>
-            { items.map((item, index) => {
-              const active = index === activeIndex
-              return (
-                <button
-                  key={ item.id }
-                  type="button"
-                  ref={ (node) => {
-                    itemRefs.current[index] = node
-                  } }
-                  onMouseEnter={ () => onActiveIndexChange(index) }
-                  onClick={ () => onSelect(index) }
-                  className={ cn(
-                    'flex w-full items-start gap-3 px-3 py-2 text-left',
-                    'text-[var(--text-color-primary)]',
-                    'transition-all duration-300 hover:bg-[var(--bg-color-hover)]',
-                    active
-                      ? 'bg-[var(--bg-color-hover)]'
-                      : 'bg-transparent border-0 cursor-pointer',
-                  ) }
-                >
-                  <div className="mt-[2px] flex h-5 w-5 flex-shrink-0 items-center justify-center text-[var(--text-color-primary)]">
-                    { item.icon ?? <span className="h-5 w-5" /> }
-                  </div>
-                  <div className="flex flex-1 flex-col">
-                    <span className="text-sm font-medium text-[var(--text-color-primary)]">
-                      { item.title }
-                    </span>
-                    { item.subtitle
-                      ? (
-                          <span className="text-xs text-[var(--text-color-secondary)]">
-                            { item.subtitle }
-                          </span>
-                        )
-                      : null }
-                  </div>
-                </button>
-              )
-            }) }
+            { items.map((item, index) => (
+              <SuggestionMenuItem
+                key={ item.id }
+                item={ item }
+                active={ index === activeIndex }
+                onMouseEnter={ () => onActiveIndexChange(index) }
+                onClick={ () => onSelect(index) }
+                ref={ (node) => {
+                  itemRefs.current[index] = node
+                } }
+              />
+            )) }
           </>
         ) }
       </div>
     </FloatingPortal>
   )
-}
+})
 
 SuggestionMenu.displayName = 'SuggestionMenu'
+
+interface SuggestionMenuItemProps {
+  item: SuggestionItem
+  active: boolean
+  onMouseEnter: () => void
+  onClick: () => void
+}
+
+const SuggestionMenuItem = memo(forwardRef<HTMLButtonElement, SuggestionMenuItemProps>(
+  ({ item, active, onMouseEnter, onClick }, ref) => {
+    return (
+      <button
+        ref={ ref }
+        type="button"
+        onMouseEnter={ onMouseEnter }
+        onClick={ onClick }
+        className={ cn(
+          'flex w-full items-start gap-3 px-3 py-2 text-left',
+          'text-[var(--text-color-primary)]',
+          'transition-colors duration-150',
+          active
+            ? 'bg-[var(--bg-color-hover)]'
+            : 'bg-transparent border-0 cursor-pointer hover:bg-[var(--bg-color-hover)]',
+        ) }
+      >
+        <div className="mt-[2px] flex h-5 w-5 flex-shrink-0 items-center justify-center text-[var(--text-color-primary)]">
+          { item.icon ?? <span className="h-5 w-5" /> }
+        </div>
+        <div className="flex flex-1 flex-col">
+          <span className="text-sm font-medium text-[var(--text-color-primary)]">
+            { item.title }
+          </span>
+          { item.subtitle
+            ? (
+                <span className="text-xs text-[var(--text-color-secondary)]">
+                  { item.subtitle }
+                </span>
+              )
+            : null }
+        </div>
+      </button>
+    )
+  },
+))
+
+SuggestionMenuItem.displayName = 'SuggestionMenuItem'

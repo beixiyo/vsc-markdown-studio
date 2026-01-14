@@ -20,7 +20,7 @@ export function useSuggestion(
   config: SuggestionConfig,
 ): SuggestionResult {
   const configRef = useWatchRef(config)
-  const apiRef = useRef<SuggestionPluginAPI | null>(null)
+  const [api, setApi] = useState<SuggestionPluginAPI | null>(null)
 
   // ======================
   // * States
@@ -48,18 +48,14 @@ export function useSuggestion(
   // ======================
   // * Effects
   // ======================
-
-  /**
-   * 注册 triggers（仅在 editor 就绪时执行一次）
-   */
   useEffect(() => {
     if (!editor) {
+      setApi(null)
       return
     }
 
     let unsubscribe: (() => void) | null = null
     let retryTimer: number | null = null
-    let addedTriggerIds: string[] = []
     let disposed = false
     let retryCount = 0
     const maxRetry = 50
@@ -70,9 +66,9 @@ export function useSuggestion(
         return
       }
 
-      let api: SuggestionPluginAPI | null = null
+      let apiInstance: SuggestionPluginAPI | null = null
       try {
-        api = getSuggestionPluginAPI(editor)
+        apiInstance = getSuggestionPluginAPI(editor)
       }
       catch (error) {
         if (
@@ -91,23 +87,14 @@ export function useSuggestion(
         return
       }
 
-      apiRef.current = api
-
-      const entries = Object.entries(configRef.current)
-      addedTriggerIds = entries.map(([id, cfg]) => {
-        api?.addTrigger({
-          id,
-          ...cfg,
-        })
-        return id
-      })
+      setApi(apiInstance)
 
       if (unsubscribe) {
         unsubscribe()
         unsubscribe = null
       }
 
-      unsubscribe = api.subscribe((next) => {
+      unsubscribe = apiInstance.subscribe((next) => {
         if (disposed) {
           return
         }
@@ -127,12 +114,30 @@ export function useSuggestion(
       if (unsubscribe) {
         unsubscribe()
       }
-      const api = apiRef.current
-      if (api && addedTriggerIds.length) {
-        addedTriggerIds.forEach(id => api.removeTrigger(id))
-      }
     }
   }, [editor])
+
+  /**
+   * 同步 Triggers 配置到插件中
+   */
+  useEffect(() => {
+    if (!api || !config) {
+      return
+    }
+
+    const entries = Object.entries(config)
+    const addedTriggerIds = entries.map(([id, cfg]) => {
+      api.addTrigger({
+        id,
+        ...cfg,
+      })
+      return id
+    })
+
+    return () => {
+      addedTriggerIds.forEach(id => api.removeTrigger(id))
+    }
+  }, [api, config])
 
   const triggerConfig = useMemo(() => {
     if (!state.triggerId) {
@@ -221,7 +226,6 @@ export function useSuggestion(
 
   const selectItem = useCallback(
     async (index: number) => {
-      const api = apiRef.current
       if (!api || !state.active || !state.triggerId) {
         return
       }
@@ -242,12 +246,12 @@ export function useSuggestion(
 
       await item.onSelect(editor as Editor, context)
     },
-    [items, state, editor],
+    [items, state, editor, api],
   )
 
   const close = useCallback(() => {
-    apiRef.current?.close()
-  }, [])
+    api?.close()
+  }, [api])
 
   // ======================
   // * Keyboard Navigation
