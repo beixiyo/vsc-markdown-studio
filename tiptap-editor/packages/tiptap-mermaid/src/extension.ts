@@ -52,6 +52,57 @@ export const MermaidNode = Node.create<MermaidOptions>({
           }
         },
       },
+      x: {
+        default: 0,
+        parseHTML: (element) => {
+          const value = element.getAttribute('data-mermaid-x')
+          return value
+            ? Number.parseFloat(value)
+            : 0
+        },
+        renderHTML: (attrs) => {
+          if (attrs.x === undefined || attrs.x === 0) {
+            return {}
+          }
+          return {
+            'data-mermaid-x': String(attrs.x),
+          }
+        },
+      },
+      y: {
+        default: 0,
+        parseHTML: (element) => {
+          const value = element.getAttribute('data-mermaid-y')
+          return value
+            ? Number.parseFloat(value)
+            : 0
+        },
+        renderHTML: (attrs) => {
+          if (attrs.y === undefined || attrs.y === 0) {
+            return {}
+          }
+          return {
+            'data-mermaid-y': String(attrs.y),
+          }
+        },
+      },
+      scale: {
+        default: 1,
+        parseHTML: (element) => {
+          const value = element.getAttribute('data-mermaid-scale')
+          return value
+            ? Number.parseFloat(value)
+            : 1
+        },
+        renderHTML: (attrs) => {
+          if (attrs.scale === undefined || attrs.scale === 1) {
+            return {}
+          }
+          return {
+            'data-mermaid-scale': String(attrs.scale),
+          }
+        },
+      },
     }
   },
 

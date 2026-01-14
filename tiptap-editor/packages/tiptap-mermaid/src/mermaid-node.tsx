@@ -2,14 +2,19 @@
 
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewWrapper } from '@tiptap/react'
+import { memo, useCallback } from 'react'
 import { Button } from 'tiptap-comps'
 import { CheckIcon, EditIcon, XIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { useMermaidEditor } from './hooks/use-mermaid-editor'
 import { useMermaidRenderer } from './hooks/use-mermaid-renderer'
+import { useMermaidTransform } from './hooks/use-mermaid-transform'
 
-export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, updateAttributes, editor }) => {
+export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updateAttributes, editor }) => {
   const code = node.attrs.code || ''
+  const x = node.attrs.x ?? 0
+  const y = node.attrs.y ?? 0
+  const scale = node.attrs.scale ?? 1
 
   const {
     isEditing,
@@ -37,12 +42,36 @@ export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, 
     isEditing,
   })
 
+  /** 处理变换更新 */
+  const handleTransformChange = useCallback((newX: number, newY: number, newScale: number) => {
+    updateAttributes({
+      x: newX,
+      y: newY,
+      scale: newScale,
+    })
+  }, [updateAttributes])
+
+  /** 使用变换 Hook（拖拽和缩放） */
+  const {
+    containerRef,
+    isDragging,
+    handleMouseDown,
+    transform,
+  } = useMermaidTransform({
+    x,
+    y,
+    scale,
+    onTransformChange: handleTransformChange,
+    enabled: !isEditing && editor?.isEditable && !!code,
+  })
+
   return (
     <NodeViewWrapper
-      className={ cn('mermaid-node-wrapper', selected && 'selected') }
+      className={ cn('mermaid-node-wrapper overflow-hidden', selected && 'selected') }
       data-mermaid="true"
     >
       <div
+        ref={ containerRef }
         className={ cn(
           'mermaid-container min-h-[100px] p-4 relative rounded-[var(--tt-radius-md)]',
           'bg-[var(--tt-gray-light-50)] dark:bg-[var(--tt-gray-dark-50)]',
@@ -50,11 +79,15 @@ export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, 
           selected
             ? 'border border-[var(--tt-brand-color-500)] dark:border-[var(--tt-brand-color-400)]'
             : 'border border-[var(--tt-gray-light-a-200)] dark:border-[var(--tt-gray-dark-a-200)]',
+          !isEditing && editor?.isEditable && !!code && 'cursor-move',
+          isDragging && 'cursor-grabbing',
         ) }
+        onMouseDown={ handleMouseDown }
+        data-editing={ isEditing }
       >
-        {/** 编辑按钮工具栏 */}
-        {!isEditing && editor?.isEditable && (
-          <div className="absolute top-2 right-2 flex gap-1 z-10">
+        {/** 编辑按钮工具栏 */ }
+        { !isEditing && editor?.isEditable && (
+          <div className="absolute top-2 right-2 flex gap-1 z-10" data-no-drag>
             <Button
               type="button"
               onClick={ handleEdit }
@@ -65,9 +98,9 @@ export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, 
               <EditIcon className="w-4 h-4" />
             </Button>
           </div>
-        )}
+        ) }
 
-        {isEditing ? (
+        { isEditing ? (
           <div className="flex flex-col gap-2">
             <textarea
               ref={ textareaRef }
@@ -110,12 +143,12 @@ export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, 
           </div>
         ) : (
           <>
-            {isRendering && (
+            { isRendering && (
               <div className="text-center text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
                 正在渲染图表...
               </div>
-            )}
-            {error && (
+            ) }
+            { error && (
               <div
                 className={ cn(
                   'p-3 rounded-[var(--tt-radius-xs)]',
@@ -127,7 +160,7 @@ export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, 
                 <div className="flex items-center justify-between gap-2">
                   <div>
                     <strong>渲染错误：</strong>
-                    {error}
+                    { error }
                   </div>
                   <Button
                     type="button"
@@ -139,8 +172,8 @@ export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, 
                   </Button>
                 </div>
               </div>
-            )}
-            {!code && (
+            ) }
+            { !code && (
               <div
                 onClick={ editor?.isEditable
                   ? handleEdit
@@ -152,12 +185,21 @@ export const MermaidNodeComponent: React.FC<NodeViewProps> = ({ node, selected, 
               >
                 请输入 Mermaid 代码
               </div>
-            )}
-            {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */}
-            <div ref={ renderContainerRef } />
+            ) }
+            {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */ }
+            <div
+              ref={ renderContainerRef }
+              style={ {
+                transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
+                transformOrigin: '0 0',
+                transition: isDragging
+                  ? 'none'
+                  : 'transform 0.1s ease-out',
+              } }
+            />
           </>
-        )}
+        ) }
       </div>
     </NodeViewWrapper>
   )
-}
+})

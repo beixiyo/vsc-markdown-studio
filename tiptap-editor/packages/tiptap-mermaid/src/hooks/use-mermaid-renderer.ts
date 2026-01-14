@@ -2,10 +2,9 @@
  * Mermaid 渲染逻辑 Hook
  */
 import type { NodeViewProps } from '@tiptap/react'
-import { uniqueId } from '@jl-org/tool'
 import { useTheme } from 'hooks'
 import mermaid from 'mermaid'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { getMermaidThemeConfig } from '../utils/mermaid-theme'
 
 interface UseMermaidRendererOptions {
@@ -31,8 +30,9 @@ export function useMermaidRenderer({
   const [theme] = useTheme()
   const isDarkMode = theme === 'dark'
 
-  /** 使用节点 ID 或生成新的渲染 ID */
-  const renderId = node.attrs.id || `mermaid-${uniqueId()}`
+  /** 优先使用节点 ID，否则使用 React 19 的 useId 生成稳定 ID */
+  const stableId = useId()
+  const renderId = node.attrs.id || `mermaid-${stableId}`
 
   /** 渲染 Mermaid 图表 */
   useEffect(() => {
