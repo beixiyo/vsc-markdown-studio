@@ -11,6 +11,7 @@ import type { MermaidConfig } from 'mermaid'
 export function getMermaidThemeConfig(isDarkMode: boolean): Partial<MermaidConfig> {
   return {
     startOnLoad: false,
+    suppressErrorRendering: true,
     theme: isDarkMode
       ? 'dark'
       : 'default',

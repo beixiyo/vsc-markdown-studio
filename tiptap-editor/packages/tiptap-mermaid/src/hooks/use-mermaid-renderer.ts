@@ -50,6 +50,10 @@ export function useMermaidRenderer({
       setIsRendering(true)
       setError(null)
 
+      if (renderContainerRef.current) {
+        renderContainerRef.current.innerHTML = ''
+      }
+
       try {
         /** 根据主题配置 mermaid */
         mermaid.initialize(getMermaidThemeConfig(isDarkMode))
@@ -68,7 +72,6 @@ export function useMermaidRenderer({
             throw new TypeError('Mermaid API 不可用：需要 mermaid.render 或 mermaid.run')
           }
 
-          renderContainerRef.current.innerHTML = ''
           const mermaidDiv = document.createElement('div')
           mermaidDiv.className = 'mermaid'
           mermaidDiv.id = renderId
@@ -81,7 +84,7 @@ export function useMermaidRenderer({
           if (renderContainerRef.current && !cancelled) {
             await mermaid.run({
               nodes: [mermaidDiv],
-              suppressErrors: false,
+              suppressErrors: true,
             })
           }
         }
@@ -91,6 +94,7 @@ export function useMermaidRenderer({
           ? err.message
           : '渲染失败'
         setError(errorMessage)
+
         console.error('Mermaid render error:', err)
       }
       finally {
