@@ -39,7 +39,9 @@ yarn-error.log*
 next-env.d.ts
 duyi-editor
 
-.turbo
+# nx
+.nx
+
 packages/vsc-markdown-studio/webview
 *.vsix
 *.sqlite
