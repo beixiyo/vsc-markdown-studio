@@ -100,105 +100,107 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
           </div>
         ) }
 
-        { isEditing ? (
-          <div className="flex flex-col gap-2">
-            <textarea
-              ref={ textareaRef }
-              value={ editCode }
-              onChange={ e => setEditCode(e.target.value) }
-              onKeyDown={ handleKeyDown }
-              placeholder="请输入 Mermaid 代码..."
-              className={ cn(
-                'w-full min-h-[200px] p-3',
-                'border border-[var(--tt-gray-light-a-200)] dark:border-[var(--tt-gray-dark-a-200)]',
-                'rounded-[var(--tt-radius-xs)]',
-                'font-mono text-sm leading-normal resize-none',
-                'bg-[var(--white)] dark:bg-[var(--tt-gray-dark-50)]',
-                'text-[var(--tt-gray-light-900)] dark:text-[var(--tt-gray-dark-900)]',
-                'transition-colors duration-[var(--tt-transition-duration-default)]',
-                'placeholder:text-[var(--tt-gray-light-400)] dark:placeholder:text-[var(--tt-gray-dark-400)]',
-                'focus:border-[var(--tt-gray-light-a-300)] dark:focus:border-[var(--tt-gray-dark-a-300)]',
-              ) }
-            />
-            <div className="flex gap-2 justify-end">
-              <Button
-                type="button"
-                onClick={ handleCancel }
-                data-style="ghost"
-                className="flex items-center gap-1.5"
-              >
-                <XIcon className="w-4 h-4" />
-                取消
-              </Button>
-              <Button
-                type="button"
-                onClick={ handleSave }
-                data-appearance="emphasized"
-                className="flex items-center gap-1.5"
-              >
-                <CheckIcon className="w-4 h-4" />
-                保存
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <>
-            { isRendering && (
-              <div className="text-center text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
-                正在渲染图表...
-              </div>
-            ) }
-            { error && (
-              <div
-                className={ cn(
-                  'p-3 rounded-[var(--tt-radius-xs)]',
-                  'bg-[var(--tt-color-red-inc-5)] dark:bg-[var(--tt-color-red-dec-5)]',
-                  'border border-[var(--tt-color-red-inc-2)] dark:border-[var(--tt-color-red-dec-3)]',
-                  'text-[var(--tt-color-red-dec-3)] dark:text-[var(--tt-color-red-inc-2)]',
-                ) }
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div>
-                    <strong>渲染错误：</strong>
-                    { error }
-                  </div>
+        { isEditing
+          ? (
+              <div className="flex flex-col gap-2">
+                <textarea
+                  ref={ textareaRef }
+                  value={ editCode }
+                  onChange={ e => setEditCode(e.target.value) }
+                  onKeyDown={ handleKeyDown }
+                  placeholder="请输入 Mermaid 代码..."
+                  className={ cn(
+                    'w-full min-h-[200px] p-3',
+                    'border border-[var(--tt-gray-light-a-200)] dark:border-[var(--tt-gray-dark-a-200)]',
+                    'rounded-[var(--tt-radius-xs)]',
+                    'font-mono text-sm leading-normal resize-none',
+                    'bg-[var(--white)] dark:bg-[var(--tt-gray-dark-50)]',
+                    'text-[var(--tt-gray-light-900)] dark:text-[var(--tt-gray-dark-900)]',
+                    'transition-colors duration-[var(--tt-transition-duration-default)]',
+                    'placeholder:text-[var(--tt-gray-light-400)] dark:placeholder:text-[var(--tt-gray-dark-400)]',
+                    'focus:border-[var(--tt-gray-light-a-300)] dark:focus:border-[var(--tt-gray-dark-a-300)]',
+                  ) }
+                />
+                <div className="flex gap-2 justify-end">
                   <Button
                     type="button"
-                    onClick={ retryRender }
+                    onClick={ handleCancel }
                     data-style="ghost"
-                    className="text-xs px-2 py-1"
+                    className="flex items-center gap-1.5"
                   >
-                    重试
+                    <XIcon className="w-4 h-4" />
+                    取消
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={ handleSave }
+                    data-appearance="emphasized"
+                    className="flex items-center gap-1.5"
+                  >
+                    <CheckIcon className="w-4 h-4" />
+                    保存
                   </Button>
                 </div>
               </div>
-            ) }
-            { !code && (
-              <div
-                onClick={ editor?.isEditable
-                  ? handleEdit
-                  : undefined }
-                className={ cn(
-                  'text-center text-[var(--tt-gray-light-400)] dark:text-[var(--tt-gray-dark-400)] py-5',
-                  editor?.isEditable && 'cursor-pointer hover:text-[var(--tt-gray-light-500)] dark:hover:text-[var(--tt-gray-dark-500)] transition-colors',
+            )
+          : (
+              <>
+                { isRendering && (
+                  <div className="text-center text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
+                    正在渲染图表...
+                  </div>
                 ) }
-              >
-                请输入 Mermaid 代码
-              </div>
+                { error && (
+                  <div
+                    className={ cn(
+                      'p-3 rounded-[var(--tt-radius-xs)]',
+                      'bg-[var(--tt-color-red-inc-5)] dark:bg-[var(--tt-color-red-dec-5)]',
+                      'border border-[var(--tt-color-red-inc-2)] dark:border-[var(--tt-color-red-dec-3)]',
+                      'text-[var(--tt-color-red-dec-3)] dark:text-[var(--tt-color-red-inc-2)]',
+                    ) }
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <strong>渲染错误：</strong>
+                        { error }
+                      </div>
+                      <Button
+                        type="button"
+                        onClick={ retryRender }
+                        data-style="ghost"
+                        className="text-xs px-2 py-1"
+                      >
+                        重试
+                      </Button>
+                    </div>
+                  </div>
+                ) }
+                { !code && (
+                  <div
+                    onClick={ editor?.isEditable
+                      ? handleEdit
+                      : undefined }
+                    className={ cn(
+                      'text-center text-[var(--tt-gray-light-400)] dark:text-[var(--tt-gray-dark-400)] py-5',
+                      editor?.isEditable && 'cursor-pointer hover:text-[var(--tt-gray-light-500)] dark:hover:text-[var(--tt-gray-dark-500)] transition-colors',
+                    ) }
+                  >
+                    请输入 Mermaid 代码
+                  </div>
+                ) }
+                {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */ }
+                <div
+                  ref={ renderContainerRef }
+                  style={ {
+                    transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
+                    transformOrigin: '0 0',
+                    transition: isDragging
+                      ? 'none'
+                      : 'transform 0.1s ease-out',
+                  } }
+                />
+              </>
             ) }
-            {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */ }
-            <div
-              ref={ renderContainerRef }
-              style={ {
-                transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
-                transformOrigin: '0 0',
-                transition: isDragging
-                  ? 'none'
-                  : 'transform 0.1s ease-out',
-              } }
-            />
-          </>
-        ) }
       </div>
     </NodeViewWrapper>
   )

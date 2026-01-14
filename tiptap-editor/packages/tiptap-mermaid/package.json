@@ -23,9 +23,10 @@
   ],
   "dependencies": {
     "hooks": "workspace:*",
-    "tiptap-config": "workspace:*",
+    "mermaid": "^11.12.2",
     "tiptap-comps": "workspace:*",
-    "mermaid": "^11.12.2"
+    "tiptap-config": "workspace:*",
+    "uuid": "^13.0.0"
   },
   "peerDependencies": {
     "@tiptap/core": "^3.13.0",

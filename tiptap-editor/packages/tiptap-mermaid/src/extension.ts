@@ -1,8 +1,16 @@
 import type { MermaidOptions } from './types'
-import { uniqueId } from '@jl-org/tool'
 import { Node, nodeInputRule } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
+import { v4 as uuidv4 } from 'uuid'
 import { MermaidNodeComponent } from './mermaid-node'
+
+/**
+ * 生成 Mermaid 节点的唯一 ID
+ * @returns 格式为 `mermaid-{uuid}` 的唯一标识符
+ */
+function generateMermaidId(): string {
+  return `mermaid-${uuidv4()}`
+}
 
 /**
  * Mermaid 节点扩展
@@ -137,7 +145,7 @@ export const MermaidNode = Node.create<MermaidOptions>({
         find: /^```mermaid[\s\n]$/,
         type: this.type,
         getAttributes: () => ({
-          id: `mermaid-${uniqueId()}`,
+          id: generateMermaidId(),
         }),
       }),
     ]
@@ -147,7 +155,7 @@ export const MermaidNode = Node.create<MermaidOptions>({
     return {
       insertMermaid: (code: string) =>
         ({ commands }) => {
-          const id = `mermaid-${uniqueId()}`
+          const id = generateMermaidId()
           return commands.insertContent({
             type: this.name,
             attrs: {
@@ -197,7 +205,7 @@ export const MermaidNode = Node.create<MermaidOptions>({
    */
   parseMarkdown: (token) => {
     const code = token.text || ''
-    const id = `mermaid-${uniqueId()}`
+    const id = generateMermaidId()
 
     return {
       type: 'mermaid',
