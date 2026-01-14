@@ -128,8 +128,14 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
       subtitle: '图表',
       aliases: ['graph', 'diagram', 'flow'],
       icon: createElement(SparklesIcon, { className: 'h-5 w-5 text-purple-500' }),
-      onSelect: () => {
-        exec('insertMermaid', '')
+      onSelect: (ed) => {
+        ed.chain()
+          .focus()
+          .insertContent([
+            { type: 'mermaid', attrs: { id: `mermaid-${Math.random().toString(36).slice(2)}`, code: '' } },
+            { type: 'paragraph' },
+          ])
+          .run()
       },
     },
   ]

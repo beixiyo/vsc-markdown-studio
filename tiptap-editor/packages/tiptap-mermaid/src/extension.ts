@@ -13,7 +13,7 @@ export const MermaidNode = Node.create<MermaidOptions>({
   name: 'mermaid',
   group: 'block',
   draggable: false,
-  selectable: false,
+  selectable: true,
   atom: true,
 
   addOptions() {

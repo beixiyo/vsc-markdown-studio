@@ -1,4 +1,5 @@
 import type { Editor } from '@tiptap/react'
+import { NodeSelection } from '@tiptap/pm/state'
 
 /**
  * 获取当前选中文本
@@ -31,8 +32,34 @@ export function hasSelectedText(editor: Editor | null): boolean {
     return false
   }
 
-  const { from, to } = editor.state.selection
-  return from !== to
+  const { selection } = editor.state
+
+  /** 如果没有选中内容（光标位置），返回 false */
+  if (selection.empty) {
+    return false
+  }
+
+  /**
+   * 如果是 NodeSelection (例如选中了 Mermaid、图片、分割线等原子节点)，
+   * 对于大部分这类节点，SelectionToolbar 并没有意义，因此返回 false
+   */
+  if (selection instanceof NodeSelection) {
+    return false
+  }
+
+  /**
+   * 即使是 TextSelection，如果它仅仅包含一个原子节点（例如插入后被自动选中的情况），
+   * 我们也不希望显示工具栏。
+   */
+  const { $from, $to } = selection
+  if ($from.pos === $to.pos - 1) {
+    const node = $from.nodeAfter
+    if (node && node.isAtom) {
+      return false
+    }
+  }
+
+  return true
 }
 
 /**
