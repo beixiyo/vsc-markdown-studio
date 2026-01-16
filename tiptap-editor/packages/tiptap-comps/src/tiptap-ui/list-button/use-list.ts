@@ -5,7 +5,7 @@ import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { useCallback, useEffect, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useListLabels, useTiptapEditor } from 'tiptap-api/react'
 
 // --- Lib ---
 import {
@@ -52,12 +52,6 @@ export const listIcons = {
   bulletList: ListIcon,
   orderedList: ListOrderedIcon,
   taskList: ListTodoIcon,
-}
-
-export const listLabels: Record<ListType, string> = {
-  bulletList: 'Bullet List',
-  orderedList: 'Ordered List',
-  taskList: 'Task List',
 }
 
 export const LIST_SHORTCUT_KEYS: Record<ListType, string> = {
@@ -297,6 +291,7 @@ export function useList(config: UseListConfig) {
   } = config
 
   const { editor } = useTiptapEditor(providedEditor)
+  const listLabels = useListLabels()
   const [isVisible, setIsVisible] = useState<boolean>(true)
   const canToggle = canToggleList(editor, type)
   const isActive = isListActive(editor, type)

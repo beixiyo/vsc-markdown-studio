@@ -3,20 +3,20 @@ import { useCurrentEditor } from '@tiptap/react'
 
 import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
+import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
 import { Button, LinkPopover, SelectionToolbar, SelectionToolbarContent, ToolbarGroup } from 'tiptap-comps'
-import { SuggestionMenu } from 'tiptap-trigger/react'
 
+import { SuggestionMenu } from 'tiptap-trigger/react'
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
-import { operateTestSuites } from '@/features/operate-tests'
 
+import { operateTestSuites } from '@/features/operate-tests'
 import { useOperateTests } from '../features/operate-tests/use-operate-tests'
 import { BaseEditorUI } from './base-editor-ui'
 import { useAiQuickSource, useAiSetup, useBindAi, useSlashSuggestion } from './hooks'
-import { unSelect } from 'tiptap-api'
 
 /**
  * 演示用编辑器 UI：使用通用的 BaseEditorUI，通过 children 传递额外的插件功能
@@ -157,7 +157,6 @@ sequenceDiagram
             { ...suggestion }
             onActiveIndexChange={ suggestion.setActiveIndex }
             onSelect={ suggestion.selectItem }
-            onClose={ suggestion.close }
           />
 
           {/* AI 操作面板 */ }

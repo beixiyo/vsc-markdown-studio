@@ -5,11 +5,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 // --- Hooks ---
-import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
+import { useIsBreakpoint, useTiptapEditor, useTiptapEditorT } from 'tiptap-api/react'
 
 // --- Lib ---
 import { isExtensionAvailable } from 'tiptap-config'
-
 // --- Icons ---
 import { ImagePlusIcon } from '../../icons'
 
@@ -143,6 +142,7 @@ export function useImageUpload(config?: UseImageUploadConfig) {
   } = config || {}
 
   const { editor } = useTiptapEditor(providedEditor)
+  const t = useTiptapEditorT()
   const isMobile = useIsBreakpoint()
   const [isVisible, setIsVisible] = useState<boolean>(true)
   const canInsert = canInsertImage(editor)
@@ -194,7 +194,7 @@ export function useImageUpload(config?: UseImageUploadConfig) {
     isActive,
     handleImage,
     canInsert,
-    label: 'Add image',
+    label: t('image.addImage'),
     shortcutKeys: IMAGE_UPLOAD_SHORTCUT_KEY,
     Icon: ImagePlusIcon,
   }

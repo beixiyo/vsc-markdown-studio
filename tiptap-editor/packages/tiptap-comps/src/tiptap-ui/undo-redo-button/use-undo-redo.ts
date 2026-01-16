@@ -1,9 +1,10 @@
 import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
 
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useHistoryLabels, useTiptapEditor } from 'tiptap-api/react'
 
 import { isNodeTypeSelected } from 'tiptap-config'
+
 import { Redo2Icon, Undo2Icon } from '../../icons'
 
 export type UndoRedoAction = 'undo' | 'redo'
@@ -36,6 +37,10 @@ export const UNDO_REDO_SHORTCUT_KEYS: Record<UndoRedoAction, string> = {
   redo: 'mod+shift+z',
 }
 
+/**
+ * 获取历史操作标签（已废弃，请使用 useHistoryLabels hook）
+ * @deprecated 使用 useHistoryLabels hook 替代
+ */
 export const historyActionLabels: Record<UndoRedoAction, string> = {
   undo: 'Undo',
   redo: 'Redo',
@@ -146,6 +151,7 @@ export function useUndoRedo(config: UseUndoRedoConfig) {
   } = config
 
   const { editor } = useTiptapEditor(providedEditor)
+  const historyLabels = useHistoryLabels()
   const [isVisible, setIsVisible] = useState<boolean>(true)
   const canExecute = canExecuteUndoRedoAction(editor, action)
 
@@ -181,7 +187,7 @@ export function useUndoRedo(config: UseUndoRedoConfig) {
     isVisible,
     handleAction,
     canExecute,
-    label: historyActionLabels[action],
+    label: historyLabels[action],
     shortcutKeys: UNDO_REDO_SHORTCUT_KEYS[action],
     Icon: historyIcons[action],
   }

@@ -3,7 +3,7 @@
 import type { Editor } from '@tiptap/react'
 import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { useCallback, useEffect, useState } from 'react'
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useHeadingLabels, useTiptapEditor } from 'tiptap-api/react'
 
 import {
   findNodePosition,
@@ -288,6 +288,7 @@ export function useHeading(config: UseHeadingConfig) {
   } = config
 
   const { editor } = useTiptapEditor(providedEditor)
+  const headingLabels = useHeadingLabels()
   const [isVisible, setIsVisible] = useState<boolean>(true)
   const canToggleState = canToggle(editor, level)
   const isActive = isHeadingActive(editor, level)
@@ -320,12 +321,31 @@ export function useHeading(config: UseHeadingConfig) {
     return success
   }, [editor, level, onToggled])
 
+  const getHeadingLabel = (level: Level): string => {
+    switch (level) {
+      case 1:
+        return headingLabels.heading1
+      case 2:
+        return headingLabels.heading2
+      case 3:
+        return headingLabels.heading3
+      case 4:
+        return headingLabels.heading4
+      case 5:
+        return headingLabels.heading5
+      case 6:
+        return headingLabels.heading6
+      default:
+        return headingLabels.heading
+    }
+  }
+
   return {
     isVisible,
     isActive,
     handleToggle,
     canToggle: canToggleState,
-    label: `Heading ${level}`,
+    label: getHeadingLabel(level),
     shortcutKeys: HEADING_SHORTCUT_KEYS[level],
     Icon: headingIcons[level],
   }

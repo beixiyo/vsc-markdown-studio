@@ -5,12 +5,13 @@ import type { ButtonProps } from '../../ui'
 import { forwardRef, useCallback, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useBlockLabels, useHeadingLabels, useListLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 // --- Icons ---
 import {
   ChevronDownIcon,
   TextFormatIcon,
 } from '../../icons'
+
 import {
   Button,
   ButtonGroup,
@@ -21,7 +22,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../../ui'
-
 import { BlockquoteButton } from '../blockquote-button'
 // --- Tiptap UI ---
 import { HeadingButton, type Level } from '../heading-button'
@@ -80,6 +80,10 @@ export const TextFormatDropdownMenu = forwardRef<
     ref,
   ) => {
     const { editor } = useTiptapEditor(providedEditor)
+    const toolbarLabels = useToolbarLabels()
+    const listLabels = useListLabels()
+    const blockLabels = useBlockLabels()
+    const headingLabels = useHeadingLabels()
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const { isVisible, isActive, canToggle } = useTextFormatDropdownMenu({
       editor,
@@ -115,9 +119,9 @@ export const TextFormatDropdownMenu = forwardRef<
             tabIndex={ -1 }
             disabled={ !canToggle }
             data-disabled={ !canToggle }
-            aria-label="文本格式"
+            aria-label={ toolbarLabels.textFormat }
             aria-pressed={ isActive }
-            tooltip="文本格式"
+            tooltip={ toolbarLabels.textFormat }
             { ...buttonProps }
             ref={ ref }
           >
@@ -136,7 +140,7 @@ export const TextFormatDropdownMenu = forwardRef<
                     <HeadingButton
                       editor={ editor }
                       level={ level }
-                      text={ `H${level}` }
+                      text={ headingLabels[`heading${level}` as keyof typeof headingLabels] }
                       showTooltip={ false }
                     />
                   </DropdownMenuItem>
@@ -148,7 +152,7 @@ export const TextFormatDropdownMenu = forwardRef<
                     <ListButton
                       editor={ editor }
                       type="orderedList"
-                      text="有序列表"
+                      text={ listLabels.orderedList }
                       showTooltip={ false }
                     />
                   </DropdownMenuItem>
@@ -158,7 +162,7 @@ export const TextFormatDropdownMenu = forwardRef<
                     <ListButton
                       editor={ editor }
                       type="bulletList"
-                      text="无序列表"
+                      text={ listLabels.bulletList }
                       showTooltip={ false }
                     />
                   </DropdownMenuItem>
@@ -168,7 +172,7 @@ export const TextFormatDropdownMenu = forwardRef<
                     <ListButton
                       editor={ editor }
                       type="taskList"
-                      text="任务"
+                      text={ listLabels.taskList }
                       showTooltip={ false }
                     />
                   </DropdownMenuItem>
@@ -178,7 +182,7 @@ export const TextFormatDropdownMenu = forwardRef<
                 <DropdownMenuItem asChild>
                   <BlockquoteButton
                     editor={ editor }
-                    text="引用"
+                    text={ blockLabels.blockquote }
                     showTooltip={ false }
                   />
                 </DropdownMenuItem>

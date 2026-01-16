@@ -32,7 +32,8 @@
     "dist"
   ],
   "dependencies": {
-    "lodash.throttle": "^4.1.1"
+    "lodash.throttle": "^4.1.1",
+    "i18n": "workspace:*"
   },
   "peerDependencies": {
     "react": "^19.2.1",

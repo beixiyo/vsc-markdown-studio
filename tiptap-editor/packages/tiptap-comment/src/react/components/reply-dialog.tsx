@@ -1,6 +1,6 @@
 import type React from 'react'
 import { memo } from 'react'
-import { Button } from 'tiptap-comps'
+import { Button, useCommentLabels } from 'tiptap-comps'
 import { CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 
@@ -24,6 +24,7 @@ export const ReplyDialog = memo(({
   canCreate,
   replyToPreview,
 }: ReplyDialogProps) => {
+  const labels = useCommentLabels()
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       event.preventDefault()
@@ -52,7 +53,7 @@ export const ReplyDialog = memo(({
 
       <textarea
         className="min-h-[84px] w-full rounded-xl bg-[var(--tt-sidebar-bg-color)] px-3 py-2 text-sm text-[var(--tt-color-text-gray)] outline-none ring-0 transition duration-[var(--tt-transition-duration-default)]"
-        placeholder="输入回复内容..."
+        placeholder={ labels.replyPlaceholder }
         value={ content }
         onChange={ e => setContent(e.target.value) }
         onKeyDown={ handleKeyDown }
@@ -64,23 +65,23 @@ export const ReplyDialog = memo(({
         <Button
           type="button"
           onClick={ onCancel }
-          aria-label="取消 (Esc)"
+          aria-label={ labels.cancelTooltip }
           showTooltip={ false }
           className="flex h-9 items-center gap-2 rounded-lg border border-transparent px-3 text-sm font-medium text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)]"
         >
           <CloseIcon className="h-4 w-4" />
-          取消
+          { labels.cancel }
         </Button>
         <Button
           type="button"
           onClick={ onCreate }
-          aria-label="创建回复 (Ctrl/Cmd + Enter)"
+          aria-label={ labels.replyTooltip }
           showTooltip={ false }
           disabled={ !canCreate || !content.trim() }
           className="flex h-9 items-center gap-2 rounded-lg bg-[var(--tt-brand-color-600)] px-3 text-sm font-semibold text-white shadow-sm transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-brand-color-500)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <CornerDownLeftIcon className="h-4 w-4" />
-          回复
+          { labels.reply }
         </Button>
       </div>
     </div>

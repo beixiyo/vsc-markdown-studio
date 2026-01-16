@@ -8,6 +8,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  useCommentLabels,
 } from 'tiptap-comps'
 import { CloseIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
@@ -51,6 +52,7 @@ export const CommentSidebar = memo(({
   activeCommentId,
 }: CommentSidebarProps) => {
   const { editor } = useTiptapEditor(providedEditor)
+  const labels = useCommentLabels()
   const isControlled = typeof open === 'boolean'
   const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false)
   const isOpen = isControlled
@@ -113,7 +115,7 @@ export const CommentSidebar = memo(({
       <PopoverTrigger asChild>
         <button
           type="button"
-          aria-label="查看评论"
+          aria-label={ labels.viewComments }
           className="flex items-center gap-2 rounded-full border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] py-1 px-2 text-sm font-semibold text-[var(--tt-color-text-blue)] shadow-[var(--tt-shadow-elevated-md)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-brand-color-400)] hover:shadow-[var(--tt-shadow-elevated-md)]"
         >
           <span className="text-base">💬</span>
@@ -124,7 +126,7 @@ export const CommentSidebar = memo(({
       </PopoverTrigger>
 
       <PopoverContent
-        aria-label="评论列表"
+        aria-label={ labels.commentPanel }
         align="end"
         className={ cn(
           'w-[380px] max-w-[calc(100vw-32px)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-0 shadow-[var(--tt-shadow-elevated-md)]',
@@ -135,19 +137,19 @@ export const CommentSidebar = memo(({
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-base font-semibold text-[var(--tt-color-text-blue)]">
-                评论面板
+                { labels.commentPanel }
               </span>
               <span className="rounded-full bg-[var(--tt-brand-color-50)] px-2.5 py-1 text-xs font-semibold text-[var(--tt-brand-color-700)]">
                 { comments.length }
                 {' '}
-                条
+                { labels.items }
               </span>
             </div>
 
             <button
               type="button"
               onClick={ () => handleOpenChange(false) }
-              aria-label="关闭评论面板"
+              aria-label={ labels.closePanel }
               className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
             >
               <CloseIcon className="h-4 w-4" />
@@ -165,9 +167,9 @@ export const CommentSidebar = memo(({
                     ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
                     : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
                 ) }
-                aria-label="显示所有评论"
+                aria-label={ labels.showAll }
               >
-                全部
+                { labels.all }
               </button>
               <button
                 type="button"
@@ -178,9 +180,9 @@ export const CommentSidebar = memo(({
                     ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
                     : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
                 ) }
-                aria-label="仅显示活跃评论"
+                aria-label={ labels.showActive }
               >
-                活跃
+                { labels.active }
               </button>
               <button
                 type="button"
@@ -191,17 +193,13 @@ export const CommentSidebar = memo(({
                     ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
                     : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
                 ) }
-                aria-label="仅显示已解决评论"
+                aria-label={ labels.showResolved }
               >
-                已解决
+                { labels.resolved }
               </button>
             </div>
             <span className="text-xs text-[var(--tt-color-text-gray)]">
-              共
-              {' '}
-              { comments.length }
-              {' '}
-              条
+              { labels.total(comments.length) }
             </span>
           </div>
 
@@ -214,7 +212,7 @@ export const CommentSidebar = memo(({
             { comments.length === 0
               ? (
                   <div className="flex items-center justify-center rounded-xl border border-dashed border-[var(--tt-border-color)] bg-[var(--tt-sidebar-bg-color)] px-3 py-6 text-sm text-[var(--tt-color-text-gray)]">
-                    暂无评论，开始第一条讨论吧
+                    { labels.empty }
                   </div>
                 )
               : (

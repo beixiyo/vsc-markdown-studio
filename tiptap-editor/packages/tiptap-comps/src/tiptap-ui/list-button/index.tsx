@@ -8,7 +8,6 @@ export {
   isListActive,
   LIST_SHORTCUT_KEYS,
   listIcons,
-  listLabels,
   toggleList,
   useList,
 } from './use-list'

@@ -10,6 +10,7 @@ import {
   useInteractions,
 } from '@floating-ui/react'
 import { memo, useEffect, useMemo, useRef } from 'react'
+import { useCommentLabels } from 'tiptap-comps'
 import { cn } from 'tiptap-config'
 import { SuggestionMenuItem } from './suggestion-menu-item'
 
@@ -50,6 +51,7 @@ export const SuggestionMenu = memo(({
   onActiveIndexChange,
   onSelect,
 }: SuggestionMenuProps) => {
+  const labels = useCommentLabels()
   const virtualElement = useMemo(() => {
     if (!referenceRect) {
       return null
@@ -121,21 +123,21 @@ export const SuggestionMenu = memo(({
       >
         { loading && (
           <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
-            加载中…
+            { labels.loading }
           </div>
         ) }
 
         { !loading && error && (
           <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
-            { error.message || '加载失败' }
+            { error.message || labels.loadFailed }
           </div>
         ) }
 
         { !loading && !error && items.length === 0 && (
           <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
             { query
-              ? '无匹配项'
-              : '无可用项' }
+              ? labels.noMatch
+              : labels.noItems }
           </div>
         ) }
 

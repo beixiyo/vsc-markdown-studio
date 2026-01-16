@@ -3,7 +3,7 @@
 import type { Editor } from '@tiptap/react'
 import { useEffect, useMemo, useState } from 'react'
 
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useAlignLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 
 import { isExtensionAvailable } from 'tiptap-config'
 
@@ -13,13 +13,11 @@ import {
   AlignLeftIcon,
   AlignRightIcon,
 } from '../../icons'
-
 import {
   canSetTextAlign,
   isTextAlignActive,
   type TextAlign,
   textAlignIcons,
-  textAlignLabels,
 } from '../text-align-button/use-text-align'
 
 /**
@@ -48,24 +46,28 @@ export interface TextAlignOption {
   icon: React.ElementType
 }
 
+/**
+ * 获取文本对齐选项（已废弃，请使用 useAlignLabels hook）
+ * @deprecated 使用 useAlignLabels hook 替代
+ */
 export const textAlignOptions: TextAlignOption[] = [
   {
-    label: textAlignLabels.left,
+    label: 'Align left',
     align: 'left',
     icon: AlignLeftIcon,
   },
   {
-    label: textAlignLabels.center,
+    label: 'Align center',
     align: 'center',
     icon: AlignCenterIcon,
   },
   {
-    label: textAlignLabels.right,
+    label: 'Align right',
     align: 'right',
     icon: AlignRightIcon,
   },
   {
-    label: textAlignLabels.justify,
+    label: 'Align justify',
     align: 'justify',
     icon: AlignJustifyIcon,
   },
@@ -91,10 +93,14 @@ export function isAnyTextAlignActive(
 
 export function getFilteredTextAlignOptions(
   availableTypes: TextAlign[],
-): typeof textAlignOptions {
-  return textAlignOptions.filter(
-    option => availableTypes.includes(option.align),
-  )
+  alignLabels: ReturnType<typeof useAlignLabels>,
+): TextAlignOption[] {
+  return textAlignOptions
+    .filter(option => availableTypes.includes(option.align))
+    .map(option => ({
+      ...option,
+      label: alignLabels[option.align],
+    }))
 }
 
 export function shouldShowTextAlignDropdown(params: {
@@ -178,13 +184,15 @@ export function useTextAlignDropdownMenu(
   } = config || {}
 
   const { editor } = useTiptapEditor(providedEditor)
+  const alignLabels = useAlignLabels()
+  const toolbarLabels = useToolbarLabels()
   const [isVisible, setIsVisible] = useState(true)
 
   const textAlignInSchema = isExtensionAvailable(editor, 'textAlign')
 
   const filteredAligns = useMemo(
-    () => getFilteredTextAlignOptions(types),
-    [types],
+    () => getFilteredTextAlignOptions(types, alignLabels),
+    [types, alignLabels],
   )
 
   const canSetAny = canSetAnyTextAlign(editor, types)
@@ -226,7 +234,7 @@ export function useTextAlignDropdownMenu(
     canToggle: canSetAny,
     types,
     filteredAligns,
-    label: 'Text Align',
+    label: toolbarLabels.textAlign,
     Icon: activeOption
       ? textAlignIcons[activeOption.align]
       : AlignLeftIcon,

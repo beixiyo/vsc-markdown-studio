@@ -541,6 +541,12 @@ importers:
         specifier: workspace:*
         version: link:../styles
 
+  packages/i18n:
+    dependencies:
+      react:
+        specifier: ^19.2.1
+        version: 19.2.3
+
   packages/markdown-mobile:
     dependencies:
       '@blocknote/core':
@@ -705,6 +711,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.13.0
         version: 3.13.0
+      i18n:
+        specifier: workspace:*
+        version: link:../packages/i18n
       react:
         specifier: ^19.2.1
         version: 19.2.3
@@ -805,6 +814,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.13.0
         version: 3.13.0
+      i18n:
+        specifier: workspace:*
+        version: link:../../../packages/i18n
       lodash.throttle:
         specifier: ^4.1.1
         version: 4.1.1
@@ -833,6 +845,9 @@ importers:
       '@tiptap/react':
         specifier: ^3.13.0
         version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      i18n:
+        specifier: workspace:*
+        version: link:../../../packages/i18n
       react:
         specifier: ^19.2.1
         version: 19.2.3
@@ -872,6 +887,9 @@ importers:
       hooks:
         specifier: workspace:*
         version: link:../../../packages/hooks
+      i18n:
+        specifier: workspace:*
+        version: link:../../../packages/i18n
       react:
         specifier: ^19.2.1
         version: 19.2.3
@@ -950,6 +968,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.13.0
         version: 3.13.0
+      i18n:
+        specifier: workspace:*
+        version: link:../../../packages/i18n
       react:
         specifier: ^19.2.1
         version: 19.2.3

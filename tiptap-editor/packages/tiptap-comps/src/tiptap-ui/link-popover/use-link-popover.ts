@@ -2,7 +2,7 @@ import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useTiptapEditor, useTiptapEditorT } from 'tiptap-api/react'
 
 // --- Lib ---
 import {
@@ -10,7 +10,6 @@ import {
   isNodeTypeSelected,
   sanitizeUrl,
 } from 'tiptap-config'
-
 // --- Icons ---
 import { LinkIcon } from '../../icons'
 
@@ -271,6 +270,7 @@ export function useLinkPopover(config?: UseLinkPopoverConfig) {
   } = config || {}
 
   const { editor } = useTiptapEditor(providedEditor)
+  const t = useTiptapEditorT()
 
   const { isVisible, canSet, isActive } = useLinkState({
     editor,
@@ -286,7 +286,7 @@ export function useLinkPopover(config?: UseLinkPopoverConfig) {
     isVisible,
     canSet,
     isActive,
-    label: 'Link',
+    label: t('link.link'),
     Icon: LinkIcon,
     ...linkHandler,
   }

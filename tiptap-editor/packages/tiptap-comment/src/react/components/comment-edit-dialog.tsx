@@ -1,5 +1,6 @@
 import type React from 'react'
 import { memo } from 'react'
+import { useCommentLabels } from 'tiptap-comps'
 import { CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 
@@ -21,6 +22,7 @@ export const CommentEditDialog = memo(({
   onCancel,
   canSave,
 }: CommentEditDialogProps) => {
+  const labels = useCommentLabels()
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       event.preventDefault()
@@ -42,7 +44,7 @@ export const CommentEditDialog = memo(({
     >
       <textarea
         className="min-h-[96px] w-full rounded-xl bg-[var(--tt-sidebar-bg-color)] px-4 py-3 text-sm text-[var(--tt-color-text-gray)] outline-none ring-0 transition duration-[var(--tt-transition-duration-default)]"
-        placeholder="输入评论内容..."
+        placeholder={ labels.placeholder }
         value={ content }
         onChange={ e => setContent(e.target.value) }
         onKeyDown={ handleKeyDown }
@@ -54,21 +56,21 @@ export const CommentEditDialog = memo(({
         <button
           type="button"
           onClick={ onCancel }
-          title="取消 (Esc)"
+          title={ labels.cancelTooltip }
           className="flex h-9 items-center gap-2 rounded-lg border border-transparent px-3 text-sm font-medium text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)]"
         >
           <CloseIcon className="h-4 w-4" />
-          取消
+          { labels.cancel }
         </button>
         <button
           type="button"
           onClick={ onSave }
-          title="保存编辑 (Ctrl/Cmd + Enter)"
+          title={ labels.saveTooltip }
           disabled={ !canSave || !content.trim() }
           className="flex h-9 items-center gap-2 rounded-lg bg-[var(--tt-brand-color-600)] px-3 text-sm font-semibold text-white shadow-sm transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-brand-color-500)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <CornerDownLeftIcon className="h-4 w-4" />
-          保存
+          { labels.save }
         </button>
       </div>
     </div>

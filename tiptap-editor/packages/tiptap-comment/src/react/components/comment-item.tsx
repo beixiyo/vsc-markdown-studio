@@ -2,7 +2,13 @@ import type { Editor } from '@tiptap/react'
 import type { Comment, CommentAuthor, CommentStore } from '../../comment-store'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { scrollToRangeSelection } from 'tiptap-api'
-import { Tooltip, TooltipContent, TooltipTrigger } from 'tiptap-comps'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  useCommentLabels,
+  useLanguage,
+} from 'tiptap-comps'
 import { BanIcon, CornerDownLeftIcon, EditIcon, LocateIcon, TrashIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { createReply, deleteComment, updateComment } from '../../comment'
@@ -39,11 +45,13 @@ export const CommentItem = memo(({
   const [editContent, setEditContent] = useState(comment.content)
   const [isReplying, setIsReplying] = useState(false)
   const [replyContent, setReplyContent] = useState('')
+  const labels = useCommentLabels()
+  const { language } = useLanguage()
 
   const defaultAuthor: CommentAuthor = useMemo(() => ({
     id: `user-${Math.random().toString(36).substr(2, 9)}`,
-    name: `用户${Math.floor(Math.random() * 100)}`,
-  }), [])
+    name: `${labels.user}${Math.floor(Math.random() * 100)}`,
+  }), [labels.user])
 
   useEffect(() => {
     if (!isEditing) {
@@ -62,7 +70,6 @@ export const CommentItem = memo(({
       scrollToRangeSelection(editor, range.from, range.to, {
         behavior: 'smooth',
         block: 'center',
-        setSelection: true,
       })
 
       setTimeout(() => {
@@ -88,11 +95,11 @@ export const CommentItem = memo(({
     if (!editor)
       return
     const preview = comment.content.substring(0, 20)
-    const confirmed = confirm(`确定要删除评论 "${preview}..." 吗？`)
+    const confirmed = confirm(labels.confirmDelete(preview))
     if (!confirmed)
       return
     deleteComment(editor, commentStore, comment.id)
-  }, [editor, commentStore, comment.id, comment.content])
+  }, [editor, commentStore, comment.id, comment.content, labels])
 
   const handleEdit = useCallback(() => {
     setEditContent(comment.content)
@@ -101,7 +108,7 @@ export const CommentItem = memo(({
 
   const handleSaveEdit = useCallback(() => {
     if (!editContent.trim()) {
-      console.warn('评论内容不能为空')
+      console.warn(labels.contentEmpty)
       return
     }
 
@@ -116,9 +123,9 @@ export const CommentItem = memo(({
       onUpdate()
     }
     else {
-      console.warn('更新评论失败')
+      console.warn(labels.updateFailed)
     }
-  }, [commentStore, comment.id, editContent, onUpdate])
+  }, [commentStore, comment.id, editContent, onUpdate, labels])
 
   const handleCancelEdit = useCallback(() => {
     setEditContent(comment.content)
@@ -137,9 +144,9 @@ export const CommentItem = memo(({
       onUpdate()
     }
     else {
-      console.warn('更新评论状态失败')
+      console.warn(labels.updateStatusFailed)
     }
-  }, [commentStore, comment.id, comment.status, onUpdate])
+  }, [commentStore, comment.id, comment.status, onUpdate, labels.updateStatusFailed])
 
   const handleReply = useCallback(() => {
     setReplyContent('')
@@ -148,7 +155,7 @@ export const CommentItem = memo(({
 
   const handleCreateReply = useCallback(() => {
     if (!editor || !replyContent.trim()) {
-      console.warn('无法创建回复：编辑器未初始化或回复内容为空')
+      console.warn(labels.createReplyFailed)
       return
     }
 
@@ -164,9 +171,9 @@ export const CommentItem = memo(({
       onUpdate()
     }
     else {
-      console.warn('回复创建失败')
+      console.warn(labels.replyFailed)
     }
-  }, [editor, commentStore, replyContent, comment.id, defaultAuthor, onUpdate])
+  }, [editor, commentStore, replyContent, comment.id, defaultAuthor, onUpdate, labels])
 
   const handleCancelReply = useCallback(() => {
     setReplyContent('')
@@ -184,7 +191,6 @@ export const CommentItem = memo(({
       scrollToRangeSelection(editor, range.from, range.to, {
         behavior: 'smooth',
         block: 'center',
-        setSelection: true,
       })
 
       setTimeout(() => {
@@ -216,7 +222,9 @@ export const CommentItem = memo(({
 
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp)
-    return date.toLocaleString('zh-CN', {
+    return date.toLocaleString(language === 'zh-CN'
+      ? 'zh-CN'
+      : 'en-US', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -281,7 +289,7 @@ export const CommentItem = memo(({
             </span>
             { comment.status === 'resolved' && (
               <span className="inline-flex items-center gap-1 rounded-full bg-[var(--tt-color-green-inc-4)] px-2 py-0.5 text-[12px] font-semibold text-[var(--tt-color-green-dec-2)]">
-                已解决
+                { labels.resolved }
               </span>
             ) }
           </div>
@@ -305,7 +313,7 @@ export const CommentItem = memo(({
                 <LocateIcon className="h-4 w-4" />
               </button>
             </TooltipTrigger>
-            <TooltipContent portal={ false }>定位</TooltipContent>
+            <TooltipContent portal={ false }>{ labels.locate }</TooltipContent>
           </Tooltip>
 
           { comment.status === 'active' && (
@@ -320,7 +328,7 @@ export const CommentItem = memo(({
                     <EditIcon className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent portal={ false }>编辑</TooltipContent>
+                <TooltipContent portal={ false }>{ labels.edit }</TooltipContent>
               </Tooltip>
               <Tooltip delay={ 100 }>
                 <TooltipTrigger asChild>
@@ -332,7 +340,7 @@ export const CommentItem = memo(({
                     <CornerDownLeftIcon className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent portal={ false }>回复</TooltipContent>
+                <TooltipContent portal={ false }>{ labels.reply }</TooltipContent>
               </Tooltip>
             </>
           ) }
@@ -355,8 +363,8 @@ export const CommentItem = memo(({
             </TooltipTrigger>
             <TooltipContent portal={ false }>
               { comment.status === 'active'
-                ? '标记为已解决'
-                : '重新打开' }
+                ? labels.markResolved
+                : labels.reopen }
             </TooltipContent>
           </Tooltip>
 
@@ -370,7 +378,7 @@ export const CommentItem = memo(({
                 <TrashIcon className="h-4 w-4" />
               </button>
             </TooltipTrigger>
-            <TooltipContent portal={ false }>删除评论</TooltipContent>
+            <TooltipContent portal={ false }>{ labels.delete }</TooltipContent>
           </Tooltip>
         </div>
       </div>

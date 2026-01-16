@@ -1,7 +1,7 @@
 import type { ChainedCommands, Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
 
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useTiptapEditor, useAlignLabels } from 'tiptap-api/react'
 
 import {
   isExtensionAvailable,
@@ -54,6 +54,10 @@ export const textAlignIcons = {
   justify: AlignJustifyIcon,
 }
 
+/**
+ * 获取文本对齐标签（已废弃，请使用 useAlignLabels hook）
+ * @deprecated 使用 useAlignLabels hook 替代
+ */
 export const textAlignLabels: Record<TextAlign, string> = {
   left: 'Align left',
   center: 'Align center',
@@ -185,6 +189,7 @@ export function useTextAlign(config: UseTextAlignConfig) {
   } = config
 
   const { editor } = useTiptapEditor(providedEditor)
+  const alignLabels = useAlignLabels()
   const [isVisible, setIsVisible] = useState<boolean>(true)
   const canAlign = canSetTextAlign(editor, align)
   const isActive = isTextAlignActive(editor, align)
@@ -222,7 +227,7 @@ export function useTextAlign(config: UseTextAlignConfig) {
     isActive,
     handleTextAlign,
     canAlign,
-    label: textAlignLabels[align],
+    label: alignLabels[align],
     shortcutKeys: TEXT_ALIGN_SHORTCUT_KEYS[align],
     Icon: textAlignIcons[align],
   }

@@ -10,8 +10,6 @@ export * from './use-scrolling'
 export * from './use-selection'
 
 export * from './use-throttled-callback'
-export * from './use-throttled-callback'
-export * from './use-tiptap-editor'
 export * from './use-tiptap-editor'
 export * from './use-unmount'
 export * from './use-window-size'

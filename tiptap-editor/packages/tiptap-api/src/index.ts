@@ -1,3 +1,5 @@
 export * from './data'
+export type * from './i18n/hooks'
+export * from './i18n/resources'
 export * from './operate'
 export * from './storage'

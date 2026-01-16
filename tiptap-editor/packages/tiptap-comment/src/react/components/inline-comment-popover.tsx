@@ -10,6 +10,7 @@ import {
 } from '@floating-ui/react'
 import { memo, useEffect, useMemo } from 'react'
 import { getSelectionRect } from 'tiptap-api'
+import { useCommentLabels } from 'tiptap-comps'
 import { CloseIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { CommentItem } from './comment-item'
@@ -129,6 +130,8 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
     middleware,
   })
 
+  const labels = useCommentLabels()
+
   /** 绑定虚拟元素为 reference */
   useEffect(() => {
     if (virtualElement) {
@@ -191,13 +194,13 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
       >
         <div className="rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] shadow-[var(--tt-shadow-elevated-lg)]">
           <div className="flex items-center justify-between border-b border-[var(--tt-border-color)] px-3 py-2 text-xs text-[var(--tt-color-text-gray)]">
-            <span>当前评论</span>
+            <span>{ labels.currentComment }</span>
             <button
               type="button"
               onClick={ () => {
                 closeInlineComment()
               } }
-              aria-label="关闭当前评论"
+              aria-label={ labels.closeCurrent }
               className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
             >
               <CloseIcon className="h-4 w-4" />

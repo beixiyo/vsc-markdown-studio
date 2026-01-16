@@ -5,7 +5,7 @@ import type { ButtonProps } from '../../ui'
 import { useCallback, useState } from 'react'
 
 // --- Hooks ---
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 
 // --- Icons ---
 import { ChevronDownIcon } from '../../icons'
@@ -20,7 +20,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../../ui'
-
 // --- Tiptap UI ---
 import { type TextAlign, TextAlignButton } from '../text-align-button'
 import { useTextAlignDropdownMenu } from './use-text-align-dropdown-menu'
@@ -60,6 +59,7 @@ export function TextAlignDropdownMenu({
   ...props
 }: TextAlignDropdownMenuProps) {
   const { editor } = useTiptapEditor(providedEditor)
+  const toolbarLabels = useToolbarLabels()
   const [isOpen, setIsOpen] = useState(false)
 
   const { filteredAligns, canToggle, isActive, isVisible, Icon }
@@ -94,8 +94,8 @@ export function TextAlignDropdownMenu({
           tabIndex={ -1 }
           disabled={ !canToggle }
           data-disabled={ !canToggle }
-          aria-label="Text align options"
-          tooltip="Text Align"
+          aria-label={ toolbarLabels.textAlign }
+          tooltip={ toolbarLabels.textAlign }
           { ...props }
         >
           <Icon className="tiptap-button-icon" />
