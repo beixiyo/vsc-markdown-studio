@@ -78,6 +78,8 @@ export function useTextFormatDropdownMenu(config?: UseTextFormatDropdownMenuConf
     && !isBlockquoteActiveState
     : false
 
+  const activeHeadingLevel = headingLevels.find(level => editor?.isActive('heading', { level }))
+
   const isActive = isHeadingActiveState || isAnyListActive || isBlockquoteActiveState || isParagraphActive
 
   /** 确定当前激活的类型和图标 */
@@ -112,6 +114,7 @@ export function useTextFormatDropdownMenu(config?: UseTextFormatDropdownMenuConf
   return {
     isVisible,
     activeType,
+    activeHeadingLevel,
     isActive,
     canToggle: canToggleAny,
     headingLevels,

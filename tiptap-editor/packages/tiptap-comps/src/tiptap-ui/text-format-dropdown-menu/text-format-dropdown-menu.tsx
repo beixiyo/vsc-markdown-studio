@@ -2,13 +2,19 @@ import type { Editor } from '@tiptap/react'
 
 // --- UI Primitives ---
 import type { ButtonProps } from '../../ui'
-import { forwardRef, useCallback, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useState } from 'react'
 
 // --- Hooks ---
 import { useBlockLabels, useHeadingLabels, useListLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 // --- Icons ---
 import {
   ChevronDownIcon,
+  HeadingFiveIcon,
+  HeadingFourIcon,
+  HeadingOneIcon,
+  HeadingSixIcon,
+  HeadingThreeIcon,
+  HeadingTwoIcon,
   TextFormatIcon,
 } from '../../icons'
 
@@ -85,12 +91,37 @@ export const TextFormatDropdownMenu = forwardRef<
     const blockLabels = useBlockLabels()
     const headingLabels = useHeadingLabels()
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const { isVisible, isActive, canToggle } = useTextFormatDropdownMenu({
+    const {
+      isVisible,
+      isActive,
+      canToggle,
+      activeType,
+      activeHeadingLevel,
+    } = useTextFormatDropdownMenu({
       editor,
       headingLevels,
       listTypes,
       hideWhenUnavailable,
     })
+
+    const [lastTextIcon, setLastTextIcon] = useState<React.ElementType>(TextFormatIcon)
+
+    useEffect(() => {
+      if (activeType === 'paragraph') {
+        setLastTextIcon(TextFormatIcon)
+      }
+      else if (activeType === 'heading' && activeHeadingLevel) {
+        const iconMap: Record<number, React.ElementType> = {
+          1: HeadingOneIcon,
+          2: HeadingTwoIcon,
+          3: HeadingThreeIcon,
+          4: HeadingFourIcon,
+          5: HeadingFiveIcon,
+          6: HeadingSixIcon,
+        }
+        setLastTextIcon(iconMap[activeHeadingLevel] || TextFormatIcon)
+      }
+    }, [activeType, activeHeadingLevel])
 
     const handleOpenChange = useCallback(
       (open: boolean) => {
@@ -105,6 +136,8 @@ export const TextFormatDropdownMenu = forwardRef<
     if (!isVisible) {
       return null
     }
+
+    const MainIcon = lastTextIcon
 
     return (
       <DropdownMenu modal open={ isOpen } onOpenChange={ handleOpenChange }>
@@ -125,7 +158,7 @@ export const TextFormatDropdownMenu = forwardRef<
             { ...buttonProps }
             ref={ ref }
           >
-            <TextFormatIcon className="tiptap-button-icon" />
+            <MainIcon className="tiptap-button-icon" />
             <ChevronDownIcon className="tiptap-button-dropdown-small" />
           </Button>
         </DropdownMenuTrigger>
@@ -134,8 +167,8 @@ export const TextFormatDropdownMenu = forwardRef<
           <Card>
             <CardBody>
               <ButtonGroup>
-                {/* 标题 */}
-                {headingLevels.map(level => (
+                {/* 标题 */ }
+                { headingLevels.map(level => (
                   <DropdownMenuItem key={ `heading-${level}` } asChild>
                     <HeadingButton
                       editor={ editor }
@@ -144,10 +177,31 @@ export const TextFormatDropdownMenu = forwardRef<
                       showTooltip={ false }
                     />
                   </DropdownMenuItem>
-                ))}
+                )) }
 
-                {/* 列表 */}
-                {listTypes.includes('orderedList') && (
+                {/* 正文 */ }
+                <DropdownMenuItem asChild>
+                  <Button
+                    type="button"
+                    data-style="ghost"
+                    data-active-state={ activeType === 'paragraph'
+                      ? 'on'
+                      : 'off' }
+                    role="button"
+                    tabIndex={ -1 }
+                    aria-label={ headingLabels.paragraph }
+                    aria-pressed={ activeType === 'paragraph' }
+                    tooltip={ headingLabels.paragraph }
+                    showTooltip={ false }
+                    onClick={ () => editor?.chain().focus().setParagraph().run() }
+                  >
+                    <TextFormatIcon className="tiptap-button-icon" />
+                    <span className="tiptap-button-text">{ headingLabels.paragraph }</span>
+                  </Button>
+                </DropdownMenuItem>
+
+                {/* 列表 */ }
+                { listTypes.includes('orderedList') && (
                   <DropdownMenuItem key="orderedList" asChild>
                     <ListButton
                       editor={ editor }
@@ -156,8 +210,8 @@ export const TextFormatDropdownMenu = forwardRef<
                       showTooltip={ false }
                     />
                   </DropdownMenuItem>
-                )}
-                {listTypes.includes('bulletList') && (
+                ) }
+                { listTypes.includes('bulletList') && (
                   <DropdownMenuItem key="bulletList" asChild>
                     <ListButton
                       editor={ editor }
@@ -166,8 +220,8 @@ export const TextFormatDropdownMenu = forwardRef<
                       showTooltip={ false }
                     />
                   </DropdownMenuItem>
-                )}
-                {listTypes.includes('taskList') && (
+                ) }
+                { listTypes.includes('taskList') && (
                   <DropdownMenuItem key="taskList" asChild>
                     <ListButton
                       editor={ editor }
@@ -176,9 +230,9 @@ export const TextFormatDropdownMenu = forwardRef<
                       showTooltip={ false }
                     />
                   </DropdownMenuItem>
-                )}
+                ) }
 
-                {/* 引用 */}
+                {/* 引用 */ }
                 <DropdownMenuItem asChild>
                   <BlockquoteButton
                     editor={ editor }

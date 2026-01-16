@@ -284,12 +284,11 @@ export function SelectionToolbar({
           refs.setFloating(node)
         } }
         className={ cn(
-          'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] border bg-[var(--tt-card-bg-color)] text-[var(--tt-color-text-gray)] rounded-[var(--tt-radius-md)] shadow-[var(--tt-shadow-elevated-md)] z-50',
+          'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-[var(--tt-card-bg-color)] text-[var(--tt-color-text-gray)] rounded-[var(--tt-radius-md)] shadow-lg z-50',
           className,
         ) }
         style={ {
           ...floatingStyles,
-          borderColor: 'var(--tt-border-color)',
           animationName: 'fadeIn',
           animationDuration: 'var(--tt-transition-duration-short)',
           animationTimingFunction: 'var(--tt-transition-easing-default)',
