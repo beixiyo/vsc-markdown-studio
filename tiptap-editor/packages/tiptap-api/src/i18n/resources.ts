@@ -22,7 +22,7 @@ export const tiptapEditorResources: Resources = {
       heading4: '四级标题',
       heading5: '五级标题',
       heading6: '六级标题',
-      paragraph: '段落',
+      paragraph: '正文',
     },
     list: {
       bulletList: '无序列表',

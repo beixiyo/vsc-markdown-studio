@@ -14,7 +14,6 @@ export default defineConfig(({ command }) => {
     plugins: [
       codeInspectorPlugin({
         bundler: 'vite',
-        editor: 'windsurf',
         hideConsole: true,
       }),
       react(),
