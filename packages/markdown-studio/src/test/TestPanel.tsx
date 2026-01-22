@@ -1,4 +1,5 @@
-import { AnimateShow } from 'comps'
+/** 暂时删除这个包，需要用到再改 */
+// import { AnimateShow } from 'comps'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
@@ -128,7 +129,7 @@ export function TestPanel() {
       </motion.div>
     </div>
 
-    <AnimateShow show={ !isCollapsed }>
+    {/* <AnimateShow show={ !isCollapsed }> */}
       <div className="pt-2">
         <button
           onClick={ handleRunAllTests }
@@ -151,6 +152,6 @@ export function TestPanel() {
           )) }
         </div>
       </div>
-    </AnimateShow>
+    {/* </AnimateShow> */}
   </div>
 }

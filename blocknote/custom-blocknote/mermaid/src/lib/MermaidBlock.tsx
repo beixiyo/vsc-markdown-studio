@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { defaultProps } from '@blocknote/core'
 import { createReactBlockSpec } from '@blocknote/react'
-import { Modal, Textarea } from 'comps'
+/** 暂时删除这个包，需要用到再改 */
+// import { Modal, Textarea } from 'comps'
 import { useTheme } from 'hooks'
 import mermaid from 'mermaid'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -195,7 +196,7 @@ export const MermaidBlock = createReactBlockSpec(
         </div>
 
         {/* 编辑对话框：改用项目内置 Modal */ }
-        <Modal
+        {/* <Modal
           isOpen={ isEditing }
           onClose={ handleCancel }
           onOk={ handleSave }
@@ -228,7 +229,7 @@ export const MermaidBlock = createReactBlockSpec(
               查看 Mermaid 语法文档 →
             </a>
           </div>
-        </Modal>
+        </Modal> */}
       </>)
     },
   },
