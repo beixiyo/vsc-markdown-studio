@@ -10,5 +10,10 @@ export function unSelect(editor: Editor | null) {
 
   const docSize = editor.state.doc.content.size
   editor.commands.setTextSelection(docSize)
-  editor.view.dom.blur()
+  try {
+    editor.view?.dom?.blur()
+  }
+  catch (e) {
+    // 视图不可用
+  }
 }

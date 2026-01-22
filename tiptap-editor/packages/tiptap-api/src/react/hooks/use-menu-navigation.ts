@@ -209,7 +209,12 @@ export function useMenuNavigation<T>({
     let targetElement: HTMLElement | null = null
 
     if (editor) {
-      targetElement = editor.view.dom
+      try {
+        targetElement = editor.view?.dom
+      }
+      catch (e) {
+        // 视图不可用
+      }
     }
     else if (containerRef?.current) {
       targetElement = containerRef.current

@@ -258,11 +258,26 @@ export function useSuggestion(
   // ======================
 
   useEffect(() => {
-    if (!editor || !editor.view) {
+    if (!editor) {
       return
     }
 
-    const viewDom = editor.view.dom
+    let viewDom: HTMLElement | null = null
+    try {
+      if (!editor.view) {
+        return
+      }
+      viewDom = editor.view.dom
+    }
+    catch (e) {
+      return
+    }
+
+    if (!viewDom) {
+      return
+    }
+
+    const currentViewDom = viewDom
 
     const handleKeydown = (event: KeyboardEvent) => {
       if (!state.active) {
@@ -301,10 +316,10 @@ export function useSuggestion(
       }
     }
 
-    viewDom.addEventListener('keydown', handleKeydown, true)
+    currentViewDom.addEventListener('keydown', handleKeydown, true)
 
     return () => {
-      viewDom.removeEventListener('keydown', handleKeydown, true)
+      currentViewDom.removeEventListener('keydown', handleKeydown, true)
     }
   }, [editor, state.active, activeIndex, items.length, selectItem, close, setActiveIndex])
 

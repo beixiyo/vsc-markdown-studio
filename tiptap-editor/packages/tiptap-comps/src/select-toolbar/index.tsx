@@ -86,6 +86,14 @@ export function SelectionToolbar({
       return null
     }
 
+    let viewDom: HTMLElement | undefined
+    try {
+      viewDom = editor.view?.dom
+    }
+    catch (e) {
+      // 视图不可用
+    }
+
     return {
       getBoundingClientRect: () => {
         const rect = getSelectionRect()
@@ -104,7 +112,7 @@ export function SelectionToolbar({
         }
         return rect
       },
-      contextElement: editor.view.dom,
+      contextElement: viewDom,
     }
   }, [editor, getSelectionRect])
 
@@ -172,12 +180,25 @@ export function SelectionToolbar({
       return
     }
 
-    const editorElement = editor.view.dom as HTMLElement
+    let editorElement: HTMLElement | null = null
+    try {
+      editorElement = editor.view.dom as HTMLElement
+    }
+    catch (e) {
+      // 视图不可用，暂不绑定事件
+      return
+    }
+
+    if (!editorElement) {
+      return
+    }
+
+    const currentEditorElement = editorElement
 
     /** 监听鼠标松开事件（在编辑器内） */
     const handleMouseUp = (event: MouseEvent) => {
       /** 检查事件是否发生在编辑器内 */
-      if (editorElement.contains(event.target as Node)) {
+      if (currentEditorElement.contains(event.target as Node)) {
         updateToolbarState()
       }
     }
@@ -198,7 +219,7 @@ export function SelectionToolbar({
 
       /** 如果点击的不是编辑器、不是工具栏本身、也不是需要保持打开的区域，则更新工具栏状态 */
       if (
-        !editorElement.contains(target)
+        !currentEditorElement.contains(target)
         && !toolbarElement.contains(target)
         && !keepOpenElement
       ) {
@@ -221,8 +242,8 @@ export function SelectionToolbar({
     /** 监听键盘事件（支持键盘选择文本） */
     const handleKeyUp = (event: KeyboardEvent) => {
       /** 检查编辑器是否获得焦点 */
-      const isEditorFocused = editorElement === document.activeElement
-        || editorElement.contains(document.activeElement)
+      const isEditorFocused = currentEditorElement === document.activeElement
+        || currentEditorElement.contains(document.activeElement)
 
       if (!isEditorFocused) {
         return

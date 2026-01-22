@@ -1,6 +1,7 @@
 import type { Editor } from '@tiptap/react'
+import type { HoverContent } from '../../operate'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { getHoverContentFromCoords, type HoverContent } from '../../operate'
+import { getHoverContentFromCoords } from '../../operate'
 import { useThrottledCallback } from './use-throttled-callback'
 
 export interface UseHoverDetectionConfig {
@@ -74,7 +75,16 @@ export function useHoverDetection(
   /** 节流处理鼠标移动 */
   const handleMouseMove = useThrottledCallback(
     (event: MouseEvent) => {
-      if (!enabled || !editor || !editor.view) {
+      if (!enabled || !editor) {
+        return
+      }
+
+      try {
+        if (!editor.view) {
+          return
+        }
+      }
+      catch (e) {
         return
       }
 
@@ -153,26 +163,38 @@ export function useHoverDetection(
 
   /** 设置事件监听 */
   useEffect(() => {
-    if (!enabled || !editor || !editor.view) {
+    if (!enabled || !editor) {
       return
     }
 
-    const editorElement = editor.view.dom as HTMLElement
+    let editorElement: HTMLElement | null = null
+    try {
+      if (!editor.view) {
+        return
+      }
+      editorElement = editor.view.dom as HTMLElement
+    }
+    catch (e) {
+      // 视图不可用，暂不绑定
+      return
+    }
+
     if (!editorElement) {
       return
     }
 
-    editorElementRef.current = editorElement
+    const currentEditorElement = editorElement
+    editorElementRef.current = currentEditorElement
 
     /** 添加事件监听 */
-    editorElement.addEventListener('mousemove', handleMouseMove)
-    editorElement.addEventListener('mouseleave', handleMouseLeave)
+    currentEditorElement.addEventListener('mousemove', handleMouseMove)
+    currentEditorElement.addEventListener('mouseleave', handleMouseLeave)
     document.addEventListener('dragstart', handleDragStart)
     document.addEventListener('dragend', handleDragEnd)
 
     return () => {
-      editorElement.removeEventListener('mousemove', handleMouseMove)
-      editorElement.removeEventListener('mouseleave', handleMouseLeave)
+      currentEditorElement.removeEventListener('mousemove', handleMouseMove)
+      currentEditorElement.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('dragstart', handleDragStart)
       document.removeEventListener('dragend', handleDragEnd)
     }

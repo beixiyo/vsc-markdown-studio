@@ -111,7 +111,16 @@ export function getSelectionRect(
   from?: number,
   to?: number,
 ): DOMRect | null {
-  if (!editor || !editor.view || !editor.state.selection) {
+  if (!editor || !editor.state.selection) {
+    return null
+  }
+
+  try {
+    if (!editor.view) {
+      return null
+    }
+  }
+  catch (e) {
     return null
   }
 
