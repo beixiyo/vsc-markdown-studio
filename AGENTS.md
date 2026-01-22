@@ -1,4 +1,4 @@
-## Tiptap 二次开发概述
+# Tiptap 二次开发概述
 
 本报告主要说明了我基于官方 tiptap 项目新增和修改的地方
 
@@ -8,14 +8,65 @@
 
 ---
 
-### 原始官方组件路径
+## 设计 Token 系统
 
-#### 1. Icons (图标组件)
+### 设计 Token 配置
+
+项目使用 **TailwindCSS** 作为样式系统，设计 Token 定义在 `tailwind.config.js` 中
+
+### Token 同步机制
+
+设计 Token 的同步流程：
+
+1. **源文件**：`packages/styles/variable.ts`
+   - 定义所有设计 Token（颜色、间距等）
+   - 包含 `light` 和 `dark` 两种主题配置
+
+2. **自动同步**：通过 Vite 插件 `@jl-org/js-to-style` 实现
+   - 自动将 `packages/styles/variable.ts` 中的 Token 同步到 `packages/styles/css/autoVariables.css`
+   - 生成 CSS 变量（`--variableName` 格式）
+
+3. **Tailwind 配置**：`tailwind.config.js`
+   - 使用 CSS 变量引用设计 Token
+   - 格式：`rgb(var(--variableName) / <alpha-value>)`
+   - 支持透明度控制（通过 `<alpha-value>` 占位符）
+
+### 使用规范
+
+- ✅ **优先使用 Tailwind Token**：使用 `tailwind.config.js` 中定义的颜色类名
+  - 例如：`bg-backgroundSecondary`、`text-systemOrange`、`border-border`
+- ✅ **自动适配深色模式**：所有 Token 都支持深色模式自动切换
+- ❌ **避免硬编码颜色**：不要直接使用 `#ffffff`、`rgba()` 等硬编码颜色值
+- ❌ **不要手动修改 CSS 变量文件**：`packages/styles/css/autoVariables.css` 是自动生成的，不要手动编辑
+
+### 常用 Token 示例
+
+```tsx
+// 背景色
+<div className="bg-backgroundSecondary" />        // 次要背景
+<div className="bg-systemOrange/10" />           // 橙色背景，10% 透明度
+
+// 文字颜色
+<span className="text-textPrimary" />            // 主要文字
+<span className="text-textSecondary" />          // 次要文字（70% 透明度）
+<span className="text-systemOrange" />           // 系统橙色
+
+// 边框
+<div className="border border-border" />         // 标准边框
+<div className="border-systemOrange" />          // 橙色边框
+```
+
+---
+
+
+## 原始官方组件路径
+
+### 1. Icons (图标组件)
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/icons/`
 - **变化**: 图标数量从 37 个增加到 43 个
 - **新增图标**: `check-icon.tsx`, `edit-icon.tsx`, `locate-icon.tsx`, `sparkles-icon.tsx`, `text-format-icon.tsx`, `x-icon.tsx`
 
-#### 2. UI Components (UI组件)
+### 2. UI Components (UI组件)
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/tiptap-ui/`
 - **新增组件**:
   - `outline-button/` - 大纲按钮组件
@@ -29,19 +80,20 @@
   - `heading-dropdown-menu/` - 已被 `TextFormatDropdownMenu` 替代
   - `list-dropdown-menu/` - 已被 `TextFormatDropdownMenu` 替代
 
-#### 3. UI Primitives (基础UI组件)
+### 3. UI Primitives (基础UI组件)
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/ui/`
 - **结构**: 保持不变
 
-#### 4. Node Styles (节点样式)
+### 4. Node Styles (节点样式)
 - **位置**: `tiptap-editor/packages/tiptap-styles/src/tiptap-node/`
 
-#### 5. Styles (样式文件)
+### 5. Styles (样式文件)
 - **位置**: `tiptap-editor/packages/tiptap-styles/src/styles/`
-- **文件**: `_keyframe-animations.scss`, `_variables.scss`
-- **新增**: `_editor.scss`, `index.scss`
+- **文件**: 
+  - `_keyframe-animations.scss`
+  - `_variables.scss`：**已废弃**，官方原始变量已被替换为 Tailwind 设计 Token 系统（详见上文“设计 Token 系统”），目前在 `tiptap-editor/packages/tiptap-styles/src/styles/index.scss` 中已被注释，优先使用全局 Token
 
-#### 6. Hooks (钩子函数)
+### 6. Hooks (钩子函数)
 - **位置**: `tiptap-editor/packages/tiptap-api/src/react/hooks/`
 - **新增 hooks**:
   - `use-hover-detection.ts`
@@ -50,42 +102,42 @@
   - `storage/use-auto-save.ts`
   - `storage/use-storage-save.ts`
 
-#### 7. Lib (工具库)
+### 7. Lib (工具库)
 - **位置**: `tiptap-editor/packages/tiptap-config/src/utils/`
 
 ---
 
-### 新增的内容
+## 新增的内容
 
-##### `tiptap-ai/`
+#### `tiptap-ai/`
 - AI 功能集成包
 - 包含：`AIOrchestrator.ts`, `EditorIntegration.ts`, `PreviewController.ts`, `TiptapEditorBridge.ts` 等
 
-##### `tiptap-api/`
+#### `tiptap-api/`
 - API 和 hooks 包
 - 包含：数据操作、存储引擎、React hooks
 
-##### `tiptap-comment/`
+#### `tiptap-comment/`
 - 评论功能包
 - 包含：评论存储、同步、导出等功能
 
-##### `tiptap-config/`
+#### `tiptap-config/`
 - 配置包
 - 包含：常量定义、工具函数
 - **重要**: 这是原始 `lib/tiptap-utils.ts` 的重构版本，被拆分为多个模块化文件
 
-##### `tiptap-editor-core/`
+#### `tiptap-editor-core/`
 - 编辑器核心包
 - 包含：扩展定义、编辑器核心逻辑
 
-##### `tiptap-speaker-node/`
+#### `tiptap-speaker-node/`
 - 说话者节点扩展
 - 用于标记对话中的说话者
 
-##### `tiptap-styles/`
+#### `tiptap-styles/`
 - 样式包
 - 整合了所有样式文件和节点样式
 
-##### `tiptap-trigger/`
+#### `tiptap-trigger/`
 - 触发器包
 - 包含：建议插件、扩展等

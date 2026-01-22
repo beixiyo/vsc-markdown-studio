@@ -51,7 +51,6 @@
     "@blocknote/mantine": "workspace:*",
     "@blocknote/react": "workspace:*",
     "markdown-operate": "workspace:*",
-    "comps": "workspace:*",
     "config": "workspace:*",
     "hooks": "workspace:*",
     "mermaid": "^11.12.0",

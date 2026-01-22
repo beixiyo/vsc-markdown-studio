@@ -362,9 +362,6 @@ importers:
       '@blocknote/react':
         specifier: workspace:*
         version: link:../../react
-      comps:
-        specifier: workspace:*
-        version: link:../../../packages/comps
       hooks:
         specifier: workspace:*
         version: link:../../../packages/hooks
@@ -515,21 +512,6 @@ importers:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@24.10.4)(jsdom@25.0.1)(sass-embedded@1.96.0)(sass@1.96.0)
 
-  packages/comps:
-    dependencies:
-      config:
-        specifier: workspace:*
-        version: link:../config
-      hooks:
-        specifier: workspace:*
-        version: link:../hooks
-      styles:
-        specifier: workspace:*
-        version: link:../styles
-      utils:
-        specifier: workspace:*
-        version: link:../utils
-
   packages/config: {}
 
   packages/hooks:
@@ -594,9 +576,6 @@ importers:
       '@y-sweet/react':
         specifier: ^0.6.3
         version: 0.6.4(react@19.2.3)(yjs@13.6.27)
-      comps:
-        specifier: workspace:*
-        version: link:../comps
       config:
         specifier: workspace:*
         version: link:../config
