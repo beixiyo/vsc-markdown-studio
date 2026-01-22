@@ -1,8 +1,9 @@
 // @ts-check
+import Config from '../../../tailwind.config.js'
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
+  ...Config,
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
   ],
