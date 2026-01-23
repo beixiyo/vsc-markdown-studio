@@ -1,3 +1,5 @@
+import './index.css'
+
 export { AIOrchestrator } from './AIOrchestrator'
 export { bindEditor } from './EditorIntegration'
 export {

@@ -10,13 +10,12 @@ export default defineConfig({
   ],
 
   build: {
-    cssCodeSplit: true,
+    cssCodeSplit: false,
     outDir: './dist',
     lib: {
       entry: {
         index: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
         react: fileURLToPath(new URL('./src/react/index.ts', import.meta.url)),
-        style: fileURLToPath(new URL('./src/index.css', import.meta.url)),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => {

@@ -13,13 +13,13 @@ export default defineConfig({
 
   build: {
     outDir: './dist',
-    cssCodeSplit: true,
+    cssCodeSplit: false,
     lib: {
       entry: {
         index: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
-        style: fileURLToPath(new URL('./src/index.css', import.meta.url)),
       },
       formats: ['es', 'cjs'],
+
       fileName: (format, entryName) => {
         const ext = format === 'es' ? 'js' : 'cjs'
         return `${entryName}.${ext}`

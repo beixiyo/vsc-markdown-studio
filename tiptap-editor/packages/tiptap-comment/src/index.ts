@@ -1,3 +1,5 @@
+import './index.css'
+
 export * from './comment'
 export * from './comment-export'
 export * from './comment-store'
