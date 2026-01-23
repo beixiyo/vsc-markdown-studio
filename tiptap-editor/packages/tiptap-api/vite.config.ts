@@ -34,7 +34,7 @@ export default defineConfig({
           ...Object.keys(pkg.peerDependencies || {}),
           ...Object.keys(basePkg.dependencies || {}),
         ]
-        return allDeps.some(dep => id === dep) || id.includes('@tiptap/')
+        return allDeps.some(dep => id === dep || id.startsWith(`${dep}/`)) || id.includes('@tiptap/')
       },
     },
   },

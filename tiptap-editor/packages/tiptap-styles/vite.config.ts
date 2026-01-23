@@ -27,16 +27,18 @@ export default defineConfig({
     },
     rollupOptions: {
       external: (id) => {
+        if (/\.(css|scss|sass|less)$/.test(id)) {
+          return false
+        }
         const allDeps = [
           ...Object.keys(pkg.peerDependencies || {}),
           ...Object.keys(basePkg.dependencies || {}),
         ]
-        return allDeps.some(dep => id === dep) || id.includes('@tiptap/')
+        return allDeps.some(dep => id === dep || id.startsWith(`${dep}/`)) || id.includes('@tiptap/')
       },
       output: {
         assetFileNames: (assetInfo) => {
-          const isCss = assetInfo.names.some(name => name.endsWith('.css'))
-          if (isCss) {
+          if (assetInfo.names && assetInfo.names.some(name => name.endsWith('.css'))) {
             return 'index.css'
           }
           return '[name][extname]'

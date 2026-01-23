@@ -10,7 +10,7 @@ import {
 } from '@floating-ui/react'
 import { memo, useEffect, useMemo } from 'react'
 import { getSelectionRect } from 'tiptap-api'
-import { useCommentLabels } from 'tiptap-comps'
+import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { CommentItem } from './comment-item'

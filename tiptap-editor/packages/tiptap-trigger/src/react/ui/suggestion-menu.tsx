@@ -10,7 +10,7 @@ import {
   useInteractions,
 } from '@floating-ui/react'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { useCommentLabels } from 'tiptap-comps'
+import { useCommentLabels } from 'tiptap-api/react'
 import { cn } from 'tiptap-config'
 import { SuggestionMenuItem } from './suggestion-menu-item'
 

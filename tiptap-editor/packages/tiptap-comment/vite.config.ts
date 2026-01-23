@@ -10,13 +10,13 @@ export default defineConfig({
   ],
 
   build: {
-    // 将样式打成单独的输出文件，便于外部直接引用
-    cssCodeSplit: false,
+    cssCodeSplit: true,
     outDir: './dist',
     lib: {
       entry: {
         index: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
         react: fileURLToPath(new URL('./src/react/index.ts', import.meta.url)),
+        style: fileURLToPath(new URL('./src/index.css', import.meta.url)),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => {
@@ -29,16 +29,18 @@ export default defineConfig({
     },
     rollupOptions: {
       external: (id) => {
+        if (/\.(css|scss|sass|less)$/.test(id)) {
+          return false
+        }
         const allDeps = [
           ...Object.keys(pkg.peerDependencies || {}),
           ...Object.keys(basePkg.dependencies || {}),
         ]
-        return allDeps.some(dep => id === dep) || id.includes('@tiptap/')
+        return allDeps.some(dep => id === dep || id.startsWith(`${dep}/`)) || id.includes('@tiptap/')
       },
       output: {
         assetFileNames: (assetInfo) => {
-          const isCss = assetInfo.names.some(name => name.endsWith('.css'))
-          if (isCss) {
+          if (assetInfo.names && assetInfo.names.some(name => name.endsWith('.css'))) {
             return 'index.css'
           }
           return '[name][extname]'

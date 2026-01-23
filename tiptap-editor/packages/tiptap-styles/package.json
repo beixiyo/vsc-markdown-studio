@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "main": "./dist/icons/index.cjs",
-  "module": "./dist/icons/index.js",
-  "types": "./dist/icons/index.d.ts",
+  "main": "./dist/tiptap-node/index.cjs",
+  "module": "./dist/tiptap-node/index.js",
+  "types": "./dist/tiptap-node/index.d.ts",
   "exports": {
     "./index.css": "./dist/index.css",
     "./icons": {
@@ -15,10 +15,6 @@
     "./tiptap-node": {
       "types": "./dist/tiptap-node/index.d.ts",
       "import": "./dist/tiptap-node/index.js"
-    },
-    "./utils": {
-      "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.js"
     },
     "./tailwind.config.mjs": "./tailwind.config.mjs"
   },

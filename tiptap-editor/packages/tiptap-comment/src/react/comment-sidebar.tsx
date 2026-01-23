@@ -8,8 +8,8 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  useCommentLabels,
 } from 'tiptap-comps'
+import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { CommentItem } from './components/comment-item'

@@ -13,32 +13,33 @@ export default defineConfig({
 
   build: {
     outDir: './dist',
-    cssCodeSplit: false,
+    cssCodeSplit: true,
     lib: {
       entry: {
         index: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+        style: fileURLToPath(new URL('./src/index.css', import.meta.url)),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => {
         const ext = format === 'es' ? 'js' : 'cjs'
-        if (entryName === 'react') {
-          return `react/index.${ext}`
-        }
         return `${entryName}.${ext}`
       },
     },
     rollupOptions: {
       external: (id) => {
+        if (/\.(css|scss|sass|less)$/.test(id)) {
+          return false
+        }
         const allDeps = [
           ...Object.keys(pkg.peerDependencies || {}),
           ...Object.keys(basePkg.dependencies || {}),
         ]
-        return allDeps.some(dep => id === dep) || id.includes('@tiptap/')
+        return allDeps.some(dep => id === dep || id.startsWith(`${dep}/`)) || id.includes('@tiptap/')
       },
       output: {
         assetFileNames: (assetInfo) => {
-          const isCss = assetInfo.names.some(name => name.endsWith('.css'))
-          if (isCss) {
+          // 将 style.css 重命名为 index.css 以匹配 package.json
+          if (assetInfo.names && assetInfo.names.some(name => name.endsWith('.css'))) {
             return 'index.css'
           }
           return '[name][extname]'

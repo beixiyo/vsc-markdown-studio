@@ -1,3 +1,4 @@
+@import 'tiptap-config/tailwind.css';
 @import 'tiptap-styles/index.css';
 @import 'tiptap-comment/index.css';
 @import 'tiptap-trigger/index.css';

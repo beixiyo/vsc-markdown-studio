@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import pkg from './package.json' with { type: 'json' }
+import basePkg from '../../package.json' with { type: 'json' }
 
 export default defineConfig({
   plugins: [
@@ -22,10 +23,11 @@ export default defineConfig({
     },
     rollupOptions: {
       external: (id) => {
-        const peers = Object.keys(pkg.peerDependencies || {})
-        const isPeer = peers.some(dep => id === dep || id.startsWith(`${dep}/`))
-        const isTiptapScoped = id.startsWith('@tiptap/')
-        return isPeer || isTiptapScoped
+        const allDeps = [
+          ...Object.keys(pkg.peerDependencies || {}),
+          ...Object.keys(basePkg.dependencies || {}),
+        ]
+        return allDeps.some(dep => id === dep || id.startsWith(`${dep}/`)) || id.includes('@tiptap/')
       },
     },
   },

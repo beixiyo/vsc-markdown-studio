@@ -1,10 +1,10 @@
 import { useState } from 'react'
+import { Button } from 'tiptap-comps'
 import {
-  Button,
   LANGUAGES,
   TiptapI18nProvider,
   useI18nInstance,
-} from 'tiptap-comps'
+} from 'tiptap-api/react'
 import { CollaborationSplitPane } from '@/playground/collaboration/split-pane'
 import { Editor } from '@/playground/editor'
 import { LanguageSwitcher } from './components/LanguageSwitcher'

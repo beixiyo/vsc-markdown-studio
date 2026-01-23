@@ -1,4 +1,5 @@
-import { Button, LANGUAGES, useLanguage } from 'tiptap-comps'
+import { Button } from 'tiptap-comps'
+import { LANGUAGES, useLanguage } from 'tiptap-api/react'
 
 /**
  * 语言切换组件

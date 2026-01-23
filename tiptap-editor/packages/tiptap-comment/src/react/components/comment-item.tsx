@@ -6,9 +6,11 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+} from 'tiptap-comps'
+import {
   useCommentLabels,
   useLanguage,
-} from 'tiptap-comps'
+} from 'tiptap-api/react'
 import { BanIcon, CornerDownLeftIcon, EditIcon, LocateIcon, TrashIcon } from 'tiptap-comps/icons'
 import { cn } from 'tiptap-config'
 import { createReply, deleteComment, updateComment } from '../../comment'

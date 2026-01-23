@@ -1,5 +1,3 @@
-import 'tiptap-config/tailwind.css'
-
 export { AIOrchestrator } from './AIOrchestrator'
 export { bindEditor } from './EditorIntegration'
 export {

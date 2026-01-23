@@ -26,7 +26,8 @@
         "types": "./dist/react/index.d.ts",
         "default": "./dist/react/index.js"
       }
-    }
+    },
+    "./index.css": "./dist/index.css"
   },
   "files": [
     "dist"
