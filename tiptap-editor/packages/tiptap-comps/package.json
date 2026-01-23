@@ -35,10 +35,10 @@
   "dependencies": {
     "tiptap-api": "workspace:*",
     "tiptap-config": "workspace:*",
-    "hooks": "workspace:*",
-    "i18n": "workspace:*"
+    "hooks": "workspace:*"
   },
   "peerDependencies": {
+    "i18n": "workspace:*",
     "@tiptap/react": "^3.13.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",

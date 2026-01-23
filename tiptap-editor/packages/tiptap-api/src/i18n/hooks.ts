@@ -97,6 +97,9 @@ export type TiptapEditorTranslations = {
     noMatch: string
     noItems: string
   }
+  speaker: {
+    speaker: string
+  }
 }
 
 /**
@@ -242,5 +245,15 @@ export function useToolbarLabels() {
   return {
     textFormat: t('toolbar.textFormat'),
     textAlign: t('toolbar.textAlign'),
+  }
+}
+
+/**
+ * 获取说话人标签
+ */
+export function useSpeakerLabels() {
+  const t = useTiptapEditorT()
+  return {
+    speaker: (number: string | number) => t('speaker.speaker', { number }),
   }
 }

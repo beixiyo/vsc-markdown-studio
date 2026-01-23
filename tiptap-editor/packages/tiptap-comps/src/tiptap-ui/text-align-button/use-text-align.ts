@@ -1,7 +1,7 @@
 import type { ChainedCommands, Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
 
-import { useTiptapEditor, useAlignLabels } from 'tiptap-api/react'
+import { useAlignLabels, useTiptapEditor } from 'tiptap-api/react'
 
 import {
   isExtensionAvailable,

@@ -65,7 +65,6 @@ function AppContent() {
           // initialMarkdown="[speaker:1] 和 [speaker:2]"
             speakerMap={ {
               1: { name: 'Alice', id: 'u1' },
-              2: { name: 'Bob', id: 'u2' },
             } }
             onSpeakerClick={ (attrs) => {
               console.log('speaker click', attrs)
@@ -79,7 +78,7 @@ function AppContent() {
 export default function App() {
   return (
     <TiptapI18nProvider
-      defaultLanguage={ LANGUAGES.ZH_CN }
+      defaultLanguage={ LANGUAGES.EN_US }
       storage={ { enabled: true, key: 'tiptap-editor-language' } }
     >
       <AppContent />

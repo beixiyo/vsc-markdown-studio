@@ -2,6 +2,7 @@ import type { EditorView } from '@tiptap/pm/view'
 import type { SpeakerAttributes, SpeakerOptions } from './types'
 import { type CommandProps, mergeAttributes, Node } from '@tiptap/core'
 import { Plugin } from '@tiptap/pm/state'
+import { getI18nInstance } from 'i18n'
 
 const DEFAULT_TAG = 'strong'
 const TOKEN_NAME = 'speaker'
@@ -25,7 +26,7 @@ function buildDataAttributes(attrs: Partial<SpeakerAttributes>) {
   return dataAttrs
 }
 
-function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerOptions) {
+function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerOptions): string {
   const key = attrs.originalLabel ?? ''
   const mapped = key
     ? options.speakerMap?.[key]
@@ -36,7 +37,17 @@ function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerO
   if (attrs.name) {
     return attrs.name
   }
-  return attrs.originalLabel
+
+  const i18n = getI18nInstance()
+  if (i18n && attrs.originalLabel) {
+    /** 强制刷新资源确保最新资源被加载 */
+    return i18n.t('speaker.speaker', {
+      number: attrs.originalLabel,
+      defaultValue: `Speaker ${attrs.originalLabel}`,
+    })
+  }
+
+  return attrs.originalLabel || ''
 }
 
 export const SpeakerNode = Node.create<SpeakerOptions>({
@@ -169,6 +180,65 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
         },
       },
     ]
+  },
+
+  addNodeView() {
+    return ({ node, HTMLAttributes }) => {
+      const tag = this.options.renderTag ?? DEFAULT_TAG
+      const dom = document.createElement(tag)
+
+      const updateText = () => {
+        dom.textContent = resolveDisplayText(node.attrs, this.options)
+      }
+
+      /** 合并属性 */
+      const mapped = node.attrs.originalLabel
+        ? this.options.speakerMap?.[node.attrs.originalLabel]
+        : undefined
+      const mergedAttrs = {
+        ...node.attrs,
+        ...mapped,
+        originalLabel: node.attrs.originalLabel,
+      }
+      const attrs = mergeAttributes(
+        HTMLAttributes,
+        this.options.className
+          ? { class: this.options.className }
+          : {},
+        buildDataAttributes(mergedAttrs),
+      )
+
+      Object.entries(attrs).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          dom.setAttribute(key, String(value))
+        }
+      })
+
+      updateText()
+
+      /** 监听语言变更事件 */
+      const i18n = getI18nInstance()
+      const onLanguageChange = () => {
+        updateText()
+      }
+      i18n.on('language:change', onLanguageChange)
+
+      return {
+        dom,
+        update: (updatedNode) => {
+          if (updatedNode.type !== node.type) {
+            return false
+          }
+          if (updatedNode.attrs.originalLabel !== node.attrs.originalLabel) {
+            updateText()
+          }
+          return true
+        },
+        destroy: () => {
+          i18n.off('language:change', onLanguageChange)
+        },
+      }
+    }
   },
 
   renderHTML({ node, HTMLAttributes }) {

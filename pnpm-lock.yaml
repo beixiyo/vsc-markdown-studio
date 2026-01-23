@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@jl-org/tool':
-        specifier: ^3.1.1
-        version: 3.3.7
+        specifier: 3.4.3
+        version: 3.4.3
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -1004,6 +1004,9 @@ importers:
       '@tiptap/pm':
         specifier: ^3.13.0
         version: 3.13.0
+      i18n:
+        specifier: workspace:*
+        version: link:../../../packages/i18n
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
@@ -1787,8 +1790,8 @@ packages:
   '@jl-org/js-to-style@1.0.1':
     resolution: {integrity: sha512-Od53B3IU0h1hNYQ3zxf72vebVORvq3CdkUoI69h4sc+vibIdfunA8eM7iLmOtV9uz4ZWfAFjcC2TYeVEz/8eZA==}
 
-  '@jl-org/tool@3.3.7':
-    resolution: {integrity: sha512-2oAV0OxH1pBiy7hOCWALl5qHyI6m7BZGMMFzvoP58UzRkY4ihu/RIgzm7sc6WCALVMnwKZCuSUz2mLzsi/LeOw==}
+  '@jl-org/tool@3.4.3':
+    resolution: {integrity: sha512-Aryjs+KrqY24BtUniq8Wn4P2NdDl8mbzzZHjXBsWj9qR7OfwBVrdeTHMcz3xr8sDcnawOjvYOLaNsn2xAlLkUQ==}
 
   '@jl-org/ts-tool@0.0.8':
     resolution: {integrity: sha512-2YwGmzod5LBOi7cKknRXn2H9xcp99OhokZJ55t+kg7wvPST4obcwLxO03ji0gVuFoHp5BgrkwzDICV+z1a3TDg==}
@@ -7347,7 +7350,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@jl-org/tool@3.3.7': {}
+  '@jl-org/tool@3.4.3': {}
 
   '@jl-org/ts-tool@0.0.8': {}
 

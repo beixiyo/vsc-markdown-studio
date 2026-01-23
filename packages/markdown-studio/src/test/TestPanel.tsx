@@ -130,28 +130,28 @@ export function TestPanel() {
     </div>
 
     {/* <AnimateShow show={ !isCollapsed }> */}
-      <div className="pt-2">
-        <button
-          onClick={ handleRunAllTests }
-          className="px-3 py-1.5 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium mb-2 flex-shrink-0 w-full"
-          title="依次执行所有测试"
-        >
-          🎯 全部测试
-        </button>
+    <div className="pt-2">
+      <button
+        onClick={ handleRunAllTests }
+        className="px-3 py-1.5 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium mb-2 flex-shrink-0 w-full"
+        title="依次执行所有测试"
+      >
+        🎯 全部测试
+      </button>
 
-        <div className="flex-1 overflow-y-auto space-y-1 pr-1 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-600 scrollbar-track-transparent">
-          { testItems.map(item => (
-            <button
-              key={ item.label }
-              onClick={ () => handleRunTest(item) }
-              className="w-full px-3 py-1.5 rounded text-sm bg-neutral-800 text-white dark:bg-neutral-100 dark:text-neutral-900 hover:opacity-90 transition-opacity text-left"
-              title={ item.description }
-            >
-              { item.label }
-            </button>
-          )) }
-        </div>
+      <div className="flex-1 overflow-y-auto space-y-1 pr-1 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-600 scrollbar-track-transparent">
+        { testItems.map(item => (
+          <button
+            key={ item.label }
+            onClick={ () => handleRunTest(item) }
+            className="w-full px-3 py-1.5 rounded text-sm bg-neutral-800 text-white dark:bg-neutral-100 dark:text-neutral-900 hover:opacity-90 transition-opacity text-left"
+            title={ item.description }
+          >
+            { item.label }
+          </button>
+        )) }
       </div>
+    </div>
     {/* </AnimateShow> */}
   </div>
 }

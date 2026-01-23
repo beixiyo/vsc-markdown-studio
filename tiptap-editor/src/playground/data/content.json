@@ -471,6 +471,24 @@
       "type": "paragraph",
       "attrs": {
         "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "speaker",
+          "attrs": {
+            "originalLabel": "2"
+          }
+        },
+        {
+          "type": "text",
+          "text": " This speaker should be localized as 'Speaker 2' or '说话人 2'."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
       }
     }
   ]

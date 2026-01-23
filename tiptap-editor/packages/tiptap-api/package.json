@@ -32,10 +32,10 @@
     "dist"
   ],
   "dependencies": {
-    "lodash.throttle": "^4.1.1",
-    "i18n": "workspace:*"
+    "lodash.throttle": "^4.1.1"
   },
   "peerDependencies": {
+    "i18n": "workspace:*",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "@tiptap/react": "^3.13.0",

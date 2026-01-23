@@ -54,6 +54,9 @@ export const tiptapEditorResources: Resources = {
     link: {
       link: '链接',
     },
+    speaker: {
+      speaker: '说话人 {{number}}',
+    },
     comment: {
       commentPanel: '评论面板',
       items: '条',
@@ -143,6 +146,9 @@ export const tiptapEditorResources: Resources = {
     },
     link: {
       link: 'Link',
+    },
+    speaker: {
+      speaker: 'Speaker {{number}}',
     },
     comment: {
       commentPanel: 'Comment Panel',

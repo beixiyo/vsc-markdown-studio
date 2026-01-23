@@ -26,6 +26,7 @@
     "@tiptap/pm": "^3.13.0"
   },
   "peerDependencies": {
+    "i18n": "workspace:*",
     "@tiptap/core": "^3.13.0",
     "@tiptap/markdown": "^3.13.0"
   },

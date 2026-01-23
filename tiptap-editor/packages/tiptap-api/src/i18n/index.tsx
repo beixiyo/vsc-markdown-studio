@@ -5,6 +5,8 @@
  */
 
 import type { I18nProviderProps } from 'i18n/react'
+import { deepMerge } from '@jl-org/tool'
+import { getI18nInstance } from 'i18n'
 import { I18nProvider } from 'i18n/react'
 import React, { useMemo } from 'react'
 import { tiptapEditorResources } from './resources'
@@ -53,44 +55,23 @@ export function TiptapI18nProvider({
   resources,
   ...props
 }: TiptapI18nProviderProps) {
-  const mergedResources = useMemo(() => {
-    if (!resources)
-      return tiptapEditorResources
+  const globalI18n = useMemo(() => {
+    const res = resources
+      ? deepMerge(tiptapEditorResources, resources)
+      : tiptapEditorResources
 
-    // 深度合并默认资源和自定义资源
-    const result = { ...tiptapEditorResources } as any
-    const customResources = resources as any
+    /** 立即同步到全局单例，确保非 React 组件在初始化时就能拿到资源 */
+    const i18n = getI18nInstance()
+    i18n.mergeResources(res, true)
+    if (props.defaultLanguage) {
+      i18n.changeLanguage(props.defaultLanguage)
+    }
 
-    Object.keys(customResources).forEach((lang) => {
-      const langResources = customResources[lang]
-      if (result[lang]) {
-        const mergedLang = { ...result[lang] }
-        Object.keys(langResources).forEach((key) => {
-          if (
-            typeof langResources[key] === 'object'
-            && langResources[key] !== null
-            && !Array.isArray(langResources[key])
-          ) {
-            mergedLang[key] = {
-              ...(mergedLang[key] || {}),
-              ...langResources[key],
-            }
-          }
-          else {
-            mergedLang[key] = langResources[key]
-          }
-        })
-        result[lang] = mergedLang
-      }
-      else {
-        result[lang] = langResources
-      }
-    })
-    return result
-  }, [resources])
+    return i18n
+  }, [resources, props.defaultLanguage])
 
   return (
-    <I18nProvider { ...props } resources={ mergedResources }>
+    <I18nProvider { ...props } instance={ globalI18n }>
       { children }
     </I18nProvider>
   )
