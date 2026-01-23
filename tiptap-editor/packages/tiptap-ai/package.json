@@ -7,6 +7,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./index.css": "./dist/index.css",
     ".": {
       "require": {
         "types": "./dist/index.d.ts",
@@ -26,8 +27,7 @@
         "types": "./dist/react/index.d.ts",
         "default": "./dist/react/index.js"
       }
-    },
-    "./index.css": "./dist/index.css"
+    }
   },
   "files": [
     "dist"
@@ -38,6 +38,7 @@
     "tiptap-comps": "workspace:*"
   },
   "peerDependencies": {
+    "i18n": "workspace:*",
     "@tiptap/react": "^3.13.0",
     "@tiptap/core": "^3.13.0",
     "@tiptap/pm": "^3.13.0",

@@ -7,6 +7,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./index.css": "./dist/index.css",
     ".": {
       "require": {
         "types": "./dist/index.d.ts",
@@ -17,7 +18,6 @@
         "default": "./dist/index.js"
       }
     },
-    "./index.css": "./dist/index.css",
     "./react": {
       "require": {
         "types": "./dist/react/index.d.ts",

@@ -70,8 +70,8 @@ export default defineConfig(({ command }) => {
           'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
 
           'hooks': path.resolve(__dirname, '../packages/hooks/src/index.ts'),
-          'i18n/react': path.resolve(__dirname, '../packages/i18n/react/index.ts'),
-          'i18n': path.resolve(__dirname, '../packages/i18n/src/index.ts'),
+          // 'i18n/react': path.resolve(__dirname, '../packages/i18n/react/index.ts'),
+          // 'i18n': path.resolve(__dirname, '../packages/i18n/src/index.ts'),
         }),
       },
     },
