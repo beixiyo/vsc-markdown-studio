@@ -61,18 +61,18 @@ export const CommentMain = memo((props: CommentMainProps) => {
   return (
     <div
       className={ cn(
-        'relative z-50 min-w-[320px] max-w-[400px] rounded-[var(--tt-radius-lg)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] shadow-[var(--tt-shadow-elevated-md)] backdrop-blur-[12px] animate-[fadeIn_var(--tt-transition-duration-default)_var(--tt-transition-easing-default)] max-[480px]:min-w-[280px] max-[480px]:max-w-[320px]',
+        'relative z-50 min-w-[320px] max-w-[400px] rounded-xl border border-border bg-background shadow-card backdrop-blur-[12px] animate-in fade-in max-[480px]:min-w-[280px] max-[480px]:max-w-[320px]',
         className,
       ) }
       role="dialog"
       aria-label="添加评论"
     >
       <div className="flex flex-col gap-3 p-4 max-[480px]:p-3">
-        <div className="text-sm font-semibold text-[var(--tt-color-text-primary)] flex justify-between">
+        <div className="text-sm font-semibold text-textPrimary flex justify-between">
           <span>添加评论</span>
         </div>
         <textarea
-          className="min-h-[80px] w-full resize-y rounded-[var(--tt-radius-md)] border border-[var(--tt-border-color)] bg-[var(--tt-color-surface-default)] p-3 text-sm leading-6 text-[var(--tt-color-text-primary)] transition-[border-color,box-shadow] duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)] placeholder:text-[var(--tt-color-text-tertiary)] focus:border-[var(--tt-brand-color-500)] focus:shadow-[0_0_0_3px_var(--tt-selection-color)] focus:outline-none"
+          className="min-h-[80px] w-full resize-y rounded-lg border border-border bg-backgroundSecondary p-3 text-sm leading-6 text-textPrimary transition-all placeholder:text-textTertiary focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
           placeholder="输入评论内容..."
           value={ content }
           onChange={ event => setContent(event.target.value) }
@@ -80,12 +80,12 @@ export const CommentMain = memo((props: CommentMainProps) => {
           autoFocus
           rows={ 3 }
         />
-        <div className="text-xs text-[var(--tt-color-text-secondary)]">
+        <div className="text-xs text-textSecondary">
           按 Ctrl/Cmd + Enter 提交，Esc 取消
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-3 border-t border-t-[var(--tt-border-color-tint)] px-4 py-3 max-[480px]:px-3 max-[480px]:py-2.5">
+      <div className="flex items-center justify-between gap-3 border-t border-borderSecondary px-4 py-3 max-[480px]:px-3 max-[480px]:py-2.5">
         <div className="inline-flex items-center">
           <Button
             type="button"

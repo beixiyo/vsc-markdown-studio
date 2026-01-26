@@ -192,8 +192,8 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
           maxHeight: maxHeight.maxHeight,
         } }
       >
-        <div className="rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] shadow-[var(--tt-shadow-elevated-lg)]">
-          <div className="flex items-center justify-between border-b border-[var(--tt-border-color)] px-3 py-2 text-xs text-[var(--tt-color-text-gray)]">
+        <div className="rounded-2xl border border-border bg-background shadow-lg">
+          <div className="flex items-center justify-between border-b border-border px-3 py-2 text-xs text-textSecondary">
             <span>{ labels.currentComment }</span>
             <button
               type="button"
@@ -201,7 +201,7 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
                 closeInlineComment()
               } }
               aria-label={ labels.closeCurrent }
-              className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
+              className="flex size-6 items-center justify-center text-textSecondary transition-colors hover:bg-backgroundSecondary rounded-xl"
             >
               <CloseIcon className="h-4 w-4" />
             </button>

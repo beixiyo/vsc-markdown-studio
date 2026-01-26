@@ -1,22 +1,12 @@
 .tiptap.ProseMirror {
-  --tt-collaboration-carets-label: var(--tt-gray-light-900);
-  --link-text-color: var(--tt-brand-color-500);
-  --thread-text: var(--tt-gray-light-900);
-  --placeholder-color: var(--tt-gray-light-a-400);
-  --thread-bg-color: var(--tt-color-yellow-inc-2);
+  --tt-collaboration-carets-label: rgb(var(--textPrimary));
+  --link-text-color: rgb(var(--brand));
+  --thread-text: rgb(var(--textPrimary));
+  --placeholder-color: rgba(var(--textPrimary), 0.4);
+  --thread-bg-color: var(--toningYellowBgColor);
 
   // ai
-  --tiptap-ai-insertion-color: var(--tt-brand-color-600);
-
-  .dark & {
-    --tt-collaboration-carets-label: var(--tt-gray-dark-100);
-    --link-text-color: var(--tt-brand-color-400);
-    --thread-text: var(--tt-gray-dark-900);
-    --placeholder-color: var(--tt-gray-dark-a-400);
-    --thread-bg-color: var(--tt-color-yellow-dec-2);
-
-    --tiptap-ai-insertion-color: var(--tt-brand-color-400);
-  }
+  --tiptap-ai-insertion-color: rgb(var(--brand));
 }
 
 /* Ensure each top-level node has relative positioning
@@ -59,7 +49,7 @@
 
   // Selected node styles
   .ProseMirror-selectednode:not(img):not(pre):not(.react-renderer) {
-    border-radius: var(--tt-radius-md);
+    border-radius: 8px;
     background-color: var(--tt-selection-color);
   }
 

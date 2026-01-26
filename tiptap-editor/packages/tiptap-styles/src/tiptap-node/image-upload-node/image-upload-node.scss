@@ -1,33 +1,21 @@
 :root {
-  --tiptap-image-upload-active: var(--tt-brand-color-500);
-  --tiptap-image-upload-progress-bg: var(--tt-brand-color-50);
-  --tiptap-image-upload-icon-bg: var(--tt-brand-color-500);
+  --tiptap-image-upload-active: rgb(var(--brand));
+  --tiptap-image-upload-progress-bg: rgba(var(--brand), 0.1);
+  --tiptap-image-upload-icon-bg: rgb(var(--brand));
 
-  --tiptap-image-upload-text-color: var(--tt-gray-light-a-700);
-  --tiptap-image-upload-subtext-color: var(--tt-gray-light-a-400);
-  --tiptap-image-upload-border: var(--tt-gray-light-a-300);
-  --tiptap-image-upload-border-hover: var(--tt-gray-light-a-400);
-  --tiptap-image-upload-border-active: var(--tt-brand-color-500);
+  --tiptap-image-upload-text-color: rgb(var(--textPrimary));
+  --tiptap-image-upload-subtext-color: rgba(var(--textPrimary), 0.5);
+  --tiptap-image-upload-border: rgb(var(--borderSecondary));
+  --tiptap-image-upload-border-hover: rgb(var(--border));
+  --tiptap-image-upload-border-active: rgb(var(--brand));
 
-  --tiptap-image-upload-icon-doc-bg: var(--tt-gray-light-a-200);
-  --tiptap-image-upload-icon-doc-border: var(--tt-gray-light-300);
-  --tiptap-image-upload-icon-color: var(--white);
+  --tiptap-image-upload-icon-doc-bg: rgb(var(--backgroundSecondary));
+  --tiptap-image-upload-icon-doc-border: rgb(var(--borderSecondary));
+  --tiptap-image-upload-icon-color: rgb(var(--background));
 }
 
 .dark {
-  --tiptap-image-upload-active: var(--tt-brand-color-400);
-  --tiptap-image-upload-progress-bg: var(--tt-brand-color-900);
-  --tiptap-image-upload-icon-bg: var(--tt-brand-color-400);
-
-  --tiptap-image-upload-text-color: var(--tt-gray-dark-a-700);
-  --tiptap-image-upload-subtext-color: var(--tt-gray-dark-a-400);
-  --tiptap-image-upload-border: var(--tt-gray-dark-a-300);
-  --tiptap-image-upload-border-hover: var(--tt-gray-dark-a-400);
-  --tiptap-image-upload-border-active: var(--tt-brand-color-400);
-
-  --tiptap-image-upload-icon-doc-bg: var(--tt-gray-dark-a-200);
-  --tiptap-image-upload-icon-doc-border: var(--tt-gray-dark-300);
-  --tiptap-image-upload-icon-color: var(--black);
+  // Global tokens already handle dark mode
 }
 
 .tiptap-image-upload {

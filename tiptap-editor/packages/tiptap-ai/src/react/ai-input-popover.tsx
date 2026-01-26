@@ -90,7 +90,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
           side="top"
           sideOffset={ 8 }
           className={ cn(
-            'w-80 rounded-[var(--tt-radius-lg)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-0 shadow-[var(--tt-shadow-elevated-md)] backdrop-blur-[12px]',
+            'w-80 rounded-xl border border-border bg-background p-0 shadow-card backdrop-blur-[12px]',
             className,
           ) }
           onOpenAutoFocus={ e => e.preventDefault() }
@@ -98,13 +98,13 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
         >
           <div className="flex flex-col gap-3 p-3">
             <div className="flex items-center gap-2">
-              <SparklesIcon className="h-4 w-4 text-[var(--tt-brand-color-500)]" />
-              <span className="text-sm font-semibold text-[var(--tt-color-text-gray)]">
+              <SparklesIcon className="h-4 w-4 text-brand" />
+              <span className="text-sm font-semibold text-textSecondary">
                 AI 增强
               </span>
             </div>
             <Input
-              className="min-h-10 w-full rounded-[var(--tt-radius-md)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] px-3 py-2.5 text-sm text-[var(--tt-color-text-gray)] transition-[border-color,box-shadow] duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)] placeholder:text-[var(--tiptap-input-placeholder)] focus:border-[var(--tt-brand-color-500)] focus:shadow-[0_0_0_3px_var(--tt-selection-color)] focus:outline-none"
+              className="min-h-10 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-textPrimary transition-all placeholder:text-textDisabled focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
               placeholder={ placeholder }
               value={ prompt }
               onChange={ e => setPrompt(e.target.value) }
@@ -113,7 +113,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
               autoFocus
             />
             <div className="flex items-center justify-between gap-3">
-              <span className="text-xs text-[var(--tt-color-text-gray)]">
+              <span className="text-xs text-textTertiary">
                 按 Enter 提交，Esc 取消
               </span>
               <div className="flex items-center gap-2">

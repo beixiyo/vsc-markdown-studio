@@ -42,18 +42,18 @@ export const ReplyDialog = memo(({
   return (
     <div
       className={ cn(
-        'flex flex-col gap-3 rounded-2xl bg-[var(--tt-card-bg-color)]',
+        'flex flex-col gap-3 rounded-2xl bg-background',
       ) }
     >
       { replyToPreview && (
-        <div className="flex items-start gap-2 rounded-xl bg-[var(--tt-color-highlight-yellow)] px-3 py-2 text-sm text-[var(--tt-color-text-gray)] shadow-inner">
-          <span className="text-[var(--tt-color-text-gray)]">↩︎</span>
+        <div className="flex items-start gap-2 rounded-xl bg-toningYellowBgColor px-3 py-2 text-sm text-textSecondary shadow-inner">
+          <span className="text-textTertiary">↩︎</span>
           <span className="leading-6">{ replyToPreview }</span>
         </div>
       ) }
 
       <textarea
-        className="min-h-[84px] w-full rounded-xl bg-[var(--tt-sidebar-bg-color)] px-3 py-2 text-sm text-[var(--tt-color-text-gray)] outline-none ring-0 transition duration-[var(--tt-transition-duration-default)]"
+        className="min-h-[84px] w-full rounded-xl bg-backgroundSecondary px-3 py-2 text-sm text-textPrimary outline-none ring-0 transition-all"
         placeholder={ labels.replyPlaceholder }
         value={ content }
         onChange={ e => setContent(e.target.value) }
@@ -68,7 +68,7 @@ export const ReplyDialog = memo(({
           onClick={ onCancel }
           aria-label={ labels.cancelTooltip }
           showTooltip={ false }
-          className="flex h-9 items-center gap-2 rounded-lg border border-transparent px-3 text-sm font-medium text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)]"
+          className="flex h-9 items-center gap-2 rounded-lg border border-transparent px-3 text-sm font-medium text-textSecondary transition-all hover:bg-backgroundSecondary"
         >
           <CloseIcon className="h-4 w-4" />
           { labels.cancel }
@@ -79,7 +79,7 @@ export const ReplyDialog = memo(({
           aria-label={ labels.replyTooltip }
           showTooltip={ false }
           disabled={ !canCreate || !content.trim() }
-          className="flex h-9 items-center gap-2 rounded-lg bg-[var(--tt-brand-color-600)] px-3 text-sm font-semibold text-white shadow-sm transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-brand-color-500)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex h-9 items-center gap-2 rounded-lg bg-brand px-3 text-sm font-semibold text-white shadow-sm transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <CornerDownLeftIcon className="h-4 w-4" />
           { labels.reply }

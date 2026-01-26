@@ -116,7 +116,7 @@ export const CommentSidebar = memo(({
         <button
           type="button"
           aria-label={ labels.viewComments }
-          className="flex items-center gap-2 rounded-full border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] py-1 px-2 text-sm font-semibold text-[var(--tt-color-text-blue)] shadow-[var(--tt-shadow-elevated-md)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-brand-color-400)] hover:shadow-[var(--tt-shadow-elevated-md)]"
+          className="flex items-center gap-2 rounded-full border border-border bg-background py-1 px-2 text-sm font-semibold text-systemBlue shadow-card transition-all hover:border-brand/50 hover:shadow-md"
         >
           <span className="text-base">💬</span>
           <span className="rounded-full text-xs font-semibold">
@@ -129,17 +129,17 @@ export const CommentSidebar = memo(({
         aria-label={ labels.commentPanel }
         align="end"
         className={ cn(
-          'w-[380px] max-w-[calc(100vw-32px)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-0 shadow-[var(--tt-shadow-elevated-md)]',
+          'w-[380px] max-w-[calc(100vw-32px)] border border-border bg-background p-0 shadow-card',
           className,
         ) }
       >
         <div className="flex flex-col gap-4 p-4">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="text-base font-semibold text-[var(--tt-color-text-blue)]">
+              <span className="text-base font-semibold text-systemBlue">
                 { labels.commentPanel }
               </span>
-              <span className="rounded-full bg-[var(--tt-brand-color-50)] px-2.5 py-1 text-xs font-semibold text-[var(--tt-brand-color-700)]">
+              <span className="rounded-full bg-brand/10 px-2.5 py-1 text-xs font-semibold text-brand">
                 { comments.length }
                 {' '}
                 { labels.items }
@@ -150,7 +150,7 @@ export const CommentSidebar = memo(({
               type="button"
               onClick={ () => handleOpenChange(false) }
               aria-label={ labels.closePanel }
-              className="flex size-6 items-center justify-center text-[var(--tt-color-text-gray)] transition hover:bg-[var(--tt-border-color-tint)] rounded-xl"
+              className="flex size-6 items-center justify-center text-textSecondary transition-colors hover:bg-backgroundSecondary rounded-xl"
             >
               <CloseIcon className="h-4 w-4" />
             </button>
@@ -164,8 +164,8 @@ export const CommentSidebar = memo(({
                 className={ cn(
                   'rounded-full px-3 py-1.5 text-xs font-semibold transition',
                   statusFilter === 'all'
-                    ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
-                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
+                    ? 'bg-brand text-white shadow-card'
+                    : 'border border-border text-textSecondary hover:border-borderSecondary hover:bg-backgroundSecondary hover:text-brand',
                 ) }
                 aria-label={ labels.showAll }
               >
@@ -177,8 +177,8 @@ export const CommentSidebar = memo(({
                 className={ cn(
                   'rounded-full px-3 py-1.5 text-xs font-semibold transition',
                   statusFilter === 'active'
-                    ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
-                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
+                    ? 'bg-brand text-white shadow-card'
+                    : 'border border-border text-textSecondary hover:border-borderSecondary hover:bg-backgroundSecondary hover:text-brand',
                 ) }
                 aria-label={ labels.showActive }
               >
@@ -190,20 +190,20 @@ export const CommentSidebar = memo(({
                 className={ cn(
                   'rounded-full px-3 py-1.5 text-xs font-semibold transition',
                   statusFilter === 'resolved'
-                    ? 'bg-[var(--tt-brand-color-500)] text-white shadow-[var(--tt-shadow-elevated-md)]'
-                    : 'border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] hover:text-[var(--tt-brand-color-600)]',
+                    ? 'bg-brand text-white shadow-card'
+                    : 'border border-border text-textSecondary hover:border-borderSecondary hover:bg-backgroundSecondary hover:text-brand',
                 ) }
                 aria-label={ labels.showResolved }
               >
                 { labels.resolved }
               </button>
             </div>
-            <span className="text-xs text-[var(--tt-color-text-gray)]">
+            <span className="text-xs text-textSecondary">
               { labels.total(comments.length) }
             </span>
           </div>
 
-          <div className="h-px w-full bg-[var(--tt-border-color)]" />
+          <div className="h-px w-full bg-border" />
 
           <div
             ref={ listRef }
@@ -211,7 +211,7 @@ export const CommentSidebar = memo(({
           >
             { comments.length === 0
               ? (
-                  <div className="flex items-center justify-center rounded-xl border border-dashed border-[var(--tt-border-color)] bg-[var(--tt-sidebar-bg-color)] px-3 py-6 text-sm text-[var(--tt-color-text-gray)]">
+                  <div className="flex items-center justify-center rounded-xl border border-dashed border-border bg-backgroundSecondary px-3 py-6 text-sm text-textSecondary">
                     { labels.empty }
                   </div>
                 )

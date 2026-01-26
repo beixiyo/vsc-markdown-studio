@@ -73,12 +73,12 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
       <div
         ref={ containerRef }
         className={ cn(
-          'mermaid-container min-h-[100px] p-4 relative rounded-[var(--tt-radius-md)]',
-          'bg-[var(--tt-gray-light-50)] dark:bg-[var(--tt-gray-dark-50)]',
-          'transition-colors duration-[var(--tt-transition-duration-default)]',
+          'mermaid-container min-h-[100px] p-4 relative rounded-lg',
+          'bg-backgroundSecondary',
+          'transition-colors',
           selected
-            ? 'border border-[var(--tt-brand-color-500)] dark:border-[var(--tt-brand-color-400)]'
-            : 'border border-[var(--tt-gray-light-a-200)] dark:border-[var(--tt-gray-dark-a-200)]',
+            ? 'border border-brand'
+            : 'border border-border',
           !isEditing && !!code && 'cursor-move',
           isDragging && 'cursor-grabbing',
         ) }
@@ -111,14 +111,14 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                   placeholder="请输入 Mermaid 代码..."
                   className={ cn(
                     'w-full min-h-[200px] p-3',
-                    'border border-[var(--tt-gray-light-a-200)] dark:border-[var(--tt-gray-dark-a-200)]',
-                    'rounded-[var(--tt-radius-xs)]',
+                    'border border-border',
+                    'rounded-lg',
                     'font-mono text-sm leading-normal resize-none',
-                    'bg-[var(--white)] dark:bg-[var(--tt-gray-dark-50)]',
-                    'text-[var(--tt-gray-light-900)] dark:text-[var(--tt-gray-dark-900)]',
-                    'transition-colors duration-[var(--tt-transition-duration-default)]',
-                    'placeholder:text-[var(--tt-gray-light-400)] dark:placeholder:text-[var(--tt-gray-dark-400)]',
-                    'focus:border-[var(--tt-gray-light-a-300)] dark:focus:border-[var(--tt-gray-dark-a-300)]',
+                    'bg-background',
+                    'text-textPrimary',
+                    'transition-colors',
+                    'placeholder:text-textDisabled',
+                    'focus:border-brand',
                   ) }
                 />
                 <div className="flex gap-2 justify-end">

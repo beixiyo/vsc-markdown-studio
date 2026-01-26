@@ -235,12 +235,12 @@ export const CommentItem = memo(({
   }
 
   const containerClass = cn(
-    'rounded-2xl border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] p-4 shadow-[var(--tt-shadow-elevated-md)] transition duration-[var(--tt-transition-duration-default)] hover:shadow-[var(--tt-shadow-elevated-md)]',
+    'rounded-2xl border border-border bg-background p-4 shadow-card transition-all hover:shadow-md',
     comment.status === 'resolved'
-    && 'border-[var(--tt-color-green-inc-3)] bg-[var(--tt-color-green-inc-5)]/70',
-    isActive && 'border-[var(--tt-brand-color-400)] shadow-[var(--tt-shadow-elevated-lg)]',
+    && 'border-systemGreen/30 bg-systemGreen/5',
+    isActive && 'border-brand shadow-lg',
   )
-  const iconButtonClass = 'flex size-8 items-center justify-center rounded-lg border border-[var(--tt-border-color)] text-[var(--tt-color-text-gray)] transition duration-[var(--tt-transition-duration-default)] hover:border-[var(--tt-border-color-tint)] hover:bg-[var(--tt-border-color-tint)] disabled:cursor-not-allowed disabled:opacity-50'
+  const iconButtonClass = 'flex size-8 items-center justify-center rounded-lg border border-border text-textSecondary transition-all hover:border-borderSecondary hover:bg-backgroundSecondary disabled:cursor-not-allowed disabled:opacity-50'
 
   if (isEditing) {
     return (
@@ -286,16 +286,16 @@ export const CommentItem = memo(({
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-[var(--tt-color-text-blue)]">
+            <span className="text-sm font-semibold text-systemBlue">
               { comment.author.name }
             </span>
             { comment.status === 'resolved' && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--tt-color-green-inc-4)] px-2 py-0.5 text-[12px] font-semibold text-[var(--tt-color-green-dec-2)]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-systemGreen/10 px-2 py-0.5 text-[12px] font-semibold text-systemGreen">
                 { labels.resolved }
               </span>
             ) }
           </div>
-          <span className="text-xs text-[var(--tt-color-text-gray)]">
+          <span className="text-xs text-textTertiary">
             { formatDate(comment.createdAt) }
           </span>
         </div>
@@ -389,13 +389,13 @@ export const CommentItem = memo(({
         <button
           type="button"
           onClick={ handleJumpToReplyTo }
-          className="mt-3 flex w-full items-center gap-2 rounded-xl bg-[var(--tt-color-highlight-brown)] px-3 py-2 text-left text-sm text-[var(--tt-color-text-blue)] transition duration-[var(--tt-transition-duration-default)] hover:bg-[var(--tt-border-color-tint)]"
+          className="mt-3 flex w-full items-center gap-2 rounded-xl bg-backgroundSecondary px-3 py-2 text-left text-sm text-systemBlue transition-all hover:bg-borderSecondary"
         >
           <span className="text-[12px] font-semibold">
             @
             { comment.replyToAuthor.name }
           </span>
-          <span className="text-[var(--tt-color-text-gray)]">
+          <span className="text-textSecondary">
             { comment.replyToContent
               ? truncateReplyContent(comment.replyToContent)
               : truncateReplyContent(commentStore.getComment(comment.replyTo)?.content) }
@@ -403,7 +403,7 @@ export const CommentItem = memo(({
         </button>
       ) }
 
-      <div className="mt-3 rounded-xl bg-[var(--tt-color-highlight-gray)] px-3 py-2 text-sm leading-6 text-[var(--tt-color-text-gray)]">
+      <div className="mt-3 rounded-xl bg-backgroundSecondary px-3 py-2 text-sm leading-6 text-textSecondary">
         { comment.content }
       </div>
     </div>

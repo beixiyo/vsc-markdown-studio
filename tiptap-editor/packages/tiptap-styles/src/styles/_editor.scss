@@ -2,11 +2,7 @@
 
 body {
   --tt-toolbar-height: 44px;
-  --tt-theme-text: var(--text-color-primary);
-
-  .dark & {
-    --tt-theme-text: var(--text-color-primary);
-  }
+  --tt-theme-text: rgb(var(--textPrimary));
 }
 
 body {
@@ -29,7 +25,7 @@ body,
 #root,
 #app {
   height: 100%;
-  background-color: var(--tt-bg-color);
+  background-color: rgb(var(--background));
 }
 
 ::-webkit-scrollbar {
@@ -38,11 +34,11 @@ body,
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--tt-scrollbar-color) transparent;
+  scrollbar-color: rgba(var(--textPrimary), 0.2) transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--tt-scrollbar-color);
+  background-color: rgba(var(--textPrimary), 0.2);
   border-radius: 9999px;
 }
 

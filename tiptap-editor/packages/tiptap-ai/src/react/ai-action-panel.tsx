@@ -62,14 +62,14 @@ export const AIActionPanel = memo<AIActionPanelProps>(
     return (
       <div
         className={ cn(
-          'flex min-w-[12rem] items-center gap-2 rounded-[var(--tt-radius-lg)] border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)] px-3 py-2 text-[var(--text-color-primary)] shadow-[var(--tt-shadow-elevated-md)] dark:bg-[var(--bg-color-primary)] dark:text-[var(--text-color-primary)]',
+          'flex min-w-[12rem] items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-textPrimary shadow-card backdrop-blur-[12px]',
           className,
         ) }
       >
         { status === 'processing' && (
           <div className="flex items-center gap-2">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--tt-brand-color-500)] border-t-transparent" />
-            <span className="text-sm text-[var(--text-color-primary)] dark:text-[var(--text-color-primary)]">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+            <span className="text-sm text-textPrimary">
               AI 处理中...
             </span>
           </div>
@@ -78,7 +78,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
         { status === 'preview' && (
           <>
             { previewText && (
-              <div className="flex-1 max-w-[14rem] overflow-hidden text-ellipsis whitespace-nowrap text-sm text-[var(--tt-color-text-gray)]">
+              <div className="flex-1 max-w-[14rem] overflow-hidden text-ellipsis whitespace-nowrap text-sm text-textSecondary">
                 { previewText }
               </div>
             ) }
@@ -88,7 +88,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
                 onClick={ handleAccept }
                 data-style="default"
                 data-size="small"
-                className="text-[var(--tt-color-green-base)]"
+                className="text-systemGreen"
                 aria-label="接受"
                 tooltip="接受"
               >
@@ -99,7 +99,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
                 onClick={ handleReject }
                 data-style="ghost"
                 data-size="small"
-                className="text-[var(--tt-color-red-base)]"
+                className="text-systemRed"
                 aria-label="拒绝"
                 tooltip="拒绝"
               >

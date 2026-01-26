@@ -109,9 +109,9 @@ export const SuggestionMenu = memo(({
         ref={ refs.setFloating }
         style={ floatingStyles }
         className={ cn(
-          'min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-[var(--tt-radius-md)]',
-          'border border-[var(--tt-border-color)] bg-[var(--tt-card-bg-color)]',
-          'text-[var(--text-color-primary)] shadow-[var(--tt-shadow-elevated-md)] outline-none',
+          'min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-lg',
+          'border border-border bg-background',
+          'text-textPrimary shadow-card outline-none',
         ) }
         tabIndex={ -1 }
         onMouseDownCapture={ (event) => {
@@ -122,19 +122,19 @@ export const SuggestionMenu = memo(({
         { ...getFloatingProps() }
       >
         { loading && (
-          <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
+          <div className="px-3 py-2 text-sm text-textSecondary">
             { labels.loading }
           </div>
         ) }
 
         { !loading && error && (
-          <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
+          <div className="px-3 py-2 text-sm text-textSecondary">
             { error.message || labels.loadFailed }
           </div>
         ) }
 
         { !loading && !error && items.length === 0 && (
-          <div className="px-3 py-2 text-sm text-[var(--text-color-secondary)]">
+          <div className="px-3 py-2 text-sm text-textSecondary">
             { query
               ? labels.noMatch
               : labels.noItems }

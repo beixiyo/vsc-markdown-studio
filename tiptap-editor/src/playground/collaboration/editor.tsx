@@ -138,7 +138,7 @@ export const CollaborationEditor = memo<CollaborationEditorProps>(({ ydoc, provi
 
   return (
     <div className="flex flex-col h-full overflow-auto">
-      <div className="flex gap-2 p-2 border-b border-[var(--tt-border-color)]">
+      <div className="flex gap-2 p-2 border-b border-border">
         <Button
           onClick={ () => editor.chain().focus().toggleBold().run() }
           data-active-state={ editor.isActive('bold')
@@ -195,8 +195,8 @@ export const CollaborationEditor = memo<CollaborationEditorProps>(({ ydoc, provi
 
       <div
         className={ cn(
-          'flex items-center justify-between gap-4 px-4 py-2 border-t border-[var(--tt-border-color)] text-xs text-[var(--text-color-secondary)]',
-          'sticky bottom-0 bg-[var(--tt-bg-color)] z-100',
+          'flex items-center justify-between gap-4 px-4 py-2 border-t border-border text-xs text-textSecondary',
+          'sticky bottom-0 bg-background z-100',
         ) }
       >
         <label className="flex items-center gap-2">
@@ -204,8 +204,8 @@ export const CollaborationEditor = memo<CollaborationEditorProps>(({ ydoc, provi
             className={ cn(
               'w-2 h-2 rounded-full',
               status === 'connected'
-                ? 'bg-[var(--tt-color-green-base)]'
-                : 'bg-[var(--tt-color-red-base)]',
+                ? 'bg-systemGreen'
+                : 'bg-systemRed',
             ) }
           />
           {status === 'connected'
