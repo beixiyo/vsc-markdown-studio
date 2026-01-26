@@ -306,15 +306,10 @@ export function SelectionToolbar({
           refs.setFloating(node)
         } }
         className={ cn(
-          'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-textSecondary rounded-lg shadow-lg z-50',
+          'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-textSecondary rounded-lg shadow-lg z-50 animate-in fade-in duration-200',
           className,
         ) }
-        style={ {
-          ...floatingStyles,
-          animationName: 'fadeIn',
-          animationDuration: '200ms',
-          animationTimingFunction: 'ease-in-out',
-        } }
+        style={ floatingStyles }
         { ...getFloatingProps() }
       >
         { children }

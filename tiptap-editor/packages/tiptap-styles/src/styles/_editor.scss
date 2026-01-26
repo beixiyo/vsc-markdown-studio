@@ -1,6 +1,3 @@
-@use './_variables.scss';
-@use './_keyframe-animations.scss';
-
 // --- Editor Core Variables ---
 .tiptap.ProseMirror {
   --link-text-color: rgb(var(--brand));
@@ -16,6 +13,19 @@
   --checklist-border-color: rgb(var(--borderSecondary));
   --checklist-border-active-color: rgb(var(--textPrimary));
   --checklist-check-icon-color: rgb(var(--background));
+}
+
+// --- Root Styles ---
+:root {
+  overflow-wrap: break-word;
+  text-size-adjust: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &, *, ::before, ::after {
+    box-sizing: border-box;
+  }
 }
 
 // --- Global Editor Styles ---

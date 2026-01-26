@@ -20,53 +20,53 @@ export const COLOR_HIGHLIGHT_SHORTCUT_KEY = 'mod+shift+h'
 export const HIGHLIGHT_COLORS = [
   {
     label: 'Default background',
-    value: 'var(--tt-bg-color)',
-    border: 'var(--tt-bg-color-contrast)',
+    value: 'var(--background)',
+    border: 'var(--borderSecondary)',
   },
   {
     label: 'Gray background',
-    value: 'var(--tt-color-highlight-gray)',
-    border: 'var(--tt-color-highlight-gray-contrast)',
+    value: 'var(--toningGrayBgColor)',
+    border: 'var(--toningGrayBorderColor)',
   },
   {
     label: 'Brown background',
-    value: 'var(--tt-color-highlight-brown)',
-    border: 'var(--tt-color-highlight-brown-contrast)',
+    value: 'var(--toningBrownBgColor)',
+    border: 'var(--toningBrownBorderColor)',
   },
   {
     label: 'Orange background',
-    value: 'var(--tt-color-highlight-orange)',
-    border: 'var(--tt-color-highlight-orange-contrast)',
+    value: 'var(--toningOrangeBgColor)',
+    border: 'var(--toningOrangeBorderColor)',
   },
   {
     label: 'Yellow background',
-    value: 'var(--tt-color-highlight-yellow)',
-    border: 'var(--tt-color-highlight-yellow-contrast)',
+    value: 'var(--toningYellowBgColor)',
+    border: 'var(--toningYellowBorderColor)',
   },
   {
     label: 'Green background',
-    value: 'var(--tt-color-highlight-green)',
-    border: 'var(--tt-color-highlight-green-contrast)',
+    value: 'var(--toningGreenBgColor)',
+    border: 'var(--toningGreenBorderColor)',
   },
   {
     label: 'Blue background',
-    value: 'var(--tt-color-highlight-blue)',
-    border: 'var(--tt-color-highlight-blue-contrast)',
+    value: 'var(--toningBlueBgColor)',
+    border: 'var(--toningBlueBorderColor)',
   },
   {
     label: 'Purple background',
-    value: 'var(--tt-color-highlight-purple)',
-    border: 'var(--tt-color-highlight-purple-contrast)',
+    value: 'var(--toningPurpleBgColor)',
+    border: 'var(--toningPurpleBorderColor)',
   },
   {
     label: 'Pink background',
-    value: 'var(--tt-color-highlight-pink)',
-    border: 'var(--tt-color-highlight-pink-contrast)',
+    value: 'var(--toningPinkBgColor)',
+    border: 'var(--toningPinkBorderColor)',
   },
   {
     label: 'Red background',
-    value: 'var(--tt-color-highlight-red)',
-    border: 'var(--tt-color-highlight-red-contrast)',
+    value: 'var(--toningRedBgColor)',
+    border: 'var(--toningRedBorderColor)',
   },
 ]
 export type HighlightColor = (typeof HIGHLIGHT_COLORS)[number]
