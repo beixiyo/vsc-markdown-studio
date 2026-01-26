@@ -65,7 +65,10 @@ export default defineConfig(({ command }) => {
           'tiptap-comps/icons': path.resolve(__dirname, './packages/tiptap-comps/src/icons/index.ts'),
           'tiptap-comps': path.resolve(__dirname, './packages/tiptap-comps/src/index.ts'),
 
-          'tiptap-speaker-node': path.resolve(__dirname, './packages/tiptap-speaker-node/src/index.ts'),
+          'tiptap-nodes/speaker': path.resolve(__dirname, './packages/tiptap-nodes/src/speaker/index.ts'),
+          'tiptap-nodes/image-upload': path.resolve(__dirname, './packages/tiptap-nodes/src/image-upload/index.tsx'),
+          'tiptap-nodes/horizontal-rule': path.resolve(__dirname, './packages/tiptap-nodes/src/horizontal-rule/index.ts'),
+          'tiptap-nodes': path.resolve(__dirname, './packages/tiptap-nodes/src/index.ts'),
 
           'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
 

@@ -729,12 +729,9 @@ importers:
       tiptap-mermaid:
         specifier: workspace:*
         version: link:packages/tiptap-mermaid
-      tiptap-speaker-node:
+      tiptap-nodes:
         specifier: workspace:*
-        version: link:packages/tiptap-speaker-node
-      tiptap-styles:
-        specifier: workspace:*
-        version: link:packages/tiptap-styles
+        version: link:packages/tiptap-nodes
       tiptap-trigger:
         specifier: workspace:*
         version: link:packages/tiptap-trigger
@@ -784,9 +781,6 @@ importers:
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
-      tiptap-styles:
-        specifier: workspace:*
-        version: link:../tiptap-styles
       utils:
         specifier: workspace:*
         version: link:../../../packages/utils
@@ -860,9 +854,6 @@ importers:
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
-      tiptap-styles:
-        specifier: workspace:*
-        version: link:../tiptap-styles
       utils:
         specifier: workspace:*
         version: link:../../../packages/utils
@@ -1023,30 +1014,15 @@ importers:
         specifier: ^13.0.0
         version: 13.0.0
 
-  tiptap-editor/packages/tiptap-speaker-node:
+  tiptap-editor/packages/tiptap-nodes:
     dependencies:
       '@tiptap/core':
         specifier: ^3.13.0
         version: 3.13.0(@tiptap/pm@3.13.0)
-      '@tiptap/markdown':
+      '@tiptap/extension-horizontal-rule':
         specifier: ^3.13.0
         version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
-      '@tiptap/pm':
-        specifier: ^3.13.0
-        version: 3.13.0
-      i18n:
-        specifier: workspace:*
-        version: link:../../../packages/i18n
-      styles:
-        specifier: workspace:*
-        version: link:../../../packages/styles
-      tiptap-config:
-        specifier: workspace:*
-        version: link:../tiptap-config
-
-  tiptap-editor/packages/tiptap-styles:
-    dependencies:
-      '@tiptap/extension-horizontal-rule':
+      '@tiptap/markdown':
         specifier: ^3.13.0
         version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)
       '@tiptap/pm':
@@ -1055,12 +1031,18 @@ importers:
       '@tiptap/react':
         specifier: ^3.13.0
         version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      i18n:
+        specifier: workspace:*
+        version: link:../../../packages/i18n
       react:
         specifier: ^19.2.1
         version: 19.2.3
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
+      styles:
+        specifier: workspace:*
+        version: link:../../../packages/styles
       tiptap-comps:
         specifier: workspace:*
         version: link:../tiptap-comps
@@ -1097,9 +1079,6 @@ importers:
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
-      tiptap-styles:
-        specifier: workspace:*
-        version: link:../tiptap-styles
       utils:
         specifier: workspace:*
         version: link:../../../packages/utils

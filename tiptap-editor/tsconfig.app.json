@@ -34,10 +34,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "tiptap-styles": ["./packages/tiptap-styles/src/index.ts"],
-      "tiptap-styles/icons": ["./packages/tiptap-styles/src/icons/index.ts"],
-      "tiptap-styles/tiptap-node": ["./packages/tiptap-styles/src/tiptap-node/index.ts"],
-      "tiptap-styles/utils": ["./packages/tiptap-styles/src/utils/index.ts"],
 
       "tiptap-ai": ["./packages/tiptap-ai/src/index.ts"],
       "tiptap-ai/react": ["./packages/tiptap-ai/src/react/index.ts"],
@@ -56,7 +52,10 @@
       "tiptap-comps": ["./packages/tiptap-comps/src/index.ts"],
       "tiptap-comps/icons": ["./packages/tiptap-comps/src/icons/index.ts"],
 
-      "tiptap-speaker-node": ["./packages/tiptap-speaker-node/src/index.ts"],
+      "tiptap-nodes": ["./packages/tiptap-nodes/src/index.ts"],
+      "tiptap-nodes/speaker": ["./packages/tiptap-nodes/src/speaker/index.ts"],
+      "tiptap-nodes/image-upload": ["./packages/tiptap-nodes/src/image-upload/index.tsx"],
+      "tiptap-nodes/horizontal-rule": ["./packages/tiptap-nodes/src/horizontal-rule/index.ts"],
 
       "tiptap-editor-core": ["./packages/tiptap-editor-core/src/index.ts"]
     }

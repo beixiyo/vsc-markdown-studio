@@ -84,16 +84,11 @@
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/ui/`
 - **结构**: 保持不变
 
-### 4. Node Styles (节点样式)
-- **位置**: `tiptap-editor/packages/tiptap-styles/src/tiptap-node/`
+### 4. Node Extensions (节点扩展)
+- **位置**: `tiptap-editor/packages/tiptap-nodes/src/`
+- **内容**: 整合了所有自定义节点扩展（如 Speaker, ImageUpload, HorizontalRule 等）
 
-### 5. Styles (样式文件)
-- **位置**: `tiptap-editor/packages/tiptap-styles/src/styles/`
-- **文件**: 
-  - `_keyframe-animations.scss`
-  - `_variables.scss`：**已废弃**，官方原始变量已被替换为 Tailwind 设计 Token 系统（详见上文“设计 Token 系统”），目前在 `tiptap-editor/packages/tiptap-styles/src/styles/index.scss` 中已被注释，优先使用全局 Token
-
-### 6. Hooks (钩子函数)
+### 5. Hooks (钩子函数)
 - **位置**: `tiptap-editor/packages/tiptap-api/src/react/hooks/`
 - **新增 hooks**:
   - `use-hover-detection.ts`
@@ -102,7 +97,7 @@
   - `storage/use-auto-save.ts`
   - `storage/use-storage-save.ts`
 
-### 7. Lib (工具库)
+### 6. Lib (工具库)
 - **位置**: `tiptap-editor/packages/tiptap-config/src/utils/`
 
 ---
@@ -130,13 +125,9 @@
 - 编辑器核心包
 - 包含：扩展定义、编辑器核心逻辑
 
-#### `tiptap-speaker-node/`
-- 说话者节点扩展
-- 用于标记对话中的说话者
-
-#### `tiptap-styles/`
-- 样式包
-- 整合了所有样式文件和节点样式
+#### `tiptap-nodes/`
+- 自定义节点扩展包
+- 包含：Speaker, ImageUpload, HorizontalRule 等节点实现
 
 #### `tiptap-trigger/`
 - 触发器包

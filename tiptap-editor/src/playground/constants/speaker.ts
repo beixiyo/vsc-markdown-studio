@@ -1,4 +1,4 @@
-import type { SpeakerMapValue } from 'tiptap-speaker-node'
+import type { SpeakerMapValue } from 'tiptap-nodes'
 
 /**
  * 演示与内置测试用的默认 speaker 映射

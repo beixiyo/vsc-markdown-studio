@@ -2,7 +2,7 @@ import type { Editor } from '@tiptap/core'
 import type { UseEditorOptions } from '@tiptap/react'
 import type { RefObject } from 'react'
 import type { CommentStore } from 'tiptap-comment'
-import type { SpeakerAttributes, SpeakerMapValue } from 'tiptap-speaker-node'
+import type { SpeakerAttributes, SpeakerMapValue } from 'tiptap-nodes'
 
 /**
  * Speaker 映射表类型

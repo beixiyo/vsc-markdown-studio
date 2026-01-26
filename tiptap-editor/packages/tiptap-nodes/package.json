@@ -1,0 +1,55 @@
+{
+  "name": "tiptap-nodes",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./index.css": "./dist/index.css",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./speaker": {
+      "types": "./dist/speaker/index.d.ts",
+      "import": "./dist/speaker/index.js",
+      "require": "./dist/speaker/index.cjs"
+    },
+    "./image-upload": {
+      "types": "./dist/image-upload/index.d.ts",
+      "import": "./dist/image-upload/index.js",
+      "require": "./dist/image-upload/index.cjs"
+    },
+    "./horizontal-rule": {
+      "types": "./dist/horizontal-rule/index.d.ts",
+      "import": "./dist/horizontal-rule/index.js",
+      "require": "./dist/horizontal-rule/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint ./src --fix --quiet"
+  },
+  "dependencies": {
+    "@tiptap/extension-horizontal-rule": "^3.13.0",
+    "tiptap-comps": "workspace:*",
+    "tiptap-config": "workspace:*",
+    "utils": "workspace:*",
+    "styles": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "@tiptap/pm": "^3.13.0",
+    "@tiptap/react": "^3.13.0",
+    "@tiptap/core": "^3.13.0",
+    "@tiptap/markdown": "^3.13.0",
+    "i18n": "workspace:*"
+  }
+}

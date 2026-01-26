@@ -468,6 +468,18 @@
       ]
     },
     {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "自定义说话人节点"
+        }
+      ]
+    },
+    {
       "type": "paragraph",
       "attrs": {
         "textAlign": "left"
@@ -481,7 +493,13 @@
         },
         {
           "type": "text",
-          "text": " This speaker should be localized as 'Speaker 2' or '说话人 2'."
+          "text": " This speaker should be localized as 'Speaker 3' or '说话人 3'.\n"
+        },
+        {
+          "type": "speaker",
+          "attrs": {
+            "originalLabel": "1"
+          }
         }
       ]
     },
