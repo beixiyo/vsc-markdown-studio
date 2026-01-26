@@ -38,16 +38,25 @@ function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerO
     return attrs.name
   }
 
+  /**
+   * 处理数字索引，从 1 开始
+   * 如果 originalLabel 是数字，则显示为数字 + 1
+   */
+  const originalLabel = attrs.originalLabel ?? ''
+  const displayLabel = (originalLabel && !isNaN(Number(originalLabel)))
+    ? (Number(originalLabel) + 1).toString()
+    : originalLabel
+
   const i18n = getI18nInstance()
-  if (i18n && attrs.originalLabel) {
+  if (i18n && originalLabel) {
     /** 强制刷新资源确保最新资源被加载 */
     return i18n.t('speaker.speaker', {
-      number: attrs.originalLabel,
-      defaultValue: `Speaker ${attrs.originalLabel}`,
+      number: displayLabel,
+      defaultValue: `Speaker ${displayLabel}`,
     })
   }
 
-  return attrs.originalLabel || ''
+  return displayLabel
 }
 
 export const SpeakerNode = Node.create<SpeakerOptions>({
