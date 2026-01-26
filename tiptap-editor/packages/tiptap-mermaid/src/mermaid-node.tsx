@@ -146,17 +146,17 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
           : (
               <>
                 { isRendering && (
-                  <div className="text-center text-[var(--tt-gray-light-500)] dark:text-[var(--tt-gray-dark-500)]">
+                  <div className="text-center text-textSecondary">
                     正在渲染图表...
                   </div>
                 ) }
                 { error && (
                   <div
                     className={ cn(
-                      'p-3 rounded-[var(--tt-radius-xs)]',
-                      'bg-[var(--tt-color-red-inc-5)] dark:bg-[var(--tt-color-red-dec-5)]',
-                      'border border-[var(--tt-color-red-inc-2)] dark:border-[var(--tt-color-red-dec-3)]',
-                      'text-[var(--tt-color-red-dec-3)] dark:text-[var(--tt-color-red-inc-2)]',
+                      'p-3 rounded',
+                      'bg-dangerBg',
+                      'border border-danger/20',
+                      'text-danger',
                     ) }
                   >
                     <div className="flex items-center justify-between gap-2">
@@ -181,8 +181,8 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                       ? handleEdit
                       : undefined }
                     className={ cn(
-                      'text-center text-[var(--tt-gray-light-400)] dark:text-[var(--tt-gray-dark-400)] py-5',
-                      editor?.isEditable && 'cursor-pointer hover:text-[var(--tt-gray-light-500)] dark:hover:text-[var(--tt-gray-dark-500)] transition-colors',
+                      'text-center text-textQuaternary py-5',
+                      editor?.isEditable && 'cursor-pointer hover:text-textSecondary transition-colors',
                     ) }
                   >
                     请输入 Mermaid 代码

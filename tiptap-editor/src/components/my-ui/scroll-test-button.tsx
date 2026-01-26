@@ -272,7 +272,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
           case 'scrollToRange':
             return (
               <InputGroup
-                className="w-full border border-[color:var(--tt-border-color)] rounded-md px-1 py-0.5 bg-[color:var(--tt-gray-light-a-50)] dark:bg-[color:var(--tt-gray-dark-a-50)] dark:border-[color:var(--tt-border-color-tint)]"
+                className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
               >
                 <Input
                   type="number"
@@ -281,7 +281,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
                   onChange={ e => setPosInput(e.target.value) }
                   onKeyDown={ handleKeyDown }
                   autoFocus
-                  className="h-9 border-none bg-transparent text-[var(--tt-gray-light-800)] dark:text-[var(--tt-gray-dark-a-800)]"
+                  className="h-9 border-none bg-transparent text-textPrimary"
                 />
               </InputGroup>
             )
@@ -290,7 +290,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
             return (
               <div className="flex flex-col gap-2">
                 <InputGroup
-                  className="w-full border border-[color:var(--tt-border-color)] rounded-md px-1 py-0.5 bg-[color:var(--tt-gray-light-a-50)] dark:bg-[color:var(--tt-gray-dark-a-50)] dark:border-[color:var(--tt-border-color-tint)]"
+                  className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
                 >
                   <Input
                     type="number"
@@ -299,11 +299,11 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
                     onChange={ e => setFromInput(e.target.value) }
                     onKeyDown={ handleKeyDown }
                     autoFocus
-                    className="h-9 border-none bg-transparent text-[var(--tt-gray-light-800)] dark:text-[var(--tt-gray-dark-a-800)]"
+                    className="h-9 border-none bg-transparent text-textPrimary"
                   />
                 </InputGroup>
                 <InputGroup
-                  className="w-full border border-[color:var(--tt-border-color)] rounded-md px-1 py-0.5 bg-[color:var(--tt-gray-light-a-50)] dark:bg-[color:var(--tt-gray-dark-a-50)] dark:border-[color:var(--tt-border-color-tint)]"
+                  className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
                 >
                   <Input
                     type="number"
@@ -311,7 +311,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
                     value={ toInput }
                     onChange={ e => setToInput(e.target.value) }
                     onKeyDown={ handleKeyDown }
-                    className="h-9 border-none bg-transparent text-[var(--tt-gray-light-800)] dark:text-[var(--tt-gray-dark-a-800)]"
+                    className="h-9 border-none bg-transparent text-textPrimary"
                   />
                 </InputGroup>
               </div>
@@ -321,7 +321,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
             return (
               <div className="flex flex-col gap-2">
                 <InputGroup
-                  className="w-full border border-[color:var(--tt-border-color)] rounded-md px-1 py-0.5 bg-[color:var(--tt-gray-light-a-50)] dark:bg-[color:var(--tt-gray-dark-a-50)] dark:border-[color:var(--tt-border-color-tint)]"
+                  className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
                 >
                   <Input
                     type="text"
@@ -330,11 +330,11 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
                     onChange={ e => setMarkIdInput(e.target.value) }
                     onKeyDown={ handleKeyDown }
                     autoFocus
-                    className="h-9 border-none bg-transparent text-[var(--tt-gray-light-800)] dark:text-[var(--tt-gray-dark-a-800)]"
+                    className="h-9 border-none bg-transparent text-textPrimary"
                   />
                 </InputGroup>
                 <InputGroup
-                  className="w-full border border-[color:var(--tt-border-color)] rounded-md px-1 py-0.5 bg-[color:var(--tt-gray-light-a-50)] dark:bg-[color:var(--tt-gray-dark-a-50)] dark:border-[color:var(--tt-border-color-tint)]"
+                  className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
                 >
                   <Input
                     type="text"
@@ -342,7 +342,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
                     value={ markTypeInput }
                     onChange={ e => setMarkTypeInput(e.target.value) }
                     onKeyDown={ handleKeyDown }
-                    className="h-9 border-none bg-transparent text-[var(--tt-gray-light-800)] dark:text-[var(--tt-gray-dark-a-800)]"
+                    className="h-9 border-none bg-transparent text-textPrimary"
                   />
                 </InputGroup>
               </div>
@@ -352,7 +352,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
           case 'scrollToText':
             return (
               <InputGroup
-                className="w-full border border-[color:var(--tt-border-color)] rounded-md px-1 py-0.5 bg-[color:var(--tt-gray-light-a-50)] dark:bg-[color:var(--tt-gray-dark-a-50)] dark:border-[color:var(--tt-border-color-tint)]"
+                className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
               >
                 <Input
                   type="text"
@@ -361,7 +361,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
                   onChange={ e => setTextInput(e.target.value) }
                   onKeyDown={ handleKeyDown }
                   autoFocus
-                  className="h-9 border-none bg-transparent text-[var(--tt-gray-light-800)] dark:text-[var(--tt-gray-dark-a-800)]"
+                  className="h-9 border-none bg-transparent text-textPrimary"
                 />
               </InputGroup>
             )
@@ -390,8 +390,8 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
 
       return (
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2 pb-1 border-b border-[color:var(--tt-border-color-tint)]">
-            <span className="text-[0.95rem] font-semibold text-[var(--tt-gray-light-800)] dark:text-[var(--tt-gray-dark-a-800)]">
+          <div className="flex items-center justify-between gap-2 pb-1 border-b border-borderSecondary">
+            <span className="text-[0.95rem] font-semibold text-textPrimary">
               { getTestTitle() }
             </span>
             <Button
@@ -400,7 +400,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
               data-style="ghost"
               data-size="small"
               title="取消"
-              className="text-[var(--tt-gray-light-600)] dark:text-[var(--tt-gray-dark-a-600)]"
+              className="text-textSecondary"
             >
               <CloseIcon className="tiptap-button-icon" />
             </Button>

@@ -20,9 +20,9 @@ import { ReplyDialog } from './reply-dialog'
 
 const activeHighlightClasses = [
   'comment-highlight-active',
-  'bg-[var(--tt-color-highlight-yellow-contrast)]',
-  'border-b-[var(--tt-color-yellow-dec-2)]',
-  'shadow-[0_0_0_2px_var(--tt-color-yellow-dec-3)]',
+  'bg-warning/20',
+  'border-b-warning',
+  'shadow-[0_0_0_2px_rgba(var(--warning),0.3)]',
 ]
 
 /**

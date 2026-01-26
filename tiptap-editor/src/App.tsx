@@ -34,7 +34,7 @@ function AppContent() {
 
   return (
     <div className="h-screen">
-      <div className="flex gap-2 items-center justify-between p-4 border-b border-[var(--tt-border-color)]">
+      <div className="flex gap-2 items-center justify-between p-4 border-b border-border">
         <div className="flex gap-2">
           <Button
             onClick={ () => setMode('editor') }

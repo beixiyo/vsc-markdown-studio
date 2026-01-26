@@ -33,7 +33,7 @@
             {
               "type": "highlight",
               "attrs": {
-                "color": "var(--tt-color-highlight-yellow)"
+                "color": "var(--toningYellowBgColor)"
               }
             }
           ],
@@ -209,7 +209,7 @@
             {
               "type": "highlight",
               "attrs": {
-                "color": "var(--tt-color-highlight-blue)"
+                "color": "var(--toningBlueBgColor)"
               }
             }
           ],

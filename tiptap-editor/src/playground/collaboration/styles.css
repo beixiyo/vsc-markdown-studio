@@ -14,7 +14,7 @@
 
   /* 用户名标签 */
   .collaboration-carets__label {
-    border-radius: var(--tt-radius-xs) var(--tt-radius-xs) var(--tt-radius-xs) 0;
+    border-radius: 4px 4px 4px 0;
     color: currentColor;
     font-size: 12px;
     font-style: normal;

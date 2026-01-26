@@ -106,7 +106,7 @@ export function TextAlignDropdownMenu({
       <DropdownMenuContent align="start" portal={ portal }>
         <Card>
           <CardBody>
-            <ButtonGroup>
+            <ButtonGroup className="min-w-[10rem]">
               {filteredAligns.map(option => (
                 <DropdownMenuItem key={ option.align } asChild>
                   <TextAlignButton
@@ -116,6 +116,7 @@ export function TextAlignDropdownMenu({
                     hideWhenUnavailable={ false }
                     showShortcut={ false }
                     showTooltip={ false }
+                    className="w-full justify-start"
                   />
                 </DropdownMenuItem>
               ))}

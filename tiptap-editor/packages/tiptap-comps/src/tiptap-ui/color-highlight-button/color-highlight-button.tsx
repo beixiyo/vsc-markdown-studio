@@ -1,31 +1,19 @@
-import type { ButtonProps } from '../../ui'
-
-import type { UseColorHighlightConfig } from './use-color-highlight'
-
 import { forwardRef, useCallback, useMemo } from 'react'
-
 import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-config'
-
 import { Badge, Button } from '../../ui'
 import {
   COLOR_HIGHLIGHT_SHORTCUT_KEY,
   useColorHighlight,
 } from './use-color-highlight'
 
-import './color-highlight-button.scss'
-
 export interface ColorHighlightButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseColorHighlightConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
+  extends Omit<React.ComponentProps<typeof Button>, 'type'> {
+  highlightColor?: string
+  editor?: any
+  hideWhenUnavailable?: boolean
+  onApplied?: (info: { color: string, label: string }) => void
   text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
   showShortcut?: boolean
 }
 
@@ -131,20 +119,21 @@ export const ColorHighlightButton = forwardRef<
         { ...buttonProps }
         ref={ ref }
       >
-        {children ?? (
+        { children ?? (
           <>
             <span
-              className="tiptap-button-highlight"
-              style={
-                { '--highlight-color': highlightColor } as React.CSSProperties
-              }
+              className="relative w-[14px] h-[14px] -mx-0.5 rounded-full transition-transform duration-200 after:content-[''] after:absolute after:inset-0 after:rounded-inherit after:box-border after:border after:border-[inherit] after:filter after:brightness-95 after:mix-blend-multiply dark:after:brightness-140 dark:after:mix-blend-lighten"
+              style={ {
+                backgroundColor: highlightColor,
+                borderColor: highlightColor,
+              } }
             />
-            {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && (
+            { text && <span className="flex-auto text-left px-0.5">{ text }</span> }
+            { showShortcut && (
               <ColorHighlightShortcutBadge shortcutKeys={ shortcutKeys } />
-            )}
+            ) }
           </>
-        )}
+        ) }
       </Button>
     )
   },

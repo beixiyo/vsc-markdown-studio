@@ -28,7 +28,7 @@ import {
   useState,
   version,
 } from 'react'
-import './tooltip.scss'
+import { cn } from 'utils'
 
 interface TooltipProviderProps {
   children: React.ReactNode
@@ -223,7 +223,10 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
           ...style,
         } }
         { ...context.getFloatingProps(props) }
-        className="tiptap-tooltip"
+        className={ cn(
+          'z-[200] overflow-hidden rounded-lg bg-textPrimary px-2 py-1.5 text-xs font-medium text-background shadow-md text-center',
+          props.className,
+        ) }
       >
         { children }
       </div>

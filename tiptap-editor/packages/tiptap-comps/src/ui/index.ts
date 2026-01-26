@@ -1,18 +1,3 @@
-/** 导入样式 */
-import './badge/badge-colors.scss'
-import './badge/badge-group.scss'
-import './badge/badge.scss'
-import './button/button-colors.scss'
-import './button/button-group.scss'
-import './button/button.scss'
-import './card/card.scss'
-import './dropdown-menu/dropdown-menu.scss'
-import './input/input.scss'
-import './popover/popover.scss'
-import './separator/separator.scss'
-import './toolbar/toolbar.scss'
-import './tooltip/tooltip.scss'
-
 /** 导出组件 */
 export * from './badge'
 export * from './button'

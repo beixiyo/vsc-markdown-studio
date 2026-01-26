@@ -166,7 +166,7 @@ export const TextFormatDropdownMenu = forwardRef<
         <DropdownMenuContent align="start" portal={ portal }>
           <Card>
             <CardBody>
-              <ButtonGroup>
+              <ButtonGroup className="min-w-[12rem]">
                 {/* 标题 */ }
                 { headingLevels.map(level => (
                   <DropdownMenuItem key={ `heading-${level}` } asChild>
@@ -175,6 +175,7 @@ export const TextFormatDropdownMenu = forwardRef<
                       level={ level }
                       text={ headingLabels[`heading${level}` as keyof typeof headingLabels] }
                       showTooltip={ false }
+                      className="w-full justify-start"
                     />
                   </DropdownMenuItem>
                 )) }
@@ -194,6 +195,7 @@ export const TextFormatDropdownMenu = forwardRef<
                     tooltip={ headingLabels.paragraph }
                     showTooltip={ false }
                     onClick={ () => editor?.chain().focus().setParagraph().run() }
+                    className="w-full justify-start"
                   >
                     <TextFormatIcon className="tiptap-button-icon" />
                     <span className="tiptap-button-text">{ headingLabels.paragraph }</span>
@@ -208,6 +210,7 @@ export const TextFormatDropdownMenu = forwardRef<
                       type="orderedList"
                       text={ listLabels.orderedList }
                       showTooltip={ false }
+                      className="w-full justify-start"
                     />
                   </DropdownMenuItem>
                 ) }
@@ -218,6 +221,7 @@ export const TextFormatDropdownMenu = forwardRef<
                       type="bulletList"
                       text={ listLabels.bulletList }
                       showTooltip={ false }
+                      className="w-full justify-start"
                     />
                   </DropdownMenuItem>
                 ) }
@@ -228,6 +232,7 @@ export const TextFormatDropdownMenu = forwardRef<
                       type="taskList"
                       text={ listLabels.taskList }
                       showTooltip={ false }
+                      className="w-full justify-start"
                     />
                   </DropdownMenuItem>
                 ) }
@@ -238,6 +243,7 @@ export const TextFormatDropdownMenu = forwardRef<
                     editor={ editor }
                     text={ blockLabels.blockquote }
                     showTooltip={ false }
+                    className="w-full justify-start"
                   />
                 </DropdownMenuItem>
               </ButtonGroup>

@@ -1,6 +1,5 @@
 import { forwardRef } from 'react'
 import { cn } from 'utils'
-import './separator.scss'
 
 export type Orientation = 'horizontal' | 'vertical'
 
@@ -20,8 +19,11 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
 
     return (
       <div
-        className={ cn('tiptap-separator', className) }
-        data-orientation={ orientation }
+        className={ cn(
+          'shrink-0 bg-borderSecondary',
+          orientation === 'horizontal' ? 'h-[1px] w-full my-1' : 'h-6 w-[1px]',
+          className,
+        ) }
         { ...semanticProps }
         { ...divProps }
         ref={ ref }

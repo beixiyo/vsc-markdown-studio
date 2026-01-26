@@ -39,7 +39,7 @@ export const CollaborationSplitPane = memo(() => {
       <div className="flex flex-col flex-1 overflow-hidden">
         <CollaborationEditor provider={ providerA } ydoc={ ydocA } room={ room } />
       </div>
-      <div className="flex flex-col flex-1 overflow-hidden border-l border-[var(--tt-border-color)] max-md:border-l-0 max-md:border-t max-md:border-[var(--tt-border-color)]">
+      <div className="flex flex-col flex-1 overflow-hidden border-l border-border max-md:border-l-0 max-md:border-t max-md:border-border">
         <CollaborationEditor provider={ providerB } ydoc={ ydocB } room={ room } />
       </div>
     </div>

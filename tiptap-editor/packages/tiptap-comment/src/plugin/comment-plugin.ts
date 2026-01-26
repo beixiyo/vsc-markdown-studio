@@ -214,9 +214,9 @@ function computeDecorations(
       /** 创建内联装饰，用于高亮显示评论区域 */
       const decoration = Decoration.inline(segment.from, segment.to, {
         'class':
-          'comment-highlight bg-[var(--tt-color-highlight-yellow)] border-b-2 border-b-[var(--tt-color-highlight-yellow-contrast)] '
-          + 'px-[2px] rounded-[var(--tt-radius-xxs)] cursor-pointer transition-[background-color,border-bottom-color] '
-          + 'duration-[var(--tt-transition-duration-default)] ease-[var(--tt-transition-easing-default)]',
+          'comment-highlight bg-warning/20 border-b-2 border-b-warning '
+          + 'px-[2px] rounded-sm cursor-pointer transition-colors '
+          + 'duration-200 ease-in-out',
         'data-comment-id': commentId,
       })
 

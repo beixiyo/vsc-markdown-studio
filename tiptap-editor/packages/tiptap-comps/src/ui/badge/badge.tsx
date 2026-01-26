@@ -1,13 +1,40 @@
+import { cva, type VariantProps } from 'class-variance-authority'
 import { forwardRef } from 'react'
 import { cn } from 'utils'
-import './badge-colors.scss'
-import './badge-group.scss'
-import './badge.scss'
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'ghost' | 'white' | 'gray' | 'green' | 'default'
-  size?: 'default' | 'small'
-  appearance?: 'default' | 'subdued' | 'emphasized'
+const badgeVariants = cva(
+  'inline-flex items-center justify-center border font-bold transition-all transition-duration-200 ease-in-out',
+  {
+    variants: {
+      variant: {
+        default: 'bg-backgroundSecondary border-borderSecondary text-textPrimary',
+        ghost: 'bg-transparent border-transparent text-textSecondary',
+        white: 'bg-white border-border text-black',
+        gray: 'bg-backgroundTertiary border-border text-textSecondary',
+        green: 'bg-successBg border-success/20 text-success',
+      },
+      size: {
+        default: 'h-5 min-w-[1.25rem] px-1 text-[10px] rounded-md',
+        small: 'h-4 min-w-[1rem] px-0.5 text-[9px] rounded',
+        large: 'h-6 min-w-[1.5rem] px-1.5 text-xs rounded-lg',
+      },
+      appearance: {
+        default: '',
+        subdued: 'opacity-70',
+        emphasized: 'border-brand/30 bg-brand/10 text-brand',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+      appearance: 'default',
+    },
+  },
+)
+
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+  VariantProps<typeof badgeVariants> {
   trimText?: boolean
 }
 
@@ -15,8 +42,8 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
   (
     {
       variant,
-      size = 'default',
-      appearance = 'default',
+      size,
+      appearance,
       trimText = false,
       className,
       children,
@@ -27,16 +54,14 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
     return (
       <div
         ref={ ref }
-        className={ cn('tiptap-badge', className) }
-        data-style={ variant }
-        data-size={ size }
-        data-appearance={ appearance }
-        data-text-trim={ trimText
-          ? 'on'
-          : 'off' }
+        className={ cn(
+          badgeVariants({ variant, size, appearance }),
+          trimText && 'truncate max-w-full block',
+          className,
+        ) }
         { ...props }
       >
-        {children}
+        { children }
       </div>
     )
   },

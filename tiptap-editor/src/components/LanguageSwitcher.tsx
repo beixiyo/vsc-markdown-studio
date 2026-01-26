@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
 
   return (
     <div className="flex gap-2 items-center">
-      <span className="text-sm text-[var(--tt-text-color-secondary)]">
+      <span className="text-sm text-textSecondary">
         语言:
       </span>
       {languages.map(lang => (

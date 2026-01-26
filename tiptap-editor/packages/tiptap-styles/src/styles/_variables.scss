@@ -2,141 +2,30 @@
   /******************
   Basics
   ******************/
-
   overflow-wrap: break-word;
   text-size-adjust: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /******************
-  Colors variables
-  ******************/
-
-  /* Bridge to Global Design Tokens */
-  --tt-bg-color: rgb(var(--background));
-  --tt-border-color: rgb(var(--border));
-  --tt-border-color-tint: rgb(var(--borderSecondary));
-  --tt-sidebar-bg-color: rgb(var(--backgroundSecondary));
-  --tt-scrollbar-color: rgb(var(--border));
-  --tt-cursor-color: rgb(var(--brand));
-  --tt-selection-color: rgba(var(--brand), 0.2);
-  --tt-card-bg-color: rgb(var(--background));
-  --tt-card-border-color: rgb(var(--borderSecondary));
-
-  /* Brand colors mapping */
-  --tt-brand-color-500: rgb(var(--brand));
-  --tt-brand-color-400: rgb(var(--brand));
-  --tt-brand-color-600: rgb(var(--brand));
-
-  /* Gray/Text mapping */
-  --tt-gray-light-900: rgb(var(--textPrimary));
-  --tt-gray-light-700: rgba(var(--textPrimary), 0.9);
-  --tt-gray-light-500: rgba(var(--textPrimary), 0.7);
-  --tt-gray-light-400: rgba(var(--textPrimary), 0.4);
-  --tt-gray-light-300: rgba(var(--textPrimary), 0.2);
-  --tt-gray-light-200: rgb(var(--border));
-  --tt-gray-light-100: rgb(var(--backgroundSecondary));
-  --tt-gray-light-50: rgb(var(--background));
-
-  --tt-color-text-gray: rgba(var(--textPrimary), 0.7);
-  --tt-color-text-blue: rgb(var(--systemBlue));
-  --tt-color-text-red: rgb(var(--systemRed));
-
-  /* Highlight/Toning mapping */
-  --tt-color-highlight-yellow: var(--toningYellowBgColor);
-  --tt-color-highlight-blue: var(--toningBlueBgColor);
-  --tt-color-highlight-green: var(--toningGreenBgColor);
-  --tt-color-highlight-red: var(--toningRedBgColor);
-  --tt-color-highlight-gray: var(--toningGrayBgColor);
-
-  /******************
-  Shadow variables
-  ******************/
-
-  --tt-shadow-elevated-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-  /**************************************************
-        Radius variables
-     **************************************************/
-
-  --tt-radius-xxs: 2px;
-  --tt-radius-xs: 4px;
-  --tt-radius-sm: 6px;
-  --tt-radius-md: 8px;
-  --tt-radius-lg: 12px;
-  --tt-radius-xl: 16px;
-
-
-  /**************************************************
-       Transition variables
-    **************************************************/
-
-  --tt-transition-duration-short: 0.1s;
-  --tt-transition-duration-default: 0.2s;
-  --tt-transition-duration-long: 0.64s;
-  --tt-transition-easing-default: cubic-bezier(0.46, 0.03, 0.52, 0.96);
-  --tt-transition-easing-cubic: cubic-bezier(0.65, 0.05, 0.36, 1);
-  --tt-transition-easing-quart: cubic-bezier(0.77, 0, 0.18, 1);
-  --tt-transition-easing-circ: cubic-bezier(0.79, 0.14, 0.15, 0.86);
-  --tt-transition-easing-back: cubic-bezier(0.68, -0.55, 0.27, 1.55);
-
-  /******************
-  Contrast variables
-  ******************/
-
-  --tt-accent-contrast: 8%;
-  --tt-destructive-contrast: 8%;
-  --tt-foreground-contrast: 8%;
-
-  &,
-  *,
-  ::before,
-  ::after {
+  &, *, ::before, ::after {
     box-sizing: border-box;
-    transition: none var(--tt-transition-duration-default)
-      var(--tt-transition-easing-default);
   }
 }
 
+/* Legacy Support mapping (Mostly internal editor use) */
 :root {
-  /**************************************************
-      Global colors
-  **************************************************/
-
-  /* Global colors */
   --tt-bg-color: rgb(var(--background));
   --tt-border-color: rgb(var(--border));
-  --tt-border-color-tint: rgb(var(--borderSecondary));
-  --tt-sidebar-bg-color: rgb(var(--backgroundSecondary));
-  --tt-scrollbar-color: rgb(var(--borderSecondary));
-  --tt-cursor-color: rgb(var(--brand));
+  --tt-brand-color-500: rgb(var(--brand));
   --tt-selection-color: rgba(var(--brand), 0.2);
-  --tt-card-bg-color: rgb(var(--background));
-  --tt-card-border-color: rgb(var(--borderSecondary));
-
-  --tt-shadow-elevated-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Dark mode overrides (if any specific needed, otherwise global tokens handle it) */
-.dark {
-  --tt-shadow-elevated-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-/* Custom colors / Legacy Support mapping */
-:root {
+  
   --text-color-primary: rgb(var(--textPrimary));
   --text-color-secondary: rgba(var(--textPrimary), 0.7);
   --text-color-disabled: rgba(var(--textPrimary), 0.3);
-  --text-color-placeholder: rgba(var(--textPrimary), 0.2);
-
+  
   --bg-color-primary: rgb(var(--background));
   --bg-color-secondary: rgb(var(--backgroundSecondary));
-  --bg-color-disabled: rgb(var(--backgroundTertiary));
-  --bg-color-placeholder: rgb(var(--backgroundQuaternary));
-
   --bg-color-hover: rgba(var(--textPrimary), 0.05);
   --bg-color-active: rgba(var(--textPrimary), 0.1);
-  --bg-color-selected: rgba(var(--brand), 0.1);
-  --bg-color-focus: rgba(var(--brand), 0.15);
 }
