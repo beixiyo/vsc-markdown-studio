@@ -22,7 +22,7 @@ const activeHighlightClasses = [
   'comment-highlight-active',
   'bg-warning/20',
   'border-b-warning',
-  'shadow-[0_0_0_2px_rgba(var(--warning),0.3)]',
+  'shadow-[0_0_0_2px_rgb(var(--warning)/0.3)]',
 ]
 
 /**
