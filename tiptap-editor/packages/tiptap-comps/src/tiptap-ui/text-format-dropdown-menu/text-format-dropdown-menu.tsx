@@ -140,7 +140,7 @@ export const TextFormatDropdownMenu = forwardRef<
     const MainIcon = lastTextIcon
 
     return (
-      <DropdownMenu modal open={ isOpen } onOpenChange={ handleOpenChange }>
+      <DropdownMenu modal={ false } open={ isOpen } onOpenChange={ handleOpenChange }>
         <DropdownMenuTrigger asChild>
           <Button
             type="button"

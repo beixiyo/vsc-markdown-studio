@@ -259,7 +259,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
     }
 
     return (
-      <Popover open={ isOpen } onOpenChange={ handleOnOpenChange }>
+      <Popover modal={ false } open={ isOpen } onOpenChange={ handleOnOpenChange }>
         <PopoverTrigger asChild>
           <LinkButton
             disabled={ !canSet }
