@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef } from 'react'
-import { cn } from 'tiptap-config'
+import { cn } from 'utils'
 import './card.scss'
 
 const Card = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(

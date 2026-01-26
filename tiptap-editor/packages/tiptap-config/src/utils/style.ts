@@ -1,8 +1,6 @@
 /**
  * 样式相关工具函数
  */
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 
 export const SR_ONLY = {
   position: 'absolute',
@@ -15,7 +13,3 @@ export const SR_ONLY = {
   whiteSpace: 'nowrap',
   borderWidth: 0,
 } as const
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}

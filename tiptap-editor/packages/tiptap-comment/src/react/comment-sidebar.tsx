@@ -11,7 +11,7 @@ import {
 } from 'tiptap-comps'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
-import { cn } from 'tiptap-config'
+import { cn } from 'utils'
 import { CommentItem } from './components/comment-item'
 
 /**

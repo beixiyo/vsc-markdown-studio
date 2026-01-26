@@ -11,7 +11,7 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Button } from 'tiptap-comps'
-import { cn } from 'tiptap-config'
+import { cn } from 'utils'
 
 const colors = [
   '#958DF1',

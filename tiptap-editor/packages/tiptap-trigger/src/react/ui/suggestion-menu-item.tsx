@@ -1,6 +1,6 @@
 import type { SuggestionItem } from '../../types'
 import { forwardRef, memo } from 'react'
-import { cn } from 'tiptap-config'
+import { cn } from 'utils'
 
 export interface SuggestionMenuItemProps {
   item: SuggestionItem

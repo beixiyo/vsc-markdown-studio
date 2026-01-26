@@ -702,6 +702,9 @@ importers:
       react-hotkeys-hook:
         specifier: ^5.2.1
         version: 5.2.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      styles:
+        specifier: workspace:*
+        version: link:../packages/styles
       tailwind-merge:
         specifier: ^2.5.4
         version: 2.6.0
@@ -735,6 +738,9 @@ importers:
       tiptap-trigger:
         specifier: workspace:*
         version: link:packages/tiptap-trigger
+      utils:
+        specifier: workspace:*
+        version: link:../packages/utils
       yjs:
         specifier: ^13.6.27
         version: 13.6.27
@@ -769,6 +775,9 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
+      styles:
+        specifier: workspace:*
+        version: link:../../../packages/styles
       tiptap-comps:
         specifier: workspace:*
         version: link:../tiptap-comps
@@ -778,6 +787,9 @@ importers:
       tiptap-styles:
         specifier: workspace:*
         version: link:../tiptap-styles
+      utils:
+        specifier: workspace:*
+        version: link:../../../packages/utils
 
   tiptap-editor/packages/tiptap-api:
     dependencies:
@@ -836,6 +848,9 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
+      styles:
+        specifier: workspace:*
+        version: link:../../../packages/styles
       tiptap-api:
         specifier: workspace:*
         version: link:../tiptap-api
@@ -848,6 +863,9 @@ importers:
       tiptap-styles:
         specifier: workspace:*
         version: link:../tiptap-styles
+      utils:
+        specifier: workspace:*
+        version: link:../../../packages/utils
 
   tiptap-editor/packages/tiptap-comps:
     dependencies:
@@ -878,12 +896,18 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
+      styles:
+        specifier: workspace:*
+        version: link:../../../packages/styles
       tiptap-api:
         specifier: workspace:*
         version: link:../tiptap-api
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
+      utils:
+        specifier: workspace:*
+        version: link:../../../packages/utils
 
   tiptap-editor/packages/tiptap-config:
     dependencies:
@@ -893,18 +917,12 @@ importers:
       '@tiptap/react':
         specifier: ^3.13.0
         version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
       react:
         specifier: ^19.2.1
         version: 19.2.3
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
-      tailwind-merge:
-        specifier: ^2.5.4
-        version: 2.6.0
 
   tiptap-editor/packages/tiptap-editor-core:
     dependencies:
@@ -989,12 +1007,18 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
+      styles:
+        specifier: workspace:*
+        version: link:../../../packages/styles
       tiptap-comps:
         specifier: workspace:*
         version: link:../tiptap-comps
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
+      utils:
+        specifier: workspace:*
+        version: link:../../../packages/utils
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
@@ -1013,6 +1037,9 @@ importers:
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n
+      styles:
+        specifier: workspace:*
+        version: link:../../../packages/styles
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
@@ -1040,6 +1067,9 @@ importers:
       tiptap-config:
         specifier: workspace:*
         version: link:../tiptap-config
+      utils:
+        specifier: workspace:*
+        version: link:../../../packages/utils
 
   tiptap-editor/packages/tiptap-trigger:
     dependencies:
@@ -1058,6 +1088,9 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
+      styles:
+        specifier: workspace:*
+        version: link:../../../packages/styles
       tiptap-api:
         specifier: workspace:*
         version: link:../tiptap-api
@@ -1067,6 +1100,9 @@ importers:
       tiptap-styles:
         specifier: workspace:*
         version: link:../tiptap-styles
+      utils:
+        specifier: workspace:*
+        version: link:../../../packages/utils
 
 packages:
 

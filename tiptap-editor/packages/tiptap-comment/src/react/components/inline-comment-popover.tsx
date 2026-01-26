@@ -12,7 +12,7 @@ import { memo, useEffect, useMemo } from 'react'
 import { getSelectionRect } from 'tiptap-api'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
-import { cn } from 'tiptap-config'
+import { cn } from 'utils'
 import { CommentItem } from './comment-item'
 
 export type InlineCommentPopoverProps = {

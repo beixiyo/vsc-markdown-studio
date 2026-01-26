@@ -36,7 +36,9 @@
     "tiptap-api": "workspace:*",
     "tiptap-config": "workspace:*",
     "tiptap-styles": "workspace:*",
-    "tiptap-comps": "workspace:*"
+    "tiptap-comps": "workspace:*",
+    "utils": "workspace:*",
+    "styles": "workspace:*"
   },
   "peerDependencies": {
     "@floating-ui/react": "^0.27.16",

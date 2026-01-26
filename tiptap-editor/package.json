@@ -57,10 +57,12 @@
     "tiptap-comment": "workspace:*",
     "tiptap-comps": "workspace:*",
     "tiptap-config": "workspace:*",
+    "styles": "workspace:*",
     "tiptap-editor-core": "workspace:*",
     "tiptap-mermaid": "workspace:*",
     "tiptap-speaker-node": "workspace:*",
     "tiptap-styles": "workspace:*",
+    "utils": "workspace:*",
     "tiptap-trigger": "workspace:*",
     "yjs": "^13.6.27"
   },

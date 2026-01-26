@@ -24,7 +24,8 @@
   ],
   "dependencies": {
     "tiptap-config": "workspace:*",
-    "@tiptap/pm": "^3.13.0"
+    "@tiptap/pm": "^3.13.0",
+    "styles": "workspace:*"
   },
   "peerDependencies": {
     "i18n": "workspace:*",

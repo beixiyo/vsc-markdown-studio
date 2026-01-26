@@ -27,7 +27,9 @@
     "mermaid": "^11.12.2",
     "tiptap-comps": "workspace:*",
     "tiptap-config": "workspace:*",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "utils": "workspace:*",
+    "styles": "workspace:*"
   },
   "peerDependencies": {
     "i18n": "workspace:*",

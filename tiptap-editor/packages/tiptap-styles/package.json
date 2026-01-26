@@ -28,7 +28,8 @@
   "dependencies": {
     "@tiptap/extension-horizontal-rule": "^3.13.0",
     "tiptap-comps": "workspace:*",
-    "tiptap-config": "workspace:*"
+    "tiptap-config": "workspace:*",
+    "utils": "workspace:*"
   },
   "peerDependencies": {
     "react": "^19.2.1",

@@ -11,7 +11,7 @@ import {
 } from '@floating-ui/react'
 import { memo, useEffect, useMemo, useRef } from 'react'
 import { useCommentLabels } from 'tiptap-api/react'
-import { cn } from 'tiptap-config'
+import { cn } from 'utils'
 import { SuggestionMenuItem } from './suggestion-menu-item'
 
 export type SuggestionMenuProps = {

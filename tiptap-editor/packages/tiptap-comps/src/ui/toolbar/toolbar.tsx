@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 import { useComposedRef } from 'tiptap-api/react'
-import { cn } from 'tiptap-config'
+import { cn } from 'utils'
 import { Separator } from '../separator'
 import { useMenuNavigation } from './use-menu-navigation'
 import './toolbar.scss'

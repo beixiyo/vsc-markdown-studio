@@ -5,7 +5,8 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { useRef, useState } from 'react'
 import { Button } from 'tiptap-comps'
 import { CloseIcon } from 'tiptap-comps/icons'
-import { cn, focusNextNode, isValidPosition } from 'tiptap-config'
+import { cn } from 'utils'
+import { focusNextNode, isValidPosition } from 'tiptap-config'
 import './image-upload-node.scss'
 
 export interface FileItem {

@@ -35,7 +35,9 @@
   "dependencies": {
     "tiptap-api": "workspace:*",
     "tiptap-config": "workspace:*",
-    "hooks": "workspace:*"
+    "hooks": "workspace:*",
+    "utils": "workspace:*",
+    "styles": "workspace:*"
   },
   "peerDependencies": {
     "i18n": "workspace:*",

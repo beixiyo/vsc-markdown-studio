@@ -20,8 +20,7 @@
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js"
-    },
-    "./tailwind.css": "./tailwind.css"
+    }
   },
   "files": [
     "dist"
@@ -31,8 +30,6 @@
     "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^2.5.4"
   },
   "peerDependencies": {
     "react": "^19.2.1",

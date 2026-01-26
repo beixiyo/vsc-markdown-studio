@@ -12,7 +12,7 @@ import {
   useLanguage,
 } from 'tiptap-api/react'
 import { BanIcon, CornerDownLeftIcon, EditIcon, LocateIcon, TrashIcon } from 'tiptap-comps/icons'
-import { cn } from 'tiptap-config'
+import { cn } from 'utils'
 import { createReply, deleteComment, updateComment } from '../../comment'
 import { commentPluginKey } from '../../plugin'
 import { CommentEditDialog } from './comment-edit-dialog'
