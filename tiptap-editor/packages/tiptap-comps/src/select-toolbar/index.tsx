@@ -34,6 +34,7 @@ export function SelectionToolbar({
   const [hasSelection, setHasSelection] = useState(false)
   const updateTimeoutRef = useRef<number | undefined>(undefined)
   const toolbarRef = useRef<HTMLDivElement | null>(null)
+  const isMouseDownRef = useRef(false)
 
   /** 获取选中文本的 DOM 位置（实时计算，不缓存） */
   const getSelectionRect = useCallback(() => {
@@ -155,10 +156,32 @@ export function SelectionToolbar({
 
     const currentEditorElement = editorElement
 
-    /** 监听鼠标松开事件（在编辑器内） */
-    const handleMouseUp = (event: MouseEvent) => {
-      /** 检查事件是否发生在编辑器内 */
-      if (currentEditorElement.contains(event.target as Node)) {
+    /** 监听鼠标按下事件 */
+    const handleMouseDown = (event: MouseEvent) => {
+      const target = event.target as Node
+      const toolbarElement = toolbarRef.current
+
+      /** 检查是否点击在工具栏或需要保持工具栏打开的区域 */
+      const keepOpenElement = target instanceof HTMLElement
+        ? target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}]`)
+        : null
+
+      if (toolbarElement?.contains(target) || keepOpenElement) {
+        return
+      }
+
+      isMouseDownRef.current = true
+
+      /** 按下时立即隐藏工具栏，等待抬起后再重新判断 */
+      if (hasSelection) {
+        setHasSelection(false)
+      }
+    }
+
+    /** 监听鼠标松开事件 */
+    const handleMouseUp = () => {
+      if (isMouseDownRef.current) {
+        isMouseDownRef.current = false
         updateToolbarState()
       }
     }
@@ -187,16 +210,18 @@ export function SelectionToolbar({
       }
     }
 
-    /** 监听选中变化（每次选择变化时都更新工具栏状态） */
+    /** 监听选中变化 */
     const handleSelectionUpdate = () => {
-      updateToolbarState()
+      if (!isMouseDownRef.current) {
+        updateToolbarState()
+      }
     }
 
-    /** 监听文档更新（可能影响选中位置，每次更新时都检查工具栏状态） */
+    /** 监听文档更新 */
     const handleUpdate = () => {
-      // Floating UI 使用 autoUpdate 自动感知布局变化
-      /** 每次更新时都检查选择状态，确保工具栏正确显示/隐藏 */
-      updateToolbarState()
+      if (!isMouseDownRef.current) {
+        updateToolbarState()
+      }
     }
 
     /** 监听键盘事件（支持键盘选择文本） */
@@ -223,6 +248,7 @@ export function SelectionToolbar({
     }
 
     /** 添加事件监听器 */
+    document.addEventListener('mousedown', handleMouseDown)
     document.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('click', handleClick, true)
     document.addEventListener('keyup', handleKeyUp)
@@ -230,6 +256,7 @@ export function SelectionToolbar({
     editor.on('update', handleUpdate)
 
     return () => {
+      document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('click', handleClick, true)
       document.removeEventListener('keyup', handleKeyUp)
@@ -239,7 +266,7 @@ export function SelectionToolbar({
         clearTimeout(updateTimeoutRef.current)
       }
     }
-  }, [enabled, editor, editorSelector, updateToolbarState])
+  }, [enabled, editor, editorSelector, updateToolbarState, hasSelection])
 
   /** 如果没有选中或未启用，不显示工具栏 */
   if (!hasSelection || !enabled || !virtualElement) {
