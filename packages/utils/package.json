@@ -36,6 +36,8 @@
     "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
+    "xss": "^1.0.15",
+    "marked": "^15.0.7",
     "config": "workspace:*"
   }
 }
