@@ -15,17 +15,20 @@ export function useOnWinHidden(
   hiddenFn: VoidFunction,
   showFn?: VoidFunction,
 ) {
+  const watchHiddenFn = useWatchRef(hiddenFn)
+  const watchShowFn = useWatchRef(showFn)
+
   useEffect(() => {
     const fn = () => {
       const isHidden = document.visibilityState === 'hidden'
       if (isHidden) {
-        hiddenFn()
+        watchHiddenFn.current()
         return
       }
 
       const isVisible = document.visibilityState === 'visible'
-      if (isVisible && showFn) {
-        showFn()
+      if (isVisible && watchShowFn.current) {
+        watchShowFn.current()
       }
     }
 
@@ -34,7 +37,7 @@ export function useOnWinHidden(
     return () => {
       document.removeEventListener('visibilitychange', fn)
     }
-  }, [hiddenFn, showFn])
+  }, [watchHiddenFn, watchShowFn])
 }
 
 /**
@@ -287,6 +290,8 @@ export function useScrollReachBottom(
     enabled = true,
   } = options
 
+  const watchOnReachBottom = useWatchRef(onReachBottom)
+
   /**
    * 获取滚动尺寸信息
    */
@@ -320,20 +325,20 @@ export function useScrollReachBottom(
    * 检查是否触底
    */
   const checkReachBottom = useCallback(() => {
-    if (!enabled || !onReachBottom) {
+    if (!enabled || !watchOnReachBottom.current) {
       return
     }
 
     const { isReachedBottom } = getScrollSize()
     if (isReachedBottom) {
-      onReachBottom()
+      watchOnReachBottom.current()
     }
-  }, [enabled, onReachBottom, getScrollSize])
+  }, [enabled, watchOnReachBottom, getScrollSize])
 
   /** 监听滚动事件 */
   useEffect(() => {
     const container = containerRef.current
-    if (!container || !enabled || !onReachBottom) {
+    if (!container || !enabled || !watchOnReachBottom.current) {
       return
     }
 
@@ -346,7 +351,7 @@ export function useScrollReachBottom(
     return () => {
       container.removeEventListener('scroll', handleScroll)
     }
-  }, [containerRef, enabled, onReachBottom, checkReachBottom])
+  }, [containerRef, enabled, watchOnReachBottom, checkReachBottom])
 
   return {
     /**
