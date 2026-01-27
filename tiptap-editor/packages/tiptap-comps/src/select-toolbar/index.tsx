@@ -138,7 +138,7 @@ export function SelectionToolbar({
   )
 
   /** 使用 Floating UI 进行智能定位 */
-  const { refs, floatingStyles, context } = useFloating({
+  const { refs, floatingStyles, context, isPositioned } = useFloating({
     placement: placement || 'top-start',
     open: hasSelection && enabled,
     whileElementsMounted: autoUpdate,
@@ -306,10 +306,13 @@ export function SelectionToolbar({
           refs.setFloating(node)
         } }
         className={ cn(
-          'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-textSecondary rounded-lg shadow-lg z-50 animate-in fade-in duration-200',
+          'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-textSecondary rounded-lg shadow-lg z-50',
           className,
         ) }
-        style={ floatingStyles }
+        style={ {
+          ...floatingStyles,
+          opacity: isPositioned ? 1 : 0,
+        } }
         { ...getFloatingProps() }
       >
         { children }
