@@ -1,5 +1,5 @@
 // --- UI Primitives ---
-import type { ButtonProps } from '../../ui'
+import type { ButtonProps } from 'comps'
 
 // --- Tiptap UI ---
 import type { UseImageUploadConfig } from './use-image-upload'
@@ -11,7 +11,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 // --- Lib ---
 import { parseShortcutKeys } from 'tiptap-utils'
 
-import { Badge, Button } from '../../ui'
+import { Badge, Button } from 'comps'
 import {
   IMAGE_UPLOAD_SHORTCUT_KEY,
   useImageUpload,
@@ -43,7 +43,7 @@ export function ImageShortcutBadge({
 }: {
   shortcutKeys?: string
 }) {
-  return <Badge>{parseShortcutKeys({ shortcutKeys })}</Badge>
+  return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
 /**
@@ -103,14 +103,12 @@ export const ImageUploadButton = forwardRef<
     return (
       <Button
         type="button"
-        data-style="ghost"
-        data-active-state={ isActive
-          ? 'on'
-          : 'off' }
+        variant="ghost"
+        size="sm"
+        name={ isActive ? 'active' : undefined }
         role="button"
         tabIndex={ -1 }
         disabled={ !canInsert }
-        data-disabled={ !canInsert }
         aria-label={ label }
         aria-pressed={ isActive }
         tooltip={ label }
@@ -118,13 +116,13 @@ export const ImageUploadButton = forwardRef<
         { ...buttonProps }
         ref={ ref }
       >
-        {children ?? (
+        { children ?? (
           <>
             <RenderIcon className="size-4" />
-            {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && <ImageShortcutBadge shortcutKeys={ shortcutKeys } />}
+            { text && <span className="tiptap-button-text">{ text }</span> }
+            { showShortcut && <ImageShortcutBadge shortcutKeys={ shortcutKeys } /> }
           </>
-        )}
+        ) }
       </Button>
     )
   },

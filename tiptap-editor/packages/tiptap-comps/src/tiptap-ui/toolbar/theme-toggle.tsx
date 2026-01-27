@@ -1,6 +1,6 @@
 import { useTheme } from 'hooks'
 import { MoonStarIcon, SunIcon } from '../../icons'
-import { Button } from '../../ui'
+import { Button } from 'comps'
 
 export function ThemeToggle() {
   const [theme, setTheme] = useTheme()
@@ -12,7 +12,8 @@ export function ThemeToggle() {
       aria-label={ `Switch to ${isDarkMode
         ? 'light'
         : 'dark'} mode` }
-      data-style="ghost"
+      variant="ghost"
+      size="sm"
     >
       { isDarkMode
         ? (

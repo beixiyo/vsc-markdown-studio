@@ -1,7 +1,7 @@
 'use client'
 
 // --- UI Primitives ---
-import type { ButtonProps } from '../../ui'
+import type { ButtonProps } from 'comps'
 
 // --- Tiptap UI ---
 import type {
@@ -16,7 +16,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 // --- Lib ---
 import { parseShortcutKeys } from 'tiptap-utils'
 
-import { Badge, Button } from '../../ui'
+import { Badge, Button } from 'comps'
 import {
   TEXT_ALIGN_SHORTCUT_KEYS,
   useTextAlign,
@@ -50,7 +50,7 @@ export function TextAlignShortcutBadge({
   align: TextAlign
   shortcutKeys?: string
 }) {
-  return <Badge>{parseShortcutKeys({ shortcutKeys })}</Badge>
+  return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
 /**
@@ -113,11 +113,9 @@ export const TextAlignButton = forwardRef<
       <Button
         type="button"
         disabled={ !canAlign }
-        data-style="ghost"
-        data-active-state={ isActive
-          ? 'on'
-          : 'off' }
-        data-disabled={ !canAlign }
+        variant="ghost"
+        size="sm"
+        name={ isActive ? 'active' : undefined }
         role="button"
         tabIndex={ -1 }
         aria-label={ label }
@@ -127,18 +125,18 @@ export const TextAlignButton = forwardRef<
         { ...buttonProps }
         ref={ ref }
       >
-        {children ?? (
+        { children ?? (
           <>
             <RenderIcon className="size-4" />
-            {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && (
+            { text && <span className="tiptap-button-text">{ text }</span> }
+            { showShortcut && (
               <TextAlignShortcutBadge
                 align={ align }
                 shortcutKeys={ shortcutKeys }
               />
-            )}
+            ) }
           </>
-        )}
+        ) }
       </Button>
     )
   },

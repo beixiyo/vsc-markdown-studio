@@ -1,11 +1,11 @@
-import type { ButtonProps } from '../../ui'
+import type { ButtonProps } from 'comps'
 
 import type { UseBlockquoteConfig } from './use-blockquote'
 import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
 import { parseShortcutKeys } from 'tiptap-utils'
-import { Badge, Button } from '../../ui'
+import { Badge, Button } from 'comps'
 import {
   BLOCKQUOTE_SHORTCUT_KEY,
   useBlockquote,
@@ -30,7 +30,7 @@ export function BlockquoteShortcutBadge({
 }: {
   shortcutKeys?: string
 }) {
-  return <Badge>{parseShortcutKeys({ shortcutKeys })}</Badge>
+  return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
 /**
@@ -87,14 +87,12 @@ export const BlockquoteButton = forwardRef<
     return (
       <Button
         type="button"
-        data-style="ghost"
-        data-active-state={ isActive
-          ? 'on'
-          : 'off' }
+        variant="ghost"
+        size="sm"
+        name={ isActive ? 'active' : undefined }
         role="button"
         tabIndex={ -1 }
         disabled={ !canToggle }
-        data-disabled={ !canToggle }
         aria-label={ label }
         aria-pressed={ isActive }
         tooltip={ label }
@@ -102,15 +100,15 @@ export const BlockquoteButton = forwardRef<
         { ...buttonProps }
         ref={ ref }
       >
-        {children ?? (
+        { children ?? (
           <>
             <Icon className="size-4" />
-            {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && (
+            { text && <span className="tiptap-button-text">{ text }</span> }
+            { showShortcut && (
               <BlockquoteShortcutBadge shortcutKeys={ shortcutKeys } />
-            )}
+            ) }
           </>
-        )}
+        ) }
       </Button>
     )
   },

@@ -1,4 +1,4 @@
-import type { ButtonProps } from '../../ui'
+import type { ButtonProps } from 'comps'
 import {
   autoUpdate,
   flip,
@@ -13,7 +13,7 @@ import {
 import { forwardRef, useCallback, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { ListIcon } from '../../icons'
-import { Button } from '../../ui'
+import { Button } from 'comps'
 import { OutlinePanel } from './outline-panel'
 
 export interface OutlineButtonProps extends Omit<ButtonProps, 'type'> {
@@ -75,8 +75,8 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
       <>
         <Button
           type="button"
-          data-style="ghost"
-          data-appearance="default"
+          variant="ghost"
+          size="sm"
           role="button"
           tabIndex={ -1 }
           aria-label="大纲"

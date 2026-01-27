@@ -1,5 +1,7 @@
+'use client'
+
 // --- UI Primitives ---
-import type { ButtonProps } from '../../ui'
+import type { ButtonProps } from 'comps'
 
 // --- Tiptap UI ---
 import type {
@@ -12,7 +14,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 
 // --- Lib ---
 import { parseShortcutKeys } from 'tiptap-utils'
-import { Badge, Button } from '../../ui'
+import { Badge, Button } from 'comps'
 import {
   HEADING_SHORTCUT_KEYS,
   useHeading,
@@ -39,7 +41,7 @@ export function HeadingShortcutBadge({
   level: Level
   shortcutKeys?: string
 }) {
-  return <Badge>{parseShortcutKeys({ shortcutKeys })}</Badge>
+  return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
 /**
@@ -95,14 +97,12 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
     return (
       <Button
         type="button"
-        data-style="ghost"
-        data-active-state={ isActive
-          ? 'on'
-          : 'off' }
+        variant="ghost"
+        size="sm"
+        name={ isActive ? 'active' : undefined }
         role="button"
         tabIndex={ -1 }
         disabled={ !canToggle }
-        data-disabled={ !canToggle }
         aria-label={ label }
         aria-pressed={ isActive }
         tooltip={ label }
@@ -110,15 +110,15 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
         { ...buttonProps }
         ref={ ref }
       >
-        {children ?? (
+        { children ?? (
           <>
             <Icon className="size-4" />
-            {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && (
+            { text && <span className="tiptap-button-text">{ text }</span> }
+            { showShortcut && (
               <HeadingShortcutBadge level={ level } shortcutKeys={ shortcutKeys } />
-            )}
+            ) }
           </>
-        )}
+        ) }
       </Button>
     )
   },

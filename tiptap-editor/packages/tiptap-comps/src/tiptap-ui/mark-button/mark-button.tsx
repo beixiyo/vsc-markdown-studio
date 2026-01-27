@@ -1,6 +1,6 @@
 'use client'
 
-import type { ButtonProps } from '../../ui'
+import type { ButtonProps } from 'comps'
 
 import type { Mark, UseMarkConfig } from './use-mark'
 
@@ -9,7 +9,7 @@ import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-utils'
 
-import { Badge, Button } from '../../ui'
+import { Badge, Button } from 'comps'
 import { MARK_SHORTCUT_KEYS, useMark } from './use-mark'
 
 export interface MarkButtonProps
@@ -33,7 +33,7 @@ export function MarkShortcutBadge({
   type: Mark
   shortcutKeys?: string
 }) {
-  return <Badge>{parseShortcutKeys({ shortcutKeys })}</Badge>
+  return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
 /**
@@ -90,11 +90,9 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
       <Button
         type="button"
         disabled={ !canToggle }
-        data-style="ghost"
-        data-active-state={ isActive
-          ? 'on'
-          : 'off' }
-        data-disabled={ !canToggle }
+        variant="ghost"
+        size="sm"
+        name={ isActive ? 'active' : undefined }
         role="button"
         tabIndex={ -1 }
         aria-label={ label }
@@ -104,15 +102,15 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
         { ...buttonProps }
         ref={ ref }
       >
-        {children ?? (
+        { children ?? (
           <>
             <Icon className="size-4" />
-            {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && (
+            { text && <span className="tiptap-button-text">{ text }</span> }
+            { showShortcut && (
               <MarkShortcutBadge type={ type } shortcutKeys={ shortcutKeys } />
-            )}
+            ) }
           </>
-        )}
+        ) }
       </Button>
     )
   },

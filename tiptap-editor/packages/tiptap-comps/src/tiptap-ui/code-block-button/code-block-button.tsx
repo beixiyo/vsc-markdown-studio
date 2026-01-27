@@ -1,4 +1,4 @@
-import type { ButtonProps } from '../../ui'
+import type { ButtonProps } from 'comps'
 
 import type { UseCodeBlockConfig } from './use-code-block'
 
@@ -7,7 +7,7 @@ import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-utils'
 
-import { Badge, Button } from '../../ui'
+import { Badge, Button } from 'comps'
 import {
   CODE_BLOCK_SHORTCUT_KEY,
   useCodeBlock,
@@ -32,7 +32,7 @@ export function CodeBlockShortcutBadge({
 }: {
   shortcutKeys?: string
 }) {
-  return <Badge>{parseShortcutKeys({ shortcutKeys })}</Badge>
+  return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
 /**
@@ -89,13 +89,11 @@ export const CodeBlockButton = forwardRef<
     return (
       <Button
         type="button"
-        data-style="ghost"
-        data-active-state={ isActive
-          ? 'on'
-          : 'off' }
+        variant="ghost"
+        size="sm"
+        name={ isActive ? 'active' : undefined }
         role="button"
         disabled={ !canToggle }
-        data-disabled={ !canToggle }
         tabIndex={ -1 }
         aria-label={ label }
         aria-pressed={ isActive }
@@ -104,15 +102,15 @@ export const CodeBlockButton = forwardRef<
         { ...buttonProps }
         ref={ ref }
       >
-        {children ?? (
+        { children ?? (
           <>
             <Icon className="size-4" />
-            {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && (
+            { text && <span className="tiptap-button-text">{ text }</span> }
+            { showShortcut && (
               <CodeBlockShortcutBadge shortcutKeys={ shortcutKeys } />
-            )}
+            ) }
           </>
-        )}
+        ) }
       </Button>
     )
   },

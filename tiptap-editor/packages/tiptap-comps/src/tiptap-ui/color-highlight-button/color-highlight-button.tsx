@@ -1,7 +1,7 @@
 import { forwardRef, useCallback, useMemo } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-utils'
-import { Badge, Button } from '../../ui'
+import { Badge, Button } from 'comps'
 import {
   COLOR_HIGHLIGHT_SHORTCUT_KEY,
   useColorHighlight,
@@ -22,7 +22,7 @@ export function ColorHighlightShortcutBadge({
 }: {
   shortcutKeys?: string
 }) {
-  return <Badge>{parseShortcutKeys({ shortcutKeys })}</Badge>
+  return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
 /**
@@ -103,14 +103,12 @@ export const ColorHighlightButton = forwardRef<
     return (
       <Button
         type="button"
-        data-style="ghost"
-        data-active-state={ isActive
-          ? 'on'
-          : 'off' }
+        variant="ghost"
+        size="sm"
+        name={ isActive ? 'active' : undefined }
         role="button"
         tabIndex={ -1 }
         disabled={ !canColorHighlight }
-        data-disabled={ !canColorHighlight }
         aria-label={ label }
         aria-pressed={ isActive }
         tooltip={ label }
