@@ -34,7 +34,7 @@
   ],
   "dependencies": {
     "tiptap-api": "workspace:*",
-    "tiptap-config": "workspace:*",
+    "tiptap-utils": "workspace:*",
     "tiptap-comps": "workspace:*",
     "utils": "workspace:*",
     "styles": "workspace:*"

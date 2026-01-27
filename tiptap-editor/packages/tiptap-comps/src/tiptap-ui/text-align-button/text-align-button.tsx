@@ -14,7 +14,7 @@ import { forwardRef, useCallback } from 'react'
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
 // --- Lib ---
-import { parseShortcutKeys } from 'tiptap-config'
+import { parseShortcutKeys } from 'tiptap-utils'
 
 import { Badge, Button } from '../../ui'
 import {

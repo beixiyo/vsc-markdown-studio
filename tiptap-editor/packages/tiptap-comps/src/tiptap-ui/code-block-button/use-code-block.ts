@@ -14,7 +14,7 @@ import {
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
-} from 'tiptap-config'
+} from 'tiptap-utils'
 // --- Icons ---
 import { CodeBlockIcon } from '../../icons'
 

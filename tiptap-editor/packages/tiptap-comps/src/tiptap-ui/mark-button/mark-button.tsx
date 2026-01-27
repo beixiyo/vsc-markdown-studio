@@ -7,7 +7,7 @@ import type { Mark, UseMarkConfig } from './use-mark'
 import { forwardRef, useCallback } from 'react'
 
 import { useTiptapEditor } from 'tiptap-api/react'
-import { parseShortcutKeys } from 'tiptap-config'
+import { parseShortcutKeys } from 'tiptap-utils'
 
 import { Badge, Button } from '../../ui'
 import { MARK_SHORTCUT_KEYS, useMark } from './use-mark'

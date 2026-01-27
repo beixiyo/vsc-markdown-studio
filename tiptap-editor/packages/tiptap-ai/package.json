@@ -33,7 +33,7 @@
     "dist"
   ],
   "dependencies": {
-    "tiptap-config": "workspace:*",
+    "tiptap-utils": "workspace:*",
     "tiptap-comps": "workspace:*",
     "utils": "workspace:*",
     "styles": "workspace:*"

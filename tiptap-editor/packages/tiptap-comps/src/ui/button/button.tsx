@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { forwardRef, Fragment, useMemo } from 'react'
 import { cn } from 'utils'
-import { parseShortcutKeys } from 'tiptap-config'
+import { parseShortcutKeys } from 'tiptap-utils'
 import {
   Tooltip,
   TooltipContent,

@@ -98,7 +98,7 @@
   - `storage/use-storage-save.ts`
 
 ### 6. Lib (工具库)
-- **位置**: `tiptap-editor/packages/tiptap-config/src/utils/`
+- **位置**: `tiptap-editor/packages/tiptap-utils/src/utils/`
 
 ---
 
@@ -116,7 +116,7 @@
 - 评论功能包
 - 包含：评论存储、同步、导出等功能
 
-#### `tiptap-config/`
+#### `tiptap-utils/`
 - 配置包
 - 包含：常量定义、工具函数
 - **重要**: 这是原始 `lib/tiptap-utils.ts` 的重构版本，被拆分为多个模块化文件

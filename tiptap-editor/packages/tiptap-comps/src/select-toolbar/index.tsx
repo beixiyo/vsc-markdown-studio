@@ -15,7 +15,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getSelectionRect as getApiSelectionRect, hasSelectedText } from 'tiptap-api'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { cn } from 'utils'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-config'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 
 /**
  * 选中文本工具栏组件

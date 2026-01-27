@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useMarkLabels, useTiptapEditor } from 'tiptap-api/react'
 
-import { isMarkInSchema, isNodeTypeSelected } from 'tiptap-config'
+import { isMarkInSchema, isNodeTypeSelected } from 'tiptap-utils'
 
 import {
   BoldIcon,

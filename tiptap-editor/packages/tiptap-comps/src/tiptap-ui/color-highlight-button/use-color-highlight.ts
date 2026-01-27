@@ -11,7 +11,7 @@ import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
 import {
   isMarkInSchema,
   isNodeTypeSelected,
-} from 'tiptap-config'
+} from 'tiptap-utils'
 
 // --- Icons ---
 import { HighlighterIcon } from '../../icons'

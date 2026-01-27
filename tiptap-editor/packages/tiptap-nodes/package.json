@@ -39,7 +39,7 @@
   "dependencies": {
     "@tiptap/extension-horizontal-rule": "^3.13.0",
     "tiptap-comps": "workspace:*",
-    "tiptap-config": "workspace:*",
+    "tiptap-utils": "workspace:*",
     "utils": "workspace:*",
     "styles": "workspace:*"
   },

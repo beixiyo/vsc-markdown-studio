@@ -56,7 +56,7 @@
     "tiptap-api": "workspace:*",
     "tiptap-comment": "workspace:*",
     "tiptap-comps": "workspace:*",
-    "tiptap-config": "workspace:*",
+    "tiptap-utils": "workspace:*",
     "styles": "workspace:*",
     "tiptap-editor-core": "workspace:*",
     "tiptap-mermaid": "workspace:*",

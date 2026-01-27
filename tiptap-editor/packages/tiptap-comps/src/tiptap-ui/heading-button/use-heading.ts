@@ -11,7 +11,7 @@ import {
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
-} from 'tiptap-config'
+} from 'tiptap-utils'
 import {
   HeadingFiveIcon,
   HeadingFourIcon,

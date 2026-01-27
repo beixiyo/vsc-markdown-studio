@@ -6,7 +6,7 @@ import { useAlignLabels, useTiptapEditor } from 'tiptap-api/react'
 import {
   isExtensionAvailable,
   isNodeTypeSelected,
-} from 'tiptap-config'
+} from 'tiptap-utils'
 
 import {
   AlignCenterIcon,

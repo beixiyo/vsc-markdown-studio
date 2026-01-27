@@ -7,7 +7,7 @@ import { AI } from 'tiptap-ai'
 
 import { useAutoSave, useIsBreakpoint, useWindowSize } from 'tiptap-api/react'
 import { CommentMark, CommentStore } from 'tiptap-comment'
-import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-config'
+import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-utils'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 
 import { MermaidNode } from 'tiptap-mermaid'

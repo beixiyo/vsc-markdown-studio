@@ -9,7 +9,7 @@ import {
   isMarkInSchema,
   isNodeTypeSelected,
   sanitizeUrl,
-} from 'tiptap-config'
+} from 'tiptap-utils'
 // --- Icons ---
 import { LinkIcon } from '../../icons'
 

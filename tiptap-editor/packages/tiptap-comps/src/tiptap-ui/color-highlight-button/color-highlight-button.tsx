@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useMemo } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { parseShortcutKeys } from 'tiptap-config'
+import { parseShortcutKeys } from 'tiptap-utils'
 import { Badge, Button } from '../../ui'
 import {
   COLOR_HIGHLIGHT_SHORTCUT_KEY,

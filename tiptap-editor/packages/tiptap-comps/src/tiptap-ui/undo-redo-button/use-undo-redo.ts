@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useHistoryLabels, useTiptapEditor } from 'tiptap-api/react'
 
-import { isNodeTypeSelected } from 'tiptap-config'
+import { isNodeTypeSelected } from 'tiptap-utils'
 
 import { Redo2Icon, Undo2Icon } from '../../icons'
 

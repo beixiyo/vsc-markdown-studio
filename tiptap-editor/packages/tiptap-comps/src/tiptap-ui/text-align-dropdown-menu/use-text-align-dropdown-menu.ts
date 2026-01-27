@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { useAlignLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 
-import { isExtensionAvailable } from 'tiptap-config'
+import { isExtensionAvailable } from 'tiptap-utils'
 
 import {
   AlignCenterIcon,

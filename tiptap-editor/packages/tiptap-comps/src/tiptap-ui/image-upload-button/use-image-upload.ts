@@ -8,7 +8,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useIsBreakpoint, useTiptapEditor, useTiptapEditorT } from 'tiptap-api/react'
 
 // --- Lib ---
-import { isExtensionAvailable } from 'tiptap-config'
+import { isExtensionAvailable } from 'tiptap-utils'
 // --- Icons ---
 import { ImagePlusIcon } from '../../icons'
 
