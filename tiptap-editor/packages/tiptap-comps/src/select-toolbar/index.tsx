@@ -12,7 +12,7 @@ import {
   useInteractions,
 } from '@floating-ui/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { hasSelectedText } from 'tiptap-api'
+import { getSelectionRect as getApiSelectionRect, hasSelectedText } from 'tiptap-api'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { cn } from 'utils'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-config'
@@ -37,48 +37,7 @@ export function SelectionToolbar({
 
   /** 获取选中文本的 DOM 位置（实时计算，不缓存） */
   const getSelectionRect = useCallback(() => {
-    if (!editor?.view || !editor.state) {
-      return null
-    }
-
-    const { selection } = editor.state
-    const { view } = editor
-
-    /** 检查是否有选中文本 */
-    if (selection.empty || selection.from === selection.to) {
-      return null
-    }
-
-    try {
-      /** 获取选中范围的开始和结束位置坐标 */
-      const fromCoords = view.coordsAtPos(selection.from)
-      const toCoords = view.coordsAtPos(selection.to)
-
-      if (!fromCoords || !toCoords) {
-        return null
-      }
-
-      /**
-       * 计算选中文本的边界框
-       * 如果选中跨越多行，我们需要获取所有行的边界
-       */
-      const rect = {
-        top: Math.min(fromCoords.top, toCoords.top),
-        bottom: Math.max(fromCoords.bottom, toCoords.bottom),
-        left: Math.min(fromCoords.left, toCoords.left),
-        right: Math.max(fromCoords.right, toCoords.right),
-        width: Math.abs(toCoords.right - fromCoords.left),
-        height: Math.abs(toCoords.bottom - fromCoords.top),
-        x: Math.min(fromCoords.left, toCoords.left),
-        y: Math.min(fromCoords.top, toCoords.top),
-      } as DOMRect
-
-      return rect
-    }
-    catch (error) {
-      console.error('Error getting selection rect:', error)
-      return null
-    }
+    return getApiSelectionRect(editor)
   }, [editor])
 
   /** 创建虚拟元素，getBoundingClientRect 总是返回最新的位置 */

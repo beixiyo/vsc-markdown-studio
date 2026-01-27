@@ -49,12 +49,12 @@ export function hasSelectedText(editor: Editor | null): boolean {
 
   /**
    * 即使是 TextSelection，如果它仅仅包含一个原子节点（例如插入后被自动选中的情况），
-   * 我们也不希望显示工具栏。
+   * 我们也不希望显示工具栏。但如果是正常的文本字符，我们应该允许。
    */
   const { $from, $to } = selection
   if ($from.pos === $to.pos - 1) {
     const node = $from.nodeAfter
-    if (node && node.isAtom) {
+    if (node && node.isAtom && !node.isText) {
       return false
     }
   }
