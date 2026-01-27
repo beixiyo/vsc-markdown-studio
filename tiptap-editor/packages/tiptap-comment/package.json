@@ -36,6 +36,7 @@
     "tiptap-api": "workspace:*",
     "tiptap-utils": "workspace:*",
     "tiptap-comps": "workspace:*",
+    "comps": "workspace:*",
     "utils": "workspace:*",
     "styles": "workspace:*"
   },

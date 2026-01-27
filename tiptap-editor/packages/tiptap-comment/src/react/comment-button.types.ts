@@ -1,4 +1,4 @@
-import type { ButtonProps } from 'tiptap-comps'
+import type { ButtonProps } from 'comps'
 import type { CommentAuthor, CommentStore } from '../comment-store'
 
 /**

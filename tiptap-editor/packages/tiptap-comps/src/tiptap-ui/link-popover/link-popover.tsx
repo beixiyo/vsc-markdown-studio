@@ -1,10 +1,10 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import type { ButtonProps } from '../../ui'
 import type { UseLinkPopoverConfig } from './use-link-popover'
-import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { Button, Card, Input, Popover, type PopoverRef } from 'comps'
 
+import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
 import {
   CornerDownLeftIcon,
@@ -12,7 +12,6 @@ import {
   LinkIcon,
   TrashIcon,
 } from '../../icons'
-import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Input, InputGroup, Popover, PopoverContent, PopoverTrigger, Separator } from '../../ui'
 
 import { useLinkPopover } from './use-link-popover'
 
@@ -24,7 +23,7 @@ export interface LinkMainProps {
   /**
    * Function to update the URL state.
    */
-  setUrl: React.Dispatch<React.SetStateAction<string | null>>
+  setUrl: (url: string) => void
   /**
    * Function to set the link in the editor.
    */
@@ -44,7 +43,7 @@ export interface LinkMainProps {
 }
 
 export interface LinkPopoverProps
-  extends Omit<ButtonProps, 'type'>,
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
   UseLinkPopoverConfig {
   /**
    * Callback for when the popover opens or closes.
@@ -60,13 +59,13 @@ export interface LinkPopoverProps
 /**
  * Link button component for triggering the link popover
  */
-export const LinkButton = forwardRef<HTMLButtonElement, ButtonProps>(
+export const LinkButton = forwardRef<HTMLButtonElement, any>(
   ({ className, children, ...props }, ref) => {
     return (
       <Button
         type="button"
         className={ className }
-        data-style="ghost"
+        variant="ghost"
         role="button"
         tabIndex={ -1 }
         aria-label="Link"
@@ -104,71 +103,65 @@ const LinkMain: React.FC<LinkMainProps> = ({
 
   return (
     <Card
-      style={ {
-        ...(isMobile
-          ? { boxShadow: 'none', border: 0 }
-          : {}),
-      } }
+      padding="none"
+      bordered={ !isMobile }
+      shadow={ isMobile ? 'none' : 'md' }
+      className="min-w-max"
     >
-      <CardBody
-        style={ {
-          ...(isMobile
-            ? { padding: 0 }
-            : {}),
-        } }
-      >
-        <CardItemGroup orientation="horizontal">
-          <InputGroup>
-            <Input
-              type="url"
-              placeholder="Paste a link..."
-              value={ url }
-              onChange={ e => setUrl(e.target.value) }
-              onKeyDown={ handleKeyDown }
-              autoFocus
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-            />
-          </InputGroup>
+      <div className="flex flex-row items-center gap-1 p-1">
+        <Input
+          type="url"
+          placeholder="Paste a link..."
+          value={ url }
+          onChange={ setUrl }
+          onKeyDown={ handleKeyDown }
+          autoFocus
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          containerClassName="w-48 h-8"
+          size="sm"
+        />
 
-          <ButtonGroup orientation="horizontal">
-            <Button
-              type="button"
-              onClick={ setLink }
-              title="Apply link"
-              disabled={ !url && !isActive }
-              data-style="ghost"
-            >
-              <CornerDownLeftIcon className="size-4" />
-            </Button>
-          </ButtonGroup>
+        <div className="flex flex-row items-center">
+          <Button
+            type="button"
+            onClick={ setLink }
+            tooltip="Apply link"
+            disabled={ !url && !isActive }
+            variant="ghost"
+            size="sm"
+          >
+            <CornerDownLeftIcon className="size-4" />
+          </Button>
+        </div>
 
-          <Separator />
+        <div className="w-px h-4 bg-border/50 mx-1" />
 
-          <ButtonGroup orientation="horizontal">
-            <Button
-              type="button"
-              onClick={ openLink }
-              title="Open in new window"
-              disabled={ !url && !isActive }
-              data-style="ghost"
-            >
-              <ExternalLinkIcon className="size-4" />
-            </Button>
+        <div className="flex flex-row items-center gap-0.5">
+          <Button
+            type="button"
+            onClick={ openLink }
+            tooltip="Open in new window"
+            disabled={ !url && !isActive }
+            variant="ghost"
+            size="sm"
+          >
+            <ExternalLinkIcon className="size-4" />
+          </Button>
 
-            <Button
-              type="button"
-              onClick={ removeLink }
-              title="Remove link"
-              disabled={ !url && !isActive }
-              data-style="ghost"
-            >
-              <TrashIcon className="size-4" />
-            </Button>
-          </ButtonGroup>
-        </CardItemGroup>
-      </CardBody>
+          <Button
+            type="button"
+            onClick={ removeLink }
+            tooltip="Remove link"
+            disabled={ !url && !isActive }
+            variant="ghost"
+            size="sm"
+          >
+            <TrashIcon className="size-4" />
+          </Button>
+        </div>
+      </div>
     </Card>
   )
 }
@@ -206,7 +199,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
     ref,
   ) => {
     const { editor } = useTiptapEditor(providedEditor)
-    const [isOpen, setIsOpen] = useState(false)
+    const popoverRef = useRef<PopoverRef>(null)
 
     const {
       isVisible,
@@ -225,32 +218,14 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
       onSetLink,
     })
 
-    const handleOnOpenChange = useCallback(
-      (nextIsOpen: boolean) => {
-        setIsOpen(nextIsOpen)
-        onOpenChange?.(nextIsOpen)
-      },
-      [onOpenChange],
-    )
-
     const handleSetLink = useCallback(() => {
       setLink()
-      setIsOpen(false)
+      popoverRef.current?.close()
     }, [setLink])
-
-    const handleClick = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        onClick?.(event)
-        if (event.defaultPrevented)
-          return
-        setIsOpen(!isOpen)
-      },
-      [onClick, isOpen],
-    )
 
     useEffect(() => {
       if (autoOpenOnLinkActive && isActive) {
-        setIsOpen(true)
+        popoverRef.current?.open()
       }
     }, [autoOpenOnLinkActive, isActive])
 
@@ -259,25 +234,13 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
     }
 
     return (
-      <Popover modal={ false } open={ isOpen } onOpenChange={ handleOnOpenChange }>
-        <PopoverTrigger asChild>
-          <LinkButton
-            disabled={ !canSet }
-            data-active-state={ isActive
-              ? 'on'
-              : 'off' }
-            data-disabled={ !canSet }
-            aria-label={ label }
-            aria-pressed={ isActive }
-            onClick={ handleClick }
-            { ...buttonProps }
-            ref={ ref }
-          >
-            { children ?? <Icon className="size-4" /> }
-          </LinkButton>
-        </PopoverTrigger>
-
-        <PopoverContent>
+      <Popover
+        ref={ popoverRef }
+        contentClassName='p-0'
+        trigger="click"
+        onOpen={ () => onOpenChange?.(true) }
+        onClose={ () => onOpenChange?.(false) }
+        content={
           <LinkMain
             url={ url }
             setUrl={ setUrl }
@@ -286,7 +249,22 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
             openLink={ openLink }
             isActive={ isActive }
           />
-        </PopoverContent>
+        }
+      >
+        <LinkButton
+          disabled={ !canSet }
+          data-active-state={ isActive
+            ? 'on'
+            : 'off' }
+          data-disabled={ !canSet }
+          aria-label={ label }
+          aria-pressed={ isActive }
+          onClick={ onClick }
+          { ...buttonProps }
+          ref={ ref }
+        >
+          { children ?? <Icon className="size-4" /> }
+        </LinkButton>
       </Popover>
     )
   },

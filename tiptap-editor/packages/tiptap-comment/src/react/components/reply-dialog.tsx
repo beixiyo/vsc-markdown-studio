@@ -1,6 +1,6 @@
 import type React from 'react'
 import { memo } from 'react'
-import { Button } from 'tiptap-comps'
+import { Button, Textarea } from 'comps'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
@@ -10,7 +10,7 @@ import { cn } from 'utils'
  */
 export type ReplyDialogProps = {
   content: string
-  setContent: React.Dispatch<React.SetStateAction<string>>
+  setContent: (content: string) => void
   onCreate: () => void
   onCancel: () => void
   canCreate: boolean
@@ -52,36 +52,35 @@ export const ReplyDialog = memo(({
         </div>
       ) }
 
-      <textarea
-        className="min-h-[84px] w-full rounded-xl bg-backgroundSecondary px-3 py-2 text-sm text-textPrimary outline-none ring-0 transition-all"
+      <Textarea
+        containerClassName="min-h-[84px] w-full"
         placeholder={ labels.replyPlaceholder }
         value={ content }
-        onChange={ e => setContent(e.target.value) }
+        onChange={ setContent }
         onKeyDown={ handleKeyDown }
         autoFocus
         rows={ 3 }
+        size="sm"
       />
 
       <div className="flex items-center justify-end gap-2">
         <Button
           type="button"
           onClick={ onCancel }
-          aria-label={ labels.cancelTooltip }
-          showTooltip={ false }
-          className="flex h-9 items-center gap-2 rounded-lg border border-transparent px-3 text-sm font-medium text-textSecondary transition-all hover:bg-backgroundSecondary"
+          variant="ghost"
+          size="sm"
+          leftIcon={ <CloseIcon className="h-4 w-4" /> }
         >
-          <CloseIcon className="h-4 w-4" />
           { labels.cancel }
         </Button>
         <Button
           type="button"
           onClick={ onCreate }
-          aria-label={ labels.replyTooltip }
-          showTooltip={ false }
+          variant="primary"
+          size="sm"
           disabled={ !canCreate || !content.trim() }
-          className="flex h-9 items-center gap-2 rounded-lg bg-brand px-3 text-sm font-semibold text-white shadow-sm transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          leftIcon={ <CornerDownLeftIcon className="h-4 w-4" /> }
         >
-          <CornerDownLeftIcon className="h-4 w-4" />
           { labels.reply }
         </Button>
       </div>

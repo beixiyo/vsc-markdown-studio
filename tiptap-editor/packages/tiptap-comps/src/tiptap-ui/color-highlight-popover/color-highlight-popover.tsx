@@ -1,11 +1,10 @@
 import type { Editor } from '@tiptap/react'
-import type { ButtonProps } from '../../ui'
 
-import { forwardRef, useMemo, useRef, useState } from 'react'
+import { forwardRef, useMemo, useRef } from 'react'
 import { useIsBreakpoint, useMenuNavigation, useTiptapEditor } from 'tiptap-api/react'
 
 import { BanIcon, HighlighterIcon } from '../../icons'
-import { Button, ButtonGroup, Card, CardBody, CardItemGroup, Popover, PopoverContent, PopoverTrigger, Separator } from '../../ui'
+import { Button, Card, Popover } from 'comps'
 
 import {
   ColorHighlightButton,
@@ -30,7 +29,7 @@ export interface ColorHighlightPopoverContentProps {
 }
 
 export interface ColorHighlightPopoverProps
-  extends Omit<ButtonProps, 'type'>,
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
   Pick<
     UseColorHighlightConfig,
       'editor' | 'hideWhenUnavailable' | 'onApplied'
@@ -44,13 +43,12 @@ export interface ColorHighlightPopoverProps
 
 export const ColorHighlightPopoverButton = forwardRef<
   HTMLButtonElement,
-  ButtonProps
+  any
 >(({ className, children, ...props }, ref) => (
   <Button
     type="button"
     className={ className }
-    data-style="ghost"
-    data-appearance="default"
+    variant="ghost"
     role="button"
     tabIndex={ -1 }
     aria-label="Highlight text"
@@ -103,18 +101,15 @@ export function ColorHighlightPopoverContent({
   })
 
   return (
-    <Card
-      ref={ containerRef }
-      tabIndex={ 0 }
-      style={ isMobile
-        ? { boxShadow: 'none', border: 0 }
-        : {} }
-    >
-      <CardBody style={ isMobile
-        ? { padding: 0 }
-        : {} }>
-        <CardItemGroup orientation="horizontal">
-          <ButtonGroup orientation="horizontal">
+    <div ref={ containerRef } tabIndex={ 0 } className="outline-none">
+      <Card
+        padding="none"
+        bordered={ !isMobile }
+        shadow={ isMobile ? 'none' : 'md' }
+        className="min-w-max"
+      >
+        <div className="flex flex-row items-center gap-1 p-1">
+          <div className="flex flex-row items-center">
             {colors.map((color, index) => (
               <ColorHighlightButton
                 key={ color.value }
@@ -128,9 +123,11 @@ export function ColorHighlightPopoverContent({
                 data-highlighted={ selectedIndex === index }
               />
             ))}
-          </ButtonGroup>
-          <Separator />
-          <ButtonGroup orientation="horizontal">
+          </div>
+
+          <div className="w-px h-4 bg-border/50 mx-1" />
+
+          <div className="flex flex-row items-center">
             <Button
               onClick={ handleRemoveHighlight }
               aria-label="Remove highlight"
@@ -140,15 +137,16 @@ export function ColorHighlightPopoverContent({
                 : -1 }
               type="button"
               role="menuitem"
-              data-style="ghost"
+              variant="ghost"
+              size="sm"
               data-highlighted={ selectedIndex === colors.length }
             >
               <BanIcon className="size-4" />
             </Button>
-          </ButtonGroup>
-        </CardItemGroup>
-      </CardBody>
-    </Card>
+          </div>
+        </div>
+      </Card>
+    </div>
   )
 }
 
@@ -166,7 +164,6 @@ export function ColorHighlightPopover({
   ...props
 }: ColorHighlightPopoverProps) {
   const { editor } = useTiptapEditor(providedEditor)
-  const [isOpen, setIsOpen] = useState(false)
   const { isVisible, canColorHighlight, isActive, label, Icon }
     = useColorHighlight({
       editor,
@@ -178,25 +175,23 @@ export function ColorHighlightPopover({
     return null
 
   return (
-    <Popover modal={ false } open={ isOpen } onOpenChange={ setIsOpen }>
-      <PopoverTrigger asChild>
-        <ColorHighlightPopoverButton
-          disabled={ !canColorHighlight }
-          data-active-state={ isActive
-            ? 'on'
-            : 'off' }
-          data-disabled={ !canColorHighlight }
-          aria-pressed={ isActive }
-          aria-label={ label }
-          tooltip={ label }
-          { ...props }
-        >
-          <Icon className="size-4" />
-        </ColorHighlightPopoverButton>
-      </PopoverTrigger>
-      <PopoverContent aria-label="Highlight colors">
-        <ColorHighlightPopoverContent editor={ editor } colors={ colors } />
-      </PopoverContent>
+    <Popover
+      trigger="click"
+      content={ <ColorHighlightPopoverContent editor={ editor } colors={ colors } /> }
+    >
+      <ColorHighlightPopoverButton
+        disabled={ !canColorHighlight }
+        data-active-state={ isActive
+          ? 'on'
+          : 'off' }
+        data-disabled={ !canColorHighlight }
+        aria-pressed={ isActive }
+        aria-label={ label }
+        tooltip={ label }
+        { ...props }
+      >
+        <Icon className="size-4" />
+      </ColorHighlightPopoverButton>
     </Popover>
   )
 }

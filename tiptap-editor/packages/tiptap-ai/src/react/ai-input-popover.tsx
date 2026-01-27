@@ -1,6 +1,6 @@
 import type React from 'react'
-import { memo, useCallback, useState } from 'react'
-import { Button, Input, Popover, PopoverContent, PopoverTrigger } from 'tiptap-comps'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { Button, Input, Popover, type PopoverRef } from 'comps'
 import { CornerDownLeftIcon, SparklesIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
@@ -35,6 +35,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
   }) => {
     const [internalOpen, setInternalOpen] = useState(false)
     const [prompt, setPrompt] = useState('')
+    const popoverRef = useRef<PopoverRef>(null)
 
     const isControlled = controlledOpen !== undefined
     const open = isControlled
@@ -53,6 +54,17 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
       },
       [isControlled, onOpenChange],
     )
+
+    useEffect(() => {
+      if (isControlled) {
+        if (controlledOpen) {
+          popoverRef.current?.open()
+        }
+        else {
+          popoverRef.current?.close()
+        }
+      }
+    }, [isControlled, controlledOpen])
 
     const handleSubmit = useCallback(() => {
       if (!prompt.trim() || disabled)
@@ -83,20 +95,19 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
     )
 
     return (
-      <Popover open={ open } onOpenChange={ handleOpenChange }>
-        <PopoverTrigger asChild>{children}</PopoverTrigger>
-        <PopoverContent
-          align="start"
-          side="top"
-          sideOffset={ 8 }
-          className={ cn(
-            'w-80 rounded-xl border border-border bg-background p-0 shadow-card backdrop-blur-[12px]',
-            className,
-          ) }
-          onOpenAutoFocus={ e => e.preventDefault() }
-          { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
-        >
-          <div className="flex flex-col gap-3 p-3">
+      <Popover
+        ref={ popoverRef }
+        trigger={ isControlled ? 'command' : 'click' }
+        onOpen={ () => !isControlled && handleOpenChange(true) }
+        onClose={ () => !isControlled && handleOpenChange(false) }
+        content={
+          <div
+            className={ cn(
+              'w-80 flex flex-col gap-3 p-3',
+              className,
+            ) }
+            { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+          >
             <div className="flex items-center gap-2">
               <SparklesIcon className="h-4 w-4 text-brand" />
               <span className="text-sm font-semibold text-textSecondary">
@@ -104,13 +115,14 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
               </span>
             </div>
             <Input
-              className="min-h-10 w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-textPrimary transition-all placeholder:text-textDisabled focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
+              className="w-full"
               placeholder={ placeholder }
               value={ prompt }
-              onChange={ e => setPrompt(e.target.value) }
+              onChange={ setPrompt }
               onKeyDown={ handleKeyDown }
               disabled={ disabled }
               autoFocus
+              size="sm"
             />
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs text-textTertiary">
@@ -120,8 +132,8 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                 <Button
                   type="button"
                   onClick={ handleCancel }
-                  data-style="ghost"
-                  data-size="small"
+                  variant="ghost"
+                  size="sm"
                   disabled={ disabled }
                 >
                   取消
@@ -129,17 +141,20 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                 <Button
                   type="button"
                   onClick={ handleSubmit }
-                  data-style="default"
-                  data-size="small"
+                  variant="primary"
+                  size="sm"
                   disabled={ !prompt.trim() || disabled }
+                  leftIcon={ <CornerDownLeftIcon className="size-4" /> }
                 >
-                  <CornerDownLeftIcon className="size-4" />
                   提交
                 </Button>
               </div>
             </div>
           </div>
-        </PopoverContent>
+        }
+        contentClassName="p-0 backdrop-blur-[12px] bg-background/80"
+      >
+        { children }
       </Popover>
     )
   },

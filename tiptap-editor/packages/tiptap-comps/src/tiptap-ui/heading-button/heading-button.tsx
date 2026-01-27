@@ -107,13 +107,13 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
         aria-pressed={ isActive }
         tooltip={ label }
         onClick={ handleClick }
+        leftIcon={ children ? null : <Icon className="size-5 text-icon" /> }
         { ...buttonProps }
         ref={ ref }
       >
         { children ?? (
           <>
-            <Icon className="size-4" />
-            { text && <span className="tiptap-button-text">{ text }</span> }
+            { text && <span className="text-base text-textSecondary">{ text }</span> }
             { showShortcut && (
               <HeadingShortcutBadge level={ level } shortcutKeys={ shortcutKeys } />
             ) }

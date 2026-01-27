@@ -5,10 +5,10 @@ import type { CommentStore } from '../comment-store'
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import {
+  Button,
   Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from 'tiptap-comps'
+  type PopoverRef,
+} from 'comps'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
@@ -55,9 +55,8 @@ export const CommentSidebar = memo(({
   const labels = useCommentLabels()
   const isControlled = typeof open === 'boolean'
   const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false)
-  const isOpen = isControlled
-    ? open as boolean
-    : internalOpen
+  const popoverRef = useRef<PopoverRef>(null)
+
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'resolved'>('all')
   const listRef = useRef<HTMLDivElement>(null)
 
@@ -92,6 +91,18 @@ export const CommentSidebar = memo(({
   }, [isControlled, onOpenChange])
 
   useEffect(() => {
+    if (isControlled) {
+      if (open) {
+        popoverRef.current?.open()
+      }
+      else {
+        popoverRef.current?.close()
+      }
+    }
+  }, [isControlled, open])
+
+  useEffect(() => {
+    const isOpen = isControlled ? open : internalOpen
     if (!isOpen || !activeCommentId) {
       return
     }
@@ -108,32 +119,21 @@ export const CommentSidebar = memo(({
         block: 'center',
       })
     }
-  }, [activeCommentId, isOpen, comments.length])
+  }, [activeCommentId, isControlled, open, internalOpen, comments.length])
 
   return (
-    <Popover open={ isOpen } onOpenChange={ handleOpenChange }>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          aria-label={ labels.viewComments }
-          className="flex items-center gap-2 rounded-full border border-border bg-background py-1 px-2 text-sm font-semibold text-systemBlue shadow-card transition-all hover:border-brand/50 hover:shadow-md"
+    <Popover
+      ref={ popoverRef }
+      trigger={ isControlled ? 'command' : 'click' }
+      onOpen={ () => handleOpenChange(true) }
+      onClose={ () => handleOpenChange(false) }
+      content={
+        <div
+          className={ cn(
+            'w-[380px] max-w-[calc(100vw-32px)] flex flex-col gap-4 p-4',
+            className,
+          ) }
         >
-          <span className="text-base">💬</span>
-          <span className="rounded-full text-xs font-semibold">
-            { comments.length }
-          </span>
-        </button>
-      </PopoverTrigger>
-
-      <PopoverContent
-        aria-label={ labels.commentPanel }
-        align="end"
-        className={ cn(
-          'w-[380px] max-w-[calc(100vw-32px)] border border-border bg-background p-0 shadow-card',
-          className,
-        ) }
-      >
-        <div className="flex flex-col gap-4 p-4">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-base font-semibold text-systemBlue">
@@ -146,57 +146,46 @@ export const CommentSidebar = memo(({
               </span>
             </div>
 
-            <button
+            <Button
               type="button"
-              onClick={ () => handleOpenChange(false) }
-              aria-label={ labels.closePanel }
-              className="flex size-6 items-center justify-center text-textSecondary transition-colors hover:bg-backgroundSecondary rounded-xl"
+              onClick={ () => popoverRef.current?.close() }
+              variant="ghost"
+              size="sm"
+              className="size-6"
             >
               <CloseIcon className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
 
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <button
+              <Button
                 type="button"
                 onClick={ () => setStatusFilter('all') }
-                className={ cn(
-                  'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                  statusFilter === 'all'
-                    ? 'bg-brand text-white shadow-card'
-                    : 'border border-border text-textSecondary hover:border-borderSecondary hover:bg-backgroundSecondary hover:text-brand',
-                ) }
-                aria-label={ labels.showAll }
+                variant={ statusFilter === 'all' ? 'primary' : 'default' }
+                size="sm"
+                className="rounded-full px-3"
               >
                 { labels.all }
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={ () => setStatusFilter('active') }
-                className={ cn(
-                  'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                  statusFilter === 'active'
-                    ? 'bg-brand text-white shadow-card'
-                    : 'border border-border text-textSecondary hover:border-borderSecondary hover:bg-backgroundSecondary hover:text-brand',
-                ) }
-                aria-label={ labels.showActive }
+                variant={ statusFilter === 'active' ? 'primary' : 'default' }
+                size="sm"
+                className="rounded-full px-3"
               >
                 { labels.active }
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={ () => setStatusFilter('resolved') }
-                className={ cn(
-                  'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                  statusFilter === 'resolved'
-                    ? 'bg-brand text-white shadow-card'
-                    : 'border border-border text-textSecondary hover:border-borderSecondary hover:bg-backgroundSecondary hover:text-brand',
-                ) }
-                aria-label={ labels.showResolved }
+                variant={ statusFilter === 'resolved' ? 'primary' : 'default' }
+                size="sm"
+                className="rounded-full px-3"
               >
                 { labels.resolved }
-              </button>
+              </Button>
             </div>
             <span className="text-xs text-textSecondary">
               { labels.total(comments.length) }
@@ -229,7 +218,19 @@ export const CommentSidebar = memo(({
                 ) }
           </div>
         </div>
-      </PopoverContent>
+      }
+      position="bottom"
+    >
+      <button
+        type="button"
+        aria-label={ labels.viewComments }
+        className="flex items-center gap-2 rounded-full border border-border bg-background py-1 px-2 text-sm font-semibold text-systemBlue shadow-card transition-all hover:border-brand/50 hover:shadow-md"
+      >
+        <span className="text-base">💬</span>
+        <span className="rounded-full text-xs font-semibold">
+          { comments.length }
+        </span>
+      </button>
     </Popover>
   )
 })

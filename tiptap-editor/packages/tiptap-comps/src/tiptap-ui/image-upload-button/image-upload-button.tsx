@@ -119,7 +119,7 @@ export const ImageUploadButton = forwardRef<
         { children ?? (
           <>
             <RenderIcon className="size-4" />
-            { text && <span className="tiptap-button-text">{ text }</span> }
+            { text && <span className="text-base text-textSecondary">{ text }</span> }
             { showShortcut && <ImageShortcutBadge shortcutKeys={ shortcutKeys } /> }
           </>
         ) }

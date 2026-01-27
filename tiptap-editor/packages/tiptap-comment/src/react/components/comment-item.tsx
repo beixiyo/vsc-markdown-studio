@@ -3,10 +3,8 @@ import type { Comment, CommentAuthor, CommentStore } from '../../comment-store'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { scrollToRangeSelection } from 'tiptap-api'
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from 'tiptap-comps'
+  Button,
+} from 'comps'
 import {
   useCommentLabels,
   useLanguage,
@@ -240,7 +238,6 @@ export const CommentItem = memo(({
     && 'border-systemGreen/30 bg-systemGreen/5',
     isActive && 'border-brand shadow-lg',
   )
-  const iconButtonClass = 'flex size-8 items-center justify-center rounded-lg border border-border text-textSecondary transition-all hover:border-borderSecondary hover:bg-backgroundSecondary disabled:cursor-not-allowed disabled:opacity-50'
 
   if (isEditing) {
     return (
@@ -301,87 +298,72 @@ export const CommentItem = memo(({
         </div>
 
         <div className="flex items-center gap-2">
-          <Tooltip delay={ 100 }>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                onClick={ handleJumpToComment }
-                disabled={ comment.status === 'resolved' }
-                className={ cn(
-                  iconButtonClass,
-                  comment.status === 'resolved' && 'cursor-not-allowed opacity-50',
-                ) }
-              >
-                <LocateIcon className="h-4 w-4" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent portal={ false }>{ labels.locate }</TooltipContent>
-          </Tooltip>
+          <Button
+            type="button"
+            onClick={ handleJumpToComment }
+            disabled={ comment.status === 'resolved' }
+            variant="ghost"
+            size="sm"
+            tooltip={ labels.locate }
+            className="size-8"
+          >
+            <LocateIcon className="size-4" />
+          </Button>
 
           { comment.status === 'active' && (
             <>
-              <Tooltip delay={ 100 }>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={ handleEdit }
-                    className={ iconButtonClass }
-                  >
-                    <EditIcon className="h-4 w-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent portal={ false }>{ labels.edit }</TooltipContent>
-              </Tooltip>
-              <Tooltip delay={ 100 }>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={ handleReply }
-                    className={ iconButtonClass }
-                  >
-                    <CornerDownLeftIcon className="h-4 w-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent portal={ false }>{ labels.reply }</TooltipContent>
-              </Tooltip>
+              <Button
+                type="button"
+                onClick={ handleEdit }
+                variant="ghost"
+                size="sm"
+                tooltip={ labels.edit }
+                className="size-8"
+              >
+                <EditIcon className="size-4" />
+              </Button>
+              <Button
+                type="button"
+                onClick={ handleReply }
+                variant="ghost"
+                size="sm"
+                tooltip={ labels.reply }
+                className="size-8"
+              >
+                <CornerDownLeftIcon className="size-4" />
+              </Button>
             </>
           ) }
 
-          <Tooltip delay={ 100 }>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                onClick={ handleToggleStatus }
-                className={ iconButtonClass }
-              >
-                { comment.status === 'active'
-                  ? (
-                      <BanIcon className="h-4 w-4" />
-                    )
-                  : (
-                      <TrashIcon className="h-4 w-4" />
-                    )}
-              </button>
-            </TooltipTrigger>
-            <TooltipContent portal={ false }>
-              { comment.status === 'active'
-                ? labels.markResolved
-                : labels.reopen }
-            </TooltipContent>
-          </Tooltip>
+          <Button
+            type="button"
+            onClick={ handleToggleStatus }
+            variant="ghost"
+            size="sm"
+            tooltip={ comment.status === 'active'
+              ? labels.markResolved
+              : labels.reopen }
+            className="size-8"
+          >
+            { comment.status === 'active'
+              ? (
+                  <BanIcon className="size-4" />
+                )
+              : (
+                  <TrashIcon className="size-4" />
+                )}
+          </Button>
 
-          <Tooltip delay={ 100 }>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                onClick={ handleDelete }
-                className={ iconButtonClass }
-              >
-                <TrashIcon className="h-4 w-4" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent portal={ false }>{ labels.delete }</TooltipContent>
-          </Tooltip>
+          <Button
+            type="button"
+            onClick={ handleDelete }
+            variant="ghost"
+            size="sm"
+            tooltip={ labels.delete }
+            className="size-8"
+          >
+            <TrashIcon className="size-4" />
+          </Button>
         </div>
       </div>
 

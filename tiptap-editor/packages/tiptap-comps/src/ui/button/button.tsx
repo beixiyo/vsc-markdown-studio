@@ -9,7 +9,7 @@ import {
 } from '../tooltip'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center transition-all transition-duration-200 ease-in-out font-medium text-sm leading-tight border-none focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:shrink-0 [&_.tiptap-button-text]:flex-auto [&_.tiptap-button-text]:text-left [&_.tiptap-button-text]:px-0.5',
+  'inline-flex items-center justify-center transition-all transition-duration-200 ease-in-out font-medium text-sm leading-tight border-none focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:shrink-0 [&_.text-base text-textSecondary]:flex-auto [&_.text-base text-textSecondary]:text-left [&_.text-base text-textSecondary]:px-0.5',
   {
     variants: {
       variant: {

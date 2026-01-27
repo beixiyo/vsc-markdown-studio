@@ -3,7 +3,7 @@
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewWrapper } from '@tiptap/react'
 import { memo, useCallback } from 'react'
-import { Button } from 'tiptap-comps'
+import { Button, Textarea } from 'comps'
 import { CheckIcon, EditIcon, XIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 import { useMermaidEditor } from './hooks/use-mermaid-editor'
@@ -93,7 +93,8 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
               onClick={ handleEdit }
               tooltip="编辑 Mermaid 代码"
               className="p-1.5"
-              data-style="ghost"
+              variant="ghost"
+              size="sm"
             >
               <EditIcon className="w-4 h-4" />
             </Button>
@@ -103,41 +104,33 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
         { isEditing
           ? (
               <div className="flex flex-col gap-2">
-                <textarea
+                <Textarea
                   ref={ textareaRef }
                   value={ editCode }
-                  onChange={ e => setEditCode(e.target.value) }
+                  onChange={ setEditCode }
                   onKeyDown={ handleKeyDown }
                   placeholder="请输入 Mermaid 代码..."
-                  className={ cn(
-                    'w-full min-h-[200px] p-3',
-                    'border border-border',
-                    'rounded-lg',
-                    'font-mono text-sm leading-normal resize-none',
-                    'bg-background',
-                    'text-textPrimary',
-                    'transition-colors',
-                    'placeholder:text-textDisabled',
-                    'focus:border-brand',
-                  ) }
+                  containerClassName="w-full min-h-[200px]"
+                  className="font-mono"
+                  autoFocus
                 />
                 <div className="flex gap-2 justify-end">
                   <Button
                     type="button"
                     onClick={ handleCancel }
-                    data-style="ghost"
-                    className="flex items-center gap-1.5"
+                    variant="ghost"
+                    size="sm"
+                    leftIcon={ <XIcon className="w-4 h-4" /> }
                   >
-                    <XIcon className="w-4 h-4" />
                     取消
                   </Button>
                   <Button
                     type="button"
                     onClick={ handleSave }
-                    data-appearance="emphasized"
-                    className="flex items-center gap-1.5"
+                    variant="primary"
+                    size="sm"
+                    leftIcon={ <CheckIcon className="w-4 h-4" /> }
                   >
-                    <CheckIcon className="w-4 h-4" />
                     保存
                   </Button>
                 </div>
@@ -153,22 +146,23 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                 { error && (
                   <div
                     className={ cn(
-                      'p-3 rounded',
-                      'bg-dangerBg',
+                      'p-3 rounded-xl',
+                      'bg-danger/10',
                       'border border-danger/20',
                       'text-danger',
                     ) }
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <div>
+                      <div className="text-sm">
                         <strong>渲染错误：</strong>
                         { error }
                       </div>
                       <Button
                         type="button"
                         onClick={ retryRender }
-                        data-style="ghost"
-                        className="text-xs px-2 py-1"
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs px-2"
                       >
                         重试
                       </Button>

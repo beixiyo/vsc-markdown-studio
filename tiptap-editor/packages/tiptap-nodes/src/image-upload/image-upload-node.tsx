@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewWrapper } from '@tiptap/react'
-import { Button } from 'tiptap-comps'
+import { Button } from 'comps'
 import { focusNextNode, isValidPosition } from 'tiptap-utils'
 import type { UploadOptions } from './types'
 import { useFileUpload } from './hooks/use-file-upload'
@@ -102,8 +102,9 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
               </span>
               <Button
                 type="button"
-                data-style="ghost"
-                onClick={ (e) => {
+                variant="ghost"
+                size="sm"
+                onClick={ (e: React.MouseEvent) => {
                   e.stopPropagation()
                   clearAllFiles()
                 } }

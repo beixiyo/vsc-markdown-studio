@@ -102,7 +102,7 @@ export const UndoRedoButton = forwardRef<
         { children ?? (
           <>
             <Icon className="size-4" />
-            { text && <span className="tiptap-button-text">{ text }</span> }
+            { text && <span className="text-base text-textSecondary">{ text }</span> }
             { showShortcut && (
               <HistoryShortcutBadge
                 action={ action }

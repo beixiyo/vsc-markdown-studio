@@ -1,8 +1,7 @@
 import type { Editor } from '@tiptap/react'
 
 // --- UI Primitives ---
-import type { ButtonProps } from '../../ui'
-import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 
 // --- Hooks ---
 import { useBlockLabels, useHeadingLabels, useListLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
@@ -20,14 +19,10 @@ import {
 
 import {
   Button,
-  ButtonGroup,
   Card,
-  CardBody,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../../ui'
+  Popover,
+  type PopoverRef,
+} from 'comps'
 import { BlockquoteButton } from '../blockquote-button'
 // --- Tiptap UI ---
 import { HeadingButton, type Level } from '../heading-button'
@@ -35,7 +30,7 @@ import { ListButton } from '../list-button'
 import { useTextFormatDropdownMenu } from './use-text-format-dropdown-menu'
 
 export interface TextFormatDropdownMenuProps
-  extends Omit<ButtonProps, 'type'> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * The Tiptap editor instance.
    */
@@ -79,7 +74,7 @@ export const TextFormatDropdownMenu = forwardRef<
       headingLevels = [1, 2, 3],
       listTypes = ['bulletList', 'orderedList', 'taskList'],
       hideWhenUnavailable = false,
-      portal = false,
+      portal: _portal,
       onOpenChange,
       ...buttonProps
     },
@@ -90,7 +85,8 @@ export const TextFormatDropdownMenu = forwardRef<
     const listLabels = useListLabels()
     const blockLabels = useBlockLabels()
     const headingLabels = useHeadingLabels()
-    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const popoverRef = useRef<PopoverRef>(null)
+
     const {
       isVisible,
       isActive,
@@ -123,15 +119,9 @@ export const TextFormatDropdownMenu = forwardRef<
       }
     }, [activeType, activeHeadingLevel])
 
-    const handleOpenChange = useCallback(
-      (open: boolean) => {
-        if (!editor || !canToggle)
-          return
-        setIsOpen(open)
-        onOpenChange?.(open)
-      },
-      [canToggle, editor, onOpenChange],
-    )
+    const closePopover = useCallback(() => {
+      popoverRef.current?.close()
+    }, [])
 
     if (!isVisible) {
       return null
@@ -140,117 +130,109 @@ export const TextFormatDropdownMenu = forwardRef<
     const MainIcon = lastTextIcon
 
     return (
-      <DropdownMenu modal={ false } open={ isOpen } onOpenChange={ handleOpenChange }>
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            data-style="ghost"
-            data-active-state={ isActive
-              ? 'on'
-              : 'off' }
-            role="button"
-            tabIndex={ -1 }
-            disabled={ !canToggle }
-            data-disabled={ !canToggle }
-            aria-label={ toolbarLabels.textFormat }
-            aria-pressed={ isActive }
-            tooltip={ toolbarLabels.textFormat }
-            { ...buttonProps }
-            ref={ ref }
-          >
-            <MainIcon className="size-4" />
-            <ChevronDownIcon className="tiptap-button-dropdown-small" />
-          </Button>
-        </DropdownMenuTrigger>
+      <Popover
+        ref={ popoverRef }
+        trigger="click"
+        onOpen={ () => onOpenChange?.(true) }
+        onClose={ () => onOpenChange?.(false) }
+        content={
+          <Card padding="none" shadow="md" className="min-w-[12rem] p-1">
+            <div className="flex flex-col gap-0.5">
+              {/* 标题 */ }
+              { headingLevels.map(level => (
+                <HeadingButton
+                  key={ `heading-${level}` }
+                  editor={ editor }
+                  level={ level }
+                  text={ headingLabels[`heading${level}` as keyof typeof headingLabels] }
+                  className="w-full justify-start"
+                  onClick={ closePopover }
+                />
+              )) }
 
-        <DropdownMenuContent align="start" portal={ portal }>
-          <Card>
-            <CardBody>
-              <ButtonGroup className="min-w-[12rem]">
-                {/* 标题 */ }
-                { headingLevels.map(level => (
-                  <DropdownMenuItem key={ `heading-${level}` } asChild>
-                    <HeadingButton
-                      editor={ editor }
-                      level={ level }
-                      text={ headingLabels[`heading${level}` as keyof typeof headingLabels] }
-                      showTooltip={ false }
-                      className="w-full justify-start"
-                    />
-                  </DropdownMenuItem>
-                )) }
+              {/* 正文 */ }
+              <Button
+                type="button"
+                variant="ghost"
+                name={ activeType === 'paragraph' ? 'active' : undefined }
+                role="button"
+                tabIndex={ -1 }
+                aria-label={ headingLabels.paragraph }
+                aria-pressed={ activeType === 'paragraph' }
+                onClick={ () => {
+                  editor?.chain().focus().setParagraph().run()
+                  closePopover()
+                } }
+                className="w-full justify-start"
+                size="sm"
+                leftIcon={
+                  <TextFormatIcon className="size-5 text-icon" />
+                }
+              >
+                <span className="text-base text-textSecondary">{ headingLabels.paragraph }</span>
+              </Button>
 
-                {/* 正文 */ }
-                <DropdownMenuItem asChild>
-                  <Button
-                    type="button"
-                    data-style="ghost"
-                    data-active-state={ activeType === 'paragraph'
-                      ? 'on'
-                      : 'off' }
-                    role="button"
-                    tabIndex={ -1 }
-                    aria-label={ headingLabels.paragraph }
-                    aria-pressed={ activeType === 'paragraph' }
-                    tooltip={ headingLabels.paragraph }
-                    showTooltip={ false }
-                    onClick={ () => editor?.chain().focus().setParagraph().run() }
-                    className="w-full justify-start"
-                  >
-                    <TextFormatIcon className="size-4" />
-                    <span className="tiptap-button-text">{ headingLabels.paragraph }</span>
-                  </Button>
-                </DropdownMenuItem>
+              {/* 列表 */ }
+              { listTypes.includes('orderedList') && (
+                <ListButton
+                  key="orderedList"
+                  editor={ editor }
+                  type="orderedList"
+                  text={ listLabels.orderedList }
+                  className="w-full justify-start"
+                  onClick={ closePopover }
+                />
+              ) }
+              { listTypes.includes('bulletList') && (
+                <ListButton
+                  key="bulletList"
+                  editor={ editor }
+                  type="bulletList"
+                  text={ listLabels.bulletList }
+                  className="w-full justify-start"
+                  onClick={ closePopover }
+                />
+              ) }
+              { listTypes.includes('taskList') && (
+                <ListButton
+                  key="taskList"
+                  editor={ editor }
+                  type="taskList"
+                  text={ listLabels.taskList }
+                  className="w-full justify-start"
+                  onClick={ closePopover }
+                />
+              ) }
 
-                {/* 列表 */ }
-                { listTypes.includes('orderedList') && (
-                  <DropdownMenuItem key="orderedList" asChild>
-                    <ListButton
-                      editor={ editor }
-                      type="orderedList"
-                      text={ listLabels.orderedList }
-                      showTooltip={ false }
-                      className="w-full justify-start"
-                    />
-                  </DropdownMenuItem>
-                ) }
-                { listTypes.includes('bulletList') && (
-                  <DropdownMenuItem key="bulletList" asChild>
-                    <ListButton
-                      editor={ editor }
-                      type="bulletList"
-                      text={ listLabels.bulletList }
-                      showTooltip={ false }
-                      className="w-full justify-start"
-                    />
-                  </DropdownMenuItem>
-                ) }
-                { listTypes.includes('taskList') && (
-                  <DropdownMenuItem key="taskList" asChild>
-                    <ListButton
-                      editor={ editor }
-                      type="taskList"
-                      text={ listLabels.taskList }
-                      showTooltip={ false }
-                      className="w-full justify-start"
-                    />
-                  </DropdownMenuItem>
-                ) }
-
-                {/* 引用 */ }
-                <DropdownMenuItem asChild>
-                  <BlockquoteButton
-                    editor={ editor }
-                    text={ blockLabels.blockquote }
-                    showTooltip={ false }
-                    className="w-full justify-start"
-                  />
-                </DropdownMenuItem>
-              </ButtonGroup>
-            </CardBody>
+              {/* 引用 */ }
+              <BlockquoteButton
+                editor={ editor }
+                text={ blockLabels.blockquote }
+                className="w-full justify-start"
+                onClick={ closePopover }
+              />
+            </div>
           </Card>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        }
+      >
+        <Button
+          type="button"
+          variant="ghost"
+          name={ isActive ? 'active' : undefined }
+          role="button"
+          tabIndex={ -1 }
+          disabled={ !canToggle }
+          aria-label={ toolbarLabels.textFormat }
+          aria-pressed={ isActive }
+          tooltip={ toolbarLabels.textFormat }
+          { ...buttonProps }
+          ref={ ref }
+          size="sm"
+        >
+          <MainIcon className="size-4" />
+          <ChevronDownIcon className="tiptap-button-dropdown-small" />
+        </Button>
+      </Popover>
     )
   },
 )

@@ -803,6 +803,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.13.0
         version: 3.13.0
+      comps:
+        specifier: workspace:*
+        version: link:../../../packages/comps
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n
@@ -873,6 +876,9 @@ importers:
       '@tiptap/react':
         specifier: ^3.13.0
         version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      comps:
+        specifier: workspace:*
+        version: link:../../../packages/comps
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n
@@ -1011,6 +1017,9 @@ importers:
       '@tiptap/react':
         specifier: ^3.13.0
         version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      comps:
+        specifier: workspace:*
+        version: link:../../../packages/comps
       hooks:
         specifier: workspace:*
         version: link:../../../packages/hooks
@@ -1059,6 +1068,9 @@ importers:
       '@tiptap/react':
         specifier: ^3.13.0
         version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      comps:
+        specifier: workspace:*
+        version: link:../../../packages/comps
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n

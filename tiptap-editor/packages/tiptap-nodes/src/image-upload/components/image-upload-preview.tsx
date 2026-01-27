@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'tiptap-comps'
+import { Button } from 'comps'
 import { CloseIcon } from 'tiptap-comps/icons'
 import type { FileItem } from '../types'
 import { CloudUploadIcon } from './icons'
@@ -63,8 +63,9 @@ export const ImageUploadPreview: React.FC<ImageUploadPreviewProps> = ({
           ) }
           <Button
             type="button"
-            data-style="ghost"
-            onClick={ (e) => {
+            variant="ghost"
+            size="sm"
+            onClick={ (e: React.MouseEvent) => {
               e.stopPropagation()
               onRemove()
             } }

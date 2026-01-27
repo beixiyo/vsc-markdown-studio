@@ -1,7 +1,7 @@
 import type { PreviewController } from '../PreviewController'
 import type { PreviewStatus } from '../PreviewStateMachine'
 import { memo, useEffect, useState } from 'react'
-import { Button } from 'tiptap-comps'
+import { Button, LoadingIcon } from 'comps'
 import { CheckIcon, XIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 
@@ -68,7 +68,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
       >
         { status === 'processing' && (
           <div className="flex items-center gap-2">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+            <LoadingIcon size="sm" />
             <span className="text-sm text-textPrimary">
               AI 处理中...
             </span>
@@ -86,8 +86,8 @@ export const AIActionPanel = memo<AIActionPanelProps>(
               <Button
                 type="button"
                 onClick={ handleAccept }
-                data-style="default"
-                data-size="small"
+                variant="default"
+                size="sm"
                 className="text-systemGreen"
                 aria-label="接受"
                 tooltip="接受"
@@ -97,8 +97,8 @@ export const AIActionPanel = memo<AIActionPanelProps>(
               <Button
                 type="button"
                 onClick={ handleReject }
-                data-style="ghost"
-                data-size="small"
+                variant="ghost"
+                size="sm"
                 className="text-systemRed"
                 aria-label="拒绝"
                 tooltip="拒绝"

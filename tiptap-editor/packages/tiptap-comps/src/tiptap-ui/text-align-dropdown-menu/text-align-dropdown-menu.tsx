@@ -1,8 +1,6 @@
 import type { Editor } from '@tiptap/react'
 // --- UI Primitives ---
-import type { ButtonProps } from '../../ui'
-
-import { useCallback, useState } from 'react'
+import { useCallback, useRef } from 'react'
 
 // --- Hooks ---
 import { useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
@@ -12,20 +10,16 @@ import { ChevronDownIcon } from '../../icons'
 
 import {
   Button,
-  ButtonGroup,
   Card,
-  CardBody,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../../ui'
+  Popover,
+  type PopoverRef,
+} from 'comps'
 // --- Tiptap UI ---
 import { type TextAlign, TextAlignButton } from '../text-align-button'
 import { useTextAlignDropdownMenu } from './use-text-align-dropdown-menu'
 
 export interface TextAlignDropdownMenuProps
-  extends Omit<ButtonProps, 'type'> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * The Tiptap editor instance.
    */
@@ -55,12 +49,12 @@ export function TextAlignDropdownMenu({
   types = ['left', 'center', 'right', 'justify'],
   hideWhenUnavailable = false,
   onOpenChange,
-  portal = false,
+  portal: _portal,
   ...props
 }: TextAlignDropdownMenuProps) {
   const { editor } = useTiptapEditor(providedEditor)
   const toolbarLabels = useToolbarLabels()
-  const [isOpen, setIsOpen] = useState(false)
+  const popoverRef = useRef<PopoverRef>(null)
 
   const { filteredAligns, canToggle, isActive, isVisible, Icon }
     = useTextAlignDropdownMenu({
@@ -69,62 +63,55 @@ export function TextAlignDropdownMenu({
       hideWhenUnavailable,
     })
 
-  const handleOnOpenChange = useCallback(
-    (open: boolean) => {
-      setIsOpen(open)
-      onOpenChange?.(open)
-    },
-    [onOpenChange],
-  )
+  const closePopover = useCallback(() => {
+    popoverRef.current?.close()
+  }, [])
 
   if (!isVisible) {
     return null
   }
 
   return (
-    <DropdownMenu open={ isOpen } onOpenChange={ handleOnOpenChange }>
-      <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          data-style="ghost"
-          data-active-state={ isActive
-            ? 'on'
-            : 'off' }
-          role="button"
-          tabIndex={ -1 }
-          disabled={ !canToggle }
-          data-disabled={ !canToggle }
-          aria-label={ toolbarLabels.textAlign }
-          tooltip={ toolbarLabels.textAlign }
-          { ...props }
-        >
-          <Icon className="size-4" />
-          <ChevronDownIcon className="tiptap-button-dropdown-small" />
-        </Button>
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent align="start" portal={ portal }>
-        <Card>
-          <CardBody>
-            <ButtonGroup className="min-w-[10rem]">
-              {filteredAligns.map(option => (
-                <DropdownMenuItem key={ option.align } asChild>
-                  <TextAlignButton
-                    editor={ editor }
-                    align={ option.align }
-                    text={ option.label }
-                    hideWhenUnavailable={ false }
-                    showShortcut={ false }
-                    showTooltip={ false }
-                    className="w-full justify-start"
-                  />
-                </DropdownMenuItem>
-              ))}
-            </ButtonGroup>
-          </CardBody>
+    <Popover
+      ref={ popoverRef }
+      trigger="click"
+      onOpen={ () => onOpenChange?.(true) }
+      onClose={ () => onOpenChange?.(false) }
+      content={
+        <Card padding="none" shadow="md" className="min-w-[10rem] p-1">
+          <div className="flex flex-col gap-0.5">
+            {filteredAligns.map(option => (
+              <TextAlignButton
+                key={ option.align }
+                editor={ editor }
+                align={ option.align }
+                text={ option.label }
+                hideWhenUnavailable={ false }
+                showShortcut={ false }
+                className="w-full justify-start"
+                onClick={ closePopover }
+              />
+            ))}
+          </div>
         </Card>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      }
+    >
+      <Button
+        type="button"
+        variant="ghost"
+        name={ isActive ? 'active' : undefined }
+        role="button"
+        tabIndex={ -1 }
+        disabled={ !canToggle }
+        aria-label={ toolbarLabels.textAlign }
+        tooltip={ toolbarLabels.textAlign }
+        { ...props }
+        size="sm"
+      >
+        <Icon className="size-4" />
+        <ChevronDownIcon className="tiptap-button-dropdown-small" />
+      </Button>
+    </Popover>
   )
 }
 

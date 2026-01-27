@@ -4,7 +4,7 @@ import type { PreviewController } from '../PreviewController'
 import type { AIRequestMode } from '../types'
 import { forwardRef, memo, useCallback, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Button } from 'tiptap-comps'
+import { Button } from 'comps'
 import { SparklesIcon } from 'tiptap-comps/icons'
 import { AIInputPopover } from './ai-input-popover'
 import { useAI } from './hooks/use-ai'
@@ -82,12 +82,9 @@ export const AIButton = memo(
         >
           <Button
             type="button"
-            data-style="ghost"
-            data-active-state={ isProcessing
-              ? 'on'
-              : 'off' }
+            variant={ isProcessing ? 'primary' : 'ghost' }
+            size="sm"
             disabled={ !canTrigger || isProcessing }
-            data-disabled={ !canTrigger || isProcessing }
             role="button"
             tabIndex={ -1 }
             aria-label={ label }
@@ -99,7 +96,7 @@ export const AIButton = memo(
             {children ?? (
               <>
                 <SparklesIcon className="size-4" />
-                {text && <span className="tiptap-button-text">{text}</span>}
+                {text && <span className="text-base text-textSecondary">{text}</span>}
               </>
             )}
           </Button>

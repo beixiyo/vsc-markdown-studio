@@ -1,6 +1,6 @@
 import type React from 'react'
 import { memo, useCallback } from 'react'
-import { Button } from 'tiptap-comps'
+import { Button, Textarea } from 'comps'
 import { CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 
@@ -12,7 +12,7 @@ export type CommentMainProps = {
   /**
    * 设置评论内容
    */
-  setContent: React.Dispatch<React.SetStateAction<string>>
+  setContent: (content: string) => void
   /**
    * 创建评论
    */
@@ -71,11 +71,11 @@ export const CommentMain = memo((props: CommentMainProps) => {
         <div className="text-sm font-semibold text-textPrimary flex justify-between">
           <span>添加评论</span>
         </div>
-        <textarea
-          className="min-h-[80px] w-full resize-y rounded-lg border border-border bg-backgroundSecondary p-3 text-sm leading-6 text-textPrimary transition-all placeholder:text-textTertiary focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
+        <Textarea
+          containerClassName="min-h-[80px] w-full"
           placeholder="输入评论内容..."
           value={ content }
-          onChange={ event => setContent(event.target.value) }
+          onChange={ setContent }
           onKeyDown={ handleKeyDown }
           autoFocus
           rows={ 3 }
@@ -90,12 +90,12 @@ export const CommentMain = memo((props: CommentMainProps) => {
           <Button
             type="button"
             onClick={ createComment }
-            title="创建评论 (Ctrl/Cmd + Enter)"
+            tooltip="创建评论 (Ctrl/Cmd + Enter)"
             disabled={ !canCreate || !content.trim() }
-            data-style="primary"
-            className="inline-flex items-center gap-2 font-semibold"
+            variant="primary"
+            leftIcon={ <CornerDownLeftIcon className="h-4 w-4" /> }
+            className="font-semibold"
           >
-            <CornerDownLeftIcon className="h-4 w-4" />
             提交评论
           </Button>
         </div>
