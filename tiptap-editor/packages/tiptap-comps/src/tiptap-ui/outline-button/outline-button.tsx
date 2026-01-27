@@ -89,7 +89,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
           }) }
           ref={ mergedRef }
         >
-          <ListIcon className="tiptap-button-icon" />
+          <ListIcon className="size-4" />
         </Button>
         { isOpen && (
           <FloatingPortal>

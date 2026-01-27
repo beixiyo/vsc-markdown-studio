@@ -108,7 +108,7 @@ export const ListButton = forwardRef<HTMLButtonElement, ListButtonProps>(
       >
         {children ?? (
           <>
-            <Icon className="tiptap-button-icon" />
+            <Icon className="size-4" />
             {text && <span className="tiptap-button-text">{text}</span>}
             {showShortcut && (
               <ListShortcutBadge type={ type } shortcutKeys={ shortcutKeys } />

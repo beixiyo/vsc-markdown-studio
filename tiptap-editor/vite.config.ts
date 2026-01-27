@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import { codeInspectorPlugin } from 'code-inspector-plugin'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
+import AutoImport from 'unplugin-auto-import/vite'
 
 const filename = fileURLToPath(new URL(import.meta.url).href)
 const __dirname = dirname(filename)
@@ -19,6 +20,10 @@ export default defineConfig(({ command }) => {
       }),
       react(),
       dts({ tsconfigPath: './tsconfig.app.json' }),
+      AutoImport({
+        imports: ['react'],
+        dts: './src/auto-imports.d.ts',
+      }),
       /**
        * @link https://www.npmjs.com/package/react-devtools
        * ```bash
@@ -41,40 +46,43 @@ export default defineConfig(({ command }) => {
       alias: {
         '@': path.resolve(__dirname, './src'),
         ...(command === 'serve' && {
-          'tiptap-api/react': path.resolve(__dirname, './packages/tiptap-api/src/react/index.ts'),
-          'tiptap-api': path.resolve(__dirname, './packages/tiptap-api/src/index.ts'),
-          'tiptap-react-hook': path.resolve(__dirname, './packages/tiptap-react-hook/src/index.ts'),
+          // 'tiptap-api/react': path.resolve(__dirname, './packages/tiptap-api/src/react/index.ts'),
+          // 'tiptap-api': path.resolve(__dirname, './packages/tiptap-api/src/index.ts'),
+          // 'tiptap-react-hook': path.resolve(__dirname, './packages/tiptap-react-hook/src/index.ts'),
 
-          'tiptap-ai/index.css': path.resolve(__dirname, './packages/tiptap-ai/dist/index.css'),
-          'tiptap-ai/react': path.resolve(__dirname, './packages/tiptap-ai/src/react//index.ts'),
-          'tiptap-ai': path.resolve(__dirname, './packages/tiptap-ai/src/index.ts'),
+          // 'tiptap-ai/index.css': path.resolve(__dirname, './packages/tiptap-ai/dist/index.css'),
+          // 'tiptap-ai/react': path.resolve(__dirname, './packages/tiptap-ai/src/react//index.ts'),
+          // 'tiptap-ai': path.resolve(__dirname, './packages/tiptap-ai/src/index.ts'),
 
-          'tiptap-comment/index.css': path.resolve(__dirname, './packages/tiptap-comment/dist/index.css'),
-          'tiptap-comment/react': path.resolve(__dirname, './packages/tiptap-comment/src/react/index.ts'),
-          'tiptap-comment': path.resolve(__dirname, './packages/tiptap-comment/src/index.ts'),
+          // 'tiptap-comment/index.css': path.resolve(__dirname, './packages/tiptap-comment/dist/index.css'),
+          // 'tiptap-comment/react': path.resolve(__dirname, './packages/tiptap-comment/src/react/index.ts'),
+          // 'tiptap-comment': path.resolve(__dirname, './packages/tiptap-comment/src/index.ts'),
 
-          'tiptap-mermaid/react': path.resolve(__dirname, './packages/tiptap-mermaid/src/react/index.ts'),
-          'tiptap-mermaid/index.css': path.resolve(__dirname, './packages/tiptap-mermaid/dist/index.css'),
-          'tiptap-mermaid': path.resolve(__dirname, './packages/tiptap-mermaid/src/index.ts'),
+          // 'tiptap-mermaid/react': path.resolve(__dirname, './packages/tiptap-mermaid/src/react/index.ts'),
+          // 'tiptap-mermaid/index.css': path.resolve(__dirname, './packages/tiptap-mermaid/dist/index.css'),
+          // 'tiptap-mermaid': path.resolve(__dirname, './packages/tiptap-mermaid/src/index.ts'),
 
-          'tiptap-trigger/index.css': path.resolve(__dirname, './packages/tiptap-trigger/dist/index.css'),
-          'tiptap-trigger/react': path.resolve(__dirname, './packages/tiptap-trigger/src/react/index.ts'),
-          'tiptap-trigger': path.resolve(__dirname, './packages/tiptap-trigger/src/index.ts'),
+          // 'tiptap-trigger/index.css': path.resolve(__dirname, './packages/tiptap-trigger/dist/index.css'),
+          // 'tiptap-trigger/react': path.resolve(__dirname, './packages/tiptap-trigger/src/react/index.ts'),
+          // 'tiptap-trigger': path.resolve(__dirname, './packages/tiptap-trigger/src/index.ts'),
 
-          'tiptap-comps/index.css': path.resolve(__dirname, './packages/tiptap-comps/dist/index.css'),
-          'tiptap-comps/icons': path.resolve(__dirname, './packages/tiptap-comps/src/icons/index.ts'),
-          'tiptap-comps': path.resolve(__dirname, './packages/tiptap-comps/src/index.ts'),
+          // 'tiptap-comps/index.css': path.resolve(__dirname, './packages/tiptap-comps/dist/index.css'),
+          // 'tiptap-comps/icons': path.resolve(__dirname, './packages/tiptap-comps/src/icons/index.ts'),
+          // 'tiptap-comps': path.resolve(__dirname, './packages/tiptap-comps/src/index.ts'),
 
-          'tiptap-nodes/speaker': path.resolve(__dirname, './packages/tiptap-nodes/src/speaker/index.ts'),
-          'tiptap-nodes/image-upload': path.resolve(__dirname, './packages/tiptap-nodes/src/image-upload/index.tsx'),
-          'tiptap-nodes/horizontal-rule': path.resolve(__dirname, './packages/tiptap-nodes/src/horizontal-rule/index.ts'),
-          'tiptap-nodes': path.resolve(__dirname, './packages/tiptap-nodes/src/index.ts'),
+          // 'tiptap-nodes/speaker': path.resolve(__dirname, './packages/tiptap-nodes/src/speaker/index.ts'),
+          // 'tiptap-nodes/image-upload': path.resolve(__dirname, './packages/tiptap-nodes/src/image-upload/index.tsx'),
+          // 'tiptap-nodes/horizontal-rule': path.resolve(__dirname, './packages/tiptap-nodes/src/horizontal-rule/index.ts'),
+          // 'tiptap-nodes': path.resolve(__dirname, './packages/tiptap-nodes/src/index.ts'),
 
-          'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
+          // 'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
 
-          'hooks': path.resolve(__dirname, '../packages/hooks/src/index.ts'),
-          'i18n/react': path.resolve(__dirname, '../packages/i18n/react/index.ts'),
-          'i18n': path.resolve(__dirname, '../packages/i18n/src/index.ts'),
+          // 'hooks': path.resolve(__dirname, '../packages/hooks/src/index.ts'),
+          // 'i18n/react': path.resolve(__dirname, '../packages/i18n/react/index.ts'),
+          // 'i18n': path.resolve(__dirname, '../packages/i18n/src/index.ts'),
+
+          // 'comps/index.css': path.resolve(__dirname, '../packages/comps/dist/index.css'),
+          // 'comps': path.resolve(__dirname, '../packages/comps/src/index.ts'),
         }),
       },
     },

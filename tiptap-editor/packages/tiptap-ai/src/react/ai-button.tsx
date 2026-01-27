@@ -98,7 +98,7 @@ export const AIButton = memo(
           >
             {children ?? (
               <>
-                <SparklesIcon className="tiptap-button-icon" />
+                <SparklesIcon className="size-4" />
                 {text && <span className="tiptap-button-text">{text}</span>}
               </>
             )}

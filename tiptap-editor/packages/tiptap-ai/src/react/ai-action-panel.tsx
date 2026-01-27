@@ -92,7 +92,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
                 aria-label="接受"
                 tooltip="接受"
               >
-                <CheckIcon className="tiptap-button-icon" />
+                <CheckIcon className="size-4" />
               </Button>
               <Button
                 type="button"
@@ -103,7 +103,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
                 aria-label="拒绝"
                 tooltip="拒绝"
               >
-                <XIcon className="tiptap-button-icon" />
+                <XIcon className="size-4" />
               </Button>
             </div>
           </>

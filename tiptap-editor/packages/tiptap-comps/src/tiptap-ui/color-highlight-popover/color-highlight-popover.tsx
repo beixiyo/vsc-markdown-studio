@@ -58,7 +58,7 @@ export const ColorHighlightPopoverButton = forwardRef<
     ref={ ref }
     { ...props }
   >
-    {children ?? <HighlighterIcon className="tiptap-button-icon" />}
+    {children ?? <HighlighterIcon className="size-4" />}
   </Button>
 ))
 
@@ -143,7 +143,7 @@ export function ColorHighlightPopoverContent({
               data-style="ghost"
               data-highlighted={ selectedIndex === colors.length }
             >
-              <BanIcon className="tiptap-button-icon" />
+              <BanIcon className="size-4" />
             </Button>
           </ButtonGroup>
         </CardItemGroup>
@@ -191,7 +191,7 @@ export function ColorHighlightPopover({
           tooltip={ label }
           { ...props }
         >
-          <Icon className="tiptap-button-icon" />
+          <Icon className="size-4" />
         </ColorHighlightPopoverButton>
       </PopoverTrigger>
       <PopoverContent aria-label="Highlight colors">

@@ -57,7 +57,11 @@
       "tiptap-nodes/image-upload": ["./packages/tiptap-nodes/src/image-upload/index.tsx"],
       "tiptap-nodes/horizontal-rule": ["./packages/tiptap-nodes/src/horizontal-rule/index.ts"],
 
-      "tiptap-editor-core": ["./packages/tiptap-editor-core/src/index.ts"]
+      "tiptap-editor-core": ["./packages/tiptap-editor-core/src/index.ts"],
+      "comps": ["../packages/comps/src"],
+      "hooks": ["../packages/hooks/src"],
+      "utils": ["../packages/utils/src"],
+      "styles": ["../packages/styles/src"]
     }
   },
   "include": [

@@ -133,7 +133,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                   data-size="small"
                   disabled={ !prompt.trim() || disabled }
                 >
-                  <CornerDownLeftIcon className="tiptap-button-icon" />
+                  <CornerDownLeftIcon className="size-4" />
                   提交
                 </Button>
               </div>

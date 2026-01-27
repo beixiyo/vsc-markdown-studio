@@ -13,6 +13,14 @@
     "types": [
       "@tiptap/starter-kit",
       "@tiptap/extension-text-align"
-    ]
+    ],
+    "paths": {
+      "comps": ["../../../packages/comps/src"],
+      "hooks": ["../../../packages/hooks/src"],
+      "utils": ["../../../packages/utils/src"],
+      "styles": ["../../../packages/styles/src"],
+      "tiptap-api/*": ["../tiptap-api/src/*"],
+      "tiptap-utils": ["../tiptap-utils/src/index.ts"]
+    }
   }
 }

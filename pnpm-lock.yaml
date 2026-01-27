@@ -915,6 +915,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.13.0
         version: 3.13.0
+      comps:
+        specifier: workspace:*
+        version: link:../../../packages/comps
       hooks:
         specifier: workspace:*
         version: link:../../../packages/hooks

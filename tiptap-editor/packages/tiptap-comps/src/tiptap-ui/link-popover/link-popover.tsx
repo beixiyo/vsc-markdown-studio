@@ -74,7 +74,7 @@ export const LinkButton = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ ref }
         { ...props }
       >
-        { children || <LinkIcon className="tiptap-button-icon" /> }
+        { children || <LinkIcon className="size-4" /> }
       </Button>
     )
   },
@@ -140,7 +140,7 @@ const LinkMain: React.FC<LinkMainProps> = ({
               disabled={ !url && !isActive }
               data-style="ghost"
             >
-              <CornerDownLeftIcon className="tiptap-button-icon" />
+              <CornerDownLeftIcon className="size-4" />
             </Button>
           </ButtonGroup>
 
@@ -154,7 +154,7 @@ const LinkMain: React.FC<LinkMainProps> = ({
               disabled={ !url && !isActive }
               data-style="ghost"
             >
-              <ExternalLinkIcon className="tiptap-button-icon" />
+              <ExternalLinkIcon className="size-4" />
             </Button>
 
             <Button
@@ -164,7 +164,7 @@ const LinkMain: React.FC<LinkMainProps> = ({
               disabled={ !url && !isActive }
               data-style="ghost"
             >
-              <TrashIcon className="tiptap-button-icon" />
+              <TrashIcon className="size-4" />
             </Button>
           </ButtonGroup>
         </CardItemGroup>
@@ -273,7 +273,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
             { ...buttonProps }
             ref={ ref }
           >
-            { children ?? <Icon className="tiptap-button-icon" /> }
+            { children ?? <Icon className="size-4" /> }
           </LinkButton>
         </PopoverTrigger>
 

@@ -98,7 +98,7 @@ export function TextAlignDropdownMenu({
           tooltip={ toolbarLabels.textAlign }
           { ...props }
         >
-          <Icon className="tiptap-button-icon" />
+          <Icon className="size-4" />
           <ChevronDownIcon className="tiptap-button-dropdown-small" />
         </Button>
       </DropdownMenuTrigger>

@@ -1,18 +1,15 @@
 'use client'
 
-import type { ButtonProps } from '../../ui'
-
+import type { ButtonProps } from 'comps'
 import type {
   UndoRedoAction,
   UseUndoRedoConfig,
 } from './use-undo-redo'
 
 import { forwardRef, useCallback } from 'react'
-
 import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-utils'
-
-import { Badge, Button } from '../../ui'
+import { Badge, Button } from 'comps'
 import {
   UNDO_REDO_SHORTCUT_KEYS,
   useUndoRedo,
@@ -39,7 +36,7 @@ export function HistoryShortcutBadge({
   action: UndoRedoAction
   shortcutKeys?: string
 }) {
-  return <Badge>{parseShortcutKeys({ shortcutKeys })}</Badge>
+  return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
 /**
@@ -92,9 +89,9 @@ export const UndoRedoButton = forwardRef<
       <Button
         type="button"
         disabled={ !canExecute }
-        data-style="ghost"
-        data-disabled={ !canExecute }
+        variant="ghost"
         role="button"
+        size='sm'
         tabIndex={ -1 }
         aria-label={ label }
         tooltip={ label }
@@ -102,18 +99,18 @@ export const UndoRedoButton = forwardRef<
         { ...buttonProps }
         ref={ ref }
       >
-        {children ?? (
+        { children ?? (
           <>
-            <Icon className="tiptap-button-icon" />
-            {text && <span className="tiptap-button-text">{text}</span>}
-            {showShortcut && (
+            <Icon className="size-4" />
+            { text && <span className="tiptap-button-text">{ text }</span> }
+            { showShortcut && (
               <HistoryShortcutBadge
                 action={ action }
                 shortcutKeys={ shortcutKeys }
               />
-            )}
+            ) }
           </>
-        )}
+        ) }
       </Button>
     )
   },

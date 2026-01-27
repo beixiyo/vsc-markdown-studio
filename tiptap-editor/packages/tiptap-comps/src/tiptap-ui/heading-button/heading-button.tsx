@@ -112,7 +112,7 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
       >
         {children ?? (
           <>
-            <Icon className="tiptap-button-icon" />
+            <Icon className="size-4" />
             {text && <span className="tiptap-button-text">{text}</span>}
             {showShortcut && (
               <HeadingShortcutBadge level={ level } shortcutKeys={ shortcutKeys } />

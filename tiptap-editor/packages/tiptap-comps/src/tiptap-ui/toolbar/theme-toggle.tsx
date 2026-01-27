@@ -16,10 +16,10 @@ export function ThemeToggle() {
     >
       { isDarkMode
         ? (
-            <MoonStarIcon className="tiptap-button-icon" />
+            <MoonStarIcon className="size-4" />
           )
         : (
-            <SunIcon className="tiptap-button-icon" />
+            <SunIcon className="size-4" />
           ) }
     </Button>
   )

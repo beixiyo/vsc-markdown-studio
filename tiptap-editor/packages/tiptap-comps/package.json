@@ -33,6 +33,7 @@
     "dist"
   ],
   "dependencies": {
+    "comps": "workspace:*",
     "tiptap-api": "workspace:*",
     "tiptap-utils": "workspace:*",
     "hooks": "workspace:*",

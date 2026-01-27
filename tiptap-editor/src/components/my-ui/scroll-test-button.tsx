@@ -402,7 +402,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
               title="取消"
               className="text-textSecondary"
             >
-              <CloseIcon className="tiptap-button-icon" />
+              <CloseIcon className="size-4" />
             </Button>
           </div>
 
@@ -421,7 +421,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
                 || ((testType === 'selectAndScrollToText' || testType === 'scrollToText') && !textInput.trim())
               }
             >
-              <CornerDownLeftIcon className="tiptap-button-icon" />
+              <CornerDownLeftIcon className="size-4" />
               执行
             </Button>
           </div>

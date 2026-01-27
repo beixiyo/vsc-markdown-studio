@@ -158,7 +158,7 @@ export const TextFormatDropdownMenu = forwardRef<
             { ...buttonProps }
             ref={ ref }
           >
-            <MainIcon className="tiptap-button-icon" />
+            <MainIcon className="size-4" />
             <ChevronDownIcon className="tiptap-button-dropdown-small" />
           </Button>
         </DropdownMenuTrigger>
@@ -197,7 +197,7 @@ export const TextFormatDropdownMenu = forwardRef<
                     onClick={ () => editor?.chain().focus().setParagraph().run() }
                     className="w-full justify-start"
                   >
-                    <TextFormatIcon className="tiptap-button-icon" />
+                    <TextFormatIcon className="size-4" />
                     <span className="tiptap-button-text">{ headingLabels.paragraph }</span>
                   </Button>
                 </DropdownMenuItem>
