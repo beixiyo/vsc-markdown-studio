@@ -56,7 +56,7 @@ export function createHandleClick() {
       }
     }
 
-    if (mouseEvent.button !== 0 || selection.empty) {
+    if (mouseEvent.button !== 0 || selection.empty || mouseEvent.shiftKey) {
       return false
     }
 
@@ -69,11 +69,15 @@ export function createHandleClick() {
       return false
     }
 
-    const toggled = handleSelectionToggle(view, clickedPos)
-    if (toggled) {
-      return true
-    }
+    /**
+     * 如果当前有选区（如选中了链接），点击任何位置（无论是选区内还是选区外）
+     * 我们都显式地将光标移动到点击位置以确保取消现有的选区。
+     * 这解决了从模糊状态（如弹窗输入框）切回编辑器时，默认点击有时无法取消选区的问题。
+     */
+    const { state, dispatch } = view
+    const resolved = state.doc.resolve(clickedPos.pos)
+    dispatch(state.tr.setSelection(TextSelection.near(resolved)))
 
-    return false
+    return true
   }
 }

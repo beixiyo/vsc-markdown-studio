@@ -34,7 +34,6 @@ export function SelectionToolbar({
   const [hasSelection, setHasSelection] = useState(false)
   const updateTimeoutRef = useRef<number | undefined>(undefined)
   const toolbarRef = useRef<HTMLDivElement | null>(null)
-  const isMouseDownRef = useRef(false)
 
   /** 获取选中文本的 DOM 位置（实时计算，不缓存） */
   const getSelectionRect = useCallback(() => {
@@ -156,70 +155,30 @@ export function SelectionToolbar({
 
     const currentEditorElement = editorElement
 
-    /** 监听鼠标按下事件 */
+    /** 监听鼠标按下事件（准备开始新选择或点击外部时隐藏） */
     const handleMouseDown = (event: MouseEvent) => {
       const target = event.target as Node
       const toolbarElement = toolbarRef.current
 
-      /** 检查是否点击在工具栏或需要保持工具栏打开的区域 */
+      if (toolbarElement?.contains(target)) {
+        return
+      }
+
       const keepOpenElement = target instanceof HTMLElement
         ? target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}]`)
         : null
 
-      if (toolbarElement?.contains(target) || keepOpenElement) {
+      if (keepOpenElement) {
         return
       }
 
-      isMouseDownRef.current = true
-
-      /** 按下时立即隐藏工具栏，等待抬起后再重新判断 */
-      if (hasSelection) {
-        setHasSelection(false)
-      }
+      setHasSelection(false)
     }
 
-    /** 监听鼠标松开事件 */
-    const handleMouseUp = () => {
-      if (isMouseDownRef.current) {
-        isMouseDownRef.current = false
-        updateToolbarState()
-      }
-    }
-
-    /** 监听点击事件（点击其他地方时隐藏工具栏） */
-    const handleClick = (event: MouseEvent) => {
-      const target = event.target as Node
-      const toolbarElement = toolbarRef.current
-
-      if (!toolbarElement) {
-        return
-      }
-
-      /** 检查是否点击在需要保持工具栏打开的区域（例如 AI 输入弹窗） */
-      const keepOpenElement = target instanceof HTMLElement
-        ? target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}]`)
-        : null
-
-      /** 如果点击的不是编辑器、不是工具栏本身、也不是需要保持打开的区域，则更新工具栏状态 */
-      if (
-        !currentEditorElement.contains(target)
-        && !toolbarElement.contains(target)
-        && !keepOpenElement
-      ) {
-        updateToolbarState()
-      }
-    }
-
-    /** 监听选中变化 */
-    const handleSelectionUpdate = () => {
-      if (!isMouseDownRef.current) {
-        updateToolbarState()
-      }
-    }
-
-    /** 监听文档更新 */
-    const handleUpdate = () => {
-      if (!isMouseDownRef.current) {
+    /** 监听鼠标松开事件（在编辑器内完成选择时显示） */
+    const handleMouseUp = (event: MouseEvent) => {
+      /** 检查事件是否发生在编辑器内 */
+      if (currentEditorElement.contains(event.target as Node)) {
         updateToolbarState()
       }
     }
@@ -250,23 +209,17 @@ export function SelectionToolbar({
     /** 添加事件监听器 */
     document.addEventListener('mousedown', handleMouseDown)
     document.addEventListener('mouseup', handleMouseUp)
-    document.addEventListener('click', handleClick, true)
     document.addEventListener('keyup', handleKeyUp)
-    editor.on('selectionUpdate', handleSelectionUpdate)
-    editor.on('update', handleUpdate)
 
     return () => {
       document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('click', handleClick, true)
       document.removeEventListener('keyup', handleKeyUp)
-      editor.off('selectionUpdate', handleSelectionUpdate)
-      editor.off('update', handleUpdate)
       if (updateTimeoutRef.current) {
         clearTimeout(updateTimeoutRef.current)
       }
     }
-  }, [enabled, editor, editorSelector, updateToolbarState, hasSelection])
+  }, [enabled, editor, editorSelector, updateToolbarState])
 
   /** 如果没有选中或未启用，不显示工具栏 */
   if (!hasSelection || !enabled || !virtualElement) {
