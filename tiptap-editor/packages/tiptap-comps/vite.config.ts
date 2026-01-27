@@ -6,7 +6,12 @@ import basePkg from '../../package.json' with { type: 'json' }
 
 export default defineConfig({
   plugins: [
-    dts({ tsconfigPath: './tsconfig.json' })
+    dts({
+      tsconfigPath: './tsconfig.json',
+      compilerOptions: {
+        rootDir: fileURLToPath(new URL('./src', import.meta.url)),
+      }
+    })
   ],
 
   build: {
