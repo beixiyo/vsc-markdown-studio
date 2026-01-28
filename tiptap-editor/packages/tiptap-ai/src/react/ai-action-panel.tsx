@@ -1,7 +1,8 @@
 import type { PreviewController } from '../PreviewController'
 import type { PreviewStatus } from '../PreviewStateMachine'
-import { memo, useEffect, useState } from 'react'
 import { Button, LoadingIcon } from 'comps'
+import { memo, useEffect, useState } from 'react'
+import { unSelect } from 'tiptap-api'
 import { CheckIcon, XIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 
@@ -10,6 +11,7 @@ import { cn } from 'utils'
  */
 export type AIActionPanelProps = {
   controller: PreviewController | null
+  editor?: any
   className?: string
   onClose?: () => void
 }
@@ -18,7 +20,7 @@ export type AIActionPanelProps = {
  * AI 操作面板组件，显示接受/拒绝按钮
  */
 export const AIActionPanel = memo<AIActionPanelProps>(
-  ({ controller, className, onClose }) => {
+  ({ controller, editor, className, onClose }) => {
     const [status, setStatus] = useState<PreviewStatus>('idle')
     const [previewText, setPreviewText] = useState<string>('')
 
@@ -51,11 +53,17 @@ export const AIActionPanel = memo<AIActionPanelProps>(
 
     const handleAccept = () => {
       controller?.accept()
+      if (editor) {
+        unSelect(editor)
+      }
       onClose?.()
     }
 
     const handleReject = () => {
       controller?.reject()
+      if (editor) {
+        unSelect(editor)
+      }
       onClose?.()
     }
 

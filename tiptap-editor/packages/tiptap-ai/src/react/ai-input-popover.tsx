@@ -1,9 +1,9 @@
 import type React from 'react'
+import { Button, Popover, type PopoverRef, Textarea } from 'comps'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { Button, Input, Popover, type PopoverRef } from 'comps'
 import { CornerDownLeftIcon, SparklesIcon } from 'tiptap-comps/icons'
-import { cn } from 'utils'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { cn } from 'utils'
 
 /**
  * AI 输入弹窗属性
@@ -36,11 +36,9 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
     const [internalOpen, setInternalOpen] = useState(false)
     const [prompt, setPrompt] = useState('')
     const popoverRef = useRef<PopoverRef>(null)
+    const textareaRef = useRef<HTMLTextAreaElement>(null)
 
     const isControlled = controlledOpen !== undefined
-    const open = isControlled
-      ? controlledOpen
-      : internalOpen
 
     const handleOpenChange = useCallback(
       (newOpen: boolean) => {
@@ -59,6 +57,10 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
       if (isControlled) {
         if (controlledOpen) {
           popoverRef.current?.open()
+          /** 延迟聚焦确保 Popover 动画完成后能够成功获取焦点 */
+          setTimeout(() => {
+            textareaRef.current?.focus()
+          }, 50)
         }
         else {
           popoverRef.current?.close()
@@ -81,24 +83,39 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
     }, [handleOpenChange, onCancel])
 
     const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault()
-          handleSubmit()
-        }
-        else if (e.key === 'Escape') {
+      (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Escape') {
           e.preventDefault()
           handleCancel()
         }
       },
-      [handleSubmit, handleCancel],
+      [handleCancel],
+    )
+
+    const handlePressEnter = useCallback(
+      (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (!e.shiftKey) {
+          e.preventDefault()
+          handleSubmit()
+        }
+      },
+      [handleSubmit],
     )
 
     return (
       <Popover
         ref={ popoverRef }
-        trigger={ isControlled ? 'command' : 'click' }
-        onOpen={ () => !isControlled && handleOpenChange(true) }
+        trigger={ isControlled
+          ? 'command'
+          : 'click' }
+        onOpen={ () => {
+          if (!isControlled) {
+            handleOpenChange(true)
+            setTimeout(() => {
+              textareaRef.current?.focus()
+            }, 50)
+          }
+        } }
         onClose={ () => !isControlled && handleOpenChange(false) }
         content={
           <div
@@ -114,19 +131,22 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                 AI 增强
               </span>
             </div>
-            <Input
+            <Textarea
+              ref={ textareaRef }
               className="w-full"
               placeholder={ placeholder }
               value={ prompt }
               onChange={ setPrompt }
+              onPressEnter={ handlePressEnter }
               onKeyDown={ handleKeyDown }
               disabled={ disabled }
               autoFocus
               size="sm"
+              autoResize
             />
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs text-textTertiary">
-                按 Enter 提交，Esc 取消
+                按 Enter 提交，Shift + Enter 换行
               </span>
               <div className="flex items-center gap-2">
                 <Button

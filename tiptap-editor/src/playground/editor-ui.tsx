@@ -105,7 +105,7 @@ export const EditorUI = memo<EditorUIProps>(({
               disabled={ !editor }
             />
             <Button
-              size='sm'
+              size="sm"
               onClick={ () => {
                 if (editor) {
                   const markdown = `\`\`\`mermaid
@@ -157,7 +157,7 @@ sequenceDiagram
           />
 
           {/* AI 操作面板 */ }
-          <AIActionPanel controller={ aiController } className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" />
+          <AIActionPanel editor={ editor } controller={ aiController } className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" />
         </>
       ) }
 
