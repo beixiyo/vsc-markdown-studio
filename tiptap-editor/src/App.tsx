@@ -42,6 +42,11 @@ function AppContent() {
             data-active-state={ mode === 'editor'
               ? 'on'
               : 'off' }
+            variant={
+              mode === 'editor'
+                ? 'primary'
+                : 'default'
+            }
             data-appearance="emphasized"
             className="px-4 py-2 text-sm"
           >
@@ -53,6 +58,11 @@ function AppContent() {
             data-active-state={ mode === 'collaboration'
               ? 'on'
               : 'off' }
+            variant={
+              mode === 'collaboration'
+                ? 'primary'
+                : 'default'
+            }
             data-appearance="emphasized"
             className="px-4 py-2 text-sm"
           >

@@ -41,6 +41,10 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
   const [isOpen, setIsOpen] = useState(false)
   /** 是否挂载，用于 Portal 渲染 */
   const [mounted, setMounted] = useState(false)
+  /** 是否应该显示动画，位置计算完成后才为 true */
+  const [shouldAnimate, setShouldAnimate] = useState(false)
+  /** 记录上一次的打开状态 */
+  const prevOpenRef = useRef(isOpen)
 
   useEffect(() => {
     setMounted(true)
@@ -58,6 +62,7 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
   const {
     style: floatingStyle,
     placement: actualPosition,
+    update: updatePosition,
   } = useFloatingPosition(triggerRef, contentRef, {
     enabled: isOpen,
     placement: position,
@@ -70,6 +75,26 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
     strategy: 'fixed',
     virtualReferenceRect,
   })
+
+  /** 当打开状态变化时，计算位置并控制动画 */
+  useEffect(() => {
+    if (isOpen) {
+      if (!prevOpenRef.current) {
+        setShouldAnimate(false)
+        requestAnimationFrame(() => {
+          updatePosition()
+          setShouldAnimate(true)
+        })
+      }
+      else {
+        updatePosition()
+      }
+    }
+    else {
+      setShouldAnimate(false)
+    }
+    prevOpenRef.current = isOpen
+  }, [isOpen, updatePosition])
 
   /**
    * 关闭 Popover 的处理函数
@@ -86,7 +111,9 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
     handleClose,
     {
       enabled: isOpen && (trigger === 'click' || trigger === 'command') && clickOutsideToClose,
-      additionalSelectors: clickOutsideIgnoreSelector ? [clickOutsideIgnoreSelector] : [],
+      additionalSelectors: clickOutsideIgnoreSelector
+        ? [clickOutsideIgnoreSelector]
+        : [],
     },
   )
 
@@ -255,7 +282,7 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
 
       { mounted && createPortal(
         <AnimateShow
-          show={ isOpen }
+          show={ shouldAnimate }
           ref={ contentRef }
           className={ cn('fixed z-50 rounded-2xl shadow-lg bg-background', contentClassName) }
           style={ floatingStyle }

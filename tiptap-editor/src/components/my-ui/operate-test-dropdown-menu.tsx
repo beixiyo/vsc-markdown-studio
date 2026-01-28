@@ -108,7 +108,7 @@ export function OperateTestDropdownMenu({
         size="sm"
       >
         <span className="tiptap-button-label">测试</span>
-        <ChevronDownIcon className="tiptap-button-dropdown-small" />
+        <ChevronDownIcon className="size-4 text-icon" />
       </Button>
     </Popover>
   )

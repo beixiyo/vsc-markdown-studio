@@ -1,21 +1,21 @@
 import type { Editor } from '@tiptap/react'
-// --- UI Primitives ---
-import { useCallback, useRef } from 'react'
-
-// --- Hooks ---
-import { useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
-
-// --- Icons ---
-import { ChevronDownIcon } from '../../icons'
+// --- Tiptap UI ---
+import type { TextAlign } from '../text-align-button/use-text-align'
 
 import {
   Button,
-  Card,
-  Popover,
-  type PopoverRef,
+  Cascader,
+  type CascaderOption,
+  type CascaderRef,
 } from 'comps'
-// --- Tiptap UI ---
-import { type TextAlign, TextAlignButton } from '../text-align-button'
+
+// --- UI Primitives ---
+import { useCallback, useMemo, useRef } from 'react'
+
+// --- Hooks ---
+import { useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
+// --- Icons ---
+import { ChevronDownIcon } from '../../icons'
 import { useTextAlignDropdownMenu } from './use-text-align-dropdown-menu'
 
 export interface TextAlignDropdownMenuProps
@@ -54,64 +54,63 @@ export function TextAlignDropdownMenu({
 }: TextAlignDropdownMenuProps) {
   const { editor } = useTiptapEditor(providedEditor)
   const toolbarLabels = useToolbarLabels()
-  const popoverRef = useRef<PopoverRef>(null)
+  const cascaderRef = useRef<CascaderRef>(null)
 
-  const { filteredAligns, canToggle, isActive, isVisible, Icon }
+  const { filteredAligns, canToggle, isActive, isVisible, Icon, activeAlign }
     = useTextAlignDropdownMenu({
       editor,
       types,
       hideWhenUnavailable,
     })
 
-  const closePopover = useCallback(() => {
-    popoverRef.current?.close()
-  }, [])
+  const options = useMemo<CascaderOption[]>(() => {
+    return filteredAligns.map(option => ({
+      value: option.align,
+      label: option.label,
+      icon: <option.icon className="size-4 text-icon" />,
+    }))
+  }, [filteredAligns])
+
+  const handleValueChange = useCallback((value: string) => {
+    editor?.chain().focus().setTextAlign(value).run()
+  }, [editor])
 
   if (!isVisible) {
     return null
   }
 
-  return (
-    <Popover
-      ref={ popoverRef }
-      trigger="click"
-      onOpen={ () => onOpenChange?.(true) }
-      onClose={ () => onOpenChange?.(false) }
-      content={
-        <Card padding="none" shadow="md" className="min-w-[10rem] p-1">
-          <div className="flex flex-col gap-0.5">
-            {filteredAligns.map(option => (
-              <TextAlignButton
-                key={ option.align }
-                editor={ editor }
-                align={ option.align }
-                text={ option.label }
-                hideWhenUnavailable={ false }
-                showShortcut={ false }
-                className="w-full justify-start"
-                onClick={ closePopover }
-              />
-            ))}
-          </div>
-        </Card>
-      }
+  const trigger = useMemo(() => (
+    <Button
+      type="button"
+      variant="ghost"
+      name={ isActive
+        ? 'active'
+        : undefined }
+      role="button"
+      tabIndex={ -1 }
+      disabled={ !canToggle }
+      aria-label={ toolbarLabels.textAlign }
+      tooltip={ toolbarLabels.textAlign }
+      { ...props }
+      size="sm"
     >
-      <Button
-        type="button"
-        variant="ghost"
-        name={ isActive ? 'active' : undefined }
-        role="button"
-        tabIndex={ -1 }
-        disabled={ !canToggle }
-        aria-label={ toolbarLabels.textAlign }
-        tooltip={ toolbarLabels.textAlign }
-        { ...props }
-        size="sm"
-      >
-        <Icon className="size-4" />
-        <ChevronDownIcon className="tiptap-button-dropdown-small" />
-      </Button>
-    </Popover>
+      <Icon className="size-4" />
+      <ChevronDownIcon className="size-4 text-icon" />
+    </Button>
+  ), [isActive, canToggle, toolbarLabels.textAlign, Icon, props])
+
+  return (
+    <Cascader
+      ref={ cascaderRef }
+      options={ options }
+      value={ activeAlign }
+      onChange={ handleValueChange }
+      onOpenChange={ onOpenChange }
+      placement="bottom-start"
+      dropdownHeight={ 400 }
+      optionClassName="px-2 py-1"
+      trigger={ trigger }
+    />
   )
 }
 

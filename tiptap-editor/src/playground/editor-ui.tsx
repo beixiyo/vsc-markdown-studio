@@ -109,6 +109,7 @@ export const EditorUI = memo<EditorUIProps>(({
               disabled={ !editor }
             />
             <Button
+              size='sm'
               onClick={ () => {
                 if (editor) {
                   const markdown = `\`\`\`mermaid

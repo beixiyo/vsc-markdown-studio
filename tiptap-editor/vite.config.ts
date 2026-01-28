@@ -16,7 +16,6 @@ export default defineConfig(({ command }) => {
       codeInspectorPlugin({
         bundler: 'vite',
         hideConsole: true,
-        editor: 'trae',
       }),
       react(),
       dts({ tsconfigPath: './tsconfig.app.json' }),

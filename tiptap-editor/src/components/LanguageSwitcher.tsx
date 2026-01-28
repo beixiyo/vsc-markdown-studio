@@ -25,8 +25,12 @@ export function LanguageSwitcher() {
           data-active-state={ language === lang.value
             ? 'on'
             : 'off' }
+          variant={
+            language === lang.value
+              ? 'primary'
+              : 'default'
+          }
           data-appearance="emphasized"
-          className="px-3 py-1 text-sm"
         >
           { lang.label }
         </Button>
