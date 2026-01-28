@@ -30,7 +30,7 @@ export const SelectionTestButton = memo<SelectionTestButtonProps>(
 
     return (
       <Button
-        size='sm'
+        size="sm"
         onClick={ handleClick }
         className={ className }
         tooltip="获取选中文本（测试功能）"

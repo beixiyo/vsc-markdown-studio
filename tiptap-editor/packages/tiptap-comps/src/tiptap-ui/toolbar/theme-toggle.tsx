@@ -1,6 +1,6 @@
+import { Button } from 'comps'
 import { useTheme } from 'hooks'
 import { MoonStarIcon, SunIcon } from '../../icons'
-import { Button } from 'comps'
 
 export function ThemeToggle() {
   const [theme, setTheme] = useTheme()

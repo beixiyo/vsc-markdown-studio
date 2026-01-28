@@ -1,13 +1,12 @@
+import { mixColor } from '@jl-org/tool'
+import { Badge, Button } from 'comps'
 import { forwardRef, useCallback, useMemo } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { parseShortcutKeys } from 'tiptap-utils'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
-import { Badge, Button } from 'comps'
+import { parseShortcutKeys, SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import {
   COLOR_HIGHLIGHT_SHORTCUT_KEY,
   useColorHighlight,
 } from './use-color-highlight'
-import { mixColor } from '@jl-org/tool'
 
 export interface ColorHighlightButtonProps
   extends Omit<React.ComponentProps<typeof Button>, 'type'> {
@@ -109,7 +108,7 @@ export const ColorHighlightButton = forwardRef<
         size="sm"
         name={ isActive ? 'active' : undefined }
         role="button"
-        className='hover:bg-background'
+        className="hover:bg-background"
         tabIndex={ -1 }
         disabled={ !canColorHighlight }
         aria-label={ label }

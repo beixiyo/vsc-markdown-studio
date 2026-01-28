@@ -10,10 +10,10 @@ import {
   useInteractions,
   useMergeRefs,
 } from '@floating-ui/react'
+import { Button } from 'comps'
 import { forwardRef, useCallback, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { ListIcon } from '../../icons'
-import { Button } from 'comps'
 import { OutlinePanel } from './outline-panel'
 
 export interface OutlineButtonProps extends Omit<ButtonProps, 'type'> {

@@ -1,10 +1,10 @@
 import type { Editor } from '@tiptap/react'
 import type { CommentStore } from '../../comment-store'
+import { useWatchRef } from 'hooks'
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { getSelectionRect } from 'tiptap-api'
 import { DATA_COMMENT_ID } from '../../constants'
 import { commentPluginKey } from '../../plugin'
-import { useWatchRef } from '../../../../../../packages/hooks/dist'
 
 /**
  * 点击评论高亮时，展示贴合文本的评论浮层

@@ -1,9 +1,9 @@
+import {
+  Button,
+  Toolbar,
+} from 'comps'
 import { memo } from 'react'
 import { ArrowLeftIcon, HighlighterIcon, LinkIcon } from '../../icons'
-import {
-  Toolbar,
-  Button,
-} from 'comps'
 import {
   ColorHighlightPopoverContent,
   LinkContent,

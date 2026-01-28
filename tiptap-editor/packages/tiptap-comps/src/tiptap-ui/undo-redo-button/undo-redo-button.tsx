@@ -6,10 +6,10 @@ import type {
   UseUndoRedoConfig,
 } from './use-undo-redo'
 
+import { Badge, Button } from 'comps'
 import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-utils'
-import { Badge, Button } from 'comps'
 import {
   UNDO_REDO_SHORTCUT_KEYS,
   useUndoRedo,
@@ -91,7 +91,7 @@ export const UndoRedoButton = forwardRef<
         disabled={ !canExecute }
         variant="ghost"
         role="button"
-        size='sm'
+        size="sm"
         tabIndex={ -1 }
         aria-label={ label }
         tooltip={ label }

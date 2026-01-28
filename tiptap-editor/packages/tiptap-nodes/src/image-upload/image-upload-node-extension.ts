@@ -1,6 +1,6 @@
+import type { ImageUploadNodeOptions } from './types'
 import { mergeAttributes, Node, ReactNodeViewRenderer } from '@tiptap/react'
 import { ImageUploadNode as ImageUploadNodeComponent } from './image-upload-node'
-import type { ImageUploadNodeOptions } from './types'
 
 declare module '@tiptap/react' {
   interface Commands<ReturnType> {

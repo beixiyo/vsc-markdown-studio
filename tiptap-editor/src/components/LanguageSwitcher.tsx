@@ -1,5 +1,5 @@
-import { Button } from 'tiptap-comps'
 import { LANGUAGES, useLanguage } from 'tiptap-api/react'
+import { Button } from 'tiptap-comps'
 
 /**
  * 语言切换组件
@@ -19,7 +19,7 @@ export function LanguageSwitcher() {
       </span>
       { languages.map(lang => (
         <Button
-          size='sm'
+          size="sm"
           key={ lang.value }
           onClick={ () => changeLanguage(lang.value) }
           data-active-state={ language === lang.value

@@ -1,7 +1,7 @@
-import { memo } from 'react'
 import {
   Toolbar,
 } from 'comps'
+import { memo } from 'react'
 import {
   CodeBlockButton,
   ColorHighlightPopover,

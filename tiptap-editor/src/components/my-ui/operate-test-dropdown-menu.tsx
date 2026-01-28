@@ -1,5 +1,4 @@
 import type { OperateTestSuite } from '@/features/operate-tests'
-import { useMemo, useRef } from 'react'
 import {
   Button,
   ButtonGroup,
@@ -7,6 +6,7 @@ import {
   Popover,
   type PopoverRef,
 } from 'comps'
+import { useMemo, useRef } from 'react'
 
 import { ChevronDownIcon } from 'tiptap-comps/icons'
 

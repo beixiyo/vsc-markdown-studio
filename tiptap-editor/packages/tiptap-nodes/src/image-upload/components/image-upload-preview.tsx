@@ -1,7 +1,7 @@
-import React from 'react'
-import { Button } from 'comps'
-import { CloseIcon } from 'tiptap-comps/icons'
 import type { FileItem } from '../types'
+import { Button } from 'comps'
+import React from 'react'
+import { CloseIcon } from 'tiptap-comps/icons'
 import { CloudUploadIcon } from './icons'
 
 interface ImageUploadPreviewProps {

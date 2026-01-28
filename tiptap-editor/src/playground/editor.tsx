@@ -7,12 +7,12 @@ import { AI } from 'tiptap-ai'
 
 import { useAutoSave, useIsBreakpoint, useWindowSize } from 'tiptap-api/react'
 import { CommentMark, CommentStore } from 'tiptap-comment'
-import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-utils'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
-
 import { MermaidNode } from 'tiptap-mermaid'
+
 import { HorizontalRule, ImageUploadNode, preprocessSpeakerTags, SpeakerNode } from 'tiptap-nodes'
 import { SuggestionTrigger } from 'tiptap-trigger'
+import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-utils'
 import content from './data/content.json' with { type: 'json' }
 import { EditorUI } from './editor-ui'
 

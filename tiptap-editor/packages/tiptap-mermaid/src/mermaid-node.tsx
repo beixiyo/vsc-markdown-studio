@@ -2,8 +2,8 @@
 
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewWrapper } from '@tiptap/react'
-import { memo, useCallback } from 'react'
 import { Button, Textarea } from 'comps'
+import { memo, useCallback } from 'react'
 import { CheckIcon, EditIcon, XIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 import { useMermaidEditor } from './hooks/use-mermaid-editor'

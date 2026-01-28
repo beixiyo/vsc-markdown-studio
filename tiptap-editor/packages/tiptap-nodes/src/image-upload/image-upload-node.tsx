@@ -1,13 +1,13 @@
-import React, { useRef } from 'react'
 import type { NodeViewProps } from '@tiptap/react'
+import type { UploadOptions } from './types'
 import { NodeViewWrapper } from '@tiptap/react'
 import { Button } from 'comps'
+import React, { useRef } from 'react'
 import { focusNextNode, isValidPosition } from 'tiptap-utils'
-import type { UploadOptions } from './types'
-import { useFileUpload } from './hooks/use-file-upload'
+import { DropZoneContent } from './components/drop-zone-content'
 import { ImageUploadDragArea } from './components/image-upload-drag-area'
 import { ImageUploadPreview } from './components/image-upload-preview'
-import { DropZoneContent } from './components/drop-zone-content'
+import { useFileUpload } from './hooks/use-file-upload'
 
 export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
   const { accept, limit, maxSize } = props.node.attrs

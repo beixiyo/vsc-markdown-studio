@@ -3,10 +3,10 @@
 import type { Editor } from '@tiptap/react'
 import type { UseLinkPopoverConfig } from './use-link-popover'
 import { Button, Card, Input, Popover, type PopoverRef } from 'comps'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
-
 import { forwardRef, useCallback, useEffect, useRef } from 'react'
+
 import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import {
   CornerDownLeftIcon,
   ExternalLinkIcon,
@@ -238,7 +238,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
     return (
       <Popover
         ref={ popoverRef }
-        contentClassName='p-0'
+        contentClassName="p-0"
         trigger="click"
         onOpen={ () => onOpenChange?.(true) }
         onClose={ () => onOpenChange?.(false) }

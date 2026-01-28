@@ -38,6 +38,7 @@
     "tiptap-comps": "workspace:*",
     "comps": "workspace:*",
     "utils": "workspace:*",
+    "hooks": "workspace:*",
     "styles": "workspace:*"
   },
   "peerDependencies": {

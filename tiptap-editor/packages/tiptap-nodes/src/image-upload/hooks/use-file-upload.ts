@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import type { FileItem, UploadOptions } from '../types'
+import { useState } from 'react'
 
 /**
  * Custom hook for managing multiple file uploads with progress tracking and cancellation

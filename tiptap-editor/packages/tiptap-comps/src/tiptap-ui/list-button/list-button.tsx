@@ -6,14 +6,14 @@ import type { ButtonProps } from 'comps'
 // --- Tiptap UI ---
 import type { ListType, UseListConfig } from './use-list'
 
-import { forwardRef, useCallback } from 'react'
+import { Badge, Button } from 'comps'
 
+import { forwardRef, useCallback } from 'react'
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
+
 // --- Lib ---
 import { parseShortcutKeys } from 'tiptap-utils'
-
-import { Badge, Button } from 'comps'
 import { LIST_SHORTCUT_KEYS, useList } from './use-list'
 
 export interface ListButtonProps

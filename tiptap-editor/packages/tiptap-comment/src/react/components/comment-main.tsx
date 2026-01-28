@@ -1,8 +1,8 @@
 import type React from 'react'
-import { memo, useCallback } from 'react'
 import { Button, Textarea } from 'comps'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { memo, useCallback } from 'react'
 import { CornerDownLeftIcon } from 'tiptap-comps/icons'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 
 export type CommentMainProps = {

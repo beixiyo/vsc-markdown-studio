@@ -1,5 +1,5 @@
 import React from 'react'
-import { CloudUploadIcon, FileIcon, FileCornerIcon } from './icons'
+import { CloudUploadIcon, FileCornerIcon, FileIcon } from './icons'
 
 interface DropZoneContentProps {
   maxSize: number

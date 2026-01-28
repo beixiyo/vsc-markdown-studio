@@ -1,21 +1,21 @@
 import type { Editor } from '@tiptap/react'
 
+import { Button, Card, Popover } from 'comps'
 import { forwardRef, useMemo, useRef } from 'react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import variable from 'styles/variable'
+
 import { useIsBreakpoint, useMenuNavigation, useTiptapEditor } from 'tiptap-api/react'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 
 import { BanIcon, HighlighterIcon } from '../../icons'
-import { Button, Card, Popover } from 'comps'
-
 import {
   ColorHighlightButton,
   type UseColorHighlightConfig,
 } from '../color-highlight-button'
+
 import {
   useColorHighlight,
 } from '../color-highlight-button/use-color-highlight'
-
-import variable from 'styles/variable'
 
 export interface ColorHighlightPopoverContentProps {
   /**

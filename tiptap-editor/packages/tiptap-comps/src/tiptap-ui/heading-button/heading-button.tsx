@@ -9,12 +9,12 @@ import type {
   UseHeadingConfig,
 } from './use-heading'
 
+import { Badge, Button } from 'comps'
 import { forwardRef, useCallback } from 'react'
-import { useTiptapEditor } from 'tiptap-api/react'
 
+import { useTiptapEditor } from 'tiptap-api/react'
 // --- Lib ---
 import { parseShortcutKeys } from 'tiptap-utils'
-import { Badge, Button } from 'comps'
 import {
   HEADING_SHORTCUT_KEYS,
   useHeading,

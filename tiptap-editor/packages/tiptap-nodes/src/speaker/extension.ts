@@ -43,7 +43,7 @@ function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerO
    * 如果 originalLabel 是数字，则显示为数字 + 1
    */
   const originalLabel = attrs.originalLabel ?? ''
-  const displayLabel = (originalLabel && !isNaN(Number(originalLabel)))
+  const displayLabel = (originalLabel && !Number.isNaN(Number(originalLabel)))
     ? (Number(originalLabel) + 1).toString()
     : originalLabel
 

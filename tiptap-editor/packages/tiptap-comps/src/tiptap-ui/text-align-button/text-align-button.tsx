@@ -9,14 +9,14 @@ import type {
   UseTextAlignConfig,
 } from './use-text-align'
 
-import { forwardRef, useCallback } from 'react'
+import { Badge, Button } from 'comps'
 
+import { forwardRef, useCallback } from 'react'
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
+
 // --- Lib ---
 import { parseShortcutKeys } from 'tiptap-utils'
-
-import { Badge, Button } from 'comps'
 import {
   TEXT_ALIGN_SHORTCUT_KEYS,
   useTextAlign,

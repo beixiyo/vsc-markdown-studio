@@ -1,10 +1,10 @@
 import type { Editor } from '@tiptap/react'
 import type { Comment, CommentAuthor, CommentStore } from '../../comment-store'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { scrollToRangeSelection } from 'tiptap-api'
 import {
   Button,
 } from 'comps'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { scrollToRangeSelection } from 'tiptap-api'
 import {
   useCommentLabels,
   useLanguage,
@@ -343,11 +343,11 @@ export const CommentItem = memo(({
             className="size-8"
             leftIcon={ comment.status === 'active'
               ? (
-                <BanIcon className="size-4 text-icon" />
-              )
+                  <BanIcon className="size-4 text-icon" />
+                )
               : (
-                <TrashIcon className="size-4 text-icon" />
-              ) }
+                  <TrashIcon className="size-4 text-icon" />
+                ) }
           />
 
           <Button

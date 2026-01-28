@@ -1,6 +1,6 @@
 'use client'
 
-import type { RefObject, Ref } from 'react'
+import type { Ref, RefObject } from 'react'
 import { useCallback, useEffect, useRef } from 'react'
 
 /**

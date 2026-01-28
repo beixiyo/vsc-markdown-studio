@@ -2,16 +2,15 @@
 
 import type { Editor } from '@tiptap/react'
 import type { CommentStore } from '../comment-store'
-import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
-import { useTiptapEditor } from 'tiptap-api/react'
 import {
   Button,
   Popover,
   type PopoverRef,
 } from 'comps'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
-import { useCommentLabels } from 'tiptap-api/react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { useCommentLabels, useTiptapEditor } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { CommentItem } from './components/comment-item'
 
