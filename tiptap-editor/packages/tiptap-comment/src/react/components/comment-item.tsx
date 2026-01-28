@@ -306,9 +306,8 @@ export const CommentItem = memo(({
             size="sm"
             tooltip={ labels.locate }
             className="size-8"
-          >
-            <LocateIcon className="size-4" />
-          </Button>
+            leftIcon={ <LocateIcon className="size-4 text-icon" /> }
+          />
 
           { comment.status === 'active' && (
             <>
@@ -319,9 +318,8 @@ export const CommentItem = memo(({
                 size="sm"
                 tooltip={ labels.edit }
                 className="size-8"
-              >
-                <EditIcon className="size-4" />
-              </Button>
+                leftIcon={ <EditIcon className="size-4 text-icon" /> }
+              />
               <Button
                 type="button"
                 onClick={ handleReply }
@@ -329,9 +327,8 @@ export const CommentItem = memo(({
                 size="sm"
                 tooltip={ labels.reply }
                 className="size-8"
-              >
-                <CornerDownLeftIcon className="size-4" />
-              </Button>
+                leftIcon={ <CornerDownLeftIcon className="size-4 text-icon" /> }
+              />
             </>
           ) }
 
@@ -344,15 +341,14 @@ export const CommentItem = memo(({
               ? labels.markResolved
               : labels.reopen }
             className="size-8"
-          >
-            { comment.status === 'active'
+            leftIcon={ comment.status === 'active'
               ? (
-                  <BanIcon className="size-4" />
-                )
+                <BanIcon className="size-4 text-icon" />
+              )
               : (
-                  <TrashIcon className="size-4" />
-                )}
-          </Button>
+                <TrashIcon className="size-4 text-icon" />
+              ) }
+          />
 
           <Button
             type="button"
@@ -361,9 +357,8 @@ export const CommentItem = memo(({
             size="sm"
             tooltip={ labels.delete }
             className="size-8"
-          >
-            <TrashIcon className="size-4" />
-          </Button>
+            leftIcon={ <TrashIcon className="size-4 text-icon" /> }
+          />
         </div>
       </div>
 

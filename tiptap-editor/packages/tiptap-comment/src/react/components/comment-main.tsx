@@ -1,6 +1,7 @@
 import type React from 'react'
 import { memo, useCallback } from 'react'
 import { Button, Textarea } from 'comps'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 
@@ -66,6 +67,7 @@ export const CommentMain = memo((props: CommentMainProps) => {
       ) }
       role="dialog"
       aria-label="添加评论"
+      { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
     >
       <div className="flex flex-col gap-3 p-4 max-[480px]:p-3">
         <div className="text-sm font-semibold text-textPrimary flex justify-between">

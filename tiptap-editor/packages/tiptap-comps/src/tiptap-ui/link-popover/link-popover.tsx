@@ -3,6 +3,7 @@
 import type { Editor } from '@tiptap/react'
 import type { UseLinkPopoverConfig } from './use-link-popover'
 import { Button, Card, Input, Popover, type PopoverRef } from 'comps'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 
 import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useIsBreakpoint, useTiptapEditor } from 'tiptap-api/react'
@@ -107,6 +108,7 @@ const LinkMain: React.FC<LinkMainProps> = ({
       bordered={ !isMobile }
       shadow={ isMobile ? 'none' : 'md' }
       className="min-w-max"
+      { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
     >
       <div className="flex flex-row items-center gap-1 p-1">
         <Input

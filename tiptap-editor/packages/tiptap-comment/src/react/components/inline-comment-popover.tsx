@@ -9,6 +9,7 @@ import {
   useFloating,
 } from '@floating-ui/react'
 import { memo, useEffect, useMemo } from 'react'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { getSelectionRect } from 'tiptap-api'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
@@ -184,13 +185,14 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
       <div
         ref={ refs.setFloating }
         className={ cn(
-          'bn-inline-comment-popover z-[1000] max-w-[360px] overflow-y-auto',
+          'bn-inline-comment-popover max-w-[360px] overflow-y-auto',
           className,
         ) }
         style={ {
           ...floatingStyles,
           maxHeight: maxHeight.maxHeight,
         } }
+        { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
       >
         <div className="rounded-2xl border border-border bg-background shadow-lg">
           <div className="flex items-center justify-between border-b border-border px-3 py-2 text-xs text-textSecondary">

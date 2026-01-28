@@ -9,6 +9,7 @@ import {
   Popover,
   type PopoverRef,
 } from 'comps'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
@@ -133,6 +134,7 @@ export const CommentSidebar = memo(({
             'w-[380px] max-w-[calc(100vw-32px)] flex flex-col gap-4 p-4',
             className,
           ) }
+          { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
         >
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2">
