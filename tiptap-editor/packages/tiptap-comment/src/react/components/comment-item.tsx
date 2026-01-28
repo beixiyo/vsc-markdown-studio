@@ -30,7 +30,7 @@ export type CommentItemProps = {
   comment: Comment
   editor: Editor | null
   commentStore: CommentStore
-  onUpdate: () => void
+  onUpdate?: () => void
   isActive?: boolean
 }
 
@@ -120,7 +120,7 @@ export const CommentItem = memo(({
 
     if (success) {
       setIsEditing(false)
-      onUpdate()
+      onUpdate?.()
     }
     else {
       console.warn(labels.updateFailed)
@@ -141,7 +141,7 @@ export const CommentItem = memo(({
     })
 
     if (success) {
-      onUpdate()
+      onUpdate?.()
     }
     else {
       console.warn(labels.updateStatusFailed)
@@ -168,7 +168,7 @@ export const CommentItem = memo(({
     if (reply) {
       setReplyContent('')
       setIsReplying(false)
-      onUpdate()
+      onUpdate?.()
     }
     else {
       console.warn(labels.replyFailed)

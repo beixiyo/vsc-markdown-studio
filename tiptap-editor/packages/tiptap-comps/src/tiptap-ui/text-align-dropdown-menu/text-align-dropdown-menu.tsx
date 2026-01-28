@@ -75,10 +75,6 @@ export function TextAlignDropdownMenu({
     editor?.chain().focus().setTextAlign(value).run()
   }, [editor])
 
-  if (!isVisible) {
-    return null
-  }
-
   const trigger = useMemo(() => (
     <Button
       type="button"
@@ -98,6 +94,10 @@ export function TextAlignDropdownMenu({
       <ChevronDownIcon className="size-4 text-icon" />
     </Button>
   ), [isActive, canToggle, toolbarLabels.textAlign, Icon, props])
+
+  if (!isVisible) {
+    return null
+  }
 
   return (
     <Cascader

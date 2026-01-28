@@ -1,7 +1,7 @@
 import type { CommentButtonProps } from './comment-button.types'
+import { Button, Popover, type PopoverRef } from 'comps'
 import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Button, Popover, type PopoverRef } from 'comps'
 import { canCreateComment, createComment } from '../comment'
 import { type CommentAuthor, CommentStore } from '../comment-store'
 import { CommentMain } from './components/comment-main'
@@ -120,7 +120,5 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
     )
   },
 )
-
-CommentButton.displayName = 'CommentButton'
 
 CommentButton.displayName = 'CommentButton'

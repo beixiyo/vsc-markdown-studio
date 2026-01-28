@@ -9,10 +9,10 @@ import {
   useFloating,
 } from '@floating-ui/react'
 import { memo, useEffect, useMemo } from 'react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { getSelectionRect } from 'tiptap-api'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { CommentItem } from './comment-item'
 
@@ -216,7 +216,6 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
                 comment={ comment }
                 editor={ editor }
                 commentStore={ commentStore }
-                onUpdate={ () => {} }
                 isActive={ comment.id === inlineComment.id }
               />
             )) }
