@@ -90,10 +90,6 @@ export const EditorUI = memo<EditorUIProps>(({
                 open={ commentSidebarOpen }
                 onOpenChange={ (openPanel) => {
                   setCommentSidebarOpen(openPanel)
-                  if (!openPanel) {
-                    setActiveCommentId(null)
-                    closeInlineComment()
-                  }
                 } }
                 activeCommentId={ activeCommentId ?? undefined }
               />

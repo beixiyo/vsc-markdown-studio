@@ -288,7 +288,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
           onChange={ handleValueChange }
           placement="bottom-start"
           dropdownHeight={ 400 }
-          optionClassName="px-2 py-1.5"
+          optionClassName="px-2 py-1.5 text-sm"
           trigger={
             <Button
               type="button"

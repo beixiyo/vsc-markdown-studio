@@ -1,4 +1,5 @@
 import { Mark, mergeAttributes } from '@tiptap/core'
+import { DATA_COMMENT_ID } from '../constants'
 import { createCommentPlugin } from './comment-plugin'
 
 export interface CommentMarkOptions {
@@ -37,15 +38,15 @@ export const CommentMark = Mark.create<CommentMarkOptions>({
       commentId: {
         default: null,
         parseHTML: (element) => {
-          return element.getAttribute('data-comment-id') || null
+          return element.getAttribute(DATA_COMMENT_ID) || null
         },
         renderHTML: (attributes) => {
           if (!attributes.commentId) {
             return {}
           }
           return {
-            'data-comment-id': attributes.commentId,
-            'class': 'comment-mark',
+            [DATA_COMMENT_ID]: attributes.commentId,
+            class: 'comment-mark',
           }
         },
       },
@@ -55,7 +56,7 @@ export const CommentMark = Mark.create<CommentMarkOptions>({
   parseHTML() {
     return [
       {
-        tag: 'span[data-comment-id]',
+        tag: `span[${DATA_COMMENT_ID}]`,
       },
     ]
   },

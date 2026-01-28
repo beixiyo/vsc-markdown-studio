@@ -2,7 +2,9 @@ import type { Editor } from '@tiptap/react'
 import type { CommentStore } from '../../comment-store'
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { getSelectionRect } from 'tiptap-api'
+import { DATA_COMMENT_ID } from '../../constants'
 import { commentPluginKey } from '../../plugin'
+import { useWatchRef } from '../../../../../../packages/hooks/dist'
 
 /**
  * 点击评论高亮时，展示贴合文本的评论浮层
@@ -14,6 +16,9 @@ export function useInlineCommentPopover(params: {
   onInlineClose?: () => void
 }) {
   const { editor, commentStore, onInlineOpen, onInlineClose } = params
+  const onInlineOpenRef = useWatchRef(onInlineOpen)
+  const onInlineCloseRef = useWatchRef(onInlineClose)
+
   const [inlineCommentId, setInlineCommentId] = useState<string | null>(null)
   const [inlineCommentRect, setInlineCommentRect] = useState<DOMRect | null>(null)
   const [inlineCommentRange, setInlineCommentRange] = useState<{ from: number, to: number } | null>(null)
@@ -33,8 +38,8 @@ export function useInlineCommentPopover(params: {
 
     const handleCommentHighlightClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null
-      const commentElement = target?.closest<HTMLElement>('[data-comment-id]')
-      const commentId = commentElement?.getAttribute('data-comment-id')
+      const commentElement = target?.closest<HTMLElement>(`[${DATA_COMMENT_ID}]`)
+      const commentId = commentElement?.getAttribute(DATA_COMMENT_ID)
 
       if (!commentId || !commentStore?.getComment(commentId)) {
         return
@@ -51,7 +56,7 @@ export function useInlineCommentPopover(params: {
       setInlineCommentRange(range
         ? { from: range.from, to: range.to }
         : null)
-      onInlineOpen?.(commentId)
+      onInlineOpenRef.current?.(commentId)
     }
 
     editorDom.addEventListener('click', handleCommentHighlightClick)
@@ -59,7 +64,7 @@ export function useInlineCommentPopover(params: {
     return () => {
       editorDom.removeEventListener('click', handleCommentHighlightClick)
     }
-  }, [editor, commentStore, onInlineOpen])
+  }, [editor, commentStore])
 
   /** 当评论被删除或丢失时，自动收起浮层 */
   useEffect(() => {
@@ -72,15 +77,15 @@ export function useInlineCommentPopover(params: {
       setInlineCommentId(null)
       setInlineCommentRect(null)
       setInlineCommentRange(null)
-      onInlineClose?.()
+      onInlineCloseRef.current?.()
     }
-  }, [inlineCommentId, commentSnapshot, onInlineClose])
+  }, [inlineCommentId, commentSnapshot])
 
   const closeInlineComment = () => {
     setInlineCommentId(null)
     setInlineCommentRect(null)
     setInlineCommentRange(null)
-    onInlineClose?.()
+    onInlineCloseRef.current?.()
   }
 
   const inlineComment = useMemo(() => {

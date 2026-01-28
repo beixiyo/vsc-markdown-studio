@@ -2,6 +2,7 @@ import type { Node } from '@tiptap/pm/model'
 import type { EditorState } from '@tiptap/pm/state'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { DATA_COMMENT_ID } from '../constants'
 
 /**
  * 评论范围信息
@@ -213,11 +214,11 @@ function computeDecorations(
 
       /** 创建内联装饰，用于高亮显示评论区域 */
       const decoration = Decoration.inline(segment.from, segment.to, {
-        'class':
+        class:
           'comment-highlight bg-warning/20 border-b-2 border-b-warning '
           + 'px-[2px] rounded-sm cursor-pointer transition-colors '
           + 'duration-200 ease-in-out',
-        'data-comment-id': commentId,
+        [DATA_COMMENT_ID]: commentId,
       })
 
       decorations.push(decoration)
