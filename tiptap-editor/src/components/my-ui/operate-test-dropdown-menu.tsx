@@ -1,15 +1,12 @@
 import type { OperateTestSuite } from '@/features/operate-tests'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import {
   Button,
   ButtonGroup,
   Card,
-  CardBody,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from 'tiptap-comps'
+  Popover,
+  type PopoverRef,
+} from 'comps'
 
 import { ChevronDownIcon } from 'tiptap-comps/icons'
 
@@ -26,61 +23,42 @@ export function OperateTestDropdownMenu({
   suites = [],
   onRunAll,
   onRunSuite,
-  portal = false,
+  portal: _portal = false,
   disabled = false,
   running = false,
 }: OperateTestDropdownMenuProps) {
+  const popoverRef = useRef<PopoverRef>(null)
   const totalCases = useMemo(
     () => suites.reduce((acc, suite) => acc + (suite.cases?.length ?? 0), 0),
     [suites],
   )
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          data-style="ghost"
-          data-active-state={ running
-            ? 'on'
-            : 'off' }
-          role="button"
-          tabIndex={ -1 }
-          disabled={ disabled || running }
-          data-disabled={ disabled || running }
-          aria-label="Operate tests"
-          tooltip="Operate tests"
-        >
-          <span className="tiptap-button-label">测试</span>
-          <ChevronDownIcon className="tiptap-button-dropdown-small" />
-        </Button>
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent align="start" portal={ portal }>
-        <Card>
-          <CardBody className="space-y-2">
+    <Popover
+      ref={ popoverRef }
+      trigger="click"
+      position="bottom"
+      content={
+        <Card className="p-2" shadow="md" padding="none">
+          <div className="space-y-2">
             <ButtonGroup>
-              <DropdownMenuItem
-                asChild
-                onSelect={ (event) => {
-                  event.preventDefault()
+              <Button
+                type="button"
+                variant="ghost"
+                className="justify-between"
+                disabled={ disabled || running || totalCases === 0 }
+                onClick={ () => {
                   onRunAll?.()
+                  popoverRef.current?.close()
                 } }
               >
-                <Button
-                  type="button"
-                  data-style="ghost"
-                  className="justify-between"
-                  disabled={ disabled || running || totalCases === 0 }
-                >
-                  运行全部
-                  <span className="text-xs text-tiptap-muted">
-                    { totalCases }
-                    {' '}
-                    项
-                  </span>
-                </Button>
-              </DropdownMenuItem>
+                运行全部
+                <span className="text-xs text-tiptap-muted">
+                  { totalCases }
+                  {' '}
+                  项
+                </span>
+              </Button>
             </ButtonGroup>
 
             <div className="flex flex-col gap-1">
@@ -92,34 +70,46 @@ export function OperateTestDropdownMenu({
                   )
                 : (
                     suites.map(suite => (
-                      <DropdownMenuItem
+                      <Button
                         key={ suite.id }
-                        className="cursor-pointer"
-                        onSelect={ (event) => {
-                          event.preventDefault()
+                        type="button"
+                        variant="ghost"
+                        className="flex w-full items-center justify-between gap-3 px-2 py-1 text-left"
+                        onClick={ () => {
                           onRunSuite?.(suite.id)
+                          popoverRef.current?.close()
                         } }
-                        asChild
                       >
-                        <Button
-                          type="button"
-                          data-style="ghost"
-                          className="flex w-full items-center justify-between gap-3 px-2 py-1 text-left"
-                        >
-                          <span className="text-sm font-medium">{ suite.title }</span>
-                          <span className="text-xs text-tiptap-muted">
-                            { suite.cases?.length ?? 0 }
-                            {' '}
-                            项
-                          </span>
-                        </Button>
-                      </DropdownMenuItem>
+                        <span className="text-sm font-medium">{ suite.title }</span>
+                        <span className="text-xs text-tiptap-muted">
+                          { suite.cases?.length ?? 0 }
+                          {' '}
+                          项
+                        </span>
+                      </Button>
                     ))
                   ) }
             </div>
-          </CardBody>
+          </div>
         </Card>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      }
+    >
+      <Button
+        type="button"
+        variant="ghost"
+        name={ running
+          ? 'active'
+          : undefined }
+        role="button"
+        tabIndex={ -1 }
+        disabled={ disabled || running }
+        aria-label="Operate tests"
+        tooltip="Operate tests"
+        size="sm"
+      >
+        <span className="tiptap-button-label">测试</span>
+        <ChevronDownIcon className="tiptap-button-dropdown-small" />
+      </Button>
+    </Popover>
   )
 }

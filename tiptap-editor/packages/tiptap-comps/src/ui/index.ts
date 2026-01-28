@@ -1,11 +1,14 @@
 /** 导出组件 */
-export * from './badge'
-export * from './button'
-export * from './card'
-export * from './dropdown-menu'
-export * from './input'
-export * from './popover'
-export * from './separator'
-export * from './spacer'
-export * from './toolbar'
-export * from './tooltip'
+export {
+  Badge,
+  Button,
+  ButtonGroup,
+  Card,
+  Dropdown,
+  Input,
+  Popover,
+  Separator,
+  Spacer,
+  Toolbar,
+  Tooltip,
+} from 'comps'

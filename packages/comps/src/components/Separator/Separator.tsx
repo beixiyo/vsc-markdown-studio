@@ -1,3 +1,5 @@
+'use client'
+
 import { forwardRef } from 'react'
 import { cn } from 'utils'
 
@@ -20,7 +22,7 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
     return (
       <div
         className={ cn(
-          'shrink-0 bg-borderSecondary',
+          'shrink-0 bg-border',
           orientation === 'horizontal' ? 'h-[1px] w-full my-1' : 'h-6 w-[1px]',
           className,
         ) }

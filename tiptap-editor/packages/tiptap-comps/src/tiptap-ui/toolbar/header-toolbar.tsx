@@ -1,8 +1,7 @@
 import {
   Spacer,
-  ToolbarGroup,
-  ToolbarSeparator,
-} from '../../ui'
+  Toolbar,
+} from 'comps'
 import {
   CodeBlockButton,
   ColorHighlightPopover,
@@ -31,29 +30,29 @@ export function HeaderToolbar(props: HeaderToolbarProps) {
     <>
       <Spacer />
 
-      <ToolbarGroup>
+      <Toolbar.Group>
         <OutlineButton />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarGroup>
+      <Toolbar.Group>
         <UndoRedoButton action="undo" />
         <UndoRedoButton action="redo" />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
-      <ToolbarGroup>
+      <Toolbar.Group>
         <TextFormatDropdownMenu
           headingLevels={ [1, 2, 3, 4] }
           listTypes={ ['bulletList', 'orderedList', 'taskList'] }
           portal={ isMobile }
         />
         <CodeBlockButton />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
-      <ToolbarGroup>
+      <Toolbar.Group>
         <MarkButton type="bold" />
         <MarkButton type="italic" />
         <MarkButton type="strike" />
@@ -69,39 +68,39 @@ export function HeaderToolbar(props: HeaderToolbarProps) {
         { !isMobile
           ? <LinkPopover />
           : <LinkButton onClick={ onLinkClick } /> }
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
-      <ToolbarGroup>
+      <Toolbar.Group>
         <MarkButton type="superscript" />
         <MarkButton type="subscript" />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
-      <ToolbarGroup>
+      <Toolbar.Group>
         <TextAlignDropdownMenu
           types={ ['left', 'center', 'right', 'justify'] }
           portal={ isMobile }
         />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
-      <ToolbarGroup>
+      <Toolbar.Group>
         <ImageUploadButton text="Add" />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
       { children }
 
       <Spacer />
 
-      { isMobile && <ToolbarSeparator /> }
+      { isMobile && <Toolbar.Separator /> }
 
-      <ToolbarGroup>
+      <Toolbar.Group>
         <ThemeToggle />
-      </ToolbarGroup>
+      </Toolbar.Group>
     </>
   )
 }

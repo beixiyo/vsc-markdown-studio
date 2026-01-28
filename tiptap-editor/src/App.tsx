@@ -34,9 +34,10 @@ function AppContent() {
 
   return (
     <div className="h-screen">
-      <div className="flex gap-2 items-center justify-between p-4 border-b border-border">
+      <div className="flex gap-2 items-center justify-between px-4 py-2 border-b border-border">
         <div className="flex gap-2">
           <Button
+            size='sm'
             onClick={ () => setMode('editor') }
             data-active-state={ mode === 'editor'
               ? 'on'
@@ -47,6 +48,7 @@ function AppContent() {
             普通编辑器
           </Button>
           <Button
+            size='sm'
             onClick={ () => setMode('collaboration') }
             data-active-state={ mode === 'collaboration'
               ? 'on'
@@ -63,13 +65,13 @@ function AppContent() {
       { mode === 'editor'
         ? <Editor
           // initialMarkdown="[speaker:1] 和 [speaker:2]"
-            speakerMap={ {
-              1: { name: 'Alice', id: 'u1' },
-            } }
-            onSpeakerClick={ (attrs) => {
-              console.log('speaker click', attrs)
-            } }
-          />
+          speakerMap={ {
+            1: { name: 'Alice', id: 'u1' },
+          } }
+          onSpeakerClick={ (attrs) => {
+            console.log('speaker click', attrs)
+          } }
+        />
         : <CollaborationSplitPane /> }
     </div>
   )

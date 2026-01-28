@@ -1,8 +1,7 @@
 import { memo } from 'react'
 import {
-  ToolbarGroup,
-  ToolbarSeparator,
-} from '../../ui'
+  Toolbar,
+} from 'comps'
 import {
   CodeBlockButton,
   ColorHighlightPopover,
@@ -32,73 +31,73 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
   return (
     <>
       {/* 撤销/重做 */}
-      <ToolbarGroup>
+      <Toolbar.Group>
         <UndoRedoButton action="undo" hideWhenUnavailable />
         <UndoRedoButton action="redo" hideWhenUnavailable />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
       {/* 文本格式：标题、段落、列表、任务、引用 */}
-      <ToolbarGroup>
+      <Toolbar.Group>
         <TextFormatDropdownMenu
           headingLevels={ [1, 2, 3] }
           listTypes={ ['bulletList', 'orderedList', 'taskList'] }
           portal={ isMobile }
           hideWhenUnavailable
         />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
       {/* 文本样式：粗体、斜体、删除线、行内代码、下划线 */}
-      <ToolbarGroup>
+      <Toolbar.Group>
         <MarkButton type="bold" hideWhenUnavailable />
         <MarkButton type="italic" hideWhenUnavailable />
         <MarkButton type="strike" hideWhenUnavailable />
         <MarkButton type="code" hideWhenUnavailable />
         <MarkButton type="underline" hideWhenUnavailable />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
       {/* 高亮（5个颜色） */}
-      <ToolbarGroup>
+      <Toolbar.Group>
         <ColorHighlightPopover hideWhenUnavailable />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
       {/* 代码块 */}
-      <ToolbarGroup>
+      <Toolbar.Group>
         <CodeBlockButton hideWhenUnavailable />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
       {/* 上角标、下角标 */}
-      <ToolbarGroup>
+      <Toolbar.Group>
         <MarkButton type="superscript" hideWhenUnavailable />
         <MarkButton type="subscript" hideWhenUnavailable />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
       {/* 对齐：左对齐、居中、右对齐、两端对齐 */}
-      <ToolbarGroup>
+      <Toolbar.Group>
         <TextAlignDropdownMenu
           types={ ['left', 'center', 'right', 'justify'] }
           portal={ isMobile }
           hideWhenUnavailable
         />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
-      <ToolbarSeparator />
+      <Toolbar.Separator />
 
       {/* 添加图片 */}
-      <ToolbarGroup>
+      <Toolbar.Group>
         <ImageUploadButton hideWhenUnavailable />
-      </ToolbarGroup>
+      </Toolbar.Group>
 
       {/* 自定义内容 */}
       { children }

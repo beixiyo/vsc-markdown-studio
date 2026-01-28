@@ -1,4 +1,3 @@
-import type { Editor } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 
 /**
@@ -11,9 +10,9 @@ type Orientation = 'horizontal' | 'vertical' | 'both'
 
 interface MenuNavigationOptions<T> {
   /**
-   * Tiptap 编辑器实例，如果与 Tiptap 编辑器一起使用。
+   * 触发源对象，可以是 Tiptap 编辑器或任何具有 view.dom 的对象
    */
-  editor?: Editor | null
+  editor?: { view: { dom: HTMLElement } } | null
   /**
    * 用于处理键盘事件的容器元素引用。
    */
@@ -52,47 +51,8 @@ interface MenuNavigationOptions<T> {
  * 提供完整的键盘导航支持，包括方向键导航、Tab 键切换、Home/End 键跳转、
  * Enter 键选择和 Escape 键关闭。支持 Tiptap 编辑器和常规 DOM 元素。
  *
- * @example
- * ```tsx
- * // 在命令面板中使用
- * const { selectedIndex } = useMenuNavigation({
- *   items: commands,
- *   onSelect: (command) => executeCommand(command),
- *   onClose: () => setOpen(false),
- *   orientation: "vertical"
- * });
- *
- * // 在 Tiptap 编辑器中使用
- * const { selectedIndex } = useMenuNavigation({
- *   editor,
- *   items: suggestions,
- *   onSelect: (suggestion) => insertSuggestion(suggestion)
- * });
- * ```
- *
  * @template T - 菜单项的类型
  * @param options - 菜单导航的配置选项
- * @param options.editor - Tiptap 编辑器实例，如果导航与编辑器集成
- * @param options.containerRef - 容器元素的 React ref，用于监听键盘事件
- * @param options.query - 搜索查询，当查询变化时重置选中项
- * @param options.items - 要导航的项目数组
- * @param options.onSelect - 选择项目时的回调函数
- * @param options.onClose - 关闭菜单时的回调函数
- * @param options.orientation - 导航方向，默认为 "vertical"
- * @param options.autoSelectFirstItem - 是否自动选择第一项，默认为 true
- * @returns 包含选中索引和设置函数的对象
- *   - selectedIndex: 当前选中项的索引，如果没有项目则为 undefined
- *   - setSelectedIndex: 手动设置选中索引的函数
- *
- * @note
- * - 支持以下键盘操作：
- *   - ArrowUp/ArrowDown: 垂直导航
- *   - ArrowLeft/ArrowRight: 水平导航
- *   - Tab/Shift+Tab: 向前/向后导航
- *   - Home/End: 跳转到第一项/最后一项
- *   - Enter: 选择当前项
- *   - Escape: 关闭菜单
- * - 当 items 数组为空时，selectedIndex 为 undefined
  */
 export function useMenuNavigation<T>({
   editor,
@@ -208,7 +168,7 @@ export function useMenuNavigation<T>({
 
     let targetElement: HTMLElement | null = null
 
-    if (editor) {
+    if (editor?.view?.dom) {
       targetElement = editor.view.dom
     }
     else if (containerRef?.current) {

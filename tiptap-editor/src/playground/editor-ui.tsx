@@ -5,7 +5,7 @@ import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { Button, LinkPopover, SelectionToolbar, SelectionToolbarContent, ToolbarGroup } from 'tiptap-comps'
+import { Button, LinkPopover, SelectionToolbar, SelectionToolbarContent, Toolbar } from 'tiptap-comps'
 
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
@@ -82,7 +82,7 @@ export const EditorUI = memo<EditorUIProps>(({
           setMobileView={ setMobileView }
           toolbarRef={ toolbarRef }
         >
-          <ToolbarGroup>
+          <Toolbar.Group>
             { commentStore && (
               <CommentSidebar
                 commentStore={ commentStore }
@@ -98,8 +98,8 @@ export const EditorUI = memo<EditorUIProps>(({
                 activeCommentId={ activeCommentId ?? undefined }
               />
             ) }
-          </ToolbarGroup>
-          <ToolbarGroup>
+          </Toolbar.Group>
+          <Toolbar.Group>
             <OperateTestDropdownMenu
               suites={ operateTestSuites }
               portal={ isMobile }
@@ -129,7 +129,7 @@ sequenceDiagram
             </Button>
             <SelectionTestButton />
             <ScrollTestButton />
-          </ToolbarGroup>
+          </Toolbar.Group>
         </BaseEditorUI>
       ) }
 

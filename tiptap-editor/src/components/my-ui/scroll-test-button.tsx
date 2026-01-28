@@ -10,7 +10,7 @@ import {
   selectAndScrollToText,
 } from 'tiptap-api'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { Button, Card, CardBody, CardItemGroup, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Input, InputGroup, Separator } from 'tiptap-comps'
+import { Button, Card, Input, Popover, type PopoverRef, Separator } from 'comps'
 import { ChevronDownIcon, CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 
 export interface ScrollTestButtonProps {
@@ -33,9 +33,9 @@ export interface ScrollTestButtonProps {
  * 测试下拉菜单组件，用于测试所有滚动功能
  */
 export const ScrollTestButton = memo<ScrollTestButtonProps>(
-  ({ editor: providedEditor, className, portal = false }) => {
+  ({ editor: providedEditor, className, portal: _portal = false }) => {
     const { editor } = useTiptapEditor(providedEditor)
-    const [isOpen, setIsOpen] = useState(false)
+    const popoverRef = useRef<PopoverRef>(null)
     const [testType, setTestType] = useState<
       | 'scrollToRange'
       | 'scrollToRangeSelection'
@@ -82,6 +82,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
 
       if (success) {
         handleCancel()
+        popoverRef.current?.close()
       }
       else {
         alert('滚动失败，请检查位置是否有效')
@@ -108,6 +109,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
 
       if (success) {
         handleCancel()
+        popoverRef.current?.close()
       }
       else {
         alert('滚动失败，请检查范围是否有效')
@@ -132,6 +134,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
 
       if (success) {
         handleCancel()
+        popoverRef.current?.close()
       }
       else {
         alert('未找到指定的 mark')
@@ -156,6 +159,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
 
       if (success) {
         handleCancel()
+        popoverRef.current?.close()
       }
       else {
         alert('未找到指定的文本')
@@ -180,6 +184,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
 
       if (success) {
         handleCancel()
+        popoverRef.current?.close()
       }
       else {
         alert('未找到指定的文本')
@@ -197,7 +202,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
         block: 'center',
         setSelection: true,
       })
-      setIsOpen(false)
+      popoverRef.current?.close()
     }, [editor])
 
     /** 快速测试：滚动到文档开头 */
@@ -210,7 +215,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
         block: 'center',
         setSelection: true,
       })
-      setIsOpen(false)
+      popoverRef.current?.close()
     }, [editor])
 
     const handleKeyDown = useCallback(
@@ -271,99 +276,81 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
         switch (testType) {
           case 'scrollToRange':
             return (
-              <InputGroup
-                className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
-              >
-                <Input
-                  type="number"
-                  placeholder="输入位置（数字）"
-                  value={ posInput }
-                  onChange={ e => setPosInput(e.target.value) }
-                  onKeyDown={ handleKeyDown }
-                  autoFocus
-                  className="h-9 border-none bg-transparent text-textPrimary"
-                />
-              </InputGroup>
+              <Input
+                type="number"
+                placeholder="输入位置（数字）"
+                value={ posInput }
+                onChange={ v => setPosInput(v) }
+                onKeyDown={ handleKeyDown }
+                autoFocus
+                className="h-9 border-none bg-transparent text-textPrimary"
+                containerClassName="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
+              />
             )
 
           case 'scrollToRangeSelection':
             return (
               <div className="flex flex-col gap-2">
-                <InputGroup
-                  className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
-                >
-                  <Input
-                    type="number"
-                    placeholder="起始位置"
-                    value={ fromInput }
-                    onChange={ e => setFromInput(e.target.value) }
-                    onKeyDown={ handleKeyDown }
-                    autoFocus
-                    className="h-9 border-none bg-transparent text-textPrimary"
-                  />
-                </InputGroup>
-                <InputGroup
-                  className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
-                >
-                  <Input
-                    type="number"
-                    placeholder="结束位置"
-                    value={ toInput }
-                    onChange={ e => setToInput(e.target.value) }
-                    onKeyDown={ handleKeyDown }
-                    className="h-9 border-none bg-transparent text-textPrimary"
-                  />
-                </InputGroup>
+                <Input
+                  type="number"
+                  placeholder="起始位置"
+                  value={ fromInput }
+                  onChange={ v => setFromInput(v) }
+                  onKeyDown={ handleKeyDown }
+                  autoFocus
+                  className="h-9 border-none bg-transparent text-textPrimary"
+                  containerClassName="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
+                />
+                <Input
+                  type="number"
+                  placeholder="结束位置"
+                  value={ toInput }
+                  onChange={ v => setToInput(v) }
+                  onKeyDown={ handleKeyDown }
+                  className="h-9 border-none bg-transparent text-textPrimary"
+                  containerClassName="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
+                />
               </div>
             )
 
           case 'scrollToMark':
             return (
               <div className="flex flex-col gap-2">
-                <InputGroup
-                  className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
-                >
-                  <Input
-                    type="text"
-                    placeholder="Mark ID"
-                    value={ markIdInput }
-                    onChange={ e => setMarkIdInput(e.target.value) }
-                    onKeyDown={ handleKeyDown }
-                    autoFocus
-                    className="h-9 border-none bg-transparent text-textPrimary"
-                  />
-                </InputGroup>
-                <InputGroup
-                  className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
-                >
-                  <Input
-                    type="text"
-                    placeholder="Mark 类型（默认: comment）"
-                    value={ markTypeInput }
-                    onChange={ e => setMarkTypeInput(e.target.value) }
-                    onKeyDown={ handleKeyDown }
-                    className="h-9 border-none bg-transparent text-textPrimary"
-                  />
-                </InputGroup>
+                <Input
+                  type="text"
+                  placeholder="Mark ID"
+                  value={ markIdInput }
+                  onChange={ v => setMarkIdInput(v) }
+                  onKeyDown={ handleKeyDown }
+                  autoFocus
+                  className="h-9 border-none bg-transparent text-textPrimary"
+                  containerClassName="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
+                />
+                <Input
+                  type="text"
+                  placeholder="Mark 类型（默认: comment）"
+                  value={ markTypeInput }
+                  onChange={ v => setMarkTypeInput(v) }
+                  onKeyDown={ handleKeyDown }
+                  className="h-9 border-none bg-transparent text-textPrimary"
+                  containerClassName="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
+                />
               </div>
             )
 
           case 'selectAndScrollToText':
           case 'scrollToText':
             return (
-              <InputGroup
-                className="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
-              >
-                <Input
-                  type="text"
-                  placeholder="输入要搜索的文本"
-                  value={ textInput }
-                  onChange={ e => setTextInput(e.target.value) }
-                  onKeyDown={ handleKeyDown }
-                  autoFocus
-                  className="h-9 border-none bg-transparent text-textPrimary"
-                />
-              </InputGroup>
+              <Input
+                type="text"
+                placeholder="输入要搜索的文本"
+                value={ textInput }
+                onChange={ v => setTextInput(v) }
+                onKeyDown={ handleKeyDown }
+                autoFocus
+                className="h-9 border-none bg-transparent text-textPrimary"
+                containerClassName="w-full border border-border rounded-md px-1 py-0.5 bg-background dark:bg-backgroundSecondary dark:border-borderSecondary"
+              />
             )
 
           default:
@@ -397,8 +384,8 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
             <Button
               type="button"
               onClick={ handleCancel }
-              data-style="ghost"
-              data-size="small"
+              variant="ghost"
+              size="sm"
               title="取消"
               className="text-textSecondary"
             >
@@ -412,7 +399,7 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
             <Button
               type="button"
               onClick={ getExecuteHandler() }
-              data-style="default"
+              variant="default"
               className="w-full justify-center"
               disabled={
                 (testType === 'scrollToRange' && !posInput.trim())
@@ -430,141 +417,136 @@ export const ScrollTestButton = memo<ScrollTestButtonProps>(
     }
 
     return (
-      <DropdownMenu open={ isOpen } onOpenChange={ setIsOpen }>
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            data-style="ghost"
-            className={ className }
-            tooltip="滚动测试"
-            aria-label="滚动测试"
-          >
-            滚动测试
-            <ChevronDownIcon className="tiptap-button-dropdown-small" />
-          </Button>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent align="start" portal={ portal }>
-          <Card className="w-full">
-            <CardBody className="flex flex-col gap-2 p-2">
+      <Popover
+        ref={ popoverRef }
+        trigger="click"
+        position="bottom"
+        content={
+          <Card className="min-w-[12rem] p-1" shadow="md" padding="none">
+            <div className="flex flex-col gap-2 p-2">
               { !testType
                 ? (
                   /** 主菜单视图 */
-                    <CardItemGroup orientation="vertical" className="gap-1">
-                      {/* 快速测试 */ }
-                      <DropdownMenuItem asChild className="w-full">
-                        <Button
-                          type="button"
-                          onClick={ handleScrollToStart }
-                          data-style="ghost"
-                          className="w-full justify-start px-2"
-                        >
-                          滚动到文档开头
-                        </Button>
-                      </DropdownMenuItem>
+                  <div className="flex flex-col gap-1">
+                    {/* 快速测试 */ }
+                    <Button
+                      type="button"
+                      onClick={ handleScrollToStart }
+                      variant="ghost"
+                      className="w-full justify-start px-2"
+                      size="sm"
+                    >
+                      滚动到文档开头
+                    </Button>
 
-                      <DropdownMenuItem asChild className="w-full">
-                        <Button
-                          type="button"
-                          onClick={ handleScrollToEnd }
-                          data-style="ghost"
-                          className="w-full justify-start px-2"
-                        >
-                          滚动到文档末尾
-                        </Button>
-                      </DropdownMenuItem>
+                    <Button
+                      type="button"
+                      onClick={ handleScrollToEnd }
+                      variant="ghost"
+                      className="w-full justify-start px-2"
+                      size="sm"
+                    >
+                      滚动到文档末尾
+                    </Button>
 
-                      <Separator />
+                    <Separator />
 
-                      {/* 精确测试 */ }
-                      <div className="flex flex-col gap-1 py-0.5">
-                        {/* 滚动到指定位置 */ }
-                        <DropdownMenuItem asChild className="w-full">
-                          <Button
-                            type="button"
-                            data-style="ghost"
-                            className="w-full justify-start px-2"
-                            onClick={ (e) => {
-                              e.preventDefault()
-                              setTestType('scrollToRange')
-                            } }
-                          >
-                            滚动到指定位置
-                          </Button>
-                        </DropdownMenuItem>
+                    {/* 精确测试 */ }
+                    <div className="flex flex-col gap-1 py-0.5">
+                      {/* 滚动到指定位置 */ }
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="w-full justify-start px-2"
+                        size="sm"
+                        onClick={ (e) => {
+                          e.preventDefault()
+                          setTestType('scrollToRange')
+                        } }
+                      >
+                        滚动到指定位置
+                      </Button>
 
-                        {/* 滚动到指定范围 */ }
-                        <DropdownMenuItem asChild className="w-full">
-                          <Button
-                            type="button"
-                            data-style="ghost"
-                            className="w-full justify-start px-2"
-                            onClick={ (e) => {
-                              e.preventDefault()
-                              setTestType('scrollToRangeSelection')
-                            } }
-                          >
-                            滚动到指定范围
-                          </Button>
-                        </DropdownMenuItem>
+                      {/* 滚动到指定范围 */ }
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="w-full justify-start px-2"
+                        size="sm"
+                        onClick={ (e) => {
+                          e.preventDefault()
+                          setTestType('scrollToRangeSelection')
+                        } }
+                      >
+                        滚动到指定范围
+                      </Button>
 
-                        {/* 滚动到指定 mark */ }
-                        <DropdownMenuItem asChild className="w-full">
-                          <Button
-                            type="button"
-                            data-style="ghost"
-                            className="w-full justify-start px-2"
-                            onClick={ (e) => {
-                              e.preventDefault()
-                              setTestType('scrollToMark')
-                            } }
-                          >
-                            滚动到指定 Mark
-                          </Button>
-                        </DropdownMenuItem>
+                      {/* 滚动到指定 mark */ }
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="w-full justify-start px-2"
+                        size="sm"
+                        onClick={ (e) => {
+                          e.preventDefault()
+                          setTestType('scrollToMark')
+                        } }
+                      >
+                        滚动到指定 Mark
+                      </Button>
 
-                        {/* 选择并滚动到文本 */ }
-                        <DropdownMenuItem asChild className="w-full">
-                          <Button
-                            type="button"
-                            data-style="ghost"
-                            className="w-full justify-start px-2"
-                            onClick={ (e) => {
-                              e.preventDefault()
-                              setTestType('selectAndScrollToText')
-                            } }
-                          >
-                            选择并滚动到文本
-                          </Button>
-                        </DropdownMenuItem>
+                      {/* 选择并滚动到文本 */ }
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="w-full justify-start px-2"
+                        size="sm"
+                        onClick={ (e) => {
+                          e.preventDefault()
+                          setTestType('selectAndScrollToText')
+                        } }
+                      >
+                        选择并滚动到文本
+                      </Button>
 
-                        {/* 滚动到文本（不选择） */ }
-                        <DropdownMenuItem asChild className="w-full">
-                          <Button
-                            type="button"
-                            data-style="ghost"
-                            className="w-full justify-start px-2"
-                            onClick={ (e) => {
-                              e.preventDefault()
-                              setTestType('scrollToText')
-                            } }
-                          >
-                            滚动到文本（不选择）
-                          </Button>
-                        </DropdownMenuItem>
-                      </div>
-                    </CardItemGroup>
-                  )
+                      {/* 滚动到文本（不选择） */ }
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="w-full justify-start px-2"
+                        size="sm"
+                        onClick={ (e) => {
+                          e.preventDefault()
+                          setTestType('scrollToText')
+                        } }
+                      >
+                        滚动到文本（不选择）
+                      </Button>
+                    </div>
+                  </div>
+                )
                 : (
                   /** 输入视图 */
-                    <CardItemGroup orientation="vertical" className="w-full">
-                      { renderTestInput() }
-                    </CardItemGroup>
-                  ) }
-            </CardBody>
+                  <div className="w-full">
+                    { renderTestInput() }
+                  </div>
+                ) }
+            </div>
           </Card>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        }
+      >
+        <Button
+          type="button"
+          variant="ghost"
+          className={ className }
+          tooltip="滚动测试"
+          aria-label="滚动测试"
+          size="sm"
+        >
+          滚动测试
+          <ChevronDownIcon className="tiptap-button-dropdown-small" />
+        </Button>
+      </Popover>
     )
   },
 )

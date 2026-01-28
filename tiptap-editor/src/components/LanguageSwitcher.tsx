@@ -17,8 +17,9 @@ export function LanguageSwitcher() {
       <span className="text-sm text-textSecondary">
         语言:
       </span>
-      {languages.map(lang => (
+      { languages.map(lang => (
         <Button
+          size='sm'
           key={ lang.value }
           onClick={ () => changeLanguage(lang.value) }
           data-active-state={ language === lang.value
@@ -27,9 +28,9 @@ export function LanguageSwitcher() {
           data-appearance="emphasized"
           className="px-3 py-1 text-sm"
         >
-          {lang.label}
+          { lang.label }
         </Button>
-      ))}
+      )) }
     </div>
   )
 }
