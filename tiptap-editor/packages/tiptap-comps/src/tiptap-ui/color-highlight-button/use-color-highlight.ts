@@ -17,59 +17,6 @@ import {
 import { HighlighterIcon } from '../../icons'
 
 export const COLOR_HIGHLIGHT_SHORTCUT_KEY = 'mod+shift+h'
-export const HIGHLIGHT_COLORS = [
-  {
-    label: 'Default background',
-    value: 'var(--background)',
-    border: 'var(--borderSecondary)',
-  },
-  {
-    label: 'Gray background',
-    value: 'var(--toningGrayBgColor)',
-    border: 'var(--toningGrayBorderColor)',
-  },
-  {
-    label: 'Brown background',
-    value: 'var(--toningBrownBgColor)',
-    border: 'var(--toningBrownBorderColor)',
-  },
-  {
-    label: 'Orange background',
-    value: 'var(--toningOrangeBgColor)',
-    border: 'var(--toningOrangeBorderColor)',
-  },
-  {
-    label: 'Yellow background',
-    value: 'var(--toningYellowBgColor)',
-    border: 'var(--toningYellowBorderColor)',
-  },
-  {
-    label: 'Green background',
-    value: 'var(--toningGreenBgColor)',
-    border: 'var(--toningGreenBorderColor)',
-  },
-  {
-    label: 'Blue background',
-    value: 'var(--toningBlueBgColor)',
-    border: 'var(--toningBlueBorderColor)',
-  },
-  {
-    label: 'Purple background',
-    value: 'var(--toningPurpleBgColor)',
-    border: 'var(--toningPurpleBorderColor)',
-  },
-  {
-    label: 'Pink background',
-    value: 'var(--toningPinkBgColor)',
-    border: 'var(--toningPinkBorderColor)',
-  },
-  {
-    label: 'Red background',
-    value: 'var(--toningRedBgColor)',
-    border: 'var(--toningRedBorderColor)',
-  },
-]
-export type HighlightColor = (typeof HIGHLIGHT_COLORS)[number]
 
 /**
  * Configuration for the color highlight functionality
@@ -102,15 +49,6 @@ export interface UseColorHighlightConfig {
     color: string
     label: string
   }) => void
-}
-
-export function pickHighlightColorsByValue(values: string[]) {
-  const colorMap = new Map(
-    HIGHLIGHT_COLORS.map(color => [color.value, color]),
-  )
-  return values
-    .map(value => colorMap.get(value))
-    .filter((color): color is (typeof HIGHLIGHT_COLORS)[number] => !!color)
 }
 
 /**

@@ -1,17 +1,8 @@
 'use client'
 
 import type { SelectionToolbarProps } from './types'
-import {
-  autoUpdate,
-  flip,
-  FloatingPortal,
-  offset,
-  shift,
-  useDismiss,
-  useFloating,
-  useInteractions,
-} from '@floating-ui/react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Popover, type PopoverRef } from 'comps'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { getSelectionRect as getApiSelectionRect, hasSelectedText } from 'tiptap-api'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { cn } from 'utils'
@@ -32,88 +23,15 @@ export function SelectionToolbar({
 }: SelectionToolbarProps) {
   const { editor } = useTiptapEditor(providedEditor)
   const [hasSelection, setHasSelection] = useState(false)
+  const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
   const updateTimeoutRef = useRef<number | undefined>(undefined)
-  const toolbarRef = useRef<HTMLDivElement | null>(null)
+  const popoverRef = useRef<PopoverRef>(null)
+  const isInteractingRef = useRef(false)
 
   /** 获取选中文本的 DOM 位置（实时计算，不缓存） */
   const getSelectionRect = useCallback(() => {
     return getApiSelectionRect(editor)
   }, [editor])
-
-  /** 创建虚拟元素，getBoundingClientRect 总是返回最新的位置 */
-  const virtualElement = useMemo(() => {
-    if (!editor) {
-      return null
-    }
-
-    let viewDom: HTMLElement | undefined
-    try {
-      viewDom = editor.view?.dom
-    }
-    catch (e) {
-      // 视图不可用
-    }
-
-    return {
-      getBoundingClientRect: () => {
-        const rect = getSelectionRect()
-        if (!rect) {
-          /** 返回一个默认的 rect，避免 Floating UI 报错 */
-          return {
-            width: 0,
-            height: 0,
-            x: 0,
-            y: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-          } as DOMRect
-        }
-        return rect
-      },
-      contextElement: viewDom,
-    }
-  }, [editor, getSelectionRect])
-
-  /**
-   * 构建 middleware 数组
-   * 完全交给 Floating UI 处理滚动与位置更新，避免与手动更新逻辑“打架”
-   */
-  const middleware = useMemo(
-    () => [
-      offset(offsetDistance),
-      flip({
-        fallbackAxisSideDirection: 'start',
-        padding: 8,
-        crossAxis: false,
-      }),
-      shift({
-        padding: 8,
-        crossAxis: false,
-      }),
-    ],
-    [offsetDistance],
-  )
-
-  /** 使用 Floating UI 进行智能定位 */
-  const { refs, floatingStyles, context, isPositioned } = useFloating({
-    placement: placement || 'top-start',
-    open: hasSelection && enabled,
-    whileElementsMounted: autoUpdate,
-    middleware,
-  })
-
-  /** 添加浮层交互，统一处理点击外部关闭等逻辑 */
-  const dismiss = useDismiss(context)
-  const { getFloatingProps } = useInteractions([dismiss])
-
-  /** 更新虚拟元素引用 */
-  useEffect(() => {
-    if (hasSelection && enabled && virtualElement) {
-      refs.setReference(virtualElement)
-    }
-  }, [hasSelection, enabled, virtualElement, refs])
 
   /** 统一更新工具栏显示状态 */
   const updateToolbarState = useCallback(() => {
@@ -125,13 +43,48 @@ export function SelectionToolbar({
     updateTimeoutRef.current = window.setTimeout(() => {
       if (!editor) {
         setHasSelection(false)
+        setSelectionRect(null)
         return
       }
 
       const has = hasSelectedText(editor)
+
+      /**
+       * 如果当前没有选区，但用户正在与工具栏的子菜单（如颜色面板、链接输入框）交互，
+       * 我们应该保持工具栏开启状态，避免闪烁或非预期关闭。
+       */
+      if (!has && isInteractingRef.current) {
+        return
+      }
+
       setHasSelection(has)
+
+      if (has) {
+        /**
+         * 当子菜单打开时，锁定工具栏位置，防止因编辑器内容微调（如应用颜色导致的 DOM 变化）
+         * 引起工具栏位置跳动。
+         */
+        if (isInteractingRef.current && selectionRect) {
+          return
+        }
+
+        const rect = getSelectionRect()
+        setSelectionRect(rect)
+      }
+      else {
+        setSelectionRect(null)
+      }
     }, 0)
-  }, [editor])
+  }, [editor, getSelectionRect, selectionRect])
+
+  useEffect(() => {
+    if (hasSelection && enabled && selectionRect) {
+      popoverRef.current?.open()
+    }
+    else if (!isInteractingRef.current) {
+      popoverRef.current?.close()
+    }
+  }, [hasSelection, enabled, selectionRect])
 
   /** 监听事件 */
   useEffect(() => {
@@ -155,30 +108,34 @@ export function SelectionToolbar({
 
     const currentEditorElement = editorElement
 
-    /** 监听鼠标按下事件（准备开始新选择或点击外部时隐藏） */
+    /** 监听鼠标按下事件 */
     const handleMouseDown = (event: MouseEvent) => {
-      const target = event.target as Node
-      const toolbarElement = toolbarRef.current
+      const target = event.target as HTMLElement
 
-      if (toolbarElement?.contains(target)) {
-        return
-      }
-
-      const keepOpenElement = target instanceof HTMLElement
-        ? target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}]`)
-        : null
-
+      /** 检查是否点击在“保持打开”的元素上 */
+      const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
       if (keepOpenElement) {
+        isInteractingRef.current = true
         return
       }
 
-      setHasSelection(false)
+      /** 检查点击是否在编辑器外，且不是在交互区域 */
+      if (!currentEditorElement.contains(target)) {
+        isInteractingRef.current = false
+      }
     }
 
     /** 监听鼠标松开事件（在编辑器内完成选择时显示） */
     const handleMouseUp = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      /** 如果点击在交互区域，记录状态 */
+      const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
+      if (keepOpenElement) {
+        isInteractingRef.current = true
+      }
+
       /** 检查事件是否发生在编辑器内 */
-      if (currentEditorElement.contains(event.target as Node)) {
+      if (currentEditorElement.contains(target)) {
         updateToolbarState()
       }
     }
@@ -222,13 +179,7 @@ export function SelectionToolbar({
   }, [enabled, editor, editorSelector, updateToolbarState])
 
   /** 如果没有选中或未启用，不显示工具栏 */
-  if (!hasSelection || !enabled || !virtualElement) {
-    return null
-  }
-
-  /** 检查是否有有效的选中区域 */
-  const currentRect = getSelectionRect()
-  if (!currentRect) {
+  if (!enabled || !selectionRect) {
     return null
   }
 
@@ -238,24 +189,26 @@ export function SelectionToolbar({
   }
 
   return (
-    <FloatingPortal>
-      <div
-        ref={ (node) => {
-          toolbarRef.current = node
-          refs.setFloating(node)
-        } }
-        className={ cn(
-          'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-textSecondary rounded-lg shadow-lg z-50',
-          className,
-        ) }
-        style={ {
-          ...floatingStyles,
-          opacity: isPositioned ? 1 : 0,
-        } }
-        { ...getFloatingProps() }
-      >
-        { children }
-      </div>
-    </FloatingPortal>
+    <Popover
+      ref={ popoverRef }
+      trigger="command"
+      position={ (placement as any) || 'top' }
+      offset={ offsetDistance }
+      virtualReferenceRect={ selectionRect }
+      clickOutsideIgnoreSelector={ `[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]` }
+      content={
+        <div
+          className={ cn(
+            'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-textSecondary rounded-lg shadow-lg z-50',
+            className,
+          ) }
+        >
+          { children }
+        </div>
+      }
+      contentClassName="p-0"
+    >
+      <div className="hidden" />
+    </Popover>
   )
 }
