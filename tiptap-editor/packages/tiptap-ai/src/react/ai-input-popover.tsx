@@ -1,7 +1,7 @@
 import type React from 'react'
 import { Button, Popover, type PopoverRef, Textarea } from 'comps'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { CornerDownLeftIcon, SparklesIcon } from 'tiptap-comps/icons'
+import { SparklesIcon } from 'tiptap-comps/icons'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 
@@ -144,7 +144,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
               size="sm"
               autoResize
             />
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center justify-between">
               <span className="text-xs text-textTertiary">
                 按 Enter 提交，Shift + Enter 换行
               </span>
@@ -164,7 +164,6 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                   variant="primary"
                   size="sm"
                   disabled={ !prompt.trim() || disabled }
-                  leftIcon={ <CornerDownLeftIcon className="size-4" /> }
                 >
                   提交
                 </Button>
