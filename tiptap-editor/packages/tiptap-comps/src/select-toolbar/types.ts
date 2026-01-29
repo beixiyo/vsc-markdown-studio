@@ -29,9 +29,4 @@ export interface SelectionToolbarProps {
    * 自定义样式类名
    */
   className?: string
-  /**
-   * 编辑器查询类名
-   * @default .tiptap
-   */
-  editorSelector?: string
 }

@@ -3,7 +3,7 @@
 import type { SelectionToolbarProps } from './types'
 import { Popover, type PopoverRef } from 'comps'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { getSelectionRect as getApiSelectionRect, hasSelectedText } from 'tiptap-api'
+import { getSelectionRect, hasSelectedText } from 'tiptap-api'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
@@ -19,7 +19,6 @@ export function SelectionToolbar({
   offsetDistance = 8,
   placement = 'top-start',
   className = '',
-  editorSelector = '.tiptap',
 }: SelectionToolbarProps) {
   const { editor } = useTiptapEditor(providedEditor)
   const [hasSelection, setHasSelection] = useState(false)
@@ -27,21 +26,24 @@ export function SelectionToolbar({
   const updateTimeoutRef = useRef<number | undefined>(undefined)
   const popoverRef = useRef<PopoverRef>(null)
   const isInteractingRef = useRef(false)
-
-  /** 获取选中文本的 DOM 位置（实时计算，不缓存） */
-  const getSelectionRect = useCallback(() => {
-    return getApiSelectionRect(editor)
-  }, [editor])
+  const isMouseDownRef = useRef(false)
 
   /** 统一更新工具栏显示状态 */
-  const updateToolbarState = useCallback(() => {
+  const updateToolbarState = useCallback((force = false) => {
     if (updateTimeoutRef.current) {
       clearTimeout(updateTimeoutRef.current)
     }
 
-    /** 使用 setTimeout 确保 DOM 已更新 */
+    /**
+     * 如果鼠标正按着且不是强制更新，则不处理显示逻辑
+     * 这是为了防止用户在滑动选择过程中，工具栏频繁渲染导致选区中断
+     */
+    if (isMouseDownRef.current && !force) {
+      return
+    }
+
     updateTimeoutRef.current = window.setTimeout(() => {
-      if (!editor) {
+      if (!editor || editor.isDestroyed) {
         setHasSelection(false)
         setSelectionRect(null)
         return
@@ -57,31 +59,34 @@ export function SelectionToolbar({
         return
       }
 
-      setHasSelection(has)
-
-      if (has) {
-        /**
-         * 当子菜单打开时，锁定工具栏位置，防止因编辑器内容微调（如应用颜色导致的 DOM 变化）
-         * 引起工具栏位置跳动。
-         */
-        if (isInteractingRef.current && selectionRect) {
-          return
-        }
-
-        const rect = getSelectionRect()
-        setSelectionRect(rect)
-      }
-      else {
+      /** 如果选区消失，立即关闭，不需要等待 */
+      if (!has) {
+        setHasSelection(false)
         setSelectionRect(null)
+        return
       }
-    }, 0)
-  }, [editor, getSelectionRect, selectionRect])
 
+      /**
+       * 当子菜单打开时，锁定工具栏位置，防止因编辑器内容微调（如应用颜色导致的 DOM 变化）
+       * 引起工具栏位置跳动。
+       */
+      if (isInteractingRef.current && selectionRect) {
+        setHasSelection(true)
+        return
+      }
+
+      const rect = getSelectionRect(editor)
+      setHasSelection(true)
+      setSelectionRect(rect)
+    }, 0)
+  }, [editor, selectionRect])
+
+  /** 监听选区变化 */
   useEffect(() => {
     if (hasSelection && enabled && selectionRect) {
       popoverRef.current?.open()
     }
-    else if (!isInteractingRef.current) {
+    else {
       popoverRef.current?.close()
     }
   }, [hasSelection, enabled, selectionRect])
@@ -98,7 +103,6 @@ export function SelectionToolbar({
       editorElement = editor.view.dom as HTMLElement
     }
     catch (e) {
-      /** 视图不可用，暂不绑定事件 */
       return
     }
 
@@ -111,97 +115,66 @@ export function SelectionToolbar({
     /** 监听焦点进入事件 */
     const handleFocusIn = (event: FocusEvent) => {
       const target = event.target as HTMLElement
-      /** 如果焦点进入工具栏内部或“保持打开”的元素 */
       const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
       if (keepOpenElement) {
         isInteractingRef.current = true
+      }
+      else if (currentEditorElement.contains(target)) {
+        isInteractingRef.current = false
       }
     }
 
     /** 监听鼠标按下事件 */
     const handleMouseDown = (event: MouseEvent) => {
+      isMouseDownRef.current = true
       const target = event.target as HTMLElement
 
-      /** 检查是否点击在“保持打开”的元素上 */
       const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
       if (keepOpenElement) {
         isInteractingRef.current = true
         return
       }
 
-      /** 检查点击是否在编辑器外 */
-      if (!currentEditorElement.contains(target)) {
-        /**
-         * 额外延迟检查，因为点击可能触发焦点切换到 popover 内部
-         * 如果 100ms 后仍然没有被标记为 interacting，则关闭
-         */
-        setTimeout(() => {
-          if (!document.activeElement?.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)) {
-            isInteractingRef.current = false
-            updateToolbarState()
-          }
-        }, 100)
-      }
-    }
-
-    /** 监听鼠标松开事件（在编辑器内完成选择时显示） */
-    const handleMouseUp = (event: MouseEvent) => {
-      const target = event.target as HTMLElement
-      /** 如果点击在交互区域，记录状态 */
-      const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
-      if (keepOpenElement) {
-        isInteractingRef.current = true
-        return
-      }
-
-      /** 检查事件是否发生在编辑器内 */
       if (currentEditorElement.contains(target)) {
-        updateToolbarState()
+        isInteractingRef.current = false
+        /** 点击编辑器内部时，如果之前有选区，先隐约关闭或不处理，等待 mouseup */
       }
     }
 
-    /** 监听键盘事件（支持键盘选择文本） */
-    const handleKeyUp = (event: KeyboardEvent) => {
-      /** 检查编辑器是否获得焦点 */
-      const isEditorFocused = currentEditorElement === document.activeElement
-        || currentEditorElement.contains(document.activeElement)
-
-      if (!isEditorFocused) {
-        return
-      }
-
-      /** 检查是否是选择相关的按键（Shift + 方向键、Ctrl/Cmd + A 等） */
-      const isSelectionKey = event.shiftKey
-        || (event.ctrlKey || event.metaKey) && event.key === 'a'
-        || event.key === 'ArrowLeft'
-        || event.key === 'ArrowRight'
-        || event.key === 'ArrowUp'
-        || event.key === 'ArrowDown'
-
-      if (isSelectionKey) {
-        updateToolbarState()
-      }
+    /** 监听鼠标抬起事件 */
+    const handleMouseUp = () => {
+      isMouseDownRef.current = false
+      /** 鼠标抬起时，强制更新一次状态以显示工具栏 */
+      updateToolbarState(true)
     }
 
-    /** 添加事件监听器 */
+    /** 监听 Tiptap 选区更新事件 */
+    const handleSelectionUpdate = () => {
+      /**
+       * 如果鼠标没按着（比如键盘操作），直接更新
+       * 如果鼠标按着，updateToolbarState 内部会拦截
+       */
+      updateToolbarState()
+    }
+
+    editor.on('selectionUpdate', handleSelectionUpdate)
     document.addEventListener('mousedown', handleMouseDown)
     document.addEventListener('mouseup', handleMouseUp)
-    document.addEventListener('keyup', handleKeyUp)
     document.addEventListener('focusin', handleFocusIn)
 
     return () => {
+      editor.off('selectionUpdate', handleSelectionUpdate)
       document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('keyup', handleKeyUp)
       document.removeEventListener('focusin', handleFocusIn)
       if (updateTimeoutRef.current) {
         clearTimeout(updateTimeoutRef.current)
       }
     }
-  }, [enabled, editor, editorSelector, updateToolbarState])
+  }, [enabled, editor, updateToolbarState])
 
   /** 如果没有选中或未启用，不显示工具栏 */
-  if (!enabled || !selectionRect) {
+  if (!enabled || (!selectionRect && !isInteractingRef.current)) {
     return null
   }
 
@@ -220,6 +193,7 @@ export function SelectionToolbar({
       clickOutsideIgnoreSelector={ `[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]` }
       content={
         <div
+          { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
           className={ cn(
             'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-textSecondary rounded-lg shadow-lg z-50',
             className,
