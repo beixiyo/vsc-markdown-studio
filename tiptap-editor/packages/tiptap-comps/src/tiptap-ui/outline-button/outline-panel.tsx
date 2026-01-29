@@ -8,7 +8,7 @@ export type OutlinePanelProps = {
 }
 
 export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
-  const { outline } = useMarkdownOutline(editor)
+  const { outline } = useMarkdownOutline({ editor })
 
   const handleJump = useCallback((position: number) => {
     if (!editor)

@@ -733,6 +733,9 @@ importers:
       comps:
         specifier: workspace:*
         version: link:../packages/comps
+      hooks:
+        specifier: workspace:*
+        version: link:../packages/hooks
       i18n:
         specifier: workspace:*
         version: link:../packages/i18n
@@ -848,22 +851,18 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.13.0
         version: 3.17.1
+      hooks:
+        specifier: workspace:^
+        version: link:../../../packages/hooks
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n
-      lodash.throttle:
-        specifier: ^4.1.1
-        version: 4.1.1
       react:
         specifier: ^19.2.1
         version: 19.2.3
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
-    devDependencies:
-      '@types/lodash.throttle':
-        specifier: ^4.1.9
-        version: 4.1.9
 
   tiptap-editor/packages/tiptap-comment:
     dependencies:
@@ -2961,9 +2960,6 @@ packages:
   '@types/lodash.merge@4.6.9':
     resolution: {integrity: sha512-23sHDPmzd59kUgWyKGiOMO2Qb9YtqRO/x4IhkgNUiPQ1+5MUVqi6bCZeq9nBJ17msjIMbEIO5u+XW4Kz6aGUhQ==}
 
-  '@types/lodash.throttle@4.1.9':
-    resolution: {integrity: sha512-PCPVfpfueguWZQB7pJQK890F2scYKoDUL3iM522AptHWn7d5NQmeS/LTEHIcLr5PaTzl3dK2Z0xSUHHTHwaL5g==}
-
   '@types/lodash@4.17.23':
     resolution: {integrity: sha512-RDvF6wTulMPjrNdCoYRC8gNR880JNGT8uB+REUpC2Ns4pRqQJhGz90wh7rgdXDPpCczF3VGktDuFGVnz8zP7HA==}
 
@@ -4892,9 +4888,6 @@ packages:
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
-
-  lodash.throttle@4.1.1:
-    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -8559,10 +8552,6 @@ snapshots:
     dependencies:
       '@types/lodash': 4.17.23
 
-  '@types/lodash.throttle@4.1.9':
-    dependencies:
-      '@types/lodash': 4.17.23
-
   '@types/lodash@4.17.23': {}
 
   '@types/markdown-it@14.1.2':
@@ -10734,8 +10723,6 @@ snapshots:
   lodash-es@4.17.21: {}
 
   lodash.merge@4.6.2: {}
-
-  lodash.throttle@4.1.1: {}
 
   lodash@4.17.21: {}
 

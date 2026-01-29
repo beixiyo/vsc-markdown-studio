@@ -1,7 +1,7 @@
 'use client'
 
+import { useThrottleFn } from 'hooks'
 import { useCallback, useEffect, useState } from 'react'
-import { useThrottledCallback } from '../hooks'
 
 /**
  * 元素边界矩形的状态类型，排除了 DOMRect 的 toJSON 方法
@@ -96,14 +96,14 @@ export function useElementRect({
       return document.querySelector(element)
     }
 
-    if ('current' in element) {
+    if (element && 'current' in element) {
       return element.current
     }
 
-    return element
+    return element as Element
   }, [element, enabled])
 
-  const updateRect = useThrottledCallback(
+  const updateRect = useThrottleFn(
     () => {
       if (!enabled || !isClientSide())
         return
@@ -128,7 +128,6 @@ export function useElementRect({
     },
     throttleMs,
     [enabled, getTargetElement],
-    { leading: true, trailing: true },
   )
 
   useEffect(() => {

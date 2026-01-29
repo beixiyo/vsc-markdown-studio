@@ -1,7 +1,7 @@
 'use client'
 
+import { useThrottleFn } from 'hooks'
 import { useEffect, useState } from 'react'
-import { useThrottledCallback } from '../hooks'
 
 export interface WindowSizeState {
   /**
@@ -80,7 +80,7 @@ export function useWindowSize(): WindowSizeState {
     scale: 0,
   })
 
-  const handleViewportChange = useThrottledCallback(() => {
+  const handleViewportChange = useThrottleFn(() => {
     if (typeof window === 'undefined')
       return
 

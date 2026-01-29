@@ -33,8 +33,8 @@ export const Editor = memo<EditorProps>(({
   const toolbarRef = useRef<HTMLDivElement>(null)
   const [commentStore] = useState(() => new CommentStore())
 
-  const { debouncedSave, markdown } = useAutoSave({ storageKey: 'tiptap-editor-content' })
-  const data = initialMarkdown || content || markdown || ''
+  const { debouncedSave, content: savedContent } = useAutoSave({ storageKey: 'tiptap-editor-content' })
+  const data = initialMarkdown || content || savedContent || ''
   const contentType = typeof data === 'string'
     ? 'markdown'
     : 'json'

@@ -1,41 +1,24 @@
 import type { Editor } from '@tiptap/core'
+import { tryExecute } from './utils'
 
 /**
  * 撤销
  */
 export function undo(editor: Editor | null): boolean {
-  if (!editor)
-    return false
-
-  try {
-    const chain = editor?.chain?.()
-    if (!chain)
-      return false
-    chain.focus()
-    return chain.undo?.().run?.() ?? false
-  }
-  catch (error) {
-    console.error('撤销失败:', error)
-    return false
-  }
+  return tryExecute(
+    editor,
+    e => e.chain().focus().undo().run(),
+    '撤销失败',
+  ) as boolean
 }
 
 /**
  * 重做
  */
 export function redo(editor: Editor | null): boolean {
-  if (!editor)
-    return false
-
-  try {
-    const chain = editor?.chain?.()
-    if (!chain)
-      return false
-    chain.focus()
-    return chain.redo?.().run?.() ?? false
-  }
-  catch (error) {
-    console.error('重做失败:', error)
-    return false
-  }
+  return tryExecute(
+    editor,
+    e => e.chain().focus().redo().run(),
+    '重做失败',
+  ) as boolean
 }

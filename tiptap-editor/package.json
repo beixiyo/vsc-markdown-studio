@@ -64,6 +64,7 @@
     "tiptap-nodes": "workspace:*",
     "utils": "workspace:*",
     "tiptap-trigger": "workspace:*",
+    "hooks": "workspace:*",
     "yjs": "^13.6.27"
   },
   "devDependencies": {

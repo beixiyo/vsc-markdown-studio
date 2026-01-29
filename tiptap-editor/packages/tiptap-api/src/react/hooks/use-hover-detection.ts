@@ -1,8 +1,8 @@
 import type { Editor } from '@tiptap/react'
 import type { HoverContent } from '../../operate'
+import { useThrottleFn } from 'hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getHoverContentFromCoords } from '../../operate'
-import { useThrottledCallback } from './use-throttled-callback'
 
 export interface UseHoverDetectionConfig {
   /** Tiptap 编辑器实例 */
@@ -73,7 +73,7 @@ export function useHoverDetection(
   )
 
   /** 节流处理鼠标移动 */
-  const handleMouseMove = useThrottledCallback(
+  const handleMouseMove = useThrottleFn(
     (event: MouseEvent) => {
       if (!enabled || !editor) {
         return
@@ -175,7 +175,7 @@ export function useHoverDetection(
       editorElement = editor.view.dom as HTMLElement
     }
     catch (e) {
-      // 视图不可用，暂不绑定
+      /** 视图不可用，暂不绑定 */
       return
     }
 

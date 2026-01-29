@@ -1,4 +1,5 @@
 import type { Content, Editor } from '@tiptap/core'
+import { tryExecute } from './utils'
 
 /**
  * 获取编辑器内容，优先获取 Markdown 格式，如果无法获取则获取 JSON 格式
@@ -25,21 +26,11 @@ export function setEditorContent(
   content: Content,
   emitUpdate: boolean = true,
 ): boolean {
-  if (!editor)
-    return false
-
-  try {
-    const cmds = editor?.commands
-    if (!cmds?.setContent)
-      return false
-
-    cmds.setContent(content, { emitUpdate })
-    return true
-  }
-  catch (error) {
-    console.error('设置内容失败:', error)
-    return false
-  }
+  return tryExecute(
+    editor,
+    e => e.commands.setContent(content, { emitUpdate }),
+    '设置内容失败',
+  )
 }
 
 /**
@@ -50,7 +41,7 @@ export function getEditorHTML(editor: Editor | null): string | null {
     return null
 
   try {
-    return editor?.getHTML?.() ?? null
+    return editor.getHTML()
   }
   catch (error) {
     console.error('获取 HTML 失败:', error)
@@ -66,21 +57,11 @@ export function setEditorHTML(
   html: string,
   emitUpdate: boolean = true,
 ): boolean {
-  if (!editor)
-    return false
-
-  try {
-    const cmds = editor?.commands
-    if (!cmds?.setContent)
-      return false
-
-    cmds.setContent(html, { emitUpdate })
-    return true
-  }
-  catch (error) {
-    console.error('设置 HTML 失败:', error)
-    return false
-  }
+  return tryExecute(
+    editor,
+    e => e.commands.setContent(html, { emitUpdate }),
+    '设置 HTML 失败',
+  )
 }
 
 /**
@@ -111,21 +92,14 @@ export function setEditorMarkdown(
   markdown: string,
   emitUpdate: boolean = true,
 ): boolean {
-  if (!editor)
-    return false
-
-  try {
-    editor?.commands.setContent(markdown, {
-      contentType: typeof markdown === 'string'
-        ? 'markdown'
-        : 'json',
+  return tryExecute(
+    editor,
+    e => e.commands.setContent(markdown, {
+      contentType: 'markdown',
       emitUpdate,
-    })
-    return true
-  }
-  catch (error) {
-    return false
-  }
+    }),
+    '设置 Markdown 失败',
+  )
 }
 
 export function getEditorJson(editor: Editor) {

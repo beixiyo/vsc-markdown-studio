@@ -1,7 +1,7 @@
 import type { Placement } from '@floating-ui/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getHoverContentFromCoords, type HoverContent } from 'tiptap-api'
-import { useThrottledCallback } from 'tiptap-api/react'
+import { useThrottleFn } from 'hooks'
 import { HoverTooltip } from './hover-tooltip'
 
 /**
@@ -33,7 +33,7 @@ export function EditorHoverTooltip({
   const editorElementRef = useRef<HTMLElement | null>(null)
 
   /** 节流更新 hover 内容 */
-  const handleHoverContentUpdate = useThrottledCallback(
+  const handleHoverContentUpdate = useThrottleFn(
     (coords: { x: number, y: number }) => {
       if (!enabled || !editor || !editor.view) {
         setHoverContent(null)

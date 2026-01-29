@@ -1,9 +1,12 @@
 import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
-import { getEditorContent } from '../../../operate'
+import { getEditorContent, setEditorContent } from '../../../operate'
 import { useTiptapEditor } from '../use-tiptap-editor'
 import { useStorageSave, type UseStorageSaveOptions } from './use-storage-save'
 
+/**
+ * 自动保存 Hooks：负责处理编辑器内容的加载与自动保存逻辑
+ */
 export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }) {
   const { editor } = useTiptapEditor(options.editor)
   const {
@@ -12,28 +15,25 @@ export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }
     immediateSave: _immediateSave,
   } = useStorageSave(options)
 
-  const [markdown, setMarkdown] = useState<string | object>('')
-  const contentType = typeof markdown === 'string'
-    ? 'markdown'
-    : 'json'
+  const [content, setContent] = useState<string | object>('')
 
+  // 1. 初始化加载逻辑
   useEffect(() => {
     if (!editor)
       return
 
-    loadFromStorage().then((markdown) => {
-      const str = markdown || ''
-      setMarkdown(str)
-      editor?.commands.setContent(str, { contentType: typeof str === 'string'
-        ? 'markdown'
-        : 'json' })
+    loadFromStorage().then((savedContent) => {
+      const initialContent = savedContent || ''
+      setContent(initialContent)
+      setEditorContent(editor, initialContent, false)
     })
   }, [loadFromStorage, editor])
 
+  // 2. 保存逻辑封装
   const debouncedSave = useCallback(
     (editor: Editor) => {
-      const content = getEditorContent(editor) || ''
-      setMarkdown(content)
+      const currentContent = getEditorContent(editor) || ''
+      setContent(currentContent)
       _debouncedSave(editor)
     },
     [_debouncedSave],
@@ -41,16 +41,18 @@ export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }
 
   const immediateSave = useCallback(
     (editor: Editor) => {
-      const content = getEditorContent(editor) || ''
-      setMarkdown(content)
+      const currentContent = getEditorContent(editor) || ''
+      setContent(currentContent)
       _immediateSave(editor)
     },
     [_immediateSave],
   )
 
   return {
-    markdown,
-    contentType,
+    content,
+    contentType: typeof content === 'string'
+      ? 'markdown'
+      : 'json',
     debouncedSave,
     immediateSave,
   }

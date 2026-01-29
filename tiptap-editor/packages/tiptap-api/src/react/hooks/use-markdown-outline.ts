@@ -2,10 +2,18 @@ import type { Editor } from '@tiptap/core'
 import { useEffect, useState } from 'react'
 import { buildOutline, type OutlineItem } from '../../data'
 
+export type UseMarkdownOutlineOptions = {
+  /**
+   * 编辑器实例
+   */
+  editor: Editor | null
+}
+
 /**
  * 监听编辑器更新并生成 Markdown 大纲树
  */
-export function useMarkdownOutline(editor: Editor | null): UseMarkdownOutlineResult {
+export function useMarkdownOutline(options: UseMarkdownOutlineOptions): UseMarkdownOutlineResult {
+  const { editor } = options
   const [outline, setOutline] = useState<OutlineItem[]>([])
 
   useEffect(() => {

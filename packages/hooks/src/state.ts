@@ -203,6 +203,50 @@ export function useWatchThrottle<T>(value: T, delayMS: number = 100, options: Us
 }
 
 /**
+ * 防抖回调函数
+ * @param fn 需要防抖的函数
+ * @param delayMS 防抖时间
+ * @param dependencies 依赖项
+ */
+export function useDebounceFn<T extends (...args: any[]) => any>(
+  fn: T,
+  delayMS: number = 500,
+  dependencies: React.DependencyList = [],
+) {
+  const latestFn = useLatestRef(fn)
+  const debounced = useMemo(
+    () => debounce((...args: Parameters<T>) => latestFn.current(...args), delayMS),
+    [delayMS],
+  )
+
+  useEffect(() => debounced, dependencies)
+
+  return debounced
+}
+
+/**
+ * 节流回调函数
+ * @param fn 需要节流的函数
+ * @param delayMS 节流时间
+ * @param dependencies 依赖项
+ */
+export function useThrottleFn<T extends (...args: any[]) => any>(
+  fn: T,
+  delayMS: number = 500,
+  dependencies: React.DependencyList = [],
+) {
+  const latestFn = useLatestRef(fn)
+  const throttled = useMemo(
+    () => throttle((...args: Parameters<T>) => latestFn.current(...args), delayMS),
+    [delayMS],
+  )
+
+  useEffect(() => throttled, dependencies)
+
+  return throttled
+}
+
+/**
  * Vue v-show
  * @example
  * ```ts
