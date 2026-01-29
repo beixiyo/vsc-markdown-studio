@@ -5,7 +5,7 @@ import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { Button, LinkPopover, SelectionToolbar, SelectionToolbarContent, Toolbar } from 'tiptap-comps'
+import { Button, LinkPopover, MarkButton, SelectionToolbar, SelectionToolbarContent, Toolbar } from 'tiptap-comps'
 
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
@@ -137,16 +137,30 @@ sequenceDiagram
         <>
           {/* 选中文本工具栏 */ }
           <SelectionToolbar editor={ editor } enabled>
-            <SelectionToolbarContent isMobile={ isMobile }
+            <SelectionToolbarContent
+              isMobile={ isMobile }
               config={ {
+                undo: false,
+                redo: false,
                 code: false,
                 codeBlock: false,
+                strike: false,
+                link: false,
+                underline: false,
                 superscript: false,
                 subscript: false,
                 image: false,
               } }
+              moreContent={
+                <div className="flex flex-col gap-1">
+                  <LinkPopover editor={ editor } hideWhenUnavailable />
+                  <MarkButton type="strike" hideWhenUnavailable />
+                  <MarkButton type="underline" hideWhenUnavailable />
+                  <MarkButton type="superscript" hideWhenUnavailable />
+                  <MarkButton type="subscript" hideWhenUnavailable />
+                </div>
+              }
             >
-              <LinkPopover editor={ editor } hideWhenUnavailable />
               <AIButton
                 controller={ aiController }
                 orchestrator={ aiOrchestrator }

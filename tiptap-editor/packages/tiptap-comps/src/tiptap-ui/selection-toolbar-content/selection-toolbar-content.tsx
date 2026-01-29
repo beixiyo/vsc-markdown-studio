@@ -1,11 +1,16 @@
+import type { Editor } from '@tiptap/react'
 import {
+  Button,
+  Popover,
   Toolbar,
 } from 'comps'
 import { memo } from 'react'
+import { MoreHorizontalIcon } from '../../icons'
 import {
   CodeBlockButton,
   ColorHighlightPopover,
   ImageUploadButton,
+  LinkPopover,
   MarkButton,
   TextAlignDropdownMenu,
   TextFormatDropdownMenu,
@@ -17,8 +22,10 @@ import {
  * 包含常用的文本格式化功能
  */
 export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
+  editor,
   isMobile = false,
   config,
+  moreContent,
   children,
 }) => {
   const {
@@ -31,6 +38,7 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
     code = true,
     underline = true,
     highlight = true,
+    link = true,
     codeBlock = true,
     superscript = true,
     subscript = true,
@@ -39,104 +47,127 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
   } = config || {}
 
   const showUndoRedo = undo || redo
-  const showMarks = bold || italic || strike || code || underline
+  const showMarks = bold || italic || strike || underline || highlight || link
   const showScripts = superscript || subscript
 
   return (
     <>
-      {/* 撤销/重做 */}
+      {/* 撤销/重做 */ }
       { showUndoRedo && (
         <>
           <Toolbar.Group>
-            { undo && <UndoRedoButton action="undo" hideWhenUnavailable /> }
-            { redo && <UndoRedoButton action="redo" hideWhenUnavailable /> }
+            { undo && <UndoRedoButton editor={ editor } action="undo" hideWhenUnavailable /> }
+            { redo && <UndoRedoButton editor={ editor } action="redo" hideWhenUnavailable /> }
           </Toolbar.Group>
-          { (textFormat || showMarks || highlight || codeBlock || showScripts || textAlign || image) && <Toolbar.Separator /> }
+          { (textFormat || showMarks || highlight || link || codeBlock || showScripts || textAlign || image || moreContent) && <Toolbar.Separator /> }
         </>
       ) }
 
-      {/* 文本格式：标题、段落、列表、任务、引用 */}
+      {/* 文本格式：标题、段落、列表、任务、引用 */ }
       { textFormat && (
         <>
           <Toolbar.Group>
             <TextFormatDropdownMenu
+              editor={ editor }
               headingLevels={ [1, 2, 3] }
               listTypes={ ['bulletList', 'orderedList', 'taskList'] }
               portal={ isMobile }
               hideWhenUnavailable
             />
           </Toolbar.Group>
-          { (showMarks || highlight || codeBlock || showScripts || textAlign || image) && <Toolbar.Separator /> }
+          { (showMarks || highlight || link || codeBlock || showScripts || textAlign || image || moreContent) && <Toolbar.Separator /> }
         </>
       ) }
 
-      {/* 文本样式：粗体、斜体、删除线、行内代码、下划线 */}
+      {/* 文本样式：粗体、斜体、删除线、行内代码、下划线 */ }
       { showMarks && (
         <>
           <Toolbar.Group>
-            { bold && <MarkButton type="bold" hideWhenUnavailable /> }
-            { italic && <MarkButton type="italic" hideWhenUnavailable /> }
-            { strike && <MarkButton type="strike" hideWhenUnavailable /> }
-            { code && <MarkButton type="code" hideWhenUnavailable /> }
-            { underline && <MarkButton type="underline" hideWhenUnavailable /> }
+            { bold && <MarkButton editor={ editor } type="bold" hideWhenUnavailable /> }
+            { italic && <MarkButton editor={ editor } type="italic" hideWhenUnavailable /> }
+            { strike && <MarkButton editor={ editor } type="strike" hideWhenUnavailable /> }
+            { underline && <MarkButton editor={ editor } type="underline" hideWhenUnavailable /> }
+
+            { highlight && <ColorHighlightPopover editor={ editor } hideWhenUnavailable /> }
+            { link && <LinkPopover editor={ editor } hideWhenUnavailable /> }
           </Toolbar.Group>
-          { (highlight || codeBlock || showScripts || textAlign || image) && <Toolbar.Separator /> }
+          { (codeBlock || showScripts || textAlign || image || moreContent) && <Toolbar.Separator /> }
         </>
       ) }
 
-      {/* 高亮（5个颜色） */}
-      { highlight && (
-        <>
-          <Toolbar.Group>
-            <ColorHighlightPopover hideWhenUnavailable />
-          </Toolbar.Group>
-          { (codeBlock || showScripts || textAlign || image) && <Toolbar.Separator /> }
-        </>
-      ) }
-
-      {/* 代码块 */}
+      {/* 代码块 */ }
       { codeBlock && (
         <>
           <Toolbar.Group>
-            <CodeBlockButton hideWhenUnavailable />
+            { code && <MarkButton editor={ editor } type="code" hideWhenUnavailable /> }
+            <CodeBlockButton editor={ editor } hideWhenUnavailable />
           </Toolbar.Group>
-          { (showScripts || textAlign || image) && <Toolbar.Separator /> }
+          { (showScripts || textAlign || image || moreContent) && <Toolbar.Separator /> }
         </>
       ) }
 
-      {/* 上角标、下角标 */}
+      {/* 上角标、下角标 */ }
       { showScripts && (
         <>
           <Toolbar.Group>
-            { superscript && <MarkButton type="superscript" hideWhenUnavailable /> }
-            { subscript && <MarkButton type="subscript" hideWhenUnavailable /> }
+            { superscript && <MarkButton editor={ editor } type="superscript" hideWhenUnavailable /> }
+            { subscript && <MarkButton editor={ editor } type="subscript" hideWhenUnavailable /> }
           </Toolbar.Group>
-          { (textAlign || image) && <Toolbar.Separator /> }
+          { (textAlign || image || moreContent) && <Toolbar.Separator /> }
         </>
       ) }
 
-      {/* 对齐：左对齐、居中、右对齐、两端对齐 */}
+      {/* 对齐：左对齐、居中、右对齐、两端对齐 */ }
       { textAlign && (
         <>
           <Toolbar.Group>
             <TextAlignDropdownMenu
+              editor={ editor }
               types={ ['left', 'center', 'right', 'justify'] }
               portal={ isMobile }
               hideWhenUnavailable
             />
           </Toolbar.Group>
-          { image && <Toolbar.Separator /> }
+          { (image || moreContent) && <Toolbar.Separator /> }
         </>
       ) }
 
-      {/* 添加图片 */}
+      {/* 添加图片 */ }
       { image && (
+        <>
+          <Toolbar.Group>
+            <ImageUploadButton editor={ editor } hideWhenUnavailable />
+          </Toolbar.Group>
+          { moreContent && <Toolbar.Separator /> }
+        </>
+      ) }
+
+      {/* 更多功能 */ }
+      { moreContent && (
         <Toolbar.Group>
-          <ImageUploadButton hideWhenUnavailable />
+          <Popover
+            trigger="click"
+            position="bottom"
+            content={
+              <div className="p-1 min-w-[120px]">
+                { moreContent }
+              </div>
+            }
+          >
+            <Button
+              variant="ghost"
+              size="sm"
+              className="size-8 p-0"
+              tooltip="更多"
+              leftIcon={ <MoreHorizontalIcon className="size-4" /> }
+              iconOnly
+            >
+            </Button>
+          </Popover>
         </Toolbar.Group>
       ) }
 
-      {/* 自定义内容 */}
+      {/* 自定义内容 */ }
       { children }
     </>
   )
@@ -163,6 +194,8 @@ export interface SelectionToolbarConfig {
   underline?: boolean
   /** 文字颜色与高亮 */
   highlight?: boolean
+  /** 链接 */
+  link?: boolean
   /** 代码块 */
   codeBlock?: boolean
   /** 上角标 */
@@ -177,6 +210,10 @@ export interface SelectionToolbarConfig {
 
 export type SelectionToolbarContentProps = {
   /**
+   * 编辑器实例
+   */
+  editor?: Editor | null
+  /**
    * 是否为移动端
    * @default false
    */
@@ -185,4 +222,8 @@ export type SelectionToolbarContentProps = {
    * 功能配置
    */
   config?: SelectionToolbarConfig
+  /**
+   * 更多功能内容
+   */
+  moreContent?: React.ReactNode
 } & React.PropsWithChildren<React.HTMLAttributes<HTMLElement>>

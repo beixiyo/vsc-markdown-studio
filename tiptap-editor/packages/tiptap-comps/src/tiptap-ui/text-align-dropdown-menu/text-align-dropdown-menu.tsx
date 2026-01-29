@@ -23,7 +23,7 @@ export interface TextAlignDropdownMenuProps
   /**
    * The Tiptap editor instance.
    */
-  editor?: Editor
+  editor?: Editor | null
   /**
    * The text align types to display in the dropdown.
    */
