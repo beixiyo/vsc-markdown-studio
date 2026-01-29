@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import type { CommentStore } from '../../comment-store'
-import { useWatchRef } from 'hooks'
+import { useLatestRef } from 'hooks'
 import { useEffect, useMemo, useState } from 'react'
 import { getSelectionRect } from 'tiptap-api'
 import { DATA_COMMENT_ID } from '../../constants'
@@ -17,8 +17,8 @@ export function useInlineCommentPopover(params: {
   onInlineClose?: () => void
 }) {
   const { editor, commentStore, onInlineOpen, onInlineClose } = params
-  const onInlineOpenRef = useWatchRef(onInlineOpen)
-  const onInlineCloseRef = useWatchRef(onInlineClose)
+  const onInlineOpenRef = useLatestRef(onInlineOpen)
+  const onInlineCloseRef = useLatestRef(onInlineClose)
 
   const [inlineCommentId, setInlineCommentId] = useState<string | null>(null)
   const [inlineCommentRect, setInlineCommentRect] = useState<DOMRect | null>(null)

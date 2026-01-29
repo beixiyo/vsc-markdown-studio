@@ -1,4 +1,4 @@
-# 代码审查：`tiptap-comment` 包
+# 代码审查：`tiptap-comment` 包 DONE
 
 本文档提供了 `tiptap-comment` 包的详细代码审查，重点关注架构、React 最佳实践、数据流和代码质量。
 

@@ -1,6 +1,6 @@
 import type { UseReqOpts } from './types'
 import { useCallback, useEffect, useState } from 'react'
-import { useStable, useWatchRef } from './state'
+import { useStable, useLatestRef } from './state'
 
 /**
  * 管理异步请求的状态，会自动设置数据、加载状态等
@@ -11,7 +11,7 @@ export function useReq<T, P extends any[] = any[]>(
   requestFn: (...args: P) => Promise<T>,
   opts: UseReqOpts<T>,
 ) {
-  const watchRequestFn = useWatchRef(requestFn)
+  const watchRequestFn = useLatestRef(requestFn)
   const stableOpts = useStable(opts)
 
   const [loading, setLoading] = useState(stableOpts.initLoading)

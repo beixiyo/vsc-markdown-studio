@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { SuggestionPluginAPI, SuggestionTriggerOptions } from './types'
 import { Extension } from '@tiptap/core'
-import { ERROR_EXTENSION_API_NOT_AVAILABLE, ERROR_EXTENSION_NOT_MOUNTED, TRIGGER_EXTENSION_NAME } from './constans'
+import { ERROR_EXTENSION_API_NOT_AVAILABLE, ERROR_EXTENSION_NOT_MOUNTED, TRIGGER_EXTENSION_NAME } from './constants'
 import { createSuggestionPlugin } from './createSuggestionPlugin'
 
 export const SuggestionTrigger = {

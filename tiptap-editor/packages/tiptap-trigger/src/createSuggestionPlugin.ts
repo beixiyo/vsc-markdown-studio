@@ -3,7 +3,7 @@ import type { EditorView } from '@tiptap/pm/view'
 import type { SuggestionPluginAPI, SuggestionState, SuggestionTriggerOptions } from './types'
 import { Plugin } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
-import { TRIGGER_PLUGIN_KEY } from './constans'
+import { TRIGGER_PLUGIN_KEY } from './constants'
 
 export function createSuggestionPlugin(): {
   key: PluginKey<SuggestionState>
@@ -13,7 +13,7 @@ export function createSuggestionPlugin(): {
   let view: EditorView | null = null
   const triggers = new Map<string, SuggestionTriggerOptions>()
 
-  let currentState: SuggestionState = {
+  const getInitialState = (): SuggestionState => ({
     active: false,
     triggerId: null,
     triggerCharacter: null,
@@ -23,8 +23,9 @@ export function createSuggestionPlugin(): {
     ignoreQueryLength: false,
     decorationId: null,
     deleteTriggerCharacter: false,
-  }
-  const initialState = currentState
+  })
+
+  let currentState: SuggestionState = getInitialState()
 
   const listeners = new Set<(state: SuggestionState) => void>()
 
@@ -40,7 +41,7 @@ export function createSuggestionPlugin(): {
     key: TRIGGER_PLUGIN_KEY,
 
     state: {
-      init: () => initialState,
+      init: () => getInitialState(),
 
       apply(tr, prev) {
         let next = prev
@@ -57,20 +58,7 @@ export function createSuggestionPlugin(): {
           | undefined
 
         if (meta?.type === 'close' || meta?.type === 'clearQuery') {
-          next = {
-            active: false,
-            triggerId: null,
-            triggerCharacter: null,
-            query: '',
-            queryStartPos: null,
-            referenceRect: null,
-            ignoreQueryLength: false,
-            decorationId: null,
-            deleteTriggerCharacter: false,
-          }
-
-          notify(next)
-          return next
+          return getInitialState()
         }
 
         if (meta?.type === 'open') {
@@ -89,7 +77,6 @@ export function createSuggestionPlugin(): {
             deleteTriggerCharacter: Boolean(meta.deleteTriggerCharacter ?? trigger?.deleteTriggerCharacterOnSelect),
           }
 
-          notify(next)
           return next
         }
 
@@ -100,20 +87,7 @@ export function createSuggestionPlugin(): {
         const selection = tr.selection
 
         if (!selection.empty || next.queryStartPos === null || selection.from < next.queryStartPos) {
-          const reset: SuggestionState = {
-            active: false,
-            triggerId: null,
-            triggerCharacter: null,
-            query: '',
-            queryStartPos: null,
-            referenceRect: null,
-            ignoreQueryLength: false,
-            decorationId: null,
-            deleteTriggerCharacter: false,
-          }
-
-          notify(reset)
-          return reset
+          return getInitialState()
         }
 
         const query = tr.doc.textBetween(next.queryStartPos, selection.from, '\n', '\n')
@@ -122,13 +96,10 @@ export function createSuggestionPlugin(): {
           return next
         }
 
-        const updated: SuggestionState = {
+        return {
           ...next,
           query,
         }
-
-        notify(updated)
-        return updated
       },
     },
 
@@ -136,18 +107,32 @@ export function createSuggestionPlugin(): {
       view = editorView
 
       return {
-        update(updatedView) {
+        update(updatedView, prevState) {
           view = updatedView
 
-          /** 同步 referenceRect（用于浮层定位） */
+          /** 1. 同步 Plugin State 到外部 Listener (解决 apply 副作用问题) */
+          const nextPluginState = TRIGGER_PLUGIN_KEY.getState(updatedView.state)
+          const prevPluginState = TRIGGER_PLUGIN_KEY.getState(prevState)
+
+          if (nextPluginState && nextPluginState !== prevPluginState) {
+            /**
+             * 注意：这里只同步除了 referenceRect 以外的状态
+             * 因为 referenceRect 是在下面通过 DOM 计算的
+             */
+            notify({
+              ...nextPluginState,
+              referenceRect: currentState.referenceRect,
+            })
+          }
+
+          /** 2. 同步 referenceRect（用于浮层定位） */
           const state = TRIGGER_PLUGIN_KEY.getState(updatedView.state) ?? currentState
           if (!state.active || !state.decorationId) {
-            if (state.referenceRect !== null) {
-              const resetRect: SuggestionState = {
+            if (currentState.referenceRect !== null) {
+              notify({
                 ...state,
                 referenceRect: null,
-              }
-              notify(resetRect)
+              })
             }
             return
           }
@@ -157,28 +142,26 @@ export function createSuggestionPlugin(): {
           )
 
           if (!dom) {
-            if (state.referenceRect !== null) {
-              const resetRect: SuggestionState = {
+            if (currentState.referenceRect !== null) {
+              notify({
                 ...state,
                 referenceRect: null,
-              }
-              notify(resetRect)
+              })
             }
             return
           }
 
           const rect = dom.getBoundingClientRect()
 
-          if (!state.referenceRect
-            || rect.top !== state.referenceRect.top
-            || rect.left !== state.referenceRect.left
-            || rect.bottom !== state.referenceRect.bottom
-            || rect.right !== state.referenceRect.right) {
-            const next: SuggestionState = {
+          if (!currentState.referenceRect
+            || rect.top !== currentState.referenceRect.top
+            || rect.left !== currentState.referenceRect.left
+            || rect.bottom !== currentState.referenceRect.bottom
+            || rect.right !== currentState.referenceRect.right) {
+            notify({
               ...state,
               referenceRect: rect,
-            }
-            notify(next)
+            })
           }
         },
 

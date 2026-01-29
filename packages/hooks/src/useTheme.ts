@@ -1,19 +1,18 @@
 import type { Theme } from '@jl-org/tool'
 import { onChangeTheme } from '@jl-org/tool'
 import { useCallback, useEffect, useState } from 'react'
-import { useWatchRef } from './state'
+import { useLatestRef } from './state'
 import { getCurrentTheme, toggleTheme } from './theme'
 
 /**
  * - 监听用户主题变化，自动设置主题色，触发对应回调
  * - 首次执行会优先设置用户主题，没有则为系统主题
  * - 监听 HTML 的 class 变化、切换系统主题事件
- *
  */
 export function useChangeTheme(options?: UseChangeThemeOptions) {
   const { onLight, onDark, sync = true } = options || {}
-  const handleLight = useWatchRef(onLight)
-  const handleDark = useWatchRef(onDark)
+  const handleLight = useLatestRef(onLight)
+  const handleDark = useLatestRef(onDark)
 
   useEffect(
     () => {
