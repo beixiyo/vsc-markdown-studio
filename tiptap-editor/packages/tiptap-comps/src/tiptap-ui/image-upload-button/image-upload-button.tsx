@@ -105,7 +105,9 @@ export const ImageUploadButton = forwardRef<
         type="button"
         variant="ghost"
         size="sm"
-        name={ isActive ? 'active' : undefined }
+        name={ isActive
+          ? 'active'
+          : undefined }
         role="button"
         tabIndex={ -1 }
         disabled={ !canInsert }

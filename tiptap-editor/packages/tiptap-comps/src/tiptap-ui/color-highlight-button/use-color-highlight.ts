@@ -1,7 +1,7 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 // --- Hooks ---
@@ -128,26 +128,9 @@ export function useColorHighlight(config: UseColorHighlightConfig) {
 
   const { editor } = useTiptapEditor(providedEditor)
   const isMobile = useIsBreakpoint()
-  const [isVisible, setIsVisible] = useState<boolean>(true)
+  const isVisible = shouldShowButton({ editor, hideWhenUnavailable })
   const canColorHighlightState = canColorHighlight(editor)
   const isActive = isColorHighlightActive(editor, highlightColor)
-
-  useEffect(() => {
-    if (!editor)
-      return
-
-    const handleSelectionUpdate = () => {
-      setIsVisible(shouldShowButton({ editor, hideWhenUnavailable }))
-    }
-
-    handleSelectionUpdate()
-
-    editor.on('selectionUpdate', handleSelectionUpdate)
-
-    return () => {
-      editor.off('selectionUpdate', handleSelectionUpdate)
-    }
-  }, [editor, hideWhenUnavailable])
 
   const handleColorHighlight = useCallback(() => {
     if (!editor || !canColorHighlightState || !highlightColor || !label)

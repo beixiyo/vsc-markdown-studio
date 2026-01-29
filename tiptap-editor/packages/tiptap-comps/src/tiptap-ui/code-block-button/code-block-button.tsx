@@ -91,7 +91,9 @@ export const CodeBlockButton = forwardRef<
         type="button"
         variant="ghost"
         size="sm"
-        name={ isActive ? 'active' : undefined }
+        name={ isActive
+          ? 'active'
+          : undefined }
         role="button"
         disabled={ !canToggle }
         tabIndex={ -1 }

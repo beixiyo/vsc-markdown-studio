@@ -1,7 +1,6 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import { useEffect, useState } from 'react'
 
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
@@ -59,13 +58,14 @@ export function useTextFormatDropdownMenu(config?: UseTextFormatDropdownMenuConf
   } = config || {}
 
   const { editor } = useTiptapEditor(providedEditor)
-  const [isVisible, setIsVisible] = useState(true)
 
   /** 检查各种格式是否可用 */
   const canToggleHeading = headingLevels.some(level => canToggle(editor, level))
   const canToggleAnyList = listTypes.some(type => canToggleList(editor, type))
   const canToggleBlockquoteState = canToggleBlockquote(editor)
   const canToggleAny = canToggleHeading || canToggleAnyList || canToggleBlockquoteState || true // 段落总是可用
+
+  const isVisible = !hideWhenUnavailable || canToggleAny
 
   /** 检查当前激活的格式 */
   const isHeadingActiveState = isHeadingActive(editor)
@@ -92,24 +92,6 @@ export function useTextFormatDropdownMenu(config?: UseTextFormatDropdownMenuConf
         : isParagraphActive
           ? 'paragraph'
           : null
-
-  useEffect(() => {
-    if (!editor)
-      return
-
-    const handleSelectionUpdate = () => {
-      const shouldShow = !hideWhenUnavailable || canToggleAny
-      setIsVisible(shouldShow)
-    }
-
-    handleSelectionUpdate()
-
-    editor.on('selectionUpdate', handleSelectionUpdate)
-
-    return () => {
-      editor.off('selectionUpdate', handleSelectionUpdate)
-    }
-  }, [editor, hideWhenUnavailable, canToggleAny])
 
   return {
     isVisible,

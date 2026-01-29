@@ -1,4 +1,4 @@
-# Code Review Report: `tiptap-comps`
+# Code Review Report: `tiptap-comps` DONE
 
 ## 1. 整体评价
 `tiptap-comps` 模块展示了高度的模块化和一致性。它采用了“组件 + 自定义 Hook”的模式，成功地将复杂的编辑器逻辑与 UI 渲染分离。代码遵循现代 React 最佳实践，充分利用了 Tiptap 的生态能力。

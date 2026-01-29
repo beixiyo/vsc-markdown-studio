@@ -2,7 +2,7 @@
 
 import type { Editor } from '@tiptap/react'
 import { NodeSelection, TextSelection } from '@tiptap/pm/state'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 
 // --- Hooks ---
 import { useTiptapEditor, useTiptapEditorT } from 'tiptap-api/react'
@@ -223,26 +223,9 @@ export function useCodeBlock(config?: UseCodeBlockConfig) {
 
   const { editor } = useTiptapEditor(providedEditor)
   const t = useTiptapEditorT()
-  const [isVisible, setIsVisible] = useState<boolean>(true)
+  const isVisible = shouldShowButton({ editor, hideWhenUnavailable })
   const canToggleState = canToggle(editor)
   const isActive = editor?.isActive('codeBlock') || false
-
-  useEffect(() => {
-    if (!editor)
-      return
-
-    const handleSelectionUpdate = () => {
-      setIsVisible(shouldShowButton({ editor, hideWhenUnavailable }))
-    }
-
-    handleSelectionUpdate()
-
-    editor.on('selectionUpdate', handleSelectionUpdate)
-
-    return () => {
-      editor.off('selectionUpdate', handleSelectionUpdate)
-    }
-  }, [editor, hideWhenUnavailable])
 
   const handleToggle = useCallback(() => {
     if (!editor)

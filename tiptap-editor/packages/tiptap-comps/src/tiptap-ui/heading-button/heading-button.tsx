@@ -99,7 +99,9 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
         type="button"
         variant="ghost"
         size="sm"
-        name={ isActive ? 'active' : undefined }
+        name={ isActive
+          ? 'active'
+          : undefined }
         role="button"
         tabIndex={ -1 }
         disabled={ !canToggle }
@@ -107,7 +109,9 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
         aria-pressed={ isActive }
         tooltip={ label }
         onClick={ handleClick }
-        leftIcon={ children ? null : <Icon className="size-5 text-icon" /> }
+        leftIcon={ children
+          ? null
+          : <Icon className="size-5 text-icon" /> }
         { ...buttonProps }
         ref={ ref }
       >

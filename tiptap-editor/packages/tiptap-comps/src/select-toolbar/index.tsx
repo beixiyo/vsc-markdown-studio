@@ -98,7 +98,7 @@ export function SelectionToolbar({
       editorElement = editor.view.dom as HTMLElement
     }
     catch (e) {
-      // 视图不可用，暂不绑定事件
+      /** 视图不可用，暂不绑定事件 */
       return
     }
 
@@ -107,6 +107,16 @@ export function SelectionToolbar({
     }
 
     const currentEditorElement = editorElement
+
+    /** 监听焦点进入事件 */
+    const handleFocusIn = (event: FocusEvent) => {
+      const target = event.target as HTMLElement
+      /** 如果焦点进入工具栏内部或“保持打开”的元素 */
+      const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
+      if (keepOpenElement) {
+        isInteractingRef.current = true
+      }
+    }
 
     /** 监听鼠标按下事件 */
     const handleMouseDown = (event: MouseEvent) => {
@@ -119,9 +129,18 @@ export function SelectionToolbar({
         return
       }
 
-      /** 检查点击是否在编辑器外，且不是在交互区域 */
+      /** 检查点击是否在编辑器外 */
       if (!currentEditorElement.contains(target)) {
-        isInteractingRef.current = false
+        /**
+         * 额外延迟检查，因为点击可能触发焦点切换到 popover 内部
+         * 如果 100ms 后仍然没有被标记为 interacting，则关闭
+         */
+        setTimeout(() => {
+          if (!document.activeElement?.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)) {
+            isInteractingRef.current = false
+            updateToolbarState()
+          }
+        }, 100)
       }
     }
 
@@ -132,6 +151,7 @@ export function SelectionToolbar({
       const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
       if (keepOpenElement) {
         isInteractingRef.current = true
+        return
       }
 
       /** 检查事件是否发生在编辑器内 */
@@ -167,11 +187,13 @@ export function SelectionToolbar({
     document.addEventListener('mousedown', handleMouseDown)
     document.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('keyup', handleKeyUp)
+    document.addEventListener('focusin', handleFocusIn)
 
     return () => {
       document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('keyup', handleKeyUp)
+      document.removeEventListener('focusin', handleFocusIn)
       if (updateTimeoutRef.current) {
         clearTimeout(updateTimeoutRef.current)
       }
@@ -192,7 +214,7 @@ export function SelectionToolbar({
     <Popover
       ref={ popoverRef }
       trigger="command"
-      position={ (placement as any) || 'top' }
+      position={ (placement?.split('-')[0] as any) || 'top' }
       offset={ offsetDistance }
       virtualReferenceRect={ selectionRect }
       clickOutsideIgnoreSelector={ `[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]` }

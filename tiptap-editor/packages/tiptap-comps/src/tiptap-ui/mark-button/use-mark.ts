@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 
 import { useMarkLabels, useTiptapEditor } from 'tiptap-api/react'
 
@@ -176,26 +176,9 @@ export function useMark(config: UseMarkConfig) {
 
   const { editor } = useTiptapEditor(providedEditor)
   const markLabels = useMarkLabels()
-  const [isVisible, setIsVisible] = useState<boolean>(true)
+  const isVisible = shouldShowButton({ editor, type, hideWhenUnavailable })
   const canToggle = canToggleMark(editor, type)
   const isActive = isMarkActive(editor, type)
-
-  useEffect(() => {
-    if (!editor)
-      return
-
-    const handleSelectionUpdate = () => {
-      setIsVisible(shouldShowButton({ editor, type, hideWhenUnavailable }))
-    }
-
-    handleSelectionUpdate()
-
-    editor.on('selectionUpdate', handleSelectionUpdate)
-
-    return () => {
-      editor.off('selectionUpdate', handleSelectionUpdate)
-    }
-  }, [editor, type, hideWhenUnavailable])
 
   const handleMark = useCallback(() => {
     if (!editor)

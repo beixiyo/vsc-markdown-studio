@@ -1,5 +1,5 @@
 import type { ChainedCommands, Editor } from '@tiptap/react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 
 import { useAlignLabels, useTiptapEditor } from 'tiptap-api/react'
 
@@ -190,26 +190,9 @@ export function useTextAlign(config: UseTextAlignConfig) {
 
   const { editor } = useTiptapEditor(providedEditor)
   const alignLabels = useAlignLabels()
-  const [isVisible, setIsVisible] = useState<boolean>(true)
+  const isVisible = shouldShowButton({ editor, align, hideWhenUnavailable })
   const canAlign = canSetTextAlign(editor, align)
   const isActive = isTextAlignActive(editor, align)
-
-  useEffect(() => {
-    if (!editor)
-      return
-
-    const handleSelectionUpdate = () => {
-      setIsVisible(shouldShowButton({ editor, align, hideWhenUnavailable }))
-    }
-
-    handleSelectionUpdate()
-
-    editor.on('selectionUpdate', handleSelectionUpdate)
-
-    return () => {
-      editor.off('selectionUpdate', handleSelectionUpdate)
-    }
-  }, [editor, hideWhenUnavailable, align])
 
   const handleTextAlign = useCallback(() => {
     if (!editor)
