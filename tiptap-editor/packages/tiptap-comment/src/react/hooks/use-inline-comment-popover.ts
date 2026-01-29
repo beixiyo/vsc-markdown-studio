@@ -1,10 +1,11 @@
 import type { Editor } from '@tiptap/react'
 import type { CommentStore } from '../../comment-store'
 import { useWatchRef } from 'hooks'
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getSelectionRect } from 'tiptap-api'
 import { DATA_COMMENT_ID } from '../../constants'
 import { commentPluginKey } from '../../plugin'
+import { useComments } from './use-comments'
 
 /**
  * 点击评论高亮时，展示贴合文本的评论浮层
@@ -23,11 +24,7 @@ export function useInlineCommentPopover(params: {
   const [inlineCommentRect, setInlineCommentRect] = useState<DOMRect | null>(null)
   const [inlineCommentRange, setInlineCommentRange] = useState<{ from: number, to: number } | null>(null)
 
-  const commentSnapshot = useSyncExternalStore(
-    listener => commentStore?.subscribe(listener) ?? (() => {}),
-    () => commentStore?.getSnapshot() ?? [],
-    () => commentStore?.getSnapshot() ?? [],
-  )
+  const commentSnapshot = useComments(commentStore)
 
   useEffect(() => {
     if (!editor) {

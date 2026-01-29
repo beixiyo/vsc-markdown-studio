@@ -1,3 +1,5 @@
+export * from './use-comment-item-logic'
 export * from './use-comment-sync'
+export * from './use-comments'
 export * from './use-inline-comment-popover'
 export * from './use-is-breakpoint'

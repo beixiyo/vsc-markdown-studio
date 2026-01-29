@@ -2,7 +2,7 @@ import type { Node } from '@tiptap/pm/model'
 import type { EditorState } from '@tiptap/pm/state'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
-import { DATA_COMMENT_ID } from '../constants'
+import { COMMENT_HIGHLIGHT_ACTIVE_CLASS, COMMENT_HIGHLIGHT_CLASS, DATA_COMMENT_ID } from '../constants'
 
 /**
  * 评论范围信息
@@ -24,6 +24,8 @@ export interface CommentRange {
 export interface CommentPluginState {
   /** 评论范围映射表，key 为 commentId，value 为范围信息 */
   ranges: Map<string, CommentRange>
+  /** 当前选中的活动评论 ID（用于高亮显示） */
+  activeCommentId?: string | null
   /** 用于高亮显示的装饰集合 */
   decorations: DecorationSet
 }
@@ -68,6 +70,7 @@ export function createCommentPlugin(): Plugin<CommentPluginState> {
 
         return {
           ranges,
+          activeCommentId: null,
           decorations,
         }
       },
@@ -81,12 +84,20 @@ export function createCommentPlugin(): Plugin<CommentPluginState> {
        * @param oldState 旧状态
        * @returns 新状态
        */
-      apply(tr, _oldState): CommentPluginState {
+      apply(tr, oldState): CommentPluginState {
         /**
          * 重新扫描文档，获取实际存在的 comment mark
          * 这可以捕获通过事务添加的新 mark，以及检测被删除的 mark
          */
         const scannedRanges = scanCommentRanges(tr.doc)
+
+        /**
+         * 检测是否有活动评论 ID 的更新
+         */
+        const activeCommentId = tr.getMeta('setActiveCommentId')
+        const currentActiveCommentId = activeCommentId !== undefined
+          ? activeCommentId
+          : oldState.activeCommentId
 
         /**
          * 使用扫描结果作为最终的范围（因为它反映了文档的当前状态）
@@ -102,10 +113,11 @@ export function createCommentPlugin(): Plugin<CommentPluginState> {
          * 基于 finalRanges 重新构建 decorations，确保 decorations 与 ranges 完全一致
          * 这样可以确保删除评论时，对应的 decorations 也会被正确清理
          */
-        const decorations = computeDecorations(tr.doc, finalRanges)
+        const decorations = computeDecorations(tr.doc, finalRanges, currentActiveCommentId)
 
         return {
           ranges: finalRanges,
+          activeCommentId: currentActiveCommentId,
           decorations,
         }
       },
@@ -193,11 +205,13 @@ function scanCommentRanges(doc: Node): Map<string, CommentRange> {
  * 根据评论范围计算装饰（用于高亮显示）
  * @param doc 文档节点
  * @param ranges 评论范围映射表
+ * @param activeCommentId 当前活动的评论 ID
  * @returns 装饰集合
  */
 function computeDecorations(
   doc: Node,
   ranges: Map<string, CommentRange>,
+  activeCommentId?: string | null,
 ): DecorationSet {
   const decorations: Decoration[] = []
 
@@ -205,6 +219,8 @@ function computeDecorations(
     const segments = range.segments && range.segments.length > 0
       ? range.segments
       : [{ from: range.from, to: range.to }]
+
+    const isActive = activeCommentId === commentId
 
     for (const segment of segments) {
       /** 验证范围有效性 */
@@ -214,10 +230,9 @@ function computeDecorations(
 
       /** 创建内联装饰，用于高亮显示评论区域 */
       const decoration = Decoration.inline(segment.from, segment.to, {
-        class:
-          'comment-highlight bg-warning/20 border-b-2 border-b-warning '
-          + 'px-[2px] rounded-sm cursor-pointer transition-colors '
-          + 'duration-200 ease-in-out',
+        class: isActive
+          ? COMMENT_HIGHLIGHT_ACTIVE_CLASS
+          : COMMENT_HIGHLIGHT_CLASS,
         [DATA_COMMENT_ID]: commentId,
       })
 

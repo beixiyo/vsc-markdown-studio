@@ -7,12 +7,13 @@ import {
   Popover,
   type PopoverRef,
 } from 'comps'
-import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useCommentLabels, useTiptapEditor } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { CommentItem } from './components/comment-item'
+import { useComments } from './hooks'
 
 /**
  * 评论侧边栏属性
@@ -60,11 +61,7 @@ export const CommentSidebar = memo(({
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'resolved'>('all')
   const listRef = useRef<HTMLDivElement>(null)
 
-  const commentsSource = useSyncExternalStore(
-    listener => commentStore.subscribe(listener),
-    () => commentStore.getSnapshot(),
-    () => commentStore.getSnapshot(),
-  )
+  const commentsSource = useComments(commentStore)
 
   const comments = useMemo(() => {
     let allComments = commentsSource
@@ -102,7 +99,9 @@ export const CommentSidebar = memo(({
   }, [isControlled, open])
 
   useEffect(() => {
-    const isOpen = isControlled ? open : internalOpen
+    const isOpen = isControlled
+      ? open
+      : internalOpen
     if (!isOpen || !activeCommentId) {
       return
     }
@@ -124,7 +123,9 @@ export const CommentSidebar = memo(({
   return (
     <Popover
       ref={ popoverRef }
-      trigger={ isControlled ? 'command' : 'click' }
+      trigger={ isControlled
+        ? 'command'
+        : 'click' }
       onOpen={ () => handleOpenChange(true) }
       onClose={ () => handleOpenChange(false) }
       content={
@@ -163,7 +164,9 @@ export const CommentSidebar = memo(({
               <Button
                 type="button"
                 onClick={ () => setStatusFilter('all') }
-                variant={ statusFilter === 'all' ? 'primary' : 'default' }
+                variant={ statusFilter === 'all'
+                  ? 'primary'
+                  : 'default' }
                 size="sm"
                 className="rounded-full px-3"
               >
@@ -172,7 +175,9 @@ export const CommentSidebar = memo(({
               <Button
                 type="button"
                 onClick={ () => setStatusFilter('active') }
-                variant={ statusFilter === 'active' ? 'primary' : 'default' }
+                variant={ statusFilter === 'active'
+                  ? 'primary'
+                  : 'default' }
                 size="sm"
                 className="rounded-full px-3"
               >
@@ -181,7 +186,9 @@ export const CommentSidebar = memo(({
               <Button
                 type="button"
                 onClick={ () => setStatusFilter('resolved') }
-                variant={ statusFilter === 'resolved' ? 'primary' : 'default' }
+                variant={ statusFilter === 'resolved'
+                  ? 'primary'
+                  : 'default' }
                 size="sm"
                 className="rounded-full px-3"
               >

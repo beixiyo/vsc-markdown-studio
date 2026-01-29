@@ -64,6 +64,12 @@ export function useCommentSync(
           commentStore.deleteComment(commentId)
         })
       }
+
+      if (result.restorable.length > 0) {
+        result.restorable.forEach((commentId) => {
+          commentStore.restoreComment(commentId)
+        })
+      }
     }
 
     /** 同步函数（带防抖） */

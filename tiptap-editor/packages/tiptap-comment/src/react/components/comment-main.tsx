@@ -1,6 +1,6 @@
 import type React from 'react'
 import { Button, Textarea } from 'comps'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 import { CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
@@ -42,6 +42,15 @@ export const CommentMain = memo((props: CommentMainProps) => {
     className,
   } = props
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      textareaRef.current?.focus()
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
@@ -74,6 +83,7 @@ export const CommentMain = memo((props: CommentMainProps) => {
           <span>添加评论</span>
         </div>
         <Textarea
+          ref={ textareaRef }
           containerClassName="min-h-[80px] w-full"
           placeholder="输入评论内容..."
           value={ content }

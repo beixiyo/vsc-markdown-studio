@@ -1,5 +1,6 @@
 import type React from 'react'
-import { memo } from 'react'
+import { Button, Textarea } from 'comps'
+import { memo, useEffect, useRef } from 'react'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
@@ -23,6 +24,15 @@ export const CommentEditDialog = memo(({
   canSave,
 }: CommentEditDialogProps) => {
   const labels = useCommentLabels()
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      textareaRef.current?.focus()
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       event.preventDefault()
@@ -42,36 +52,37 @@ export const CommentEditDialog = memo(({
         'flex flex-col gap-4 bg-background',
       ) }
     >
-      <textarea
-        className="min-h-[96px] w-full rounded-xl bg-backgroundSecondary px-4 py-3 text-sm text-textPrimary outline-none ring-0 transition-all"
+      <Textarea
+        ref={ textareaRef }
+        containerClassName="min-h-[96px] w-full"
         placeholder={ labels.placeholder }
         value={ content }
-        onChange={ e => setContent(e.target.value) }
+        onChange={ setContent }
         onKeyDown={ handleKeyDown }
         autoFocus
         rows={ 3 }
       />
 
       <div className="flex items-center justify-end gap-2">
-        <button
+        <Button
           type="button"
           onClick={ onCancel }
-          title={ labels.cancelTooltip }
-          className="flex h-9 items-center gap-2 rounded-lg border border-transparent px-3 text-sm font-medium text-textSecondary transition-all hover:bg-backgroundSecondary"
+          variant="ghost"
+          size="sm"
+          leftIcon={ <CloseIcon className="h-4 w-4" /> }
         >
-          <CloseIcon className="h-4 w-4" />
           { labels.cancel }
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={ onSave }
-          title={ labels.saveTooltip }
           disabled={ !canSave || !content.trim() }
-          className="flex h-9 items-center gap-2 rounded-lg bg-brand px-3 text-sm font-semibold text-white shadow-sm transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          variant="primary"
+          size="sm"
+          leftIcon={ <CornerDownLeftIcon className="h-4 w-4" /> }
         >
-          <CornerDownLeftIcon className="h-4 w-4" />
           { labels.save }
-        </button>
+        </Button>
       </div>
     </div>
   )

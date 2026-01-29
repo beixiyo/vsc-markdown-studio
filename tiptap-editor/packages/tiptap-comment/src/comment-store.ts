@@ -59,6 +59,11 @@ export interface Comment {
   /** 评论状态 */
   status: 'active' | 'resolved'
 
+  /** 是否已删除（软删除，用于支持撤销/重做） */
+  deleted?: boolean
+  /** 删除时间戳（可选） */
+  deletedAt?: number
+
   /** 被回复的评论 ID（如果存在，表示这是回复） */
   replyTo?: string
   /** 被回复的作者信息（用于展示引用） */
@@ -134,7 +139,7 @@ export class CommentStore {
 
   /** 重建快照 */
   private rebuildSnapshot(): void {
-    this.commentsSnapshot = Array.from(this.comments.values())
+    this.commentsSnapshot = Array.from(this.comments.values()).filter(c => !c.deleted)
   }
 
   /**
@@ -207,14 +212,53 @@ export class CommentStore {
   }
 
   /**
-   * 删除评论
+   * 删除评论（软删除）
    * @param id 评论 ID
    * @returns 是否删除成功（如果评论不存在，返回 false）
    */
   deleteComment(id: string): boolean {
+    const comment = this.comments.get(id)
+    if (comment) {
+      this.comments.set(id, {
+        ...comment,
+        deleted: true,
+        deletedAt: Date.now(),
+      })
+      /** 清除查询缓存（因为评论列表变更） */
+      this.clearRangeQueryCache()
+      this.rebuildSnapshot()
+      this.notify()
+      return true
+    }
+    return false
+  }
+
+  /**
+   * 恢复评论
+   * @param id 评论 ID
+   * @returns 是否恢复成功
+   */
+  restoreComment(id: string): boolean {
+    const comment = this.comments.get(id)
+    if (comment && comment.deleted) {
+      const { deleted, deletedAt, ...rest } = comment
+      this.comments.set(id, rest)
+      this.clearRangeQueryCache()
+      this.rebuildSnapshot()
+      this.notify()
+      return true
+    }
+    return false
+  }
+
+  /**
+   * 永久删除评论
+   * @param id 评论 ID
+   * @returns 是否删除成功
+   */
+  permanentlyDeleteComment(id: string): boolean {
     const deleted = this.comments.delete(id)
     if (deleted) {
-      /** 清除查询缓存（因为评论列表变更） */
       this.clearRangeQueryCache()
       this.rebuildSnapshot()
       this.notify()
@@ -224,10 +268,14 @@ export class CommentStore {
 
   /**
    * 获取所有评论
-   * @returns 所有评论的数组（按 ID 顺序）
+   * @param includeDeleted 是否包含已删除的评论（默认 false）
+   * @returns 评论数组
    */
-  getAllComments(): Comment[] {
-    return Array.from(this.comments.values())
+  getAllComments(includeDeleted = false): Comment[] {
+    const all = Array.from(this.comments.values())
+    return includeDeleted
+      ? all
+      : all.filter(c => !c.deleted)
   }
 
   /**

@@ -2,6 +2,9 @@
  * 工具函数统一导出
  */
 
+/** 日期处理相关 */
+export * from './date'
+
 /** 编辑器相关 */
 export * from './editor'
 

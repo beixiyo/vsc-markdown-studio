@@ -1,6 +1,6 @@
 import type React from 'react'
 import { Button, Textarea } from 'comps'
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon, CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
@@ -26,6 +26,15 @@ export const ReplyDialog = memo(({
   replyToPreview,
 }: ReplyDialogProps) => {
   const labels = useCommentLabels()
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      textareaRef.current?.focus()
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
       event.preventDefault()
@@ -53,6 +62,7 @@ export const ReplyDialog = memo(({
       ) }
 
       <Textarea
+        ref={ textareaRef }
         containerClassName="min-h-[84px] w-full"
         placeholder={ labels.replyPlaceholder }
         value={ content }

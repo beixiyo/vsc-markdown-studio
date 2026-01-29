@@ -23,8 +23,10 @@ export interface CommentSyncResult {
   deleted: string[]
   /** 被分割的评论 ID 列表（范围被分割成多个不连续的部分） */
   split: string[]
-  /** 新增的评论 ID 列表（在文档中发现但 Store 中不存在） */
+  /** 孤立的评论 ID 列表（在文档中发现但 Store 中完全不存在） */
   orphaned: string[]
+  /** 可恢复的评论 ID 列表（在文档中发现且 Store 中标记为已删除） */
+  restorable: string[]
 }
 
 /**
@@ -53,13 +55,14 @@ export function syncCommentRanges(
   commentStore: CommentStore,
 ): CommentSyncResult {
   if (!editor) {
-    return { deleted: [], split: [], orphaned: [] }
+    return { deleted: [], split: [], orphaned: [], restorable: [] }
   }
 
   const result: CommentSyncResult = {
     deleted: [],
     split: [],
     orphaned: [],
+    restorable: [],
   }
 
   /** 获取 Plugin state 中的评论范围 */
@@ -75,14 +78,17 @@ export function syncCommentRanges(
   for (const comment of storeComments) {
     if (!ranges.has(comment.id)) {
       result.deleted.push(comment.id)
-      /** 注意：不执行任何自动操作，只记录检测结果 */
     }
   }
 
-  // 2. 检测孤立的评论 mark（文档中有 mark，但 Store 中没有评论）
+  // 2. 检测孤立/可恢复的评论 mark
   for (const commentId of ranges.keys()) {
-    if (!commentStore.getComment(commentId)) {
+    const comment = commentStore.getComment(commentId)
+    if (!comment) {
       result.orphaned.push(commentId)
+    }
+    else if (comment.deleted) {
+      result.restorable.push(commentId)
     }
   }
 
@@ -206,6 +212,7 @@ export function validateCommentRanges(
       deleted: string[]
       orphaned: string[]
       split: string[]
+      restorable: string[]
     }
   } {
   const syncResult = syncCommentRanges(editor, commentStore)
@@ -214,11 +221,13 @@ export function validateCommentRanges(
     isValid:
       syncResult.deleted.length === 0
       && syncResult.orphaned.length === 0
-      && syncResult.split.length === 0,
+      && syncResult.split.length === 0
+      && syncResult.restorable.length === 0,
     issues: {
       deleted: syncResult.deleted,
       orphaned: syncResult.orphaned,
       split: syncResult.split,
+      restorable: syncResult.restorable,
     },
   }
 }
