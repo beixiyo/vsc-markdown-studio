@@ -2,7 +2,7 @@
   "name": "md-editor",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.7.0",
+  "packageManager": "pnpm@10.24.0",
   "scripts": {
     "dev": "nx run tiptap-editor:dev",
     "dev:markdown-studio": "nx run markdown-studio:dev",
