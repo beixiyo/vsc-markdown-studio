@@ -1,5 +1,4 @@
 import type { Editor } from '@tiptap/react'
-
 import {
   Button,
   Cascader,
@@ -7,12 +6,10 @@ import {
   type CascaderRef,
 } from 'comps'
 
-// --- UI Primitives ---
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-// --- Hooks ---
 import { useBlockLabels, useHeadingLabels, useListLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 
-// --- Icons ---
 import {
   BlockquoteIcon,
   ChevronDownIcon,
@@ -20,7 +17,6 @@ import {
 } from '../../icons'
 
 import { shouldShowButton as shouldShowBlockquoteButton, toggleBlockquote } from '../blockquote-button/use-blockquote'
-// --- Tiptap UI ---
 import { headingIcons, type Level, shouldShowButton as shouldShowHeadingButton, toggleHeading } from '../heading-button/use-heading'
 import { isListActive, listIcons, type ListType, shouldShowButton as shouldShowListButton, toggleList } from '../list-button/use-list'
 import { useTextFormatDropdownMenu } from './use-text-format-dropdown-menu'
@@ -186,6 +182,7 @@ export const TextFormatDropdownMenu = forwardRef<
         dropdownHeight={ 400 }
         optionClassName="px-2 py-1"
         trigger={ trigger }
+        dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
       />
     )
   },

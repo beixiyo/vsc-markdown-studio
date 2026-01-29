@@ -1,5 +1,4 @@
 import type { Editor } from '@tiptap/react'
-// --- Tiptap UI ---
 import type { TextAlign } from '../text-align-button/use-text-align'
 
 import {
@@ -9,12 +8,9 @@ import {
   type CascaderRef,
 } from 'comps'
 
-// --- UI Primitives ---
 import { useCallback, useMemo, useRef } from 'react'
-
-// --- Hooks ---
 import { useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
-// --- Icons ---
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { ChevronDownIcon } from '../../icons'
 import { useTextAlignDropdownMenu } from './use-text-align-dropdown-menu'
 
@@ -110,6 +106,7 @@ export function TextAlignDropdownMenu({
       dropdownHeight={ 400 }
       optionClassName="px-2 py-1"
       trigger={ trigger }
+      dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
     />
   )
 }

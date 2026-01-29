@@ -5,6 +5,7 @@ import {
   Toolbar,
 } from 'comps'
 import { memo } from 'react'
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { MoreHorizontalIcon } from '../../icons'
 import {
   CodeBlockButton,
@@ -149,7 +150,10 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
             trigger="click"
             position="bottom"
             content={
-              <div className="p-1 min-w-[120px]">
+              <div
+                { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+                className="p-1 min-w-[120px]"
+              >
                 { moreContent }
               </div>
             }
