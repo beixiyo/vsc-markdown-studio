@@ -1,9 +1,9 @@
-import type React from 'react'
 import { Button, Popover, type PopoverRef, Textarea } from 'comps'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { SparklesIcon } from 'tiptap-comps/icons'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
+import { AI_LABELS } from '../constants'
 
 /**
  * AI 输入弹窗属性
@@ -29,7 +29,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
     onSubmit,
     onCancel,
     disabled = false,
-    placeholder = '描述你的需求...',
+    placeholder = AI_LABELS.INPUT_PLACEHOLDER,
     children,
     className,
   }) => {
@@ -53,14 +53,17 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
       [isControlled, onOpenChange],
     )
 
+    const focusTextarea = useCallback(() => {
+      /** 延迟聚焦确保 Popover 动画完成后能够成功获取焦点 */
+      setTimeout(() => {
+        textareaRef.current?.focus()
+      }, 100)
+    }, [])
+
     useEffect(() => {
       if (isControlled) {
         if (controlledOpen) {
           popoverRef.current?.open()
-          /** 延迟聚焦确保 Popover 动画完成后能够成功获取焦点 */
-          setTimeout(() => {
-            textareaRef.current?.focus()
-          }, 50)
         }
         else {
           popoverRef.current?.close()
@@ -111,10 +114,8 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
         onOpen={ () => {
           if (!isControlled) {
             handleOpenChange(true)
-            setTimeout(() => {
-              textareaRef.current?.focus()
-            }, 50)
           }
+          focusTextarea()
         } }
         onClose={ () => !isControlled && handleOpenChange(false) }
         content={
@@ -128,7 +129,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
             <div className="flex items-center gap-2">
               <SparklesIcon className="h-4 w-4 text-brand" />
               <span className="text-sm font-semibold text-textSecondary">
-                AI 增强
+                { AI_LABELS.IDLE }
               </span>
             </div>
             <Textarea
@@ -146,7 +147,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
             />
             <div className="flex items-center justify-between">
               <span className="text-xs text-textTertiary">
-                按 Enter 提交，Shift + Enter 换行
+                { AI_LABELS.HINT }
               </span>
               <div className="flex items-center gap-2">
                 <Button
@@ -156,7 +157,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                   size="sm"
                   disabled={ disabled }
                 >
-                  取消
+                  { AI_LABELS.CANCEL }
                 </Button>
                 <Button
                   type="button"
@@ -165,7 +166,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                   size="sm"
                   disabled={ !prompt.trim() || disabled }
                 >
-                  提交
+                  { AI_LABELS.SUBMIT }
                 </Button>
               </div>
             </div>

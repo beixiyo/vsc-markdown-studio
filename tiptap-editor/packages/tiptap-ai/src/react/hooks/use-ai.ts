@@ -2,6 +2,7 @@ import type { Editor } from '@tiptap/core'
 import type { PreviewController } from '../../PreviewController'
 import type { AIRequestMode } from '../../types'
 import { useCallback, useEffect, useState } from 'react'
+import { AI_LABELS } from '../../constants'
 import { getTiptapSelectionPayload } from '../../TiptapEditorBridge'
 
 /**
@@ -12,12 +13,14 @@ export function useAI(config: UseAIConfig): UseAIReturn {
 
   const [isProcessing, setIsProcessing] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
+
   const computeCanTrigger = useCallback(() => {
     if (!editor || editor.isDestroyed)
       return false
     const { selection } = editor.state
     return !selection.empty
   }, [editor])
+
   const [canTriggerState, setCanTriggerState] = useState(() => computeCanTrigger())
 
   /** 订阅控制器状态变化 */
@@ -35,22 +38,20 @@ export function useAI(config: UseAIConfig): UseAIReturn {
 
   /** 检查是否可以触发 AI（需要选中文本） */
   useEffect(() => {
-    setCanTriggerState(computeCanTrigger())
     if (!editor)
       return
 
-    const handleSelectionUpdate = () => { setCanTriggerState(computeCanTrigger()) }
-    const handleTransaction = () => { setCanTriggerState(computeCanTrigger()) }
-    const handleDestroy = () => { setCanTriggerState(false) }
+    setCanTriggerState(computeCanTrigger())
 
-    editor.on('selectionUpdate', handleSelectionUpdate)
-    editor.on('transaction', handleTransaction)
-    editor.on('destroy', handleDestroy)
+    const handleUpdate = () => {
+      setCanTriggerState(computeCanTrigger())
+    }
+
+    editor.on('selectionUpdate', handleUpdate)
+    editor.on('destroy', () => setCanTriggerState(false))
 
     return () => {
-      editor.off('selectionUpdate', handleSelectionUpdate)
-      editor.off('transaction', handleTransaction)
-      editor.off('destroy', handleDestroy)
+      editor.off('selectionUpdate', handleUpdate)
     }
   }, [editor, computeCanTrigger])
 
@@ -94,10 +95,10 @@ export function useAI(config: UseAIConfig): UseAIReturn {
   }, [controller])
 
   const label = isProcessing
-    ? 'AI 处理中...'
+    ? AI_LABELS.PROCESSING
     : isPreview
-      ? 'AI 预览中'
-      : 'AI 增强'
+      ? AI_LABELS.PREVIEW
+      : AI_LABELS.IDLE
 
   return {
     canTrigger: canTriggerState,

@@ -38,7 +38,12 @@ export function useBindAi(editor: Editor | null, aiController: AiController | nu
       return
     }
 
-    const bridge = createTiptapEditorBridge(editor)
+    const bridge = createTiptapEditorBridge(editor, {
+      onConflict: () => {
+        console.warn('AI 预览区域被外部编辑修改，取消预览。')
+        aiController.reject()
+      },
+    })
     const integration = bindEditor(aiController, bridge, aiOrchestrator, {
       onError: (error) => {
         console.error('AI 错误:', error.message)

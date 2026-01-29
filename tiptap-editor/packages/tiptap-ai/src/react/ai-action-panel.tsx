@@ -6,6 +6,8 @@ import { unSelect } from 'tiptap-api'
 import { CheckIcon, XIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 
+import { AI_LABELS } from '../constants'
+
 /**
  * AI 操作面板的属性
  */
@@ -78,7 +80,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
           <div className="flex items-center gap-2">
             <LoadingIcon size="sm" />
             <span className="text-sm text-textPrimary">
-              AI 处理中...
+              { AI_LABELS.PROCESSING }
             </span>
           </div>
         ) }
