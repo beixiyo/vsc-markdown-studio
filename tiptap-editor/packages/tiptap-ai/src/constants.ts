@@ -9,12 +9,12 @@ export const AI_CLASSES = {
 }
 
 export const AI_LABELS = {
-  IDLE: 'AI 增强',
-  PROCESSING: 'AI 处理中...',
-  PREVIEW: 'AI 预览中',
-  ERROR: 'AI 处理失败',
-  INPUT_PLACEHOLDER: '描述你的需求...',
-  SUBMIT: '提交',
-  CANCEL: '取消',
-  HINT: '按 Enter 提交，Shift + Enter 换行',
+  IDLE: 'ai.idle',
+  PROCESSING: 'ai.processing',
+  PREVIEW: 'ai.preview',
+  ERROR: 'ai.error',
+  INPUT_PLACEHOLDER: 'ai.inputPlaceholder',
+  SUBMIT: 'ai.submit',
+  CANCEL: 'ai.cancel',
+  HINT: 'ai.hint',
 }

@@ -9,8 +9,11 @@ import { Typography } from '@tiptap/extension-typography'
 import { Selection } from '@tiptap/extensions'
 import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
+import { getI18nInstance } from 'i18n'
 
 export function createExtensions() {
+  const i18n = getI18nInstance()
+
   return [
     // StarterKit：Tiptap 的基础扩展包，包含常用功能
     StarterKit.configure({
@@ -71,21 +74,21 @@ export function createExtensions() {
         if (node.type.name === 'heading') {
           const level = node.attrs.level
           return level === 1
-            ? '输入标题 1…'
+            ? i18n.t('placeholder.heading1')
             : level === 2
-              ? '输入标题 2…'
+              ? i18n.t('placeholder.heading2')
               : level === 3
-                ? '输入标题 3…'
-                : '输入标题…'
+                ? i18n.t('placeholder.heading3')
+                : i18n.t('placeholder.heading')
         }
         if (node.type.name === 'blockquote') {
-          return '输入引用内容…'
+          return i18n.t('placeholder.blockquote')
         }
         if (node.type.name === 'codeBlock') {
-          return '输入代码…'
+          return i18n.t('placeholder.codeBlock')
         }
         /** 默认占位符（段落等） */
-        return '输入内容，或输入 / 查看命令…'
+        return i18n.t('placeholder.default')
       },
       emptyEditorClass: 'is-editor-empty',
       emptyNodeClass: 'is-empty',

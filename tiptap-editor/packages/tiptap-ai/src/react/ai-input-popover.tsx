@@ -1,4 +1,5 @@
 import { Button, Popover, type PopoverRef, Textarea } from 'comps'
+import { useT } from 'i18n/react'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { SparklesIcon } from 'tiptap-comps/icons'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
@@ -29,11 +30,11 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
     onSubmit,
     onCancel,
     disabled = false,
-    placeholder = AI_LABELS.INPUT_PLACEHOLDER,
+    placeholder,
     children,
     className,
   }) => {
-    const [internalOpen, setInternalOpen] = useState(false)
+    const t = useT()
     const [prompt, setPrompt] = useState('')
     const popoverRef = useRef<PopoverRef>(null)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -42,15 +43,12 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
 
     const handleOpenChange = useCallback(
       (newOpen: boolean) => {
-        if (!isControlled) {
-          setInternalOpen(newOpen)
-        }
         onOpenChange?.(newOpen)
         if (!newOpen) {
           setPrompt('')
         }
       },
-      [isControlled, onOpenChange],
+      [onOpenChange],
     )
 
     const focusTextarea = useCallback(() => {
@@ -129,13 +127,13 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
             <div className="flex items-center gap-2">
               <SparklesIcon className="h-4 w-4 text-brand" />
               <span className="text-sm font-semibold text-textSecondary">
-                { AI_LABELS.IDLE }
+                { t(AI_LABELS.IDLE) }
               </span>
             </div>
             <Textarea
               ref={ textareaRef }
               className="w-full"
-              placeholder={ placeholder }
+              placeholder={ placeholder || t(AI_LABELS.INPUT_PLACEHOLDER) }
               value={ prompt }
               onChange={ setPrompt }
               onPressEnter={ handlePressEnter }
@@ -147,7 +145,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
             />
             <div className="flex items-center justify-between">
               <span className="text-xs text-textTertiary">
-                { AI_LABELS.HINT }
+                { t(AI_LABELS.HINT) }
               </span>
               <div className="flex items-center gap-2">
                 <Button
@@ -157,7 +155,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                   size="sm"
                   disabled={ disabled }
                 >
-                  { AI_LABELS.CANCEL }
+                  { t(AI_LABELS.CANCEL) }
                 </Button>
                 <Button
                   type="button"
@@ -166,7 +164,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
                   size="sm"
                   disabled={ !prompt.trim() || disabled }
                 >
-                  { AI_LABELS.SUBMIT }
+                  { t(AI_LABELS.SUBMIT) }
                 </Button>
               </div>
             </div>

@@ -2,6 +2,7 @@ import type { NodeViewProps } from '@tiptap/react'
 import type { UploadOptions } from './types'
 import { NodeViewWrapper } from '@tiptap/react'
 import { Button } from 'comps'
+import { useT } from 'i18n/react'
 import React, { useRef } from 'react'
 import { focusNextNode, isValidPosition } from 'tiptap-utils'
 import { DropZoneContent } from './components/drop-zone-content'
@@ -10,6 +11,7 @@ import { ImageUploadPreview } from './components/image-upload-preview'
 import { useFileUpload } from './hooks/use-file-upload'
 
 export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
+  const t = useT()
   const { accept, limit, maxSize } = props.node.attrs
   const inputRef = useRef<HTMLInputElement>(null)
   const extension = props.extension
@@ -94,11 +96,12 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
           { fileItems.length > 1 && (
             <div className="flex items-center justify-between py-2 border-b border-border mb-2 max-[480px]:flex-col max-[480px]:items-start max-[480px]:gap-2">
               <span className="text-sm font-medium text-textPrimary">
-                Uploading
-                { ' ' }
-                { fileItems.length }
-                { ' ' }
-                { fileItems.length === 1 ? 'file' : 'files' }
+                { t('image.uploading', {
+                  count: fileItems.length,
+                  plural: fileItems.length === 1
+                    ? ''
+                    : 's',
+                }) }
               </span>
               <Button
                 type="button"
@@ -109,7 +112,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
                   clearAllFiles()
                 } }
               >
-                Clear All
+                { t('image.clearAll') }
               </Button>
             </div>
           ) }

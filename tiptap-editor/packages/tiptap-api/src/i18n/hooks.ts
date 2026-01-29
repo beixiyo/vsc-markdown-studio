@@ -59,6 +59,7 @@ export type TiptapEditorTranslations = {
   }
   comment: {
     commentPanel: string
+    addComment: string
     items: string
     all: string
     active: string
@@ -80,6 +81,9 @@ export type TiptapEditorTranslations = {
     locate: string
     edit: string
     reply: string
+    submit: string
+    submitTooltip: string
+    submitHint: string
     markResolved: string
     reopen: string
     delete: string
@@ -100,6 +104,36 @@ export type TiptapEditorTranslations = {
   speaker: {
     speaker: string
   }
+  ai: {
+    idle: string
+    processing: string
+    preview: string
+    error: string
+    inputPlaceholder: string
+    submit: string
+    cancel: string
+    hint: string
+    accept: string
+    reject: string
+  }
+  slash: {
+    heading1: string
+    heading2: string
+    paragraph: string
+    bulletList: string
+    orderedList: string
+    blockquote: string
+    mermaid: string
+  }
+  placeholder: {
+    heading1: string
+    heading2: string
+    heading3: string
+    heading: string
+    blockquote: string
+    codeBlock: string
+    default: string
+  }
 }
 
 /**
@@ -117,6 +151,7 @@ export function useCommentLabels() {
   const t = useTiptapEditorT()
   return {
     commentPanel: t('comment.commentPanel'),
+    addComment: t('comment.addComment'),
     items: t('comment.items'),
     all: t('comment.all'),
     active: t('comment.active'),
@@ -138,6 +173,9 @@ export function useCommentLabels() {
     locate: t('comment.locate'),
     edit: t('comment.edit'),
     reply: t('comment.reply'),
+    submit: t('comment.submit'),
+    submitTooltip: t('comment.submitTooltip'),
+    submitHint: t('comment.submitHint'),
     markResolved: t('comment.markResolved'),
     reopen: t('comment.reopen'),
     delete: t('comment.delete'),
@@ -255,5 +293,40 @@ export function useSpeakerLabels() {
   const t = useTiptapEditorT()
   return {
     speaker: (number: string | number) => t('speaker.speaker', { number }),
+  }
+}
+
+/**
+ * 获取 AI 相关标签
+ */
+export function useAILabels() {
+  const t = useTiptapEditorT()
+  return {
+    idle: t('ai.idle'),
+    processing: t('ai.processing'),
+    preview: t('ai.preview'),
+    error: t('ai.error'),
+    inputPlaceholder: t('ai.inputPlaceholder'),
+    submit: t('ai.submit'),
+    cancel: t('ai.cancel'),
+    hint: t('ai.hint'),
+    accept: t('ai.accept'),
+    reject: t('ai.reject'),
+  }
+}
+
+/**
+ * 获取 Slash 相关标签
+ */
+export function useSlashLabels() {
+  const t = useTiptapEditorT()
+  return {
+    heading1: t('slash.heading1'),
+    heading2: t('slash.heading2'),
+    paragraph: t('slash.paragraph'),
+    bulletList: t('slash.bulletList'),
+    orderedList: t('slash.orderedList'),
+    blockquote: t('slash.blockquote'),
+    mermaid: t('slash.mermaid'),
   }
 }

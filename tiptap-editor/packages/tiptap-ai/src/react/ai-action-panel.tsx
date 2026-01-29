@@ -1,6 +1,7 @@
 import type { PreviewController } from '../PreviewController'
 import type { PreviewStatus } from '../PreviewStateMachine'
 import { Button, LoadingIcon } from 'comps'
+import { useT } from 'i18n/react'
 import { memo, useEffect, useState } from 'react'
 import { unSelect } from 'tiptap-api'
 import { CheckIcon, XIcon } from 'tiptap-comps/icons'
@@ -23,6 +24,7 @@ export type AIActionPanelProps = {
  */
 export const AIActionPanel = memo<AIActionPanelProps>(
   ({ controller, editor, className, onClose }) => {
+    const t = useT()
     const [status, setStatus] = useState<PreviewStatus>('idle')
     const [previewText, setPreviewText] = useState<string>('')
 
@@ -80,7 +82,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
           <div className="flex items-center gap-2">
             <LoadingIcon size="sm" />
             <span className="text-sm text-textPrimary">
-              { AI_LABELS.PROCESSING }
+              { t(AI_LABELS.PROCESSING) }
             </span>
           </div>
         ) }
@@ -99,8 +101,8 @@ export const AIActionPanel = memo<AIActionPanelProps>(
                 variant="default"
                 size="sm"
                 className="text-systemGreen"
-                aria-label="接受"
-                tooltip="接受"
+                aria-label={ t('ai.accept') }
+                tooltip={ t('ai.accept') }
               >
                 <CheckIcon className="size-4" />
               </Button>
@@ -110,8 +112,8 @@ export const AIActionPanel = memo<AIActionPanelProps>(
                 variant="ghost"
                 size="sm"
                 className="text-systemRed"
-                aria-label="拒绝"
-                tooltip="拒绝"
+                aria-label={ t('ai.reject') }
+                tooltip={ t('ai.reject') }
               >
                 <XIcon className="size-4" />
               </Button>

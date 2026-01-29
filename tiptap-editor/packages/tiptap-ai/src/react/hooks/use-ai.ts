@@ -1,15 +1,17 @@
 import type { Editor } from '@tiptap/core'
 import type { PreviewController } from '../../PreviewController'
 import type { AIRequestMode } from '../../types'
+import { useT } from 'i18n/react'
 import { useCallback, useEffect, useState } from 'react'
 import { AI_LABELS } from '../../constants'
 import { getTiptapSelectionPayload } from '../../TiptapEditorBridge'
 
 /**
- * AI 功能 Hook，用于管理 AI 按钮的状态和操作
+ * AI 功能 Hook，用于管理 AI 按钮的状态 and 操作
  */
 export function useAI(config: UseAIConfig): UseAIReturn {
   const { editor, controller, mode = 'stream' } = config
+  const t = useT()
 
   const [isProcessing, setIsProcessing] = useState(false)
   const [isPreview, setIsPreview] = useState(false)
@@ -94,11 +96,13 @@ export function useAI(config: UseAIConfig): UseAIReturn {
     controller.reject()
   }, [controller])
 
-  const label = isProcessing
+  const labelKey = isProcessing
     ? AI_LABELS.PROCESSING
     : isPreview
       ? AI_LABELS.PREVIEW
       : AI_LABELS.IDLE
+
+  const label = t(labelKey)
 
   return {
     canTrigger: canTriggerState,

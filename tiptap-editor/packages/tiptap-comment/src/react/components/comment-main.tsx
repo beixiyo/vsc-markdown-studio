@@ -1,5 +1,6 @@
 import type React from 'react'
 import { Button, Textarea } from 'comps'
+import { useT } from 'i18n/react'
 import { memo, useCallback, useEffect, useRef } from 'react'
 import { CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
@@ -33,6 +34,7 @@ export type CommentMainProps = {
 }
 
 export const CommentMain = memo((props: CommentMainProps) => {
+  const t = useT()
   const {
     content,
     setContent,
@@ -75,17 +77,17 @@ export const CommentMain = memo((props: CommentMainProps) => {
         className,
       ) }
       role="dialog"
-      aria-label="添加评论"
+      aria-label={ t('comment.addComment') }
       { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
     >
       <div className="flex flex-col gap-3 p-4 max-[480px]:p-3">
         <div className="text-sm font-semibold text-textPrimary flex justify-between">
-          <span>添加评论</span>
+          <span>{ t('comment.addComment') }</span>
         </div>
         <Textarea
           ref={ textareaRef }
           containerClassName="min-h-[80px] w-full"
-          placeholder="输入评论内容..."
+          placeholder={ t('comment.placeholder') }
           value={ content }
           onChange={ setContent }
           onKeyDown={ handleKeyDown }
@@ -93,7 +95,7 @@ export const CommentMain = memo((props: CommentMainProps) => {
           rows={ 3 }
         />
         <div className="text-xs text-textSecondary">
-          按 Ctrl/Cmd + Enter 提交，Esc 取消
+          { t('comment.submitHint') }
         </div>
       </div>
 
@@ -102,13 +104,13 @@ export const CommentMain = memo((props: CommentMainProps) => {
           <Button
             type="button"
             onClick={ createComment }
-            tooltip="创建评论 (Ctrl/Cmd + Enter)"
+            tooltip={ t('comment.submitTooltip') }
             disabled={ !canCreate || !content.trim() }
             variant="primary"
             leftIcon={ <CornerDownLeftIcon className="h-4 w-4" /> }
             className="font-semibold"
           >
-            提交评论
+            { t('comment.submit') }
           </Button>
         </div>
       </div>

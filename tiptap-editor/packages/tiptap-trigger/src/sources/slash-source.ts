@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import type { SuggestionItem, SuggestionItemContext, SuggestionSource, SuggestionSourceParams } from '../types'
+import { getI18nInstance } from 'i18n'
 import { createElement } from 'react'
 import { AlignLeftIcon, BlockquoteIcon, HeadingOneIcon, HeadingTwoIcon, ListIcon, ListOrderedIcon, SparklesIcon } from 'tiptap-comps/icons'
 
@@ -53,6 +54,7 @@ export class SlashMenuSource implements SuggestionSource {
  * （示例：将当前段落切换为 heading / paragraph，或插入新段落）
  */
 export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
+  const i18n = getI18nInstance()
   const exec = (command: string, ...args: unknown[]) => {
     const commands = editor.commands as Record<string, (...params: unknown[]) => unknown>
     const fn = commands[command]
@@ -65,7 +67,7 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
     {
       id: 'heading-1',
       title: 'Heading 1',
-      subtitle: '大标题',
+      subtitle: i18n.t('slash.heading1'),
       aliases: ['h1', 'title'],
       icon: createElement(HeadingOneIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -75,7 +77,7 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
     {
       id: 'heading-2',
       title: 'Heading 2',
-      subtitle: '小标题',
+      subtitle: i18n.t('slash.heading2'),
       aliases: ['h2', 'subtitle'],
       icon: createElement(HeadingTwoIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -85,7 +87,7 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
     {
       id: 'paragraph',
       title: 'Paragraph',
-      subtitle: '正文',
+      subtitle: i18n.t('slash.paragraph'),
       aliases: ['p', 'text'],
       icon: createElement(AlignLeftIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -95,7 +97,7 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
     {
       id: 'bullet-list',
       title: 'Bullet List',
-      subtitle: '符号列表',
+      subtitle: i18n.t('slash.bulletList'),
       aliases: ['ul', 'list'],
       icon: createElement(ListIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -105,7 +107,7 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
     {
       id: 'ordered-list',
       title: 'Numbered List',
-      subtitle: '有序列表',
+      subtitle: i18n.t('slash.orderedList'),
       aliases: ['ol', 'list'],
       icon: createElement(ListOrderedIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -115,7 +117,7 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
     {
       id: 'blockquote',
       title: 'Blockquote',
-      subtitle: '引用',
+      subtitle: i18n.t('slash.blockquote'),
       aliases: ['quote'],
       icon: createElement(BlockquoteIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -125,7 +127,7 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
     {
       id: 'mermaid',
       title: 'Mermaid',
-      subtitle: '图表',
+      subtitle: i18n.t('slash.mermaid'),
       aliases: ['graph', 'diagram', 'flow'],
       icon: createElement(SparklesIcon, { className: 'h-5 w-5 text-purple-500' }),
       onSelect: (ed) => {
