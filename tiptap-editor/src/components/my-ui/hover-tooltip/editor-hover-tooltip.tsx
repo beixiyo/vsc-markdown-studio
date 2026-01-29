@@ -1,7 +1,7 @@
 import type { Placement } from '@floating-ui/react'
+import { useThrottleFn } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getHoverContentFromCoords, type HoverContent } from 'tiptap-api'
-import { useThrottleFn } from 'hooks'
 import { HoverTooltip } from './hover-tooltip'
 
 /**
@@ -60,8 +60,10 @@ export function EditorHoverTooltip({
 
       setHoverContent(content)
     },
-    throttleDelay,
-    [enabled, editor, isDragging, disableOnDrag, disableOnSelection],
+    {
+      delay: throttleDelay,
+      deps: [enabled, editor, isDragging, disableOnDrag, disableOnSelection],
+    },
   )
 
   /** 实时处理鼠标移动（不节流，只更新位置） */
@@ -97,7 +99,7 @@ export function EditorHoverTooltip({
       setMousePosition(newPosition)
 
       /** 节流更新内容 */
-      handleHoverContentUpdate(newPosition)
+      handleHoverContentUpdate()
     },
     [enabled, editor, handleHoverContentUpdate],
   )

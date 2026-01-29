@@ -124,8 +124,10 @@ export function useHoverDetection(
 
       handleHoverContent(content)
     },
-    throttleDelay,
-    [enabled, editor, isDragging, disableOnDrag, disableOnSelection, handleHoverContent],
+    {
+      delay: throttleDelay,
+      deps: [enabled, editor, isDragging, disableOnDrag, disableOnSelection, handleHoverContent],
+    },
   )
 
   /** 处理鼠标离开编辑器 */

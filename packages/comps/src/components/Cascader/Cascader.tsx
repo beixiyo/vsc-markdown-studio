@@ -51,8 +51,6 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>(({
   const dropdownRef = useRef<HTMLDivElement>(null)
   /** 是否应该显示动画，位置计算完成后才为 true */
   const [shouldAnimate, setShouldAnimate] = useState(false)
-  /** 记录上一次的打开状态 */
-  const prevOpenRef = useRef(isOpen)
 
   /** 使用 useFormField 处理表单集成 */
   const {
@@ -124,27 +122,21 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>(({
 
   /** 当打开状态变化时，计算位置 */
   useEffect(() => {
-    if (isOpen) {
-      /** 只有从关闭到打开时，才重置动画状态和菜单栈 */
-      if (!prevOpenRef.current) {
-        setShouldAnimate(false)
-        setMenuStack([options])
-        requestAnimationFrame(() => {
-          updatePosition()
-          setShouldAnimate(true)
-        })
-      }
-      else {
-        /** 已经打开的情况下，如果 options 变化，仅更新位置，不重置动画 */
+    if (isOpen && triggerRef.current) {
+      // 先重置动画状态和菜单栈
+      setShouldAnimate(false)
+      setMenuStack([options])
+      // 使用 requestAnimationFrame 确保 DOM 已更新
+      requestAnimationFrame(() => {
         updatePosition()
-      }
+        setShouldAnimate(true)
+      })
     }
     else {
-      /** 关闭时重置 */
+      // 关闭时重置动画状态和菜单栈
       setShouldAnimate(false)
       setMenuStack([options])
     }
-    prevOpenRef.current = isOpen
   }, [isOpen, updatePosition, options])
 
   /** 处理点击外部关闭 */

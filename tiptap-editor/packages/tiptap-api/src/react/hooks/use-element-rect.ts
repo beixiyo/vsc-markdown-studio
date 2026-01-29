@@ -126,8 +126,10 @@ export function useElementRect({
         left: newRect.left,
       })
     },
-    throttleMs,
-    [enabled, getTargetElement],
+    {
+      delay: throttleMs,
+      deps: [enabled, getTargetElement],
+    },
   )
 
   useEffect(() => {

@@ -109,7 +109,7 @@ export function useWindowSize(): WindowSizeState {
 
       return { width, height, offsetTop, offsetLeft, scale }
     })
-  }, 200)
+  }, { delay: 200 })
 
   useEffect(() => {
     const visualViewport = window.visualViewport
