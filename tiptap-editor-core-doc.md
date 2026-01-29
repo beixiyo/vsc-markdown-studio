@@ -1,69 +1,86 @@
-# `tiptap-editor-core` 代码审查报告
+# Tiptap Editor Core (`tiptap-editor-core`) DONE
 
-## 发现摘要
+`tiptap-editor-core` 是 Markdown Studio 的核心编辑器封装包，旨在提供一个高度预配置且易于扩展的 Tiptap 编辑器基础。它整合了常用的扩展、自定义点击处理逻辑以及 React 上下文支持。
 
-`tiptap-editor-core` 包为 Tiptap 编辑器实现提供了结构良好的基础。它成功地将配置、hooks 和 UI 组件解耦。使用 React 的 Context API 共享编辑器实例是一个强有力的设计选择，促进了模块化。
+## 核心特性
 
-总体而言，代码质量很高，具有清晰的 TypeScript 定义和有用的 JSDoc 注释。然而，在 React 生命周期管理和 ref 处理方面还有一些优化机会。
+- **React 集成**：提供 `TiptapEditor` 组件和 `useDefaultEditor` 钩子，深度适配 React 生命周期。
+- **性能优化**：通过 `useMemo` 记忆化配置和扩展，结合 `memo` 和 `forwardRef` 优化重渲染性能。
+- **预配置扩展**：内置 `StarterKit`、`Markdown`、`TextAlign`、`TaskList`、`Image` 等常用功能。
+- **增强的交互**：优化了链接点击（Cmd/Ctrl + 点击打开）和选区取消逻辑。
+- **Markdown 支持**：通过 `@tiptap/markdown` 实现高效的 Markdown 输入与输出转换。
 
----
+## 安装与使用
 
-## 1. React 最佳实践
+由于项目采用 Monorepo 结构，可以通过以下方式引用：
 
-### `TiptapEditor` 中的 Ref 处理
-- **问题**：在 `src/tiptap-editor.tsx` 中，`ref.current` 在渲染阶段被赋值（第 14-16 行）。这是一个副作用，可能导致 React 并发模式下的不可预测行为。
-- **建议**：使用 `useImperativeHandle` 结合 `forwardRef`（或新的 React 19 ref 属性模式），并确保 ref 更新安全地进行。
+```tsx
+import { TiptapEditor, useDefaultEditor } from 'tiptap-editor-core'
 
-### 组件记忆化
-- **发现**：`TiptapEditor` 被包装在 `memo` 中，这对于防止编辑器容器的不必要重新渲染非常出色。
+const MyEditor = () => {
+  const editor = useDefaultEditor({
+    content: '<p>Hello World</p>',
+  })
 
----
+  return (
+    <TiptapEditor editor={editor}>
+      {/* 这里可以放置自定义的 Toolbar 等组件 */}
+    </TiptapEditor>
+  )
+}
+```
 
-## 2. Hook 规则和使用
+## 核心 API
 
-### `useDefaultEditor` 稳定性
-- **问题**：`extensions` 数组在使用 `useDefaultEditor` 的组件每次渲染时都会重新创建，因为 `createExtensions()` 直接在 `useEditor` 选项中调用。
-- **建议**：记忆化 extensions 以避免 Tiptap 的 `useEditor` 内部潜在的重初始化逻辑。
+### `TiptapEditor` 组件
 
-### `useMobileView`
-- **发现**：正确使用 `useEffect` 将 `mobileView` 状态与 `isMobile` 属性同步。简单有效。
+包装了 Tiptap 的 `EditorContent` 和 `EditorContext`，确保编辑器实例在组件树中可用。使用 `forwardRef` 支持外部获取 `Editor` 实例。
 
----
+| 属性 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| `editor` | `Editor \| null` | Tiptap 编辑器实例 |
+| `children` | `ReactNode` | 可选，通常用于插入 Toolbar 或 Floating Menu |
+| `className` | `string` | 应用于编辑器容器的类名 |
+| `style` | `CSSProperties` | 应用于编辑器容器的样式 |
 
-## 3. 数据流设计
+### `useDefaultEditor` 钩子
 
-- **优势**：
-    - `EditorContext` 有效地用于将编辑器实例提供给嵌套组件（如工具栏）。
-    - `useDefaultEditor` 封装了复杂的配置，为消费者提供了干净的 API。
-- **机会**：
-    - 确保传递给 `useDefaultEditor` 的 `options` 由消费者记忆化，以防止编辑器被重新创建。
+这是一个封装了 `useEditor` 的自定义钩子，自动注入了 Markdown Studio 的默认配置并进行了性能优化。
 
----
+```tsx
+const editor = useDefaultEditor(options: UseEditorOptions)
+```
 
-## 4. 单一职责原则（SRP）和模块化
+**默认配置包含：**
+- `immediatelyRender: false`：防止 SSR 或初始化时的闪烁。
+- **属性优化**: 禁用了浏览器的自动纠错、首字母大写等干扰输入的行为。
+- **点击处理**: 注入了自定义的点击处理器，支持链接跳转和选区优化。
+- **记忆化**: 自动记忆化 `extensions` 和 `editorProps`，避免不必要的编辑器重初始化。
 
-- **发现**：
-    - **Extensions**：隔离在 `extensions.ts` 中。
-    - **Hooks**：编辑器初始化和移动视图管理的逻辑是分离的。
-    - **Utils**：特定的事件处理逻辑（如点击处理程序）与组件解耦。
-- **结果**：该包高度模块化，易于测试或扩展。
+### `createExtensions` 函数
 
----
+返回编辑器默认使用的扩展列表。
 
-## 5. 类型安全和文档
+**包含的主要扩展：**
+- **StarterKit**: 基础包（加粗、斜体、列表等），禁用了默认水平线。
+- **Markdown**: 核心扩展，支持 2 空格缩进和 GFM 语法。`pedantic` 模式已禁用以兼容现代 Markdown 习惯。
+- **TextAlign**: 支持标题和段落的对齐。
+- **TaskList & TaskItem**: 支持任务列表及嵌套。
+- **Highlight**: 多色高亮支持。
+- **Placeholder**: 针对不同节点（标题、引用、代码块）提供定制化的占位符。
 
-- **发现**：
-    - 全面的 TypeScript 接口。
-    - JSDoc 注释解释了特定配置背后的"原因"（例如，`immediatelyRender: false`）。
-- **建议**：改进 `EditorContentProps` 类型以更好地反映 `ref` 的使用。
+## 交互逻辑
 
----
+### 链接处理
+- 普通点击：在编辑模式下，点击链接不会跳转，以便进行文本编辑。
+- **Cmd/Ctrl + 点击**：安全地在新标签页中打开链接。
 
-## 识别的潜在瓶颈
+### 选区优化
+- 解决了从外部输入框切回编辑器时，点击无法正确取消现有选区的问题。
+- 点击现有选区内部时，会自动将光标移动到点击位置，从而自然地取消选区。
 
-1. **不必要的 Extension 重新创建**：虽然 Tiptap 的 `useEditor` 很健壮，但在每次渲染时传递新的 extensions 数组可能会触发内部深度相等性检查，这是可以避免的。
-2. **Markdown 解析器配置**：`Markdown` 配置中的 `pedantic: true` 设置可能会对熟悉 GFM（GitHub 风格 Markdown）的用户造成意外行为，因为它会恢复到更严格的旧 Markdown 规则。验证这是否是有意的。
+## 最近的改进 (基于代码审查)
 
-## 结论
-
-`tiptap-editor-core` 包设计良好。建议的更改主要是"润色"，以确保与 React 最佳实践的最大兼容性，并略微提高性能和稳定性。
+- **Ref 处理**：`TiptapEditor` 现在使用 `forwardRef` 和 `useImperativeHandle`，遵循 React 的副作用管理最佳实践。
+- **稳定性增强**：`useDefaultEditor` 内部对 `extensions` 和 `editorProps` 进行了记忆化处理，显著提升了大型文档下的性能和稳定性。
+- **Markdown 兼容性**：调整了 `Markdown` 扩展配置，禁用了 `pedantic` 模式，使其更符合 GitHub 风格 Markdown (GFM) 的用户预期。

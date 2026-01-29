@@ -1,19 +1,17 @@
 'use client'
 
+import type { Editor } from '@tiptap/core'
 import type { EditorContentProps } from './types'
 import { EditorContent, EditorContext } from '@tiptap/react'
-import { memo } from 'react'
+import { forwardRef, memo, useImperativeHandle } from 'react'
 
-export const TiptapEditor = memo<EditorContentProps>(({
+const InnerTiptapEditor = forwardRef<Editor | null, EditorContentProps>(({
   editor,
   children,
   className,
   style,
-  ref,
-}) => {
-  if (ref?.current) {
-    ref.current = editor
-  }
+}, ref) => {
+  useImperativeHandle(ref, () => editor as Editor, [editor])
 
   return (
     <EditorContext value={ { editor } }>
@@ -27,5 +25,7 @@ export const TiptapEditor = memo<EditorContentProps>(({
     </EditorContext>
   )
 })
+
+export const TiptapEditor = memo(InnerTiptapEditor) as typeof InnerTiptapEditor
 
 TiptapEditor.displayName = 'TiptapEditor'

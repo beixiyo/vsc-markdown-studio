@@ -36,14 +36,9 @@ export function createExtensions() {
       },
       /** 启用 GFM，表格、任务列表等语法可用 */
       markedOptions: {
-        gfm: true,
-        /** 单行换行直接渲染为 <br /> */
-        breaks: true,
-        /**
-         * 如需智能排版（引号、破折号替换），可在支持时启用 smartypants: true
-         * 更接近原始 Markdown 行为（与 GFM 同时开启时，GFM 规则优先）
-         */
-        pedantic: true,
+        gfm: true, // 表格、任务列表、自动链接等 GFM 语法
+        breaks: true, // 单行换行直接渲染为 <br />
+        pedantic: false, // 启用智能排版
       },
     }),
 

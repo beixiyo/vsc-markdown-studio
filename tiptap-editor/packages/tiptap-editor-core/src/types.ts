@@ -1,5 +1,4 @@
 import type { Editor } from '@tiptap/core'
-import type { RefObject } from 'react'
 
 /**
  * 简单编辑器的配置项
@@ -15,7 +14,6 @@ export type EditorProps = {
  * 编辑器内容组件的配置项（纯净版本，不包含 toolbar 等 UI）
  */
 export type EditorContentProps = {
-  ref?: RefObject<Editor | null>
   editor: Editor | null
   /**
    * 子元素内容（用于传入 Toolbar、SelectionToolbar 等 UI 组件）
