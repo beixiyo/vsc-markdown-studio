@@ -137,7 +137,15 @@ sequenceDiagram
         <>
           {/* 选中文本工具栏 */ }
           <SelectionToolbar editor={ editor } enabled>
-            <SelectionToolbarContent isMobile={ isMobile }>
+            <SelectionToolbarContent isMobile={ isMobile }
+              config={ {
+                code: false,
+                codeBlock: false,
+                superscript: false,
+                subscript: false,
+                image: false,
+              } }
+            >
               <LinkPopover editor={ editor } hideWhenUnavailable />
               <AIButton
                 controller={ aiController }
