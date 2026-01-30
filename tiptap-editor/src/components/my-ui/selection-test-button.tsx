@@ -3,7 +3,7 @@
 import type { Editor } from '@tiptap/react'
 import { memo, useCallback } from 'react'
 import { useSelection, useTiptapEditor } from 'tiptap-api/react'
-import { Button } from 'tiptap-comps'
+import { Button } from 'comps'
 
 export interface SelectionTestButtonProps {
   /**

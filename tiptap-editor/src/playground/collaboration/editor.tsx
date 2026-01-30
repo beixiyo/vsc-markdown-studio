@@ -10,7 +10,7 @@ import { CharacterCount } from '@tiptap/extensions'
 import { EditorContent, useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { memo, useCallback, useEffect, useState } from 'react'
-import { Button } from 'tiptap-comps'
+import { Button } from 'comps'
 import { cn } from 'utils'
 
 const colors = [
