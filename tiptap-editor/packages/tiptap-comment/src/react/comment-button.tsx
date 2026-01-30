@@ -4,7 +4,7 @@ import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { canCreateComment, createComment } from '../comment'
 import { type CommentAuthor, CommentStore } from '../comment-store'
-import { CommentMain } from './components/comment-main'
+import { CommentMain, type CommentMainRef } from './components/comment-main'
 
 /**
  * 评论创建按钮组件
@@ -25,6 +25,7 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
     const { editor } = useTiptapEditor()
     const [content, setContent] = useState('')
     const popoverRef = useRef<PopoverRef>(null)
+    const commentMainRef = useRef<CommentMainRef>(null)
 
     const [tempStore] = useState(
       () => providedCommentStore || new CommentStore(),
@@ -90,10 +91,14 @@ export const CommentButton = forwardRef<HTMLButtonElement, CommentButtonProps>(
       <Popover
         ref={ popoverRef }
         trigger="click"
-        onOpen={ () => onOpenChange?.(true) }
+        onOpen={ () => {
+          onOpenChange?.(true)
+          commentMainRef.current?.focus()
+        } }
         onClose={ () => onOpenChange?.(false) }
         content={
           <CommentMain
+            ref={ commentMainRef }
             content={ content }
             setContent={ setContent }
             createComment={ handleCreateComment }
