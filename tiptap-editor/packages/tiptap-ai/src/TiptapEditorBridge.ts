@@ -220,7 +220,7 @@ export function createTiptapEditorBridge(editor: Editor, options?: { onConflict?
       updateDecorations(from, to, AI_CLASSES.PROCESSING)
     },
 
-    applyPreview: (preview: NormalizedResponse) => {
+    applyPreview: (_preview: NormalizedResponse) => {
       const currentRange = getDecorationRange()
       if (!currentRange || !originalText)
         return
@@ -253,7 +253,6 @@ export function createTiptapEditorBridge(editor: Editor, options?: { onConflict?
         .insertContent(previewText, {
           parseOptions: { preserveWhitespace: 'full' },
         })
-        .focus()
         .run()
 
       /** 重置状态 */
