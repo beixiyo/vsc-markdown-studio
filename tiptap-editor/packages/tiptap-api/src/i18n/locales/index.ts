@@ -1,3 +1,3 @@
 export { enUS } from './en-US'
-export { ja } from './ja'
+export { ja } from './ja-JP'
 export { zhCN } from './zh-CN'

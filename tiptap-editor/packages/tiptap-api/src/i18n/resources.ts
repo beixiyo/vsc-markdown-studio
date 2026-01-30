@@ -5,11 +5,11 @@
 import type { Resources } from 'i18n'
 import { LANGUAGES } from 'i18n'
 import { enUS } from './locales/en-US'
-import { ja } from './locales/ja'
+import { ja } from './locales/ja-JP'
 import { zhCN } from './locales/zh-CN'
 
 export const tiptapEditorResources: Resources = {
   [LANGUAGES.ZH_CN]: zhCN,
   [LANGUAGES.EN_US]: enUS,
-  [LANGUAGES.JA]: ja,
+  [LANGUAGES.JA_JP]: ja,
 }
