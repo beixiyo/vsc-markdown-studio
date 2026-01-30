@@ -1,8 +1,8 @@
 import { useEditor, type UseEditorOptions } from '@tiptap/react'
+import { useStable } from 'hooks'
 import { useMemo } from 'react'
 import { createExtensions } from '../extensions'
 import { createHandleClick } from '../utils'
-import { useStable } from 'hooks'
 
 export function useDefaultEditor(options: UseEditorOptions) {
   const {

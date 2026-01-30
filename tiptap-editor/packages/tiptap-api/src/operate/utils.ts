@@ -37,3 +37,24 @@ export function tryExecute<T>(
     return false
   }
 }
+
+/**
+ * 规范化 markdown 内容，用于对比时忽略无关差异
+ *
+ * @param md - 原始 markdown 字符串
+ * @returns 规范化后的字符串
+ */
+export function normalizeMarkdown(md: string): string {
+  return md
+    .replace(/\r\n/g, '\n') // 统一换行符
+    .replace(/\n{3,}/g, '\n\n') // 多个空行合并为两个
+    .replace(/[ \t]+$/gm, '') // 移除行尾空白
+    .trim()
+}
+
+/**
+ * 检查两个 markdown 内容是否实质相同（忽略空白差异）
+ */
+export function isMarkdownEqual(a: string, b: string): boolean {
+  return normalizeMarkdown(a) === normalizeMarkdown(b)
+}

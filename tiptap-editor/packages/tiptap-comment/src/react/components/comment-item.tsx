@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import type { Comment, CommentAuthor, CommentStore } from '../../comment-store'
+import { formatDate } from '@jl-org/tool'
 import {
   Button,
   Modal,
@@ -14,7 +15,6 @@ import { cn } from 'utils'
 import { useCommentItemLogic } from '../hooks/use-comment-item-logic'
 import { CommentEditDialog } from './comment-edit-dialog'
 import { ReplyDialog } from './reply-dialog'
-import { formatDate } from '@jl-org/tool'
 
 /**
  * 单条评论展示属性
@@ -187,11 +187,11 @@ export const CommentItem = memo(({
             className="size-8"
             leftIcon={ comment.status === 'active'
               ? (
-                <BanIcon className="size-4 text-icon" />
-              )
+                  <BanIcon className="size-4 text-icon" />
+                )
               : (
-                <TrashIcon className="size-4 text-icon" />
-              ) }
+                  <TrashIcon className="size-4 text-icon" />
+                ) }
           />
 
           <Button

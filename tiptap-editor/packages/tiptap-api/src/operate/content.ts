@@ -1,5 +1,5 @@
 import type { Content, Editor } from '@tiptap/core'
-import { tryExecute } from './utils'
+import { safeSetContent, type SafeSetContentOptions } from './safeSetContent'
 
 /**
  * 获取编辑器内容，优先获取 Markdown 格式，如果无法获取则获取 JSON 格式
@@ -19,18 +19,13 @@ export function getEditorContent(editor: Editor) {
  * 设置通用内容（JSON、HTML、Markdown 需由调用方提供对应格式）
  * @param editor Tiptap 编辑器实例
  * @param content 支持的内容格式
- * @param emitUpdate 是否触发更新事件
  */
 export function setEditorContent(
   editor: Editor | null,
   content: Content,
-  emitUpdate: boolean = true,
+  options: SafeSetContentOptions = {},
 ): boolean {
-  return tryExecute(
-    editor,
-    e => e.commands.setContent(content, { emitUpdate }),
-    '设置内容失败',
-  )
+  return safeSetContent(editor, content, options)
 }
 
 /**
@@ -55,13 +50,12 @@ export function getEditorHTML(editor: Editor | null): string | null {
 export function setEditorHTML(
   editor: Editor | null,
   html: string,
-  emitUpdate: boolean = true,
+  options: SafeSetContentOptions = {},
 ): boolean {
-  return tryExecute(
-    editor,
-    e => e.commands.setContent(html, { emitUpdate }),
-    '设置 HTML 失败',
-  )
+  return safeSetContent(editor, html, {
+    contentType: 'html',
+    ...options,
+  })
 }
 
 /**
@@ -90,16 +84,9 @@ export function getEditorMarkdown(editor: Editor | null): string | null {
 export function setEditorMarkdown(
   editor: Editor | null,
   markdown: string,
-  emitUpdate: boolean = true,
+  options: SafeSetContentOptions = {},
 ): boolean {
-  return tryExecute(
-    editor,
-    e => e.commands.setContent(markdown, {
-      contentType: 'markdown',
-      emitUpdate,
-    }),
-    '设置 Markdown 失败',
-  )
+  return safeSetContent(editor, markdown, { contentType: 'markdown', ...options })
 }
 
 export function getEditorJson(editor: Editor) {
