@@ -1,44 +1,17 @@
 import type { Editor } from '@tiptap/react'
 import { useCallback, useEffect, useState } from 'react'
-
 import { useHistoryLabels, useTiptapEditor } from 'tiptap-api/react'
-
 import { isNodeTypeSelected } from 'tiptap-utils'
-
 import { Redo2Icon, Undo2Icon } from '../../icons'
 
-export type UndoRedoAction = 'undo' | 'redo'
-
-/**
- * Configuration for the history functionality
- */
-export interface UseUndoRedoConfig {
-  /**
-   * The Tiptap editor instance.
-   */
-  editor?: Editor | null
-  /**
-   * The history action to perform (undo or redo).
-   */
-  action: UndoRedoAction
-  /**
-   * Whether the button should hide when action is not available.
-   * @default false
-   */
-  hideWhenUnavailable?: boolean
-  /**
-   * Callback function called after a successful action execution.
-   */
-  onExecuted?: () => void
-}
-
+/** 撤销/重做快捷键映射 */
 export const UNDO_REDO_SHORTCUT_KEYS: Record<UndoRedoAction, string> = {
   undo: 'mod+z',
   redo: 'mod+shift+z',
 }
 
 /**
- * 获取历史操作标签（已废弃，请使用 useHistoryLabels hook）
+ * 历史操作标签（已废弃，请使用 useHistoryLabels hook）
  * @deprecated 使用 useHistoryLabels hook 替代
  */
 export const historyActionLabels: Record<UndoRedoAction, string> = {
@@ -46,14 +19,13 @@ export const historyActionLabels: Record<UndoRedoAction, string> = {
   redo: 'Redo',
 }
 
+/** 撤销/重做对应的图标组件 */
 export const historyIcons = {
   undo: Undo2Icon,
   redo: Redo2Icon,
 }
 
-/**
- * Checks if a history action can be executed
- */
+/** 判断当前是否可执行指定的历史操作（撤销或重做） */
 export function canExecuteUndoRedoAction(
   editor: Editor | null,
   action: UndoRedoAction,
@@ -68,9 +40,7 @@ export function canExecuteUndoRedoAction(
     : editor.can().redo()
 }
 
-/**
- * Executes a history action on the editor
- */
+/** 在编辑器中执行指定的历史操作（撤销或重做） */
 export function executeUndoRedoAction(
   editor: Editor | null,
   action: UndoRedoAction,
@@ -86,9 +56,7 @@ export function executeUndoRedoAction(
     : chain.redo().run()
 }
 
-/**
- * Determines if the history button should be shown
- */
+/** 根据配置判断历史按钮是否应显示 */
 export function shouldShowButton(props: {
   editor: Editor | null
   hideWhenUnavailable: boolean
@@ -107,38 +75,27 @@ export function shouldShowButton(props: {
 }
 
 /**
- * Custom hook that provides history functionality for Tiptap editor
+ * 提供撤销/重做能力的 Hook，用于 Tiptap 编辑器
  *
  * @example
  * ```tsx
- * // Simple usage
+ * // 简单用法
  * function MySimpleUndoButton() {
- *   const { isVisible, handleAction } = useHistory({ action: "undo" })
- *
+ *   const { isVisible, handleAction } = useUndoRedo({ action: "undo" })
  *   if (!isVisible) return null
- *
- *   return <button onClick={handleAction}>Undo</button>
+ *   return <button onClick={handleAction}>撤销</button>
  * }
  *
- * // Advanced usage with configuration
+ * // 带配置的用法
  * function MyAdvancedRedoButton() {
- *   const { isVisible, handleAction, label } = useHistory({
+ *   const { isVisible, handleAction, label } = useUndoRedo({
  *     editor: myEditor,
  *     action: "redo",
  *     hideWhenUnavailable: true,
- *     onExecuted: () => console.log('Action executed!')
+ *     onExecuted: () => console.log('已执行')
  *   })
- *
  *   if (!isVisible) return null
- *
- *   return (
- *     <MyButton
- *       onClick={handleAction}
- *       aria-label={label}
- *     >
- *       Redo
- *     </MyButton>
- *   )
+ *   return <MyButton onClick={handleAction} aria-label={label}>重做</MyButton>
  * }
  * ```
  */
@@ -191,4 +148,19 @@ export function useUndoRedo(config: UseUndoRedoConfig) {
     shortcutKeys: UNDO_REDO_SHORTCUT_KEYS[action],
     Icon: historyIcons[action],
   }
+}
+
+/** 历史操作类型：撤销 | 重做 */
+export type UndoRedoAction = 'undo' | 'redo'
+
+/** useUndoRedo Hook 的配置项 */
+export interface UseUndoRedoConfig {
+  /** Tiptap 编辑器实例 */
+  editor?: Editor | null
+  /** 要执行的历史操作（撤销或重做） */
+  action: UndoRedoAction
+  /** 当操作不可用时是否隐藏按钮，默认 false */
+  hideWhenUnavailable?: boolean
+  /** 操作成功执行后的回调 */
+  onExecuted?: () => void
 }

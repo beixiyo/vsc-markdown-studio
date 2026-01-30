@@ -16,9 +16,9 @@ import {
   TextFormatIcon,
 } from '../../icons'
 
-import { shouldShowButton as shouldShowBlockquoteButton, toggleBlockquote } from '../blockquote-button/use-blockquote'
-import { headingIcons, type Level, shouldShowButton as shouldShowHeadingButton, toggleHeading } from '../heading-button/use-heading'
-import { isListActive, listIcons, type ListType, shouldShowButton as shouldShowListButton, toggleList } from '../list-button/use-list'
+import { shouldShowButton as shouldShowBlockquoteButton, toggleBlockquote } from './use-blockquote'
+import { headingIcons, type Level, shouldShowButton as shouldShowHeadingButton, toggleHeading } from './use-heading'
+import { isListActive, listIcons, type ListType, shouldShowButton as shouldShowListButton, toggleList } from './use-list'
 import { useTextFormatDropdownMenu } from './use-text-format-dropdown-menu'
 
 /** 文本格式下拉：标题、段落、列表、引用等 */

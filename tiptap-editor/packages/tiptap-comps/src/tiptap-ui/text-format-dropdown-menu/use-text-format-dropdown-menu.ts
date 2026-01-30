@@ -8,18 +8,17 @@ import { useTiptapEditor } from 'tiptap-api/react'
 import {
   canToggleBlockquote,
   isBlockquoteActive,
-} from '../blockquote-button/use-blockquote'
-// --- Tiptap UI ---
+} from './use-blockquote'
 import {
   canToggle,
   isHeadingActive,
   type Level,
-} from '../heading-button/use-heading'
+} from './use-heading'
 import {
   canToggleList,
   isListActive,
   type ListType,
-} from '../list-button/use-list'
+} from './use-list'
 
 /**
  * Configuration for the text format dropdown menu functionality

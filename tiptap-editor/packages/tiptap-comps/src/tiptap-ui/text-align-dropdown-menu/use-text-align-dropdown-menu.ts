@@ -18,7 +18,7 @@ import {
   isTextAlignActive,
   type TextAlign,
   textAlignIcons,
-} from '../text-align-button/use-text-align'
+} from './use-text-align'
 
 /**
  * Configuration for the text align dropdown menu functionality

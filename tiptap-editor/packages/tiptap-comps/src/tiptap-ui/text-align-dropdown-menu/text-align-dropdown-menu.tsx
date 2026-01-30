@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/react'
-import type { TextAlign } from '../text-align-button/use-text-align'
+import type { TextAlign } from './use-text-align'
 
 import {
   Button,
