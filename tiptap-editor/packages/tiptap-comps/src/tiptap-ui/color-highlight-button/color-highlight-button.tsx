@@ -9,11 +9,7 @@ import {
   useColorHighlight,
 } from './use-color-highlight'
 
-/**
- * Button component for applying color highlights in a Tiptap editor.
- *
- * For custom button implementations, use the `useColorHighlight` hook instead.
- */
+/** 应用颜色高亮的按钮；自定义实现请使用 useColorHighlight */
 export const ColorHighlightButton = forwardRef<
   HTMLButtonElement,
   ColorHighlightButtonProps
@@ -128,10 +124,16 @@ ColorHighlightButton.displayName = 'ColorHighlightButton'
 
 export interface ColorHighlightButtonProps
   extends Omit<React.ComponentProps<typeof Button>, 'type'> {
+  /** 高亮颜色 */
   highlightColor: string
+  /** 编辑器实例 */
   editor?: any
+  /** 不可用时是否隐藏，默认 false */
   hideWhenUnavailable?: boolean
+  /** 应用高亮后的回调 */
   onApplied?: (info: { color: string, label: string }) => void
+  /** 图标旁可选文案 */
   text?: string
+  /** 是否显示快捷键，默认 false */
   showShortcut?: boolean
 }

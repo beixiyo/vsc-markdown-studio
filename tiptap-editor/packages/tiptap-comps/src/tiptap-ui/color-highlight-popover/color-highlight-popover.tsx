@@ -8,19 +8,7 @@ import { ColorHighlightPopoverButton } from './color-highlight-popover-button'
 import { ColorHighlightPopoverContent } from './color-highlight-popover-content'
 import { DEFAULT_HIGHLIGHT_COLORS } from './constants'
 
-export interface ColorHighlightPopoverProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  Pick<
-    UseColorHighlightConfig,
-    'editor' | 'hideWhenUnavailable' | 'onApplied'
-  > {
-  /**
-   * Optional colors to use in the highlight popover.
-   * If not provided, defaults to a predefined set of colors.
-   */
-  colors?: string[]
-}
-
+/** 高亮颜色弹层：在弹层内选择颜色并应用高亮 */
 export const ColorHighlightPopover = memo(({
   editor: providedEditor,
   colors = DEFAULT_HIGHLIGHT_COLORS,
@@ -75,3 +63,13 @@ export const ColorHighlightPopover = memo(({
 })
 
 ColorHighlightPopover.displayName = 'ColorHighlightPopover'
+
+export interface ColorHighlightPopoverProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  Pick<
+    UseColorHighlightConfig,
+    'editor' | 'hideWhenUnavailable' | 'onApplied'
+  > {
+  /** 弹层中展示的颜色列表，不传则使用默认预设 */
+  colors?: string[]
+}

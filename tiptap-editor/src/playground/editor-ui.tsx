@@ -151,15 +151,73 @@ sequenceDiagram
                 subscript: false,
                 image: false,
               } }
-              moreContent={
-                <div className="flex flex-col gap-1">
-                  <LinkPopover editor={ editor } hideWhenUnavailable />
-                  <MarkButton type="strike" hideWhenUnavailable />
-                  <MarkButton type="underline" hideWhenUnavailable />
-                  <MarkButton type="superscript" hideWhenUnavailable />
-                  <MarkButton type="subscript" hideWhenUnavailable />
-                </div>
-              }
+              moreContent={ [
+                {
+                  value: 'link',
+                  label: (
+                    <LinkPopover
+                      editor={ editor }
+                      showLabel
+                      showTooltip={ false }
+                      hideWhenUnavailable
+                      className="hover:bg-transparent"
+                      labelClassName="ml-4 text-base text-textSecondary"
+                    />
+                  ),
+                },
+                {
+                  value: 'strike',
+                  label: (
+                    <MarkButton
+                      type="strike"
+                      showLabel
+                      showTooltip={ false }
+                      hideWhenUnavailable
+                      className="hover:bg-transparent"
+                      labelClassName="ml-4 text-base text-textSecondary"
+                    />
+                  ),
+                },
+                {
+                  value: 'underline',
+                  label: (
+                    <MarkButton
+                      type="underline"
+                      showLabel
+                      showTooltip={ false }
+                      hideWhenUnavailable
+                      className="hover:bg-transparent"
+                      labelClassName="ml-4 text-base text-textSecondary"
+                    />
+                  ),
+                },
+                {
+                  value: 'superscript',
+                  label: (
+                    <MarkButton
+                      type="superscript"
+                      showLabel
+                      showTooltip={ false }
+                      hideWhenUnavailable
+                      className="hover:bg-transparent"
+                      labelClassName="ml-4 text-base text-textSecondary"
+                    />
+                  ),
+                },
+                {
+                  value: 'subscript',
+                  label: (
+                    <MarkButton
+                      type="subscript"
+                      showLabel
+                      showTooltip={ false }
+                      hideWhenUnavailable
+                      className="hover:bg-transparent"
+                      labelClassName="ml-4 text-base text-textSecondary"
+                    />
+                  ),
+                },
+              ] }
             >
               <AIButton
                 controller={ aiController }

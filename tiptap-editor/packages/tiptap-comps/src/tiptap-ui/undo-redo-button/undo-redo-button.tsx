@@ -15,20 +15,7 @@ import {
   useUndoRedo,
 } from './use-undo-redo'
 
-export interface UndoRedoButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseUndoRedoConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
-  text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
-  showShortcut?: boolean
-}
-
+/** 撤销/重做快捷键角标 */
 export function HistoryShortcutBadge({
   action,
   shortcutKeys = UNDO_REDO_SHORTCUT_KEYS[action],
@@ -39,11 +26,7 @@ export function HistoryShortcutBadge({
   return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
-/**
- * Button component for triggering undo/redo actions in a Tiptap editor.
- *
- * For custom button implementations, use the `useHistory` hook instead.
- */
+/** 触发撤销/重做的按钮；自定义实现请使用 useUndoRedo */
 export const UndoRedoButton = forwardRef<
   HTMLButtonElement,
   UndoRedoButtonProps
@@ -117,3 +100,12 @@ export const UndoRedoButton = forwardRef<
 )
 
 UndoRedoButton.displayName = 'UndoRedoButton'
+
+export interface UndoRedoButtonProps
+  extends Omit<ButtonProps, 'type'>,
+  UseUndoRedoConfig {
+  /** 图标旁可选文案 */
+  text?: string
+  /** 是否显示快捷键，默认 false */
+  showShortcut?: boolean
+}

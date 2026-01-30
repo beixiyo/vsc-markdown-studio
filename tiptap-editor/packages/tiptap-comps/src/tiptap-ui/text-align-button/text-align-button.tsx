@@ -22,27 +22,7 @@ import {
   useTextAlign,
 } from './use-text-align'
 
-type IconProps = React.SVGProps<SVGSVGElement>
-type IconComponent = ({ className, ...props }: IconProps) => React.ReactElement
-
-export interface TextAlignButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseTextAlignConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
-  text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
-  showShortcut?: boolean
-  /**
-   * Optional custom icon component to render instead of the default.
-   */
-  icon?: React.MemoExoticComponent<IconComponent> | React.FC<IconProps>
-}
-
+/** 文本对齐快捷键角标 */
 export function TextAlignShortcutBadge({
   align,
   shortcutKeys = TEXT_ALIGN_SHORTCUT_KEYS[align],
@@ -53,11 +33,7 @@ export function TextAlignShortcutBadge({
   return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
-/**
- * Button component for setting text alignment in a Tiptap editor.
- *
- * For custom button implementations, use the `useTextAlign` hook instead.
- */
+/** 设置文本对齐的按钮；自定义实现请使用 useTextAlign */
 export const TextAlignButton = forwardRef<
   HTMLButtonElement,
   TextAlignButtonProps
@@ -145,3 +121,17 @@ export const TextAlignButton = forwardRef<
 )
 
 TextAlignButton.displayName = 'TextAlignButton'
+
+type IconProps = React.SVGProps<SVGSVGElement>
+type IconComponent = ({ className, ...props }: IconProps) => React.ReactElement
+
+export interface TextAlignButtonProps
+  extends Omit<ButtonProps, 'type'>,
+  UseTextAlignConfig {
+  /** 图标旁可选文案 */
+  text?: string
+  /** 是否显示快捷键，默认 false */
+  showShortcut?: boolean
+  /** 可选自定义图标组件 */
+  icon?: React.MemoExoticComponent<IconComponent> | React.FC<IconProps>
+}

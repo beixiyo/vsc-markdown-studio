@@ -14,32 +14,7 @@ import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { ChevronDownIcon } from '../../icons'
 import { useTextAlignDropdownMenu } from './use-text-align-dropdown-menu'
 
-export interface TextAlignDropdownMenuProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * The Tiptap editor instance.
-   */
-  editor?: Editor | null
-  /**
-   * The text align types to display in the dropdown.
-   */
-  types?: TextAlign[]
-  /**
-   * Whether the dropdown should be hidden when no text align types are available
-   * @default false
-   */
-  hideWhenUnavailable?: boolean
-  /**
-   * Callback for when the dropdown opens or closes
-   */
-  onOpenChange?: (isOpen: boolean) => void
-  /**
-   * Whether to render the dropdown menu in a portal
-   * @default false
-   */
-  portal?: boolean
-}
-
+/** 文本对齐下拉菜单 */
 export function TextAlignDropdownMenu({
   editor: providedEditor,
   types = ['left', 'center', 'right', 'justify'],
@@ -112,3 +87,17 @@ export function TextAlignDropdownMenu({
 }
 
 export default TextAlignDropdownMenu
+
+export interface TextAlignDropdownMenuProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** 编辑器实例 */
+  editor?: Editor | null
+  /** 下拉中展示的对齐类型 */
+  types?: TextAlign[]
+  /** 无可用对齐类型时是否隐藏，默认 false */
+  hideWhenUnavailable?: boolean
+  /** 下拉打开/关闭回调 */
+  onOpenChange?: (isOpen: boolean) => void
+  /** 是否用 portal 渲染下拉，默认 false */
+  portal?: boolean
+}

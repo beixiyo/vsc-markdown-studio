@@ -20,20 +20,7 @@ import {
   useHeading,
 } from './use-heading'
 
-export interface HeadingButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseHeadingConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
-  text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
-  showShortcut?: boolean
-}
-
+/** 标题快捷键角标 */
 export function HeadingShortcutBadge({
   level,
   shortcutKeys = HEADING_SHORTCUT_KEYS[level],
@@ -44,11 +31,7 @@ export function HeadingShortcutBadge({
   return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
-/**
- * Button component for toggling heading in a Tiptap editor.
- *
- * For custom button implementations, use the `useHeading` hook instead.
- */
+/** 切换标题级别的按钮；自定义实现请使用 useHeading */
 export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
   (
     {
@@ -129,3 +112,12 @@ export const HeadingButton = forwardRef<HTMLButtonElement, HeadingButtonProps>(
 )
 
 HeadingButton.displayName = 'HeadingButton'
+
+export interface HeadingButtonProps
+  extends Omit<ButtonProps, 'type'>,
+  UseHeadingConfig {
+  /** 图标旁可选文案 */
+  text?: string
+  /** 是否显示快捷键，默认 false */
+  showShortcut?: boolean
+}

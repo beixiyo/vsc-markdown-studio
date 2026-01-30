@@ -8,6 +8,7 @@ import { ColorHighlightButton } from '../color-highlight-button'
 import { useColorHighlight } from '../color-highlight-button/use-color-highlight'
 import { DEFAULT_HIGHLIGHT_COLORS } from './constants'
 
+/** 高亮颜色弹层内容：颜色按钮 + 移除高亮 */
 export const ColorHighlightPopoverContent = memo(({
   editor,
   colors = DEFAULT_HIGHLIGHT_COLORS,
@@ -90,13 +91,8 @@ export const ColorHighlightPopoverContent = memo(({
 ColorHighlightPopoverContent.displayName = 'ColorHighlightPopoverContent'
 
 export interface ColorHighlightPopoverContentProps {
-  /**
-   * The Tiptap editor instance.
-   */
+  /** 编辑器实例 */
   editor?: Editor | null
-  /**
-   * Optional colors to use in the highlight popover.
-   * If not provided, defaults to a predefined set of colors.
-   */
+  /** 弹层中展示的颜色列表，不传则使用默认预设 */
   colors?: string[]
 }

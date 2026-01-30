@@ -1,6 +1,9 @@
 import type { Editor } from '@tiptap/react'
+import type { PropsWithChildren, ReactNode } from 'react'
 import {
   Button,
+  Cascader,
+  type CascaderOption,
   Popover,
   Toolbar,
 } from 'comps'
@@ -18,10 +21,7 @@ import {
   UndoRedoButton,
 } from '../index'
 
-/**
- * 选中文本工具栏内容组件
- * 包含常用的文本格式化功能
- */
+/** 选中文本工具栏内容：撤销/重做、文本格式、样式、高亮、代码块、角标、对齐、图片等 */
 export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
   editor,
   isMobile = false,
@@ -50,6 +50,53 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
   const showUndoRedo = undo || redo
   const showMarks = bold || italic || strike || underline || highlight || link
   const showScripts = superscript || subscript
+
+  const renderMore = () => {
+    if (!moreContent)
+      return null
+
+    const moreButton = (
+      <Button
+        variant="ghost"
+        size="sm"
+        className="size-8 p-0"
+        tooltip="更多"
+        leftIcon={ <MoreHorizontalIcon className="size-4" /> }
+        iconOnly
+      />
+    )
+
+    if (Array.isArray(moreContent)) {
+      return (
+        <Cascader
+          trigger={ moreButton }
+          options={ moreContent as CascaderOption[] }
+          placement="bottom-start"
+          dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
+          dropdownHeight={ 500 }
+          optionClassName="p-0"
+          dropdownClassName="p-1 min-w-[140px]"
+        />
+      )
+    }
+
+    return (
+      <Popover
+        trigger="click"
+        position="bottom"
+        content={
+          <div
+            { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+            className="p-1 min-w-[120px]"
+          >
+            { moreContent }
+          </div>
+        }
+      >
+        { moreButton }
+      </Popover>
+    )
+  }
 
   return (
     <>
@@ -146,28 +193,7 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
       {/* 更多功能 */ }
       { moreContent && (
         <Toolbar.Group>
-          <Popover
-            trigger="click"
-            position="bottom"
-            content={
-              <div
-                { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
-                className="p-1 min-w-[120px]"
-              >
-                { moreContent }
-              </div>
-            }
-          >
-            <Button
-              variant="ghost"
-              size="sm"
-              className="size-8 p-0"
-              tooltip="更多"
-              leftIcon={ <MoreHorizontalIcon className="size-4" /> }
-              iconOnly
-            >
-            </Button>
-          </Popover>
+          { renderMore() }
         </Toolbar.Group>
       ) }
 
@@ -213,21 +239,12 @@ export interface SelectionToolbarConfig {
 }
 
 export type SelectionToolbarContentProps = {
-  /**
-   * 编辑器实例
-   */
+  /** 编辑器实例 */
   editor?: Editor | null
-  /**
-   * 是否为移动端
-   * @default false
-   */
+  /** 是否为移动端，默认 false */
   isMobile?: boolean
-  /**
-   * 功能配置
-   */
+  /** 功能配置 */
   config?: SelectionToolbarConfig
-  /**
-   * 更多功能内容
-   */
-  moreContent?: React.ReactNode
-} & React.PropsWithChildren<React.HTMLAttributes<HTMLElement>>
+  /** 更多功能内容 */
+  moreContent?: ReactNode | CascaderOption[]
+} & PropsWithChildren<React.HTMLAttributes<HTMLElement>>

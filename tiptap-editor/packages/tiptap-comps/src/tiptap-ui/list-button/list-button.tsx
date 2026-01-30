@@ -16,20 +16,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-utils'
 import { LIST_SHORTCUT_KEYS, useList } from './use-list'
 
-export interface ListButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseListConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
-  text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
-  showShortcut?: boolean
-}
-
+/** 列表快捷键角标 */
 export function ListShortcutBadge({
   type,
   shortcutKeys = LIST_SHORTCUT_KEYS[type],
@@ -40,11 +27,7 @@ export function ListShortcutBadge({
   return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
-/**
- * Button component for toggling lists in a Tiptap editor.
- *
- * For custom button implementations, use the `useList` hook instead.
- */
+/** 切换列表类型的按钮；自定义实现请使用 useList */
 export const ListButton = forwardRef<HTMLButtonElement, ListButtonProps>(
   (
     {
@@ -125,3 +108,12 @@ export const ListButton = forwardRef<HTMLButtonElement, ListButtonProps>(
 )
 
 ListButton.displayName = 'ListButton'
+
+export interface ListButtonProps
+  extends Omit<ButtonProps, 'type'>,
+  UseListConfig {
+  /** 图标旁可选文案 */
+  text?: string
+  /** 是否显示快捷键，默认 false */
+  showShortcut?: boolean
+}

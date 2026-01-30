@@ -11,20 +11,7 @@ import {
   useBlockquote,
 } from './use-blockquote'
 
-export interface BlockquoteButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseBlockquoteConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
-  text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
-  showShortcut?: boolean
-}
-
+/** 引用快捷键角标 */
 export function BlockquoteShortcutBadge({
   shortcutKeys = BLOCKQUOTE_SHORTCUT_KEY,
 }: {
@@ -33,11 +20,7 @@ export function BlockquoteShortcutBadge({
   return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
-/**
- * Button component for toggling blockquote in a Tiptap editor.
- *
- * For custom button implementations, use the `useBlockquote` hook instead.
- */
+/** 切换引用块的按钮；自定义实现请使用 useBlockquote */
 export const BlockquoteButton = forwardRef<
   HTMLButtonElement,
   BlockquoteButtonProps
@@ -119,3 +102,12 @@ export const BlockquoteButton = forwardRef<
 )
 
 BlockquoteButton.displayName = 'BlockquoteButton'
+
+export interface BlockquoteButtonProps
+  extends Omit<ButtonProps, 'type'>,
+  UseBlockquoteConfig {
+  /** 图标旁可选文案 */
+  text?: string
+  /** 是否显示快捷键，默认 false */
+  showShortcut?: boolean
+}

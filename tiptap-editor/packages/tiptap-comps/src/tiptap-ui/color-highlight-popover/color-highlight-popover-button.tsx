@@ -3,13 +3,7 @@ import { forwardRef } from 'react'
 import { cn } from 'utils'
 import { HighlighterIcon } from '../../icons'
 
-export interface ColorHighlightPopoverButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  className?: string
-  children?: React.ReactNode
-  activeColor?: string | null
-  tooltip?: string
-}
-
+/** 高亮弹层触发器按钮 */
 export const ColorHighlightPopoverButton = forwardRef<
   HTMLButtonElement,
   ColorHighlightPopoverButtonProps
@@ -37,3 +31,11 @@ export const ColorHighlightPopoverButton = forwardRef<
 ))
 
 ColorHighlightPopoverButton.displayName = 'ColorHighlightPopoverButton'
+
+export interface ColorHighlightPopoverButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  className?: string
+  children?: React.ReactNode
+  /** 当前选中的高亮颜色，用于底部色条展示 */
+  activeColor?: string | null
+  tooltip?: string
+}

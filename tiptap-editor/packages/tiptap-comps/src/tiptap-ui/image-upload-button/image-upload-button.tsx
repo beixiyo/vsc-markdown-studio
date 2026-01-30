@@ -17,27 +17,7 @@ import {
   useImageUpload,
 } from './use-image-upload'
 
-type IconProps = React.SVGProps<SVGSVGElement>
-type IconComponent = ({ className, ...props }: IconProps) => React.ReactElement
-
-export interface ImageUploadButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseImageUploadConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
-  text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
-  showShortcut?: boolean
-  /**
-   * Optional custom icon component to render instead of the default.
-   */
-  icon?: React.MemoExoticComponent<IconComponent> | React.FC<IconProps>
-}
-
+/** 图片上传快捷键角标 */
 export function ImageShortcutBadge({
   shortcutKeys = IMAGE_UPLOAD_SHORTCUT_KEY,
 }: {
@@ -46,11 +26,7 @@ export function ImageShortcutBadge({
   return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
-/**
- * Button component for uploading/inserting images in a Tiptap editor.
- *
- * For custom button implementations, use the `useImage` hook instead.
- */
+/** 上传/插入图片的按钮；自定义实现请使用 useImageUpload */
 export const ImageUploadButton = forwardRef<
   HTMLButtonElement,
   ImageUploadButtonProps
@@ -131,3 +107,17 @@ export const ImageUploadButton = forwardRef<
 )
 
 ImageUploadButton.displayName = 'ImageUploadButton'
+
+type IconProps = React.SVGProps<SVGSVGElement>
+type IconComponent = ({ className, ...props }: IconProps) => React.ReactElement
+
+export interface ImageUploadButtonProps
+  extends Omit<ButtonProps, 'type'>,
+  UseImageUploadConfig {
+  /** 图标旁可选文案 */
+  text?: string
+  /** 是否显示快捷键，默认 false */
+  showShortcut?: boolean
+  /** 可选自定义图标组件 */
+  icon?: React.MemoExoticComponent<IconComponent> | React.FC<IconProps>
+}

@@ -21,9 +21,7 @@ import { headingIcons, type Level, shouldShowButton as shouldShowHeadingButton, 
 import { isListActive, listIcons, type ListType, shouldShowButton as shouldShowListButton, toggleList } from '../list-button/use-list'
 import { useTextFormatDropdownMenu } from './use-text-format-dropdown-menu'
 
-/**
- * Dropdown menu component for selecting text formats (headings, paragraph, lists, blockquote) in a Tiptap editor.
- */
+/** 文本格式下拉：标题、段落、列表、引用等 */
 export const TextFormatDropdownMenu = forwardRef<
   HTMLButtonElement,
   TextFormatDropdownMenuProps
@@ -192,32 +190,16 @@ TextFormatDropdownMenu.displayName = 'TextFormatDropdownMenu'
 
 export interface TextFormatDropdownMenuProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * The Tiptap editor instance.
-   */
+  /** 编辑器实例 */
   editor?: Editor | null
-  /**
-   * Available heading levels to show in the dropdown
-   * @default [1, 2, 3]
-   */
+  /** 下拉中展示的标题级别，默认 [1, 2, 3] */
   headingLevels?: Level[]
-  /**
-   * Available list types to show in the dropdown
-   * @default ['bulletList', 'orderedList', 'taskList']
-   */
+  /** 下拉中展示的列表类型，默认 ['bulletList', 'orderedList', 'taskList'] */
   listTypes?: ('bulletList' | 'orderedList' | 'taskList')[]
-  /**
-   * Whether the dropdown should hide when formats are not available.
-   * @default false
-   */
+  /** 格式不可用时是否隐藏下拉，默认 false */
   hideWhenUnavailable?: boolean
-  /**
-   * Whether to render the dropdown menu in a portal
-   * @default false
-   */
+  /** 是否用 portal 渲染下拉，默认 false */
   portal?: boolean
-  /**
-   * Callback for when the dropdown opens or closes
-   */
+  /** 下拉打开/关闭回调 */
   onOpenChange?: (isOpen: boolean) => void
 }

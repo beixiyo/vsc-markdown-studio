@@ -13,20 +13,7 @@ import {
   useCodeBlock,
 } from './use-code-block'
 
-export interface CodeBlockButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseCodeBlockConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
-  text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
-  showShortcut?: boolean
-}
-
+/** 代码块快捷键角标 */
 export function CodeBlockShortcutBadge({
   shortcutKeys = CODE_BLOCK_SHORTCUT_KEY,
 }: {
@@ -35,11 +22,7 @@ export function CodeBlockShortcutBadge({
   return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
-/**
- * Button component for toggling code block in a Tiptap editor.
- *
- * For custom button implementations, use the `useCodeBlock` hook instead.
- */
+/** 切换代码块的按钮；自定义实现请使用 useCodeBlock */
 export const CodeBlockButton = forwardRef<
   HTMLButtonElement,
   CodeBlockButtonProps
@@ -119,3 +102,12 @@ export const CodeBlockButton = forwardRef<
 )
 
 CodeBlockButton.displayName = 'CodeBlockButton'
+
+export interface CodeBlockButtonProps
+  extends Omit<ButtonProps, 'type'>,
+  UseCodeBlockConfig {
+  /** 图标旁可选文案 */
+  text?: string
+  /** 是否显示快捷键，默认 false */
+  showShortcut?: boolean
+}

@@ -12,20 +12,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-utils'
 import { MARK_SHORTCUT_KEYS, useMark } from './use-mark'
 
-export interface MarkButtonProps
-  extends Omit<ButtonProps, 'type'>,
-  UseMarkConfig {
-  /**
-   * Optional text to display alongside the icon.
-   */
-  text?: string
-  /**
-   * Optional show shortcut keys in the button.
-   * @default false
-   */
-  showShortcut?: boolean
-}
-
+/** 快捷键角标 */
 export function MarkShortcutBadge({
   type,
   shortcutKeys = MARK_SHORTCUT_KEYS[type],
@@ -36,17 +23,16 @@ export function MarkShortcutBadge({
   return <Badge variant="outline" size="sm" content={ parseShortcutKeys({ shortcutKeys }) } />
 }
 
-/**
- * Button component for toggling marks in a Tiptap editor.
- *
- * For custom button implementations, use the `useMark` hook instead.
- */
+/** 用于切换 Tiptap 标记的按钮；自定义实现请使用 useMark */
 export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
   (
     {
       editor: providedEditor,
       type,
       text,
+      showLabel = false,
+      showTooltip = true,
+      labelClassName,
       hideWhenUnavailable = false,
       onToggled,
       showShortcut = false,
@@ -86,6 +72,10 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
       return null
     }
 
+    const labelText = showLabel
+      ? text ?? label
+      : text
+
     return (
       <Button
         type="button"
@@ -99,7 +89,9 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
         tabIndex={ -1 }
         aria-label={ label }
         aria-pressed={ isActive }
-        tooltip={ label }
+        tooltip={ showTooltip
+          ? label
+          : undefined }
         onClick={ handleClick }
         { ...buttonProps }
         ref={ ref }
@@ -107,7 +99,11 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
         { children ?? (
           <>
             <Icon className="size-4" />
-            { text && <span className="text-base text-textSecondary">{ text }</span> }
+            { labelText && (
+              <span className={ labelClassName ?? 'ml-4 text-base text-textSecondary' }>
+                { labelText }
+              </span>
+            ) }
             { showShortcut && (
               <MarkShortcutBadge type={ type } shortcutKeys={ shortcutKeys } />
             ) }
@@ -119,3 +115,18 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
 )
 
 MarkButton.displayName = 'MarkButton'
+
+export interface MarkButtonProps
+  extends Omit<ButtonProps, 'type'>,
+  UseMarkConfig {
+  /** 图标旁可选文案 */
+  text?: string
+  /** 为 true 时用组件 tooltip（label）作为图标旁文案，默认 false */
+  showLabel?: boolean
+  /** 为 false 时不显示悬停 tooltip，默认 true */
+  showTooltip?: boolean
+  /** showLabel 时包裹文案的 span 的 class */
+  labelClassName?: string
+  /** 是否在按钮中显示快捷键，默认 false */
+  showShortcut?: boolean
+}

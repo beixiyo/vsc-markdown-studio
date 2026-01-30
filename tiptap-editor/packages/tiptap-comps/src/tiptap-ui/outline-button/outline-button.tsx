@@ -16,16 +16,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 import { ListIcon } from '../../icons'
 import { OutlinePanel } from './outline-panel'
 
-export interface OutlineButtonProps extends Omit<ButtonProps, 'type'> {
-  /**
-   * 浮层打开状态变化回调
-   */
-  onOpenChange?: (open: boolean) => void
-}
-
-/**
- * 大纲按钮组件，点击后显示文档大纲
- */
+/** 大纲按钮，点击后显示文档大纲 */
 export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
   (
     {
@@ -108,3 +99,8 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
 )
 
 OutlineButton.displayName = 'OutlineButton'
+
+export interface OutlineButtonProps extends Omit<ButtonProps, 'type'> {
+  /** 浮层打开状态变化回调 */
+  onOpenChange?: (open: boolean) => void
+}
