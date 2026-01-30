@@ -8,6 +8,7 @@ import { Popover, type PopoverRef } from 'comps'
 import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
+import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { LinkButton } from './link-button'
 import { LinkMain } from './link-main'
 import { useLinkPopover } from './use-link-popover'
@@ -73,14 +74,16 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
         onOpen={ () => onOpenChange?.(true) }
         onClose={ () => onOpenChange?.(false) }
         content={
-          <LinkMain
-            url={ url }
-            setUrl={ setUrl }
-            setLink={ handleSetLink }
-            removeLink={ removeLink }
-            openLink={ openLink }
-            isActive={ isActive }
-          />
+          <div { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }>
+            <LinkMain
+              url={ url }
+              setUrl={ setUrl }
+              setLink={ handleSetLink }
+              removeLink={ removeLink }
+              openLink={ openLink }
+              isActive={ isActive }
+            />
+          </div>
         }
       >
         <LinkButton

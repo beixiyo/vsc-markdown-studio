@@ -76,6 +76,7 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
           dropdownHeight={ 500 }
           optionClassName="p-0"
           dropdownClassName="p-1 min-w-[140px]"
+          clickOutsideIgnoreSelector={ `[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]` }
         />
       )
     }
