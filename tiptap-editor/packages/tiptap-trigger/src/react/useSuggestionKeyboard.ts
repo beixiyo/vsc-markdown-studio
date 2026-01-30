@@ -1,5 +1,16 @@
 import type { Editor } from '@tiptap/core'
-import { useEffect } from 'react'
+import { useShortCutKey } from 'hooks'
+
+function getEditorViewDom(editor: Editor | null | undefined): HTMLElement | null {
+  if (!editor)
+    return null
+  try {
+    return editor.view?.dom ?? null
+  }
+  catch {
+    return null
+  }
+}
 
 interface UseSuggestionKeyboardProps {
   editor: Editor | null | undefined
@@ -20,59 +31,52 @@ export function useSuggestionKeyboard({
   onSelect,
   onClose,
 }: UseSuggestionKeyboardProps) {
-  useEffect(() => {
-    if (!editor || !active || itemsCount === 0) {
-      return
-    }
+  const viewDom = active && itemsCount > 0
+    ? getEditorViewDom(editor)
+    : null
+  const el = viewDom as HTMLElement | null
 
-    let viewDom: HTMLElement | null = null
-    try {
-      if (!editor.view) {
-        return
-      }
-      viewDom = editor.view.dom
-    }
-    catch (e) {
-      return
-    }
+  useShortCutKey({
+    key: 'ArrowDown',
+    fn: (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      setActiveIndex(prev => (prev + 1) % itemsCount)
+    },
+    el,
+    capture: true,
+  })
 
-    if (!viewDom) {
-      return
-    }
+  useShortCutKey({
+    key: 'ArrowUp',
+    fn: (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      setActiveIndex(prev => (prev - 1 + itemsCount) % itemsCount)
+    },
+    el,
+    capture: true,
+  })
 
-    const handleKeydown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowDown') {
-        event.preventDefault()
-        event.stopPropagation()
-        setActiveIndex(prev => (prev + 1) % itemsCount)
-        return
-      }
+  useShortCutKey({
+    key: 'Enter',
+    fn: (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      onSelect(activeIndex)
+    },
+    el,
+    capture: true,
+  })
 
-      if (event.key === 'ArrowUp') {
-        event.preventDefault()
-        event.stopPropagation()
-        setActiveIndex(prev => (prev - 1 + itemsCount) % itemsCount)
-        return
-      }
-
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        event.stopPropagation()
-        onSelect(activeIndex)
-        return
-      }
-
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        event.stopPropagation()
-        onClose()
-      }
-    }
-
-    viewDom.addEventListener('keydown', handleKeydown, true)
-
-    return () => {
-      viewDom?.removeEventListener('keydown', handleKeydown, true)
-    }
-  }, [editor, active, itemsCount, activeIndex, setActiveIndex, onSelect, onClose])
+  useShortCutKey({
+    key: 'Escape',
+    fn: (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      onClose()
+    },
+    el,
+    capture: true,
+  })
 }

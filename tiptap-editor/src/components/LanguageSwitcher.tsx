@@ -10,6 +10,7 @@ export function LanguageSwitcher() {
   const languages = [
     { value: LANGUAGES.ZH_CN, label: '中文' },
     { value: LANGUAGES.EN_US, label: 'English' },
+    { value: LANGUAGES.JA, label: '日語' },
   ]
 
   return (

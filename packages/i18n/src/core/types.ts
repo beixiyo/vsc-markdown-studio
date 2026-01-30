@@ -4,7 +4,7 @@
 export const LANGUAGES = {
   ZH_CN: 'zh-CN',
   EN_US: 'en-US',
-  JA_JP: 'ja-JP',
+  JA: 'ja',
   FR_FR: 'fr-FR',
   DE_DE: 'de-DE',
   KO_KR: 'ko-KR',

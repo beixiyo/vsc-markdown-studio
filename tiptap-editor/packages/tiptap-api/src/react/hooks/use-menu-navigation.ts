@@ -213,7 +213,7 @@ export function useMenuNavigation<T>({
         targetElement = editor.view?.dom
       }
       catch (e) {
-        // 视图不可用
+        /** 视图不可用 */
       }
     }
     else if (containerRef?.current) {

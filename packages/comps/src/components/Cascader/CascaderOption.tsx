@@ -3,7 +3,7 @@ import { Check, ChevronRight } from 'lucide-react'
 import { memo } from 'react'
 import { cn } from 'utils'
 
-export const CascaderOption = memo(({ option, selected, onClick, onMouseEnter, className }: CascaderOptionProps) => {
+export const CascaderOption = memo(({ option, selected, highlighted, onClick, onMouseEnter, className }: CascaderOptionProps) => {
   const handleClick = () => {
     if (!option.disabled) {
       onClick(option.value)
@@ -17,10 +17,11 @@ export const CascaderOption = memo(({ option, selected, onClick, onMouseEnter, c
         'text-textPrimary bg-background rounded-xl mx-1 my-0.5',
         option.disabled
           ? 'opacity-50 cursor-not-allowed'
-          : 'hover:bg-backgroundSecondary',
+          : 'hover:bg-backgroundQuaternary',
         selected && !option.children
           ? 'bg-backgroundSecondary text-textPrimary'
           : '',
+        highlighted && !option.disabled && 'bg-backgroundSecondary',
         className,
       ) }
       onClick={ handleClick }
@@ -46,6 +47,7 @@ CascaderOption.displayName = 'CascaderOption'
 interface CascaderOptionProps {
   option: Option
   selected: boolean
+  highlighted?: boolean
   onClick: (value: string) => void
   onMouseEnter?: () => void
   className?: string
