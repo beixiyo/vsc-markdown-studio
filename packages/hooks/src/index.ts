@@ -20,6 +20,7 @@ export * from './useGenRefState'
 
 export * from './useGetState'
 export * from './useNotifyParentReady'
+export * from './useRestoreFocusOnOpen'
 export * from './useStateWithPromise'
 export * from './useTextOverflow'
 export * from './useTheme'
