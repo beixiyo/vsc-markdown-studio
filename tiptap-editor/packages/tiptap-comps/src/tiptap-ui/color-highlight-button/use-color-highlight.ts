@@ -35,6 +35,10 @@ export interface UseColorHighlightConfig {
    */
   label?: string
   /**
+   * Label for "Remove highlight" action, used in onApplied callback.
+   */
+  removeHighlightLabel?: string
+  /**
    * Whether the button should hide when the mark is not available.
    * @default false
    */
@@ -121,6 +125,7 @@ export function useColorHighlight(config: UseColorHighlightConfig) {
   const {
     editor: providedEditor,
     label,
+    removeHighlightLabel = 'Remove highlight',
     highlightColor,
     hideWhenUnavailable = false,
     onApplied,
@@ -163,10 +168,10 @@ export function useColorHighlight(config: UseColorHighlightConfig) {
   const handleRemoveHighlight = useCallback(() => {
     const success = removeHighlight(editor)
     if (success) {
-      onApplied?.({ color: '', label: 'Remove highlight' })
+      onApplied?.({ color: '', label: removeHighlightLabel })
     }
     return success
-  }, [editor, onApplied])
+  }, [editor, onApplied, removeHighlightLabel])
 
   useHotkeys(
     COLOR_HIGHLIGHT_SHORTCUT_KEY,
@@ -187,7 +192,7 @@ export function useColorHighlight(config: UseColorHighlightConfig) {
     handleColorHighlight,
     handleRemoveHighlight,
     canColorHighlight: canColorHighlightState,
-    label: label || `Highlight`,
+    label: label ?? 'Highlight',
     shortcutKeys: COLOR_HIGHLIGHT_SHORTCUT_KEY,
     Icon: HighlighterIcon,
   }

@@ -40,6 +40,8 @@ export type TiptapEditorTranslations = {
     underline: string
     superscript: string
     subscript: string
+    highlight: string
+    removeHighlight: string
   }
   align: {
     left: string
@@ -248,6 +250,8 @@ export function useMarkLabels() {
     underline: t('mark.underline'),
     superscript: t('mark.superscript'),
     subscript: t('mark.subscript'),
+    highlight: t('mark.highlight'),
+    removeHighlight: t('mark.removeHighlight'),
   }
 }
 

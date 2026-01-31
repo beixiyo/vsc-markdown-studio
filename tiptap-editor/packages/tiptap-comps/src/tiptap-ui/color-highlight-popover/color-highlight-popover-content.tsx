@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/react'
 import { Button, Card, Separator } from 'comps'
 import { memo, useMemo, useRef } from 'react'
-import { useIsBreakpoint, useMenuNavigation } from 'tiptap-api/react'
+import { useIsBreakpoint, useMarkLabels, useMenuNavigation } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { BanIcon } from '../../icons'
 import { ColorHighlightButton } from '../color-highlight-button'
@@ -13,13 +13,14 @@ export const ColorHighlightPopoverContent = memo(({
   editor,
   colors = DEFAULT_HIGHLIGHT_COLORS,
 }: ColorHighlightPopoverContentProps) => {
+  const { removeHighlight } = useMarkLabels()
   const { handleRemoveHighlight } = useColorHighlight({ editor })
   const isMobile = useIsBreakpoint()
   const containerRef = useRef<HTMLDivElement>(null)
 
   const menuItems = useMemo(
-    () => [...colors.map(c => ({ value: c, label: c })), { label: 'Remove highlight', value: 'none' }],
-    [colors],
+    () => [...colors.map(c => ({ value: c, label: c })), { label: removeHighlight, value: 'none' }],
+    [colors, removeHighlight],
   )
 
   const { selectedIndex } = useMenuNavigation({
@@ -72,8 +73,8 @@ export const ColorHighlightPopoverContent = memo(({
         <div className="flex flex-row items-center">
           <Button
             onClick={ handleRemoveHighlight }
-            aria-label="Remove highlight"
-            tooltip="Remove highlight"
+            aria-label={ removeHighlight }
+            tooltip={ removeHighlight }
             type="button"
             role="menuitem"
             variant="ghost"

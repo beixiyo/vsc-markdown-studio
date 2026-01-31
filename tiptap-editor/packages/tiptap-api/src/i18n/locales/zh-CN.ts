@@ -35,6 +35,8 @@ export const zhCN: Translations = {
     underline: '下划线',
     superscript: '上角标',
     subscript: '下角标',
+    highlight: '高亮文本',
+    removeHighlight: '移除高亮',
   },
   align: {
     left: '左对齐',

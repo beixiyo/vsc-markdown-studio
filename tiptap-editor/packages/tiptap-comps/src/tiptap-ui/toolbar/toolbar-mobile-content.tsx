@@ -23,7 +23,7 @@ export const MobileToolbarContent = memo<MobileToolbarContentProps>((props) => {
         <Button data-style="ghost" onClick={ onBack }>
           <ArrowLeftIcon className="size-4" />
           { type === 'highlighter'
-            ? <HighlighterIcon className="size-4" />
+            ? <HighlighterIcon className="size-4 text-systemRed" />
             : <LinkIcon className="size-4" /> }
         </Button>
       </Toolbar.Group>

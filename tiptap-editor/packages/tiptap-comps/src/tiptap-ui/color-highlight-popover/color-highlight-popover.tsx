@@ -1,7 +1,7 @@
 import { useEditorState } from '@tiptap/react'
 import { Popover } from 'comps'
 import { memo } from 'react'
-import { useTiptapEditor } from 'tiptap-api/react'
+import { useMarkLabels, useTiptapEditor } from 'tiptap-api/react'
 import { HighlighterIcon } from '../../icons'
 import { useColorHighlight, type UseColorHighlightConfig } from '../color-highlight-button'
 import { ColorHighlightPopoverButton } from './color-highlight-popover-button'
@@ -16,11 +16,14 @@ export const ColorHighlightPopover = memo(({
   onApplied,
   ...props
 }: ColorHighlightPopoverProps) => {
+  const { highlight, removeHighlight } = useMarkLabels()
   const { editor } = useTiptapEditor(providedEditor)
   const { isVisible, canColorHighlight, isActive, label }
     = useColorHighlight({
       editor,
       hideWhenUnavailable,
+      label: highlight,
+      removeHighlightLabel: removeHighlight,
       onApplied,
     })
 
@@ -56,7 +59,7 @@ export const ColorHighlightPopover = memo(({
         activeColor={ activeColor }
         { ...props }
       >
-        <HighlighterIcon className="size-4" />
+        <HighlighterIcon className="size-4 text-systemRed" />
       </ColorHighlightPopoverButton>
     </Popover>
   )

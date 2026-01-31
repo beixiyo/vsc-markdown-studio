@@ -35,6 +35,8 @@ export const ja: Translations = {
     underline: '下線',
     superscript: '上付き',
     subscript: '下付き',
+    highlight: 'テキストをハイライト',
+    removeHighlight: 'ハイライトを解除',
   },
   align: {
     left: '左揃え',

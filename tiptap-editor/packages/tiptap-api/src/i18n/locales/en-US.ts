@@ -35,6 +35,8 @@ export const enUS: Translations = {
     underline: 'Underline',
     superscript: 'Superscript',
     subscript: 'Subscript',
+    highlight: 'Highlight text',
+    removeHighlight: 'Remove highlight',
   },
   align: {
     left: 'Align left',
