@@ -50,7 +50,7 @@ export default defineConfig(({ command }) => {
           'tiptap-react-hook': path.resolve(__dirname, './packages/tiptap-react-hook/src/index.ts'),
 
           'tiptap-ai/index.css': path.resolve(__dirname, './packages/tiptap-ai/dist/index.css'),
-          'tiptap-ai/react': path.resolve(__dirname, './packages/tiptap-ai/src/react//index.ts'),
+          'tiptap-ai/react': path.resolve(__dirname, './packages/tiptap-ai/src/react/index.ts'),
           'tiptap-ai': path.resolve(__dirname, './packages/tiptap-ai/src/index.ts'),
 
           'tiptap-comment/index.css': path.resolve(__dirname, './packages/tiptap-comment/dist/index.css'),
@@ -74,6 +74,8 @@ export default defineConfig(({ command }) => {
           'tiptap-nodes/horizontal-rule': path.resolve(__dirname, './packages/tiptap-nodes/src/horizontal-rule/index.ts'),
           'tiptap-nodes': path.resolve(__dirname, './packages/tiptap-nodes/src/index.ts'),
 
+          'tiptap-utils': path.resolve(__dirname, './packages/tiptap-utils/src/index.ts'),
+
           'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
 
           'hooks': path.resolve(__dirname, '../packages/hooks/src/index.ts'),
@@ -82,6 +84,8 @@ export default defineConfig(({ command }) => {
 
           'comps/index.css': path.resolve(__dirname, '../packages/comps/dist/index.css'),
           'comps': path.resolve(__dirname, '../packages/comps/src/index.ts'),
+
+          'utils': path.resolve(__dirname, '../packages/utils/src/index.ts'),
         }),
       },
     },

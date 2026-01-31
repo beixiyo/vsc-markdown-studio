@@ -8,60 +8,28 @@ import { useTiptapEditor, useTiptapEditorT } from 'tiptap-api/react'
 import {
   isMarkInSchema,
   isNodeTypeSelected,
+  normalizeLinkUrl,
   sanitizeUrl,
 } from 'tiptap-utils'
 // --- Icons ---
 import { LinkIcon } from '../../icons'
 
 /**
- * Configuration for the link popover functionality
- */
-export interface UseLinkPopoverConfig {
-  /**
-   * The Tiptap editor instance.
-   */
-  editor?: Editor | null
-  /**
-   * Whether to hide the link popover when not available.
-   * @default false
-   */
-  hideWhenUnavailable?: boolean
-  /**
-   * Callback function called when the link is set.
-   */
-  onSetLink?: () => void
-}
-
-/**
- * Configuration for the link handler functionality
- */
-export interface LinkHandlerProps {
-  /**
-   * The Tiptap editor instance.
-   */
-  editor: Editor | null
-  /**
-   * Callback function called when the link is set.
-   */
-  onSetLink?: () => void
-}
-
-/**
- * Checks if a link can be set in the current editor state
+ * 检查当前编辑器状态是否可以设置链接
  */
 export function canSetLink(editor: Editor | null): boolean {
   if (!editor || !editor.isEditable)
     return false
 
-  // The third argument 'true' checks whether the current selection is inside an image caption, and prevents setting a link there
-  // If the selection is inside an image caption, we can't set a link
+  // 第三个参数 'true' 用于检查当前选区是否在图片标题内，如果是则阻止设置链接
+  // 如果选区在图片标题内，则不能设置链接
   if (isNodeTypeSelected(editor, ['image'], true))
     return false
   return editor.can().setMark('link')
 }
 
 /**
- * Checks if a link is currently active in the editor
+ * 检查编辑器中当前是否有激活的链接
  */
 export function isLinkActive(editor: Editor | null): boolean {
   if (!editor || !editor.isEditable)
@@ -70,7 +38,7 @@ export function isLinkActive(editor: Editor | null): boolean {
 }
 
 /**
- * Determines if the link button should be shown
+ * 判断是否应该显示链接按钮
  */
 export function shouldShowLinkButton(props: {
   editor: Editor | null
@@ -92,7 +60,7 @@ export function shouldShowLinkButton(props: {
 }
 
 /**
- * Custom hook for handling link operations in a Tiptap editor
+ * 用于处理 Tiptap 编辑器中链接操作的自定义 Hook
  */
 export function useLinkHandler(props: LinkHandlerProps) {
   const { editor, onSetLink } = props
@@ -102,7 +70,7 @@ export function useLinkHandler(props: LinkHandlerProps) {
     if (!editor)
       return
 
-    // Get URL immediately on mount
+    // 挂载时立即获取 URL
     const { href } = editor.getAttributes('link')
 
     if (isLinkActive(editor) && url === null) {
@@ -129,12 +97,15 @@ export function useLinkHandler(props: LinkHandlerProps) {
     if (!url || !editor)
       return
 
+    // 保存前规范化 URL：无协议时自动补 https://，避免存成 example.com 被浏览器解析成当前页相对路径
+    const hrefToStore = normalizeLinkUrl(url) || url
+
     const { selection } = editor.state
     const isEmpty = selection.empty
 
     let chain = editor.chain().focus()
 
-    chain = chain.extendMarkRange('link').setLink({ href: url })
+    chain = chain.extendMarkRange('link').setLink({ href: hrefToStore })
 
     if (isEmpty) {
       chain = chain.insertContent({ type: 'text', text: url })
@@ -183,7 +154,7 @@ export function useLinkHandler(props: LinkHandlerProps) {
 }
 
 /**
- * Custom hook for link popover state management
+ * 用于链接弹出框状态管理的自定义 Hook
  */
 export function useLinkState(props: {
   editor: Editor | null
@@ -226,11 +197,11 @@ export function useLinkState(props: {
 }
 
 /**
- * Main hook that provides link popover functionality for Tiptap editor
+ * 为 Tiptap 编辑器提供链接弹出框功能的主 Hook
  *
  * @example
  * ```tsx
- * // Simple usage
+ * // 简单用法
  * function MyLinkButton() {
  *   const { isVisible, canSet, isActive, Icon, label } = useLinkPopover()
  *
@@ -239,7 +210,7 @@ export function useLinkState(props: {
  *   return <button disabled={!canSet}>Link</button>
  * }
  *
- * // Advanced usage with configuration
+ * // 高级用法（带配置）
  * function MyAdvancedLinkButton() {
  *   const { isVisible, canSet, isActive, Icon, label } = useLinkPopover({
  *     editor: myEditor,
@@ -290,4 +261,39 @@ export function useLinkPopover(config?: UseLinkPopoverConfig) {
     Icon: LinkIcon,
     ...linkHandler,
   }
+}
+
+// ==================== 类型定义 ====================
+
+/**
+ * 链接弹出框功能的配置项
+ */
+export interface UseLinkPopoverConfig {
+  /**
+   * Tiptap 编辑器实例
+   */
+  editor?: Editor | null
+  /**
+   * 当链接不可用时是否隐藏链接弹出框
+   * @default false
+   */
+  hideWhenUnavailable?: boolean
+  /**
+   * 设置链接时的回调函数
+   */
+  onSetLink?: () => void
+}
+
+/**
+ * 链接处理器的配置项
+ */
+export interface LinkHandlerProps {
+  /**
+   * Tiptap 编辑器实例
+   */
+  editor: Editor | null
+  /**
+   * 设置链接时的回调函数
+   */
+  onSetLink?: () => void
 }

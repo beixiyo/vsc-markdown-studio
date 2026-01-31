@@ -46,6 +46,7 @@
 
       "tiptap-api": ["./packages/tiptap-api/src/index.ts"],
       "tiptap-api/react": ["./packages/tiptap-api/src/react/index.ts"],
+      "tiptap-react-hook": ["./packages/tiptap-react-hook/src/index.ts"],
       "tiptap-trigger": ["./packages/tiptap-trigger/src/index.ts"],
       "tiptap-trigger/react": ["./packages/tiptap-trigger/src/react/index.ts"],
 
@@ -58,10 +59,13 @@
       "tiptap-nodes/horizontal-rule": ["./packages/tiptap-nodes/src/horizontal-rule/index.ts"],
 
       "tiptap-editor-core": ["./packages/tiptap-editor-core/src/index.ts"],
+      "tiptap-utils": ["./packages/tiptap-utils/src/index.ts"],
       "comps": ["../packages/comps/src"],
       "hooks": ["../packages/hooks/src"],
       "utils": ["../packages/utils/src"],
-      "styles": ["../packages/styles/src"]
+      "styles": ["../packages/styles/src"],
+      "i18n": ["../packages/i18n/src/index.ts"],
+      "i18n/react": ["../packages/i18n/react/index.ts"]
     }
   },
   "include": [

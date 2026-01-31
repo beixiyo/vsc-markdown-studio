@@ -11,6 +11,7 @@ export const LinkButton = forwardRef<HTMLButtonElement, LinkButtonProps>(
         type="button"
         className={ className }
         variant="ghost"
+        size="sm"
         role="button"
         tabIndex={ -1 }
         aria-label="Link"
