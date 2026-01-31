@@ -80,15 +80,19 @@
   - `heading-dropdown-menu/` - 已被 `TextFormatDropdownMenu` 替代
   - `list-dropdown-menu/` - 已被 `TextFormatDropdownMenu` 替代
 
-### 3. UI Primitives (基础UI组件)
-- **位置**: `tiptap-editor/packages/tiptap-comps/src/ui/`
-- **结构**: 保持不变
+### 3. 基础 UI（Button、Popover、Badge 等）
+- **位置**: 已迁移到 workspace 的 **`comps`** 包（`packages/comps`）
+- tiptap-comps 内所有 UI 组件从 `comps` 导入使用，不再维护 `tiptap-comps/src/ui/` 目录
 
-### 4. Node Extensions (节点扩展)
+### 4. 选中文本工具栏 (Select Toolbar)
+- **位置**: `tiptap-editor/packages/tiptap-comps/src/select-toolbar/`
+- **内容**: `SelectionToolbar` 组件、`useSelectionToolbar`，与 `comps` 的 `Popover` 配合使用
+
+### 5. Node Extensions (节点扩展)
 - **位置**: `tiptap-editor/packages/tiptap-nodes/src/`
 - **内容**: 整合了所有自定义节点扩展（如 Speaker, ImageUpload, HorizontalRule 等）
 
-### 5. Hooks (钩子函数)
+### 6. Hooks (钩子函数)
 - **位置**: `tiptap-editor/packages/tiptap-api/src/react/hooks/`
 - **新增 hooks**:
   - `use-hover-detection.ts`
@@ -97,7 +101,7 @@
   - `storage/use-auto-save.ts`
   - `storage/use-storage-save.ts`
 
-### 6. Lib (工具库)
+### 7. Lib (工具库)
 - **位置**: `tiptap-editor/packages/tiptap-utils/src/utils/`
 
 ---
