@@ -14,6 +14,7 @@ import { Button } from 'comps'
 import { forwardRef, useCallback, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { ListIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 import { OutlinePanel } from './outline-panel'
 
 /** 大纲按钮，点击后显示文档大纲 */
@@ -80,7 +81,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
           }) }
           ref={ mergedRef }
         >
-          <ListIcon className="size-4" />
+          <ListIcon className={ TIPTAP_UI_STYLES.icon } />
         </Button>
         { isOpen && (
           <FloatingPortal>

@@ -6,7 +6,7 @@ import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { LinkPopover, MarkButton, SelectToolbar } from 'tiptap-comps'
+import { LinkPopover, MarkButton, SelectToolbar, TIPTAP_UI_STYLES } from 'tiptap-comps'
 
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
@@ -161,8 +161,8 @@ sequenceDiagram
                       showLabel
                       showTooltip={ false }
                       hideWhenUnavailable
-                      className="hover:bg-transparent"
-                      labelClassName="ml-4 text-base text-textSecondary"
+                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
+                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
                     />
                   ),
                 },
@@ -174,8 +174,8 @@ sequenceDiagram
                       showLabel
                       showTooltip={ false }
                       hideWhenUnavailable
-                      className="hover:bg-transparent"
-                      labelClassName="ml-4 text-base text-textSecondary"
+                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
+                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
                     />
                   ),
                 },
@@ -187,8 +187,8 @@ sequenceDiagram
                       showLabel
                       showTooltip={ false }
                       hideWhenUnavailable
-                      className="hover:bg-transparent"
-                      labelClassName="ml-4 text-base text-textSecondary"
+                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
+                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
                     />
                   ),
                 },
@@ -200,8 +200,8 @@ sequenceDiagram
                       showLabel
                       showTooltip={ false }
                       hideWhenUnavailable
-                      className="hover:bg-transparent"
-                      labelClassName="ml-4 text-base text-textSecondary"
+                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
+                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
                     />
                   ),
                 },
@@ -213,8 +213,8 @@ sequenceDiagram
                       showLabel
                       showTooltip={ false }
                       hideWhenUnavailable
-                      className="hover:bg-transparent"
-                      labelClassName="ml-4 text-base text-textSecondary"
+                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
+                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
                     />
                   ),
                 },

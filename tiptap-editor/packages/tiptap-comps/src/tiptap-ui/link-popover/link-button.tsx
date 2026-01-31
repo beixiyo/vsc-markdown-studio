@@ -3,6 +3,7 @@
 import { Button } from 'comps'
 import { forwardRef } from 'react'
 import { LinkIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 
 export const LinkButton = forwardRef<HTMLButtonElement, LinkButtonProps>(
   ({ className, children, ...props }, ref) => {
@@ -19,7 +20,7 @@ export const LinkButton = forwardRef<HTMLButtonElement, LinkButtonProps>(
         ref={ ref }
         { ...props }
       >
-        { children || <LinkIcon className="size-4" /> }
+        { children || <LinkIcon className={ TIPTAP_UI_STYLES.icon } /> }
       </Button>
     )
   },

@@ -46,11 +46,8 @@ export interface TextAlignOption {
   icon: React.ElementType
 }
 
-/**
- * 获取文本对齐选项（已废弃，请使用 useAlignLabels hook）
- * @deprecated 使用 useAlignLabels hook 替代
- */
-export const textAlignOptions: TextAlignOption[] = [
+/** 文本对齐选项（align + icon），标签由 useAlignLabels 在 getFilteredTextAlignOptions 中注入 */
+export const TEXT_ALIGN_OPTIONS: TextAlignOption[] = [
   {
     label: 'Align left',
     align: 'left',
@@ -95,7 +92,7 @@ export function getFilteredTextAlignOptions(
   availableTypes: TextAlign[],
   alignLabels: ReturnType<typeof useAlignLabels>,
 ): TextAlignOption[] {
-  return textAlignOptions
+  return TEXT_ALIGN_OPTIONS
     .filter(option => availableTypes.includes(option.align))
     .map(option => ({
       ...option,

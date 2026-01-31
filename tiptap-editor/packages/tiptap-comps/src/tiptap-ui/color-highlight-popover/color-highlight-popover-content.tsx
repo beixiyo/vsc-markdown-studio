@@ -4,6 +4,7 @@ import { memo, useMemo, useRef } from 'react'
 import { useIsBreakpoint, useMarkLabels, useMenuNavigation } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { BanIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 import { ColorHighlightButton } from '../color-highlight-button'
 import { useColorHighlight } from '../color-highlight-button/use-color-highlight'
 import { DEFAULT_HIGHLIGHT_COLORS } from './constants'
@@ -81,7 +82,7 @@ export const ColorHighlightPopoverContent = memo(({
             size="sm"
             data-highlighted={ selectedIndex === colors.length }
           >
-            <BanIcon className="size-4" />
+            <BanIcon className={ TIPTAP_UI_STYLES.icon } />
           </Button>
         </div>
       </div>

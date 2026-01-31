@@ -55,17 +55,6 @@ export const textAlignIcons = {
 }
 
 /**
- * 获取文本对齐标签（已废弃，请使用 useAlignLabels hook）
- * @deprecated 使用 useAlignLabels hook 替代
- */
-export const textAlignLabels: Record<TextAlign, string> = {
-  left: 'Align left',
-  center: 'Align center',
-  right: 'Align right',
-  justify: 'Align justify',
-}
-
-/**
  * Checks if text alignment can be performed in the current editor state
  */
 export function canSetTextAlign(

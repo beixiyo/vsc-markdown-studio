@@ -6,6 +6,7 @@ import {
   type CascaderRef,
 } from 'comps'
 
+import type { ElementType } from 'react'
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useBlockLabels, useHeadingLabels, useListLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
@@ -15,6 +16,7 @@ import {
   ChevronDownIcon,
   TextFormatIcon,
 } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 
 import { shouldShowButton as shouldShowBlockquoteButton, toggleBlockquote } from './use-blockquote'
 import { headingIcons, type Level, shouldShowButton as shouldShowHeadingButton, toggleHeading } from './use-heading'
@@ -76,42 +78,41 @@ export const TextFormatDropdownMenu = forwardRef<
 
     const options = useMemo<CascaderOption[]>(() => {
       const result: CascaderOption[] = []
+      const triggerClassName = TIPTAP_UI_STYLES.moreContentTrigger
+      const labelClassName = TIPTAP_UI_STYLES.moreContentLabel
+
+      const makeOption = (value: string, labelText: string, Icon: ElementType) => ({
+        value,
+        label: (
+          <div className={ triggerClassName }>
+            <Icon className={ TIPTAP_UI_STYLES.iconSecondary } />
+            <span className={ labelClassName }>{ labelText }</span>
+          </div>
+        ),
+      })
 
       headingLevels.forEach((level) => {
         if (shouldShowHeadingButton({ editor, level, hideWhenUnavailable })) {
           const Icon = headingIcons[level]
-          result.push({
-            value: `heading${level}`,
-            label: memoizedHeadingLabels[`heading${level}` as keyof typeof memoizedHeadingLabels],
-            icon: <Icon className="size-4 text-icon" />,
-          })
+          result.push(makeOption(
+            `heading${level}`,
+            memoizedHeadingLabels[`heading${level}` as keyof typeof memoizedHeadingLabels],
+            Icon,
+          ))
         }
       })
 
-      // Paragraph
-      result.push({
-        value: 'paragraph',
-        label: memoizedHeadingLabels.paragraph,
-        icon: <TextFormatIcon className="size-4 text-icon" />,
-      })
+      result.push(makeOption('paragraph', memoizedHeadingLabels.paragraph, TextFormatIcon))
 
       listTypes.forEach((type) => {
         if (shouldShowListButton({ editor, type, hideWhenUnavailable })) {
           const Icon = listIcons[type]
-          result.push({
-            value: type,
-            label: memoizedListLabels[type],
-            icon: <Icon className="size-4 text-icon" />,
-          })
+          result.push(makeOption(type, memoizedListLabels[type], Icon))
         }
       })
 
       if (shouldShowBlockquoteButton({ editor, hideWhenUnavailable })) {
-        result.push({
-          value: 'blockquote',
-          label: memoizedBlockLabels.blockquote,
-          icon: <BlockquoteIcon className="size-4 text-icon" />,
-        })
+        result.push(makeOption('blockquote', memoizedBlockLabels.blockquote, BlockquoteIcon))
       }
 
       return result
@@ -160,8 +161,8 @@ export const TextFormatDropdownMenu = forwardRef<
         ref={ ref }
         size="sm"
       >
-        <MainIcon className="size-4" />
-        <ChevronDownIcon className="size-4 text-icon" />
+        <MainIcon className={ TIPTAP_UI_STYLES.icon } />
+        <ChevronDownIcon className={ TIPTAP_UI_STYLES.iconSecondary } />
       </Button>
     ), [isActive, canToggle, toolbarLabels.textFormat, MainIcon, buttonProps, ref])
 
@@ -178,7 +179,8 @@ export const TextFormatDropdownMenu = forwardRef<
         onOpenChange={ onOpenChange }
         placement="bottom-start"
         dropdownHeight={ 400 }
-        optionClassName="px-2 py-1"
+        optionClassName={ TIPTAP_UI_STYLES.cascaderOption }
+        optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
         trigger={ trigger }
         dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
       />

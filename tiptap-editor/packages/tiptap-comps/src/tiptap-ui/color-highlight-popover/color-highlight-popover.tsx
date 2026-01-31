@@ -3,6 +3,7 @@ import { Popover } from 'comps'
 import { memo } from 'react'
 import { useMarkLabels, useTiptapEditor } from 'tiptap-api/react'
 import { HighlighterIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 import { useColorHighlight, type UseColorHighlightConfig } from '../color-highlight-button'
 import { ColorHighlightPopoverButton } from './color-highlight-popover-button'
 import { ColorHighlightPopoverContent } from './color-highlight-popover-content'
@@ -59,7 +60,7 @@ export const ColorHighlightPopover = memo(({
         activeColor={ activeColor }
         { ...props }
       >
-        <HighlighterIcon className="size-4 text-systemRed" />
+        <HighlighterIcon className={ TIPTAP_UI_STYLES.iconHighlight } />
       </ColorHighlightPopoverButton>
     </Popover>
   )

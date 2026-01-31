@@ -4,6 +4,7 @@ import {
 } from 'comps'
 import { memo } from 'react'
 import { ArrowLeftIcon, HighlighterIcon, LinkIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 import {
   ColorHighlightPopoverContent,
   LinkContent,
@@ -21,10 +22,10 @@ export const MobileToolbarContent = memo<MobileToolbarContentProps>((props) => {
     <>
       <Toolbar.Group>
         <Button data-style="ghost" onClick={ onBack }>
-          <ArrowLeftIcon className="size-4" />
+          <ArrowLeftIcon className={ TIPTAP_UI_STYLES.icon } />
           { type === 'highlighter'
-            ? <HighlighterIcon className="size-4 text-systemRed" />
-            : <LinkIcon className="size-4" /> }
+            ? <HighlighterIcon className={ TIPTAP_UI_STYLES.iconHighlight } />
+            : <LinkIcon className={ TIPTAP_UI_STYLES.icon } /> }
         </Button>
       </Toolbar.Group>
 

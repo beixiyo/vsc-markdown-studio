@@ -9,6 +9,7 @@ import {
 import { memo } from 'react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { MoreHorizontalIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 import {
   CodeBlockButton,
   ColorHighlightPopover,
@@ -58,9 +59,8 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
       <Button
         variant="ghost"
         size="sm"
-        className="size-8 p-0"
         tooltip="更多"
-        leftIcon={ <MoreHorizontalIcon className="size-4" /> }
+        leftIcon={ <MoreHorizontalIcon className={ TIPTAP_UI_STYLES.icon } /> }
         iconOnly
       />
     )
@@ -73,8 +73,9 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
           placement="bottom-start"
           dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
           dropdownHeight={ 500 }
-          optionClassName="p-0"
-          dropdownClassName="p-1 min-w-[140px]"
+          optionClassName={ TIPTAP_UI_STYLES.cascaderOption }
+          optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
+          dropdownClassName="min-w-[140px]"
           clickOutsideIgnoreSelector={ `[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]` }
         />
       )
@@ -87,7 +88,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
         content={
           <div
             { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
-            className="p-1 min-w-[120px]"
+            className="min-w-[120px]"
           >
             { moreContent }
           </div>

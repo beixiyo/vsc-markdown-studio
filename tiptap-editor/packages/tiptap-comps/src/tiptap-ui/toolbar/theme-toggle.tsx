@@ -1,6 +1,7 @@
 import { Button } from 'comps'
 import { useTheme } from 'hooks'
 import { MoonStarIcon, SunIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 
 export function ThemeToggle() {
   const [theme, setTheme] = useTheme()
@@ -17,10 +18,10 @@ export function ThemeToggle() {
     >
       { isDarkMode
         ? (
-            <MoonStarIcon className="size-4" />
+            <MoonStarIcon className={ TIPTAP_UI_STYLES.icon } />
           )
         : (
-            <SunIcon className="size-4" />
+            <SunIcon className={ TIPTAP_UI_STYLES.icon } />
           ) }
     </Button>
   )

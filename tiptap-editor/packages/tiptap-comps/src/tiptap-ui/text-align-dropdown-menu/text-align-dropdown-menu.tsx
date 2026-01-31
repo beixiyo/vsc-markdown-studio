@@ -4,25 +4,33 @@ import type { TextAlign } from './use-text-align'
 import {
   Button,
   Cascader,
+  type ButtonProps,
   type CascaderOption,
   type CascaderRef,
 } from 'comps'
 
-import { useCallback, useMemo, useRef } from 'react'
+import { forwardRef, useCallback, useMemo, useRef } from 'react'
 import { useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { ChevronDownIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 import { useTextAlignDropdownMenu } from './use-text-align-dropdown-menu'
 
 /** 文本对齐下拉菜单 */
-export function TextAlignDropdownMenu({
-  editor: providedEditor,
-  types = ['left', 'center', 'right', 'justify'],
-  hideWhenUnavailable = false,
-  onOpenChange,
-  portal: _portal,
-  ...props
-}: TextAlignDropdownMenuProps) {
+export const TextAlignDropdownMenu = forwardRef<
+  HTMLButtonElement,
+  TextAlignDropdownMenuProps
+>((
+  {
+    editor: providedEditor,
+    types = ['left', 'center', 'right', 'justify'],
+    hideWhenUnavailable = false,
+    onOpenChange,
+    portal: _portal,
+    ...buttonProps
+  },
+  ref,
+) => {
   const { editor } = useTiptapEditor(providedEditor)
   const toolbarLabels = useToolbarLabels()
   const cascaderRef = useRef<CascaderRef>(null)
@@ -35,11 +43,20 @@ export function TextAlignDropdownMenu({
     })
 
   const options = useMemo<CascaderOption[]>(() => {
-    return filteredAligns.map(option => ({
-      value: option.align,
-      label: option.label,
-      icon: <option.icon className="size-4 text-icon" />,
-    }))
+    const triggerClassName = TIPTAP_UI_STYLES.moreContentTrigger
+    const labelClassName = TIPTAP_UI_STYLES.moreContentLabel
+    return filteredAligns.map(option => {
+      const Icon = option.icon
+      return {
+        value: option.align,
+        label: (
+          <div className={ triggerClassName }>
+            <Icon className={ TIPTAP_UI_STYLES.iconSecondary } />
+            <span className={ labelClassName }>{ option.label }</span>
+          </div>
+        ),
+      }
+    })
   }, [filteredAligns])
 
   const handleValueChange = useCallback((value: string) => {
@@ -58,13 +75,14 @@ export function TextAlignDropdownMenu({
       disabled={ !canToggle }
       aria-label={ toolbarLabels.textAlign }
       tooltip={ toolbarLabels.textAlign }
-      { ...props }
+      { ...buttonProps }
+      ref={ ref }
       size="sm"
     >
-      <Icon className="size-4" />
-      <ChevronDownIcon className="size-4 text-icon" />
+      <Icon className={ TIPTAP_UI_STYLES.icon } />
+      <ChevronDownIcon className={ TIPTAP_UI_STYLES.iconSecondary } />
     </Button>
-  ), [isActive, canToggle, toolbarLabels.textAlign, Icon, props])
+  ), [isActive, canToggle, toolbarLabels.textAlign, Icon, buttonProps, ref])
 
   if (!isVisible) {
     return null
@@ -79,17 +97,18 @@ export function TextAlignDropdownMenu({
       onOpenChange={ onOpenChange }
       placement="bottom-start"
       dropdownHeight={ 400 }
-      optionClassName="px-2 py-1"
+      optionClassName={ TIPTAP_UI_STYLES.cascaderOption }
+      optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
       trigger={ trigger }
       dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
     />
   )
-}
+})
 
-export default TextAlignDropdownMenu
+TextAlignDropdownMenu.displayName = 'TextAlignDropdownMenu'
 
 export interface TextAlignDropdownMenuProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  extends ButtonProps {
   /** 编辑器实例 */
   editor?: Editor | null
   /** 下拉中展示的对齐类型 */

@@ -8,6 +8,7 @@ import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
 import { parseShortcutKeys } from 'tiptap-utils'
+import { TIPTAP_UI_STYLES } from '../constants'
 import {
   CODE_BLOCK_SHORTCUT_KEY,
   useCodeBlock,
@@ -89,8 +90,8 @@ export const CodeBlockButton = forwardRef<
       >
         { children ?? (
           <>
-            <Icon className="size-4" />
-            { text && <span className="text-base text-textSecondary">{ text }</span> }
+            <Icon className={ TIPTAP_UI_STYLES.icon } />
+            { text && <span className={ TIPTAP_UI_STYLES.triggerLabel }>{ text }</span> }
             { showShortcut && (
               <CodeBlockShortcutBadge shortcutKeys={ shortcutKeys } />
             ) }

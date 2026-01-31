@@ -10,6 +10,7 @@ import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
 import { parseShortcutKeys } from 'tiptap-utils'
+import { TIPTAP_UI_STYLES } from '../constants'
 import { MARK_SHORTCUT_KEYS, useMark } from './use-mark'
 
 /** 快捷键角标 */
@@ -98,9 +99,9 @@ export const MarkButton = forwardRef<HTMLButtonElement, MarkButtonProps>(
       >
         { children ?? (
           <>
-            <Icon className="size-4" />
+            <Icon className={ TIPTAP_UI_STYLES.iconSecondary } />
             { labelText && (
-              <span className={ labelClassName ?? 'ml-4 text-base text-textSecondary' }>
+              <span className={ labelClassName ?? TIPTAP_UI_STYLES.cascaderOptionLabelWithIcon }>
                 { labelText }
               </span>
             ) }

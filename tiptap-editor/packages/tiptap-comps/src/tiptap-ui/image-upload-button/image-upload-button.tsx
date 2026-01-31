@@ -12,6 +12,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 
 // --- Lib ---
 import { parseShortcutKeys } from 'tiptap-utils'
+import { TIPTAP_UI_STYLES } from '../constants'
 import {
   IMAGE_UPLOAD_SHORTCUT_KEY,
   useImageUpload,
@@ -96,8 +97,8 @@ export const ImageUploadButton = forwardRef<
       >
         { children ?? (
           <>
-            <RenderIcon className="size-4" />
-            { text && <span className="text-base text-textSecondary">{ text }</span> }
+            <RenderIcon className={ TIPTAP_UI_STYLES.icon } />
+            { text && <span className={ TIPTAP_UI_STYLES.triggerLabel }>{ text }</span> }
             { showShortcut && <ImageShortcutBadge shortcutKeys={ shortcutKeys } /> }
           </>
         ) }

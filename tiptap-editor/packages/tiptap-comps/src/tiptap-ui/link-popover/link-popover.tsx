@@ -9,124 +9,123 @@ import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_UI_STYLES } from '../constants'
 import { LinkButton } from './link-button'
 import { LinkMain } from './link-main'
 import { useLinkPopover } from './use-link-popover'
 
 /** 链接弹层：设置/编辑/移除链接 */
-export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
-  (
-    {
-      editor: providedEditor,
-      hideWhenUnavailable = false,
-      onSetLink,
-      onOpenChange,
-      autoOpenOnLinkActive = true,
-      showLabel = false,
-      showTooltip = true,
-      labelClassName,
-      onClick,
-      children,
-      ...buttonProps
-    },
-    ref,
-  ) => {
-    const { editor } = useTiptapEditor(providedEditor)
-    const popoverRef = useRef<PopoverRef>(null)
-    const inputRef = useRef<HTMLInputElement>(null)
-
-    const {
-      isVisible,
-      canSet,
-      isActive,
-      url,
-      setUrl,
-      setLink,
-      removeLink,
-      openLink,
-      label,
-      Icon,
-    } = useLinkPopover({
-      editor,
-      hideWhenUnavailable,
-      onSetLink,
-    })
-
-    const handleSetLink = useCallback(() => {
-      setLink()
-      popoverRef.current?.close()
-    }, [setLink])
-
-    useEffect(() => {
-      if (autoOpenOnLinkActive && isActive) {
-        popoverRef.current?.open()
-      }
-    }, [autoOpenOnLinkActive, isActive])
-
-    if (!isVisible) {
-      return null
-    }
-
-    const handleOpen = useCallback(() => {
-      onOpenChange?.(true)
-      setTimeout(() => {
-        inputRef.current?.focus()
-      }, 100)
-    }, [onOpenChange])
-
-    return (
-      <Popover
-        ref={ popoverRef }
-        contentClassName="p-0"
-        trigger="click"
-        onOpen={ handleOpen }
-        onClose={ () => onOpenChange?.(false) }
-        content={
-          <div { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }>
-            <LinkMain
-              url={ url }
-              setUrl={ setUrl }
-              setLink={ handleSetLink }
-              removeLink={ removeLink }
-              openLink={ openLink }
-              isActive={ isActive }
-              inputRef={ inputRef }
-            />
-          </div>
-        }
-      >
-        <LinkButton
-          disabled={ !canSet }
-          data-active-state={
-            isActive
-              ? 'on'
-              : 'off'
-          }
-          data-disabled={ !canSet }
-          aria-label={ label }
-          aria-pressed={ isActive }
-          tooltip={ showTooltip
-            ? label
-            : undefined }
-          onClick={ onClick }
-          { ...buttonProps }
-          ref={ ref }
-        >
-          { children ?? (
-            <>
-              <Icon className="size-4" />
-              { showLabel && (
-                <span className={ labelClassName ?? 'ml-4 text-base text-textSecondary' }>
-                  { label }
-                </span>
-              ) }
-            </>
-          ) }
-        </LinkButton>
-      </Popover>
-    )
+export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>((
+  {
+    editor: providedEditor,
+    hideWhenUnavailable = false,
+    onSetLink,
+    onOpenChange,
+    autoOpenOnLinkActive = true,
+    showLabel = false,
+    showTooltip = true,
+    labelClassName,
+    onClick,
+    children,
+    ...buttonProps
   },
-)
+  ref,
+) => {
+  const { editor } = useTiptapEditor(providedEditor)
+  const popoverRef = useRef<PopoverRef>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const {
+    isVisible,
+    canSet,
+    isActive,
+    url,
+    setUrl,
+    setLink,
+    removeLink,
+    openLink,
+    label,
+    Icon,
+  } = useLinkPopover({
+    editor,
+    hideWhenUnavailable,
+    onSetLink,
+  })
+
+  const handleSetLink = useCallback(() => {
+    setLink()
+    popoverRef.current?.close()
+  }, [setLink])
+
+  useEffect(() => {
+    if (autoOpenOnLinkActive && isActive) {
+      popoverRef.current?.open()
+    }
+  }, [autoOpenOnLinkActive, isActive])
+
+  if (!isVisible) {
+    return null
+  }
+
+  const handleOpen = useCallback(() => {
+    onOpenChange?.(true)
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 100)
+  }, [onOpenChange])
+
+  return (
+    <Popover
+      ref={ popoverRef }
+      contentClassName="p-0"
+      trigger="click"
+      onOpen={ handleOpen }
+      onClose={ () => onOpenChange?.(false) }
+      content={
+        <div { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }>
+          <LinkMain
+            url={ url }
+            setUrl={ setUrl }
+            setLink={ handleSetLink }
+            removeLink={ removeLink }
+            openLink={ openLink }
+            isActive={ isActive }
+            inputRef={ inputRef }
+          />
+        </div>
+      }
+    >
+      <LinkButton
+        disabled={ !canSet }
+        data-active-state={
+          isActive
+            ? 'on'
+            : 'off'
+        }
+        data-disabled={ !canSet }
+        aria-label={ label }
+        aria-pressed={ isActive }
+        tooltip={ showTooltip
+          ? label
+          : undefined }
+        onClick={ onClick }
+        { ...buttonProps }
+        ref={ ref }
+      >
+        { children ?? (
+          <>
+            <Icon className={ TIPTAP_UI_STYLES.iconSecondary } />
+            { showLabel && (
+              <span className={ labelClassName ?? TIPTAP_UI_STYLES.cascaderOptionLabelWithIcon }>
+                { label }
+              </span>
+            ) }
+          </>
+        ) }
+      </LinkButton>
+    </Popover>
+  )
+})
 
 LinkPopover.displayName = 'LinkPopover'
 

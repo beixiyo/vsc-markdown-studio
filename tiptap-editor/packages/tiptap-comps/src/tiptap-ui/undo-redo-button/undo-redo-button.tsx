@@ -10,6 +10,7 @@ import { Badge, Button } from 'comps'
 import { forwardRef, useCallback } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { parseShortcutKeys } from 'tiptap-utils'
+import { TIPTAP_UI_STYLES } from '../constants'
 import {
   UNDO_REDO_SHORTCUT_KEYS,
   useUndoRedo,
@@ -84,8 +85,8 @@ export const UndoRedoButton = forwardRef<
       >
         { children ?? (
           <>
-            <Icon className="size-4" />
-            { text && <span className="text-base text-textSecondary">{ text }</span> }
+            <Icon className={ TIPTAP_UI_STYLES.icon } />
+            { text && <span className={ TIPTAP_UI_STYLES.triggerLabel }>{ text }</span> }
             { showShortcut && (
               <HistoryShortcutBadge
                 action={ action }

@@ -3,6 +3,7 @@ import { forwardRef } from 'react'
 import { cn } from 'utils'
 import { useMarkLabels } from 'tiptap-api/react'
 import { HighlighterIcon } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 
 /** 高亮弹层触发器按钮 */
 export const ColorHighlightPopoverButton = forwardRef<
@@ -22,7 +23,7 @@ export const ColorHighlightPopoverButton = forwardRef<
       { ...props }
     >
     <div className="flex flex-col items-center">
-      { children ?? <HighlighterIcon className="size-4 text-systemRed" /> }
+      { children ?? <HighlighterIcon className={ TIPTAP_UI_STYLES.iconHighlight } /> }
       { activeColor && (
         <div
           className="absolute bottom-1 h-1 w-4 rounded-full"

@@ -11,6 +11,7 @@ import {
   ExternalLinkIcon,
   TrashIcon,
 } from '../../icons'
+import { TIPTAP_UI_STYLES } from '../constants'
 
 export const LinkMain: FC<LinkMainProps> = ({
   url,
@@ -67,7 +68,7 @@ export const LinkMain: FC<LinkMainProps> = ({
             variant="ghost"
             size="sm"
           >
-            <CornerDownLeftIcon className="size-4" />
+            <CornerDownLeftIcon className={ TIPTAP_UI_STYLES.icon } />
           </Button>
         </div>
 
@@ -82,7 +83,7 @@ export const LinkMain: FC<LinkMainProps> = ({
             variant="ghost"
             size="sm"
           >
-            <ExternalLinkIcon className="size-4" />
+            <ExternalLinkIcon className={ TIPTAP_UI_STYLES.icon } />
           </Button>
 
           <Button
@@ -93,7 +94,7 @@ export const LinkMain: FC<LinkMainProps> = ({
             variant="ghost"
             size="sm"
           >
-            <TrashIcon className="size-4" />
+            <TrashIcon className={ TIPTAP_UI_STYLES.icon } />
           </Button>
         </div>
       </div>
