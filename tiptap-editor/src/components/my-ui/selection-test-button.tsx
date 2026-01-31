@@ -1,9 +1,9 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
+import { Button } from 'comps'
 import { memo, useCallback } from 'react'
 import { useSelection, useTiptapEditor } from 'tiptap-api/react'
-import { Button } from 'comps'
 
 export interface SelectionTestButtonProps {
   /**

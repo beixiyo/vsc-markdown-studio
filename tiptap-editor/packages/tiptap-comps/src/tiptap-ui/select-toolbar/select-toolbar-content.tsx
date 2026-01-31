@@ -1,5 +1,4 @@
-import type { Editor } from '@tiptap/react'
-import type { PropsWithChildren, ReactNode } from 'react'
+import type { SelectToolbarContentProps } from './types'
 import {
   Button,
   Cascader,
@@ -22,7 +21,7 @@ import {
 } from '../index'
 
 /** 选中文本工具栏内容：撤销/重做、文本格式、样式、高亮、代码块、角标、对齐、图片等 */
-export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
+export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
   editor,
   isMobile = false,
   config,
@@ -204,48 +203,4 @@ export const SelectionToolbarContent = memo<SelectionToolbarContentProps>(({
   )
 })
 
-SelectionToolbarContent.displayName = 'SelectionToolbarContent'
-
-export interface SelectionToolbarConfig {
-  /** 撤销 */
-  undo?: boolean
-  /** 重做 */
-  redo?: boolean
-  /** 文本格式（标题、段落、列表、引用） */
-  textFormat?: boolean
-  /** 粗体 */
-  bold?: boolean
-  /** 斜体 */
-  italic?: boolean
-  /** 删除线 */
-  strike?: boolean
-  /** 行内代码 */
-  code?: boolean
-  /** 下划线 */
-  underline?: boolean
-  /** 文字颜色与高亮 */
-  highlight?: boolean
-  /** 链接 */
-  link?: boolean
-  /** 代码块 */
-  codeBlock?: boolean
-  /** 上角标 */
-  superscript?: boolean
-  /** 下角标 */
-  subscript?: boolean
-  /** 文本对齐 */
-  textAlign?: boolean
-  /** 插入图片 */
-  image?: boolean
-}
-
-export type SelectionToolbarContentProps = {
-  /** 编辑器实例 */
-  editor?: Editor | null
-  /** 是否为移动端，默认 false */
-  isMobile?: boolean
-  /** 功能配置 */
-  config?: SelectionToolbarConfig
-  /** 更多功能内容 */
-  moreContent?: ReactNode | CascaderOption[]
-} & PropsWithChildren<React.HTMLAttributes<HTMLElement>>
+SelectToolbarContent.displayName = 'SelectToolbarContent'

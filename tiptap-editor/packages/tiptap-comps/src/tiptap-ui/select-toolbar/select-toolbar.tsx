@@ -1,29 +1,25 @@
 'use client'
 
-import type { SelectionToolbarProps } from './types'
+import type { SelectToolbarProps } from './types'
 import { Popover } from 'comps'
+import { memo } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
-import { useSelectionToolbar } from './useSelectionToolbar'
+import { useSelectToolbar } from './use-select-toolbar'
 
-export { useSelectionToolbar }
-export type { UseSelectionToolbarOptions, UseSelectionToolbarResult } from './useSelectionToolbar'
+export const SelectToolbar = memo<SelectToolbarProps>((props) => {
+  const {
+    editor: providedEditor,
+    enabled = true,
+    children,
+    offsetDistance = 8,
+    placement = 'top-start',
+    className = '',
+  } = props
 
-/**
- * 选中文本工具栏组件
- * 当用户选中文本时，在选中文本上方显示工具栏
- */
-export function SelectionToolbar({
-  editor: providedEditor,
-  enabled = true,
-  children,
-  offsetDistance = 8,
-  placement = 'top-start',
-  className = '',
-}: SelectionToolbarProps) {
   const { editor } = useTiptapEditor(providedEditor)
-  const { selectionRect, isInteractingRef, popoverRef } = useSelectionToolbar({ editor, enabled })
+  const { selectionRect, isInteractingRef, popoverRef } = useSelectToolbar({ editor, enabled })
 
   /** 如果没有选中或未启用，不显示工具栏 */
   if (!enabled || (!selectionRect && !isInteractingRef.current)) {
@@ -60,4 +56,6 @@ export function SelectionToolbar({
       <div className="hidden" />
     </Popover>
   )
-}
+})
+
+SelectToolbar.displayName = 'SelectToolbar'

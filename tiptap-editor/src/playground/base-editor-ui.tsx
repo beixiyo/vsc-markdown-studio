@@ -1,9 +1,9 @@
 import type { BaseEditorUIProps } from './types'
 import { useCurrentEditor } from '@tiptap/react'
+import { Toolbar } from 'comps'
 import { memo } from 'react'
 import { useCursorVisibility } from 'tiptap-api/react'
 import { HeaderToolbar, MobileToolbarContent } from 'tiptap-comps'
-import { Toolbar } from 'comps'
 
 /**
  * 通用编辑器 UI 组件：提供基础的 Toolbar 功能

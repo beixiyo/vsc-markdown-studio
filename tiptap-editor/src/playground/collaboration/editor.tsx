@@ -9,8 +9,8 @@ import { TaskItem, TaskList } from '@tiptap/extension-list'
 import { CharacterCount } from '@tiptap/extensions'
 import { EditorContent, useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
-import { memo, useCallback, useEffect, useState } from 'react'
 import { Button } from 'comps'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { cn } from 'utils'
 
 const colors = [
@@ -218,7 +218,7 @@ export const CollaborationEditor = memo<CollaborationEditorProps>(({ ydoc, provi
           onClick={ setName }
           style={ { '--color': currentUser.color } as React.CSSProperties }
           className="px-2 py-1 text-xs relative overflow-hidden text-foreground hover:opacity-80 transition-opacity"
-          showTooltip={ false }
+          tooltip={ false }
         >
           <span
             className="absolute inset-0 opacity-50 rounded"

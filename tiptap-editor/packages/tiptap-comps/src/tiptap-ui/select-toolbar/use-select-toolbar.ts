@@ -3,31 +3,17 @@
  * 管理选区状态、Popover 开关、滚动与事件监听
  */
 
-import type { Editor } from '@tiptap/core'
 import type { PopoverRef } from 'comps'
+import type { UseSelectToolbarOptions } from './types'
 import { getScrollParents } from 'hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getSelectionRect, hasSelectedText } from 'tiptap-api'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 
-export interface UseSelectionToolbarOptions {
-  /** 编辑器实例 */
-  editor: Editor | null
-  /** 是否启用 */
-  enabled: boolean
-}
-
-export interface UseSelectionToolbarResult {
-  hasSelection: boolean
-  selectionRect: DOMRect | null
-  isInteractingRef: React.MutableRefObject<boolean>
-  popoverRef: React.RefObject<PopoverRef | null>
-}
-
-export function useSelectionToolbar({
+export function useSelectToolbar({
   editor,
   enabled,
-}: UseSelectionToolbarOptions): UseSelectionToolbarResult {
+}: UseSelectToolbarOptions) {
   const [hasSelection, setHasSelection] = useState(false)
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
   const updateTimeoutRef = useRef<number | undefined>(undefined)
