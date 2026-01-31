@@ -26,8 +26,8 @@ export const SuggestionMenuItem = memo(forwardRef<HTMLButtonElement, SuggestionM
             : 'bg-transparent border-0 cursor-pointer hover:bg-backgroundSecondary',
         ) }
       >
-        <div className="mt-[2px] flex h-5 w-5 flex-shrink-0 items-center justify-center text-textPrimary">
-          { item.icon ?? <span className="h-5 w-5" /> }
+        <div className={ cn('mt-[2px] flex shrink-0 items-center justify-center text-textPrimary', !item.icon && 'h-5 w-5') }>
+          { item.icon ?? <div className="h-5 w-5" /> }
         </div>
         <div className="flex flex-1 flex-col">
           <span className="text-sm font-medium text-textPrimary">
