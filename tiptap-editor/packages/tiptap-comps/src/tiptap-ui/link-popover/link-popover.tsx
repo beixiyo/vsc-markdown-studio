@@ -33,6 +33,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
   ) => {
     const { editor } = useTiptapEditor(providedEditor)
     const popoverRef = useRef<PopoverRef>(null)
+    const inputRef = useRef<HTMLInputElement>(null)
 
     const {
       isVisible,
@@ -66,12 +67,19 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
       return null
     }
 
+    const handleOpen = useCallback(() => {
+      onOpenChange?.(true)
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 100)
+    }, [onOpenChange])
+
     return (
       <Popover
         ref={ popoverRef }
         contentClassName="p-0"
         trigger="click"
-        onOpen={ () => onOpenChange?.(true) }
+        onOpen={ handleOpen }
         onClose={ () => onOpenChange?.(false) }
         content={
           <div { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }>
@@ -82,6 +90,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
               removeLink={ removeLink }
               openLink={ openLink }
               isActive={ isActive }
+              inputRef={ inputRef }
             />
           </div>
         }

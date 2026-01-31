@@ -1,6 +1,6 @@
 'use client'
 
-import type { FC, KeyboardEvent } from 'react'
+import type { FC, KeyboardEvent, RefObject } from 'react'
 
 import { Button, Card, Input } from 'comps'
 
@@ -19,6 +19,7 @@ export const LinkMain: FC<LinkMainProps> = ({
   removeLink,
   openLink,
   isActive,
+  inputRef,
 }) => {
   const isMobile = useIsBreakpoint()
 
@@ -43,6 +44,7 @@ export const LinkMain: FC<LinkMainProps> = ({
     >
       <div className="flex flex-row items-center gap-1 p-1">
         <Input
+          ref={ inputRef }
           type="url"
           placeholder="Paste a link..."
           value={ url }
@@ -112,4 +114,5 @@ export interface LinkMainProps {
   openLink: () => void
   /** 当前选区是否命中链接 */
   isActive: boolean
+  inputRef?: RefObject<HTMLInputElement | null>
 }
