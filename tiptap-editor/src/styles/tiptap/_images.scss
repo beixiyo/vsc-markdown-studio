@@ -1,0 +1,55 @@
+/* ============================================
+   Tiptap 图片样式
+   基于 Markdown Mobile 排版规范
+   ============================================ */
+
+.tiptap.ProseMirror {
+  img {
+    border-style: none;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    margin: 2rem 0;
+    box-sizing: content-box;
+    
+    /* 选中状态 */
+    &.ProseMirror-selectednode {
+      outline: 3px solid var(--tt-brand);
+      outline-offset: 2px;
+    }
+    
+    /* 左对齐图片 */
+    &[align=left] {
+      padding-right: 20px;
+    }
+    
+    /* 右对齐图片 */
+    &[align=right] {
+      padding-left: 20px;
+    }
+  }
+  
+  /* Emoji */
+  .emoji {
+    max-width: none;
+    vertical-align: text-top;
+    background-color: transparent;
+  }
+  
+  g-emoji {
+    display: inline-block;
+    min-width: 1ch;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 1em;
+    font-style: normal !important;
+    font-weight: 400;
+    line-height: 1;
+    vertical-align: -0.075em;
+    
+    img {
+      width: 1em;
+      height: 1em;
+    }
+  }
+}

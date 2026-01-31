@@ -1,0 +1,29 @@
+/* ============================================
+   Tiptap 分割线样式
+   基于 Markdown Mobile 排版规范
+   ============================================ */
+
+.tiptap.ProseMirror {
+  hr {
+    box-sizing: content-box;
+    overflow: hidden;
+    background: transparent;
+    border: none;
+    height: 0.25em;
+    padding: 0;
+    margin: 1.5rem 0;
+    background-color: var(--tt-hr-color);
+    border-radius: 2px;
+    
+    &::before {
+      display: table;
+      content: "";
+    }
+    
+    &::after {
+      display: table;
+      clear: both;
+      content: "";
+    }
+  }
+}

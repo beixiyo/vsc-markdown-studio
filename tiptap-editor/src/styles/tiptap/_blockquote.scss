@@ -1,0 +1,33 @@
+/* ============================================
+   Tiptap 引用样式
+   基于 Markdown Mobile 排版规范
+   ============================================ */
+
+.tiptap.ProseMirror {
+  blockquote {
+    position: relative;
+    margin: 0;
+    padding: 0 1em;
+    color: var(--tt-blockquote-text);
+    
+    /* 左侧竖线 */
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0.25em;
+      background-color: var(--tt-blockquote-border);
+      border-radius: 2px;
+    }
+    
+    > *:first-child {
+      margin-top: 0;
+    }
+    
+    > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

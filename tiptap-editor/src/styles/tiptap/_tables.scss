@@ -1,0 +1,56 @@
+/* ============================================
+   Tiptap 表格样式
+   基于 Markdown Mobile 排版规范
+   ============================================ */
+
+.tiptap.ProseMirror {
+  table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    font-variant: tabular-nums;
+    margin: 1.5rem 0;
+    
+    /* 表头 */
+    th {
+      font-weight: bold;
+      text-align: left;
+    }
+    
+    /* 单元格 */
+    th,
+    td {
+      padding: 6px 13px;
+      border: 1px solid var(--tt-table-border);
+      
+      /* 单元格内最后元素无下边距 */
+      > *:last-child {
+        margin-bottom: 0;
+      }
+      
+      /* 单元格内段落 */
+      p {
+        margin: 0;
+      }
+      
+      /* 单元格内图片 */
+      img {
+        background-color: transparent;
+      }
+    }
+    
+    /* 表格行 */
+    tr {
+      background-color: var(--tt-table-bg);
+      border-top: 1px solid var(--tt-table-border);
+      
+      /* 斑马纹 - 偶数行浅底 */
+      &:nth-child(2n) {
+        background-color: var(--tt-table-bg-alt);
+      }
+    }
+  }
+}

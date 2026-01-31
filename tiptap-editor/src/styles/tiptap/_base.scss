@@ -1,0 +1,81 @@
+/* ============================================
+   Tiptap 基础样式
+   基于 Markdown Mobile 排版规范
+   ============================================ */
+
+.tiptap.ProseMirror {
+  /* 基础排版 */
+  color: var(--tt-text-primary);
+  background-color: var(--tt-bg-primary);
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  font-weight: 400;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  outline: none;
+  caret-color: var(--tt-brand);
+  
+  /* 清除浮动 */
+  &::before {
+    display: table;
+    content: "";
+  }
+  
+  &::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+  
+  /* 首个元素无上边距 */
+  > *:first-child {
+    margin-top: 0 !important;
+  }
+  
+  /* 最后元素无下边距 */
+  > *:last-child {
+    margin-bottom: 0 !important;
+  }
+  
+  /* 隐藏元素 */
+  [hidden] {
+    display: none !important;
+  }
+  
+  /* 选区样式 */
+  &:not(.readonly):not(.ProseMirror-hideselection) {
+    ::selection {
+      background-color: var(--tt-selection-bg);
+    }
+    
+    .selection::selection {
+      background: transparent;
+    }
+  }
+  
+  .selection {
+    display: inline;
+    background-color: var(--tt-selection-bg);
+  }
+  
+  /* 选中节点样式 */
+  .ProseMirror-selectednode:not(img):not(pre):not(.react-renderer) {
+    border-radius: 8px;
+    background-color: var(--tt-selection-bg);
+  }
+  
+  /* 隐藏选区时的光标 */
+  .ProseMirror-hideselection {
+    caret-color: transparent;
+  }
+  
+  /* 占位符样式 */
+  .is-empty[data-placeholder]::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    color: var(--tt-placeholder);
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}

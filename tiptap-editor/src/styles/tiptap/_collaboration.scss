@@ -1,0 +1,25 @@
+/* ============================================
+   Tiptap 协作光标样式
+   ============================================ */
+
+.tiptap.ProseMirror {
+  .collaboration-carets {
+    &__caret {
+      border-left: 1px solid currentColor;
+      border-right: 1px solid currentColor;
+      position: relative;
+    }
+    
+    &__label {
+      position: absolute;
+      top: -1.3em;
+      left: -1px;
+      background-color: inherit;
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px 4px 4px 0;
+      white-space: nowrap;
+    }
+  }
+}

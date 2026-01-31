@@ -1,0 +1,15 @@
+/* ============================================
+   Tiptap 链接样式
+   ============================================ */
+
+.tiptap.ProseMirror {
+  a {
+    color: var(--tt-link-text);
+    text-decoration: underline;
+    cursor: pointer;
+    
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
