@@ -6,7 +6,7 @@ export const CloudUploadIcon: React.FC<{ className?: string }> = ({ className })
     width="24"
     height="24"
     viewBox="0 0 24 24"
-    className={ cn('w-3.5 h-3.5', className) }
+    className={cn('w-3.5 h-3.5', className)}
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -16,41 +16,6 @@ export const CloudUploadIcon: React.FC<{ className?: string }> = ({ className })
     />
     <path
       d="M11 14.4142V21C11 21.5523 11.4477 22 12 22C12.5523 22 13 21.5523 13 21V14.4142L15.2929 16.7071C15.6834 17.0976 16.3166 17.0976 16.7071 16.7071C17.0976 16.3166 17.0976 15.6834 16.7071 15.2929L12.7078 11.2936C12.7054 11.2912 12.703 11.2888 12.7005 11.2864C12.5208 11.1099 12.2746 11.0008 12.003 11L12 11L11.997 11C11.8625 11.0004 11.7343 11.0273 11.6172 11.0759C11.502 11.1236 11.3938 11.1937 11.2995 11.2864C11.297 11.2888 11.2946 11.2912 11.2922 11.2936L7.29289 15.2929C6.90237 15.6834 6.90237 16.3166 7.29289 16.7071C7.68342 17.0976 8.31658 17.0976 8.70711 16.7071L11 14.4142Z"
-      fill="currentColor"
-    />
-  </svg>
-)
-
-export const FileIcon: React.FC = () => (
-  <svg
-    width="43"
-    height="57"
-    viewBox="0 0 43 57"
-    fill="currentColor"
-    className="text-backgroundTertiary absolute"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M0.75 10.75C0.75 5.64137 4.89137 1.5 10 1.5H32.3431C33.2051 1.5 34.0317 1.84241 34.6412 2.4519L40.2981 8.10876C40.9076 8.71825 41.25 9.5449 41.25 10.4069V46.75C41.25 51.8586 37.1086 56 32 56H10C4.89137 56 0.75 51.8586 0.75 46.75V10.75Z"
-      fill="currentColor"
-      fillOpacity="1"
-      stroke="currentColor"
-      strokeWidth="1.5"
-    />
-  </svg>
-)
-
-export const FileCornerIcon: React.FC = () => (
-  <svg
-    width="10"
-    height="10"
-    className="absolute top-0 right-1 bottom-0 text-borderSecondary"
-    viewBox="0 0 10 10"
-    fill="currentColor"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M0 0.75H0.343146C1.40401 0.75 2.42143 1.17143 3.17157 1.92157L8.82843 7.57843C9.57857 8.32857 10 9.34599 10 10.4069V10.75H4C1.79086 10.75 0 8.95914 0 6.75V0.75Z"
       fill="currentColor"
     />
   </svg>
