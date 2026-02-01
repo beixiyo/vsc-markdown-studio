@@ -593,6 +593,64 @@ importers:
         specifier: workspace:*
         version: link:../styles
 
+  packages/markdown-mobile-tiptap:
+    dependencies:
+      '@tiptap/core':
+        specifier: ^3.13.0
+        version: 3.17.1(@tiptap/pm@3.17.1)
+      '@tiptap/extension-image':
+        specifier: ^3.13.0
+        version: 3.17.1(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))
+      '@tiptap/extension-list':
+        specifier: ^3.13.0
+        version: 3.17.1(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1)
+      '@tiptap/extension-placeholder':
+        specifier: ^3.13.0
+        version: 3.17.1(@tiptap/extensions@3.17.1(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1))
+      '@tiptap/markdown':
+        specifier: ^3.13.0
+        version: 3.17.1(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1)
+      '@tiptap/pm':
+        specifier: ^3.13.0
+        version: 3.17.1
+      '@tiptap/react':
+        specifier: ^3.13.0
+        version: 3.17.1(@floating-ui/dom@1.7.5)(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@tiptap/starter-kit':
+        specifier: ^3.13.0
+        version: 3.17.1
+      hooks:
+        specifier: workspace:*
+        version: link:../hooks
+      i18n:
+        specifier: workspace:*
+        version: link:../i18n
+      notify:
+        specifier: workspace:*
+        version: link:../notify
+      styles:
+        specifier: workspace:*
+        version: link:../styles
+      tiptap-api:
+        specifier: workspace:*
+        version: link:../../tiptap-editor/packages/tiptap-api
+      tiptap-editor-core:
+        specifier: workspace:*
+        version: link:../../tiptap-editor/packages/tiptap-editor-core
+      tiptap-nodes:
+        specifier: workspace:*
+        version: link:../../tiptap-editor/packages/tiptap-nodes
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^5.1.1
+        version: 5.1.2(vite@7.2.7(@types/node@24.10.4)(jiti@1.21.7)(sass-embedded@1.96.0)(sass@1.96.0)(yaml@2.8.2))
+      react:
+        specifier: ^19.2.1
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.3(react@19.2.3)
+
   packages/markdown-studio:
     dependencies:
       '@blocknote/code-block':

@@ -1,0 +1,8 @@
+@import '../../../styles/css/reset.css';
+@import '../../../styles/css/tailwind.css';
+
+.markdown-body {
+  min-height: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}

@@ -1,0 +1,44 @@
+{
+  "name": "markdown-mobile-tiptap",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "description": "Tiptap-based Markdown editor for mobile Webview (MDBridge-compatible)",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tiptap/core": "^3.13.0",
+    "@tiptap/extension-image": "^3.13.0",
+    "@tiptap/extension-list": "^3.13.0",
+    "@tiptap/extension-placeholder": "^3.13.0",
+    "@tiptap/markdown": "^3.13.0",
+    "@tiptap/pm": "^3.13.0",
+    "@tiptap/react": "^3.13.0",
+    "@tiptap/starter-kit": "^3.13.0",
+    "hooks": "workspace:*",
+    "i18n": "workspace:*",
+    "notify": "workspace:*",
+    "styles": "workspace:*",
+    "tiptap-api": "workspace:*",
+    "tiptap-editor-core": "workspace:*",
+    "tiptap-nodes": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "peerDependencies": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  }
+}
