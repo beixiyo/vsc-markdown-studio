@@ -84,3 +84,13 @@ export type UseSelectToolbarOptions = {
   /** 是否启用 */
   enabled: boolean
 }
+
+/**
+ * SelectToolbar 组件的 Ref
+ */
+export interface SelectToolbarRef {
+  /**
+   * 手动关闭工具栏
+   */
+  close: () => void
+}

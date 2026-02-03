@@ -1,14 +1,14 @@
 'use client'
 
-import type { SelectToolbarProps } from './types'
+import type { SelectToolbarProps, SelectToolbarRef } from './types'
 import { Popover } from 'comps'
-import { memo } from 'react'
+import { forwardRef, memo, useImperativeHandle } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { useSelectToolbar } from './use-select-toolbar'
 
-export const SelectToolbar = memo<SelectToolbarProps>((props) => {
+const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((props, ref) => {
   const {
     editor: providedEditor,
     enabled = true,
@@ -20,6 +20,13 @@ export const SelectToolbar = memo<SelectToolbarProps>((props) => {
 
   const { editor } = useTiptapEditor(providedEditor)
   const { selectionRect, isInteractingRef, popoverRef } = useSelectToolbar({ editor, enabled })
+
+  /** 暴露命令式 API */
+  useImperativeHandle(ref, () => ({
+    close: () => {
+      popoverRef.current?.close()
+    },
+  }), [])
 
   /** 如果没有选中或未启用，不显示工具栏 */
   if (!enabled || (!selectionRect && !isInteractingRef.current)) {
@@ -58,4 +65,6 @@ export const SelectToolbar = memo<SelectToolbarProps>((props) => {
   )
 })
 
-SelectToolbar.displayName = 'SelectToolbar'
+InnerSelectToolbar.displayName = 'InnerSelectToolbar'
+
+export const SelectToolbar = memo(InnerSelectToolbar) as typeof InnerSelectToolbar

@@ -13,9 +13,9 @@ export const TIPTAP_UI_STYLES = {
   cascaderOptionLabelWithIcon: 'ml-4 text-sm',
 
   /** 作为 Cascader moreContent 项时的触发器按钮：与 CascaderOption 对齐（边距 px-2 py-1、字号 text-sm、图标与文案 gap-2） */
-  moreContentTrigger: 'hover:bg-transparent w-full justify-start flex items-center gap-2 !h-auto !min-h-0 !py-0 !px-2 text-sm',
+  moreContentTrigger: 'hover:bg-transparent w-full justify-start flex items-center gap-2 h-auto min-h-0 py-0 px-2 text-sm font-normal',
   /** 作为 Cascader moreContent 项时，图标旁的文案 label 样式（与 CascaderOption 的 label text-sm 一致，仅色） */
-  moreContentLabel: 'text-sm',
+  moreContentLabel: 'text-sm font-normal',
   /** 作为 Cascader moreContent 项时，选项的 label 槽位 className，使自定义内容（Button）占满行 */
   moreContentOptionLabel: 'flex-1 min-w-0',
 
