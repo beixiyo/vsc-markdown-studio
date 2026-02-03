@@ -46,14 +46,23 @@ export function useAiQuickSource(editor: Editor | null, aiController?: AiControl
   }, [editor, aiController])
 }
 
-export function useSlashSuggestion(editor: Editor | null, aiQuickSource?: SuggestionSource) {
+export type UseSlashSuggestionOptions = {
+  /** 要在 Slash 菜单中隐藏的项 id，例如 ['mermaid'] 不显示 Mermaid */
+  slashExcludeIds?: string[]
+}
+
+export function useSlashSuggestion(
+  editor: Editor | null,
+  aiQuickSource?: SuggestionSource,
+  options?: UseSlashSuggestionOptions,
+) {
   const suggestionConfig = useMemo<SuggestionConfig>(() => {
     if (!editor) {
       return {} as SuggestionConfig
     }
 
     const sources: SuggestionSource[] = [
-      new SlashMenuSource(createBasicSlashItems(editor)),
+      new SlashMenuSource(createBasicSlashItems(editor, { excludeIds: options?.slashExcludeIds })),
     ]
 
     if (aiQuickSource) {
@@ -68,7 +77,7 @@ export function useSlashSuggestion(editor: Editor | null, aiQuickSource?: Sugges
         deleteTriggerCharacterOnSelect: true,
       },
     }
-  }, [editor, aiQuickSource])
+  }, [editor, aiQuickSource, options?.slashExcludeIds])
 
   return useSuggestion(editor, suggestionConfig)
 }

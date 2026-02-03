@@ -43,7 +43,9 @@ export const EditorUI = memo<EditorUIProps>(({
   } = useOperateTests(editor || null, operateTestSuites)
 
   const aiQuickSource = useAiQuickSource(editor, aiController)
-  const suggestion = useSlashSuggestion(editor, aiQuickSource)
+  const suggestion = useSlashSuggestion(editor, aiQuickSource, {
+    slashExcludeIds: ['mermaid'], // 不显示 Mermaid 项；可改为 [] 显示全部，或从设置读取
+  })
 
   /** 启用评论同步，检测评论范围状态 */
   useCommentSync(editor, commentStore, {

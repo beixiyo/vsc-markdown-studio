@@ -49,12 +49,21 @@ export class SlashMenuSource implements SuggestionSource {
   }
 }
 
+export type CreateBasicSlashItemsOptions = {
+  /** 要排除的菜单项 id，例如 ['mermaid'] 可隐藏 Mermaid 项 */
+  excludeIds?: string[]
+}
+
 /**
  * 便捷工厂：基于当前 block 类型构造常见动作
  * （示例：将当前段落切换为 heading / paragraph，或插入新段落）
+ * @param options.excludeIds 要排除的项 id 列表，用户可据此自定义不显示的项（如不要 mermaid）
  */
-export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
+export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlashItemsOptions): SlashItemConfig[] {
   const i18n = getI18nInstance()
+  const excludeSet = options?.excludeIds?.length
+    ? new Set(options.excludeIds)
+    : null
   const exec = (command: string, ...args: unknown[]) => {
     const commands = editor.commands as Record<string, (...params: unknown[]) => unknown>
     const fn = commands[command]
@@ -130,7 +139,7 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
       subtitle: i18n.t('slash.mermaid'),
       aliases: ['graph', 'diagram', 'flow'],
       icon: createElement(SparklesIcon, { className: 'h-5 w-5 text-purple-500' }),
-      onSelect: (ed) => {
+      onSelect: (ed: Editor) => {
         ed.chain()
           .focus()
           .insertContent([
@@ -140,5 +149,5 @@ export function createBasicSlashItems(editor: Editor): SlashItemConfig[] {
           .run()
       },
     },
-  ]
+  ].filter(item => !excludeSet || !excludeSet.has(item.id))
 }
