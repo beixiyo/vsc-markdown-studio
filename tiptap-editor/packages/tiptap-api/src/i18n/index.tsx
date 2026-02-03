@@ -16,11 +16,15 @@ export * from './hooks'
 export { tiptapEditorResources } from './resources'
 
 export {
-  type Language,
+  getFirstAvailableLocale,
+  LANGUAGE_TO_LOCALE,
   LANGUAGES,
+  resolveLocaleCandidates,
 } from 'i18n'
 
 export type {
+  Language,
+  LanguageToLocaleMap,
   Resources,
   TFunction,
   TranslateOptions,
@@ -45,6 +49,7 @@ export type {
 /**
  * Tiptap Editor 特定的 I18nProvider
  * 自动注入了 Tiptap Editor 的默认翻译资源
+ * 支持通过 languageToLocale 传入自定义 fallback 映射
  */
 export interface TiptapI18nProviderProps extends Omit<I18nProviderProps, 'children'> {
   children?: React.ReactNode
@@ -53,6 +58,7 @@ export interface TiptapI18nProviderProps extends Omit<I18nProviderProps, 'childr
 export function TiptapI18nProvider({
   children,
   resources,
+  languageToLocale,
   ...props
 }: TiptapI18nProviderProps) {
   const globalI18n = useMemo(() => {
@@ -63,12 +69,15 @@ export function TiptapI18nProvider({
     /** 立即同步到全局单例，确保非 React 组件在初始化时就能拿到资源 */
     const i18n = getI18nInstance()
     i18n.mergeResources(res, true)
+    if (languageToLocale) {
+      i18n.setLanguageToLocale(languageToLocale)
+    }
     if (props.defaultLanguage) {
       i18n.changeLanguage(props.defaultLanguage)
     }
 
     return i18n
-  }, [resources, props.defaultLanguage])
+  }, [resources, props.defaultLanguage, languageToLocale])
 
   return (
     <I18nProvider { ...props } instance={ globalI18n }>
