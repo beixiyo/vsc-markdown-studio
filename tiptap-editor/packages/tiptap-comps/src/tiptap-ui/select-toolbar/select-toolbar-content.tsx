@@ -1,8 +1,9 @@
+import type { CascaderOption } from 'comps'
 import type { SelectToolbarContentProps } from './types'
 import {
   Button,
   Cascader,
-  type CascaderOption,
+
   Popover,
   Toolbar,
 } from 'comps'

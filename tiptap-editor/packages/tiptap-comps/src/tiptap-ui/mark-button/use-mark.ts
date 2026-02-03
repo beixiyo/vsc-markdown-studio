@@ -15,14 +15,14 @@ import {
   UnderlineIcon,
 } from '../../icons'
 
-export type Mark =
-  | 'bold'
-  | 'italic'
-  | 'strike'
-  | 'code'
-  | 'underline'
-  | 'superscript'
-  | 'subscript'
+export type Mark
+  = | 'bold'
+    | 'italic'
+    | 'strike'
+    | 'code'
+    | 'underline'
+    | 'superscript'
+    | 'subscript'
 
 /**
  * Configuration for the mark functionality

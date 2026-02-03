@@ -4,9 +4,9 @@ import { memo, useMemo, useRef } from 'react'
 import { useIsBreakpoint, useMarkLabels, useMenuNavigation } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { BanIcon } from '../../icons'
-import { TIPTAP_UI_STYLES } from '../constants'
 import { ColorHighlightButton } from '../color-highlight-button'
 import { useColorHighlight } from '../color-highlight-button/use-color-highlight'
+import { TIPTAP_UI_STYLES } from '../constants'
 import { DEFAULT_HIGHLIGHT_COLORS } from './constants'
 
 /** 高亮颜色弹层内容：颜色按钮 + 移除高亮 */

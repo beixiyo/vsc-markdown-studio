@@ -6,7 +6,8 @@ import { forwardRef, memo, useImperativeHandle } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
-import { useSelectToolbar } from './use-select-toolbar'
+import { useSelectToolbar } from './hooks/use-select-toolbar'
+import { useEvent } from './hooks/useEvent';
 
 const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((props, ref) => {
   const {
@@ -21,7 +22,7 @@ const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((pro
   const { editor } = useTiptapEditor(providedEditor)
   const { selectionRect, isInteractingRef, popoverRef } = useSelectToolbar({ editor, enabled })
 
-  /** 暴露命令式 API */
+  useEvent(enabled, popoverRef)
   useImperativeHandle(ref, () => ({
     close: () => {
       popoverRef.current?.close()
@@ -43,6 +44,7 @@ const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((pro
       ref={ popoverRef }
       trigger="command"
       followScroll
+      exitSetMode
       position={ (placement?.split('-')[0] as any) || 'top' }
       offset={ offsetDistance }
       virtualReferenceRect={ selectionRect }

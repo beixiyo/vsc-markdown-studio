@@ -1,12 +1,12 @@
 import type { Editor } from '@tiptap/react'
-import type { TextAlign } from './use-text-align'
+import type { ButtonProps, CascaderOption, CascaderRef } from 'comps'
 
+import type { TextAlign } from './use-text-align'
 import {
   Button,
+
   Cascader,
-  type ButtonProps,
-  type CascaderOption,
-  type CascaderRef,
+
 } from 'comps'
 
 import { forwardRef, useCallback, useMemo, useRef } from 'react'
@@ -45,7 +45,7 @@ export const TextAlignDropdownMenu = forwardRef<
   const options = useMemo<CascaderOption[]>(() => {
     const triggerClassName = TIPTAP_UI_STYLES.moreContentTrigger
     const labelClassName = TIPTAP_UI_STYLES.moreContentLabel
-    return filteredAligns.map(option => {
+    return filteredAligns.map((option) => {
       const Icon = option.icon
       return {
         value: option.align,

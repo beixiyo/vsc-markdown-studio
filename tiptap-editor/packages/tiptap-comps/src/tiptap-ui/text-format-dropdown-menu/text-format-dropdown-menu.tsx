@@ -1,13 +1,16 @@
 import type { Editor } from '@tiptap/react'
+import type { CascaderOption, CascaderRef } from 'comps'
+
+import type { ElementType } from 'react'
+import type { Level } from './use-heading'
+import type { ListType } from './use-list'
 import {
   Button,
   Cascader,
-  type CascaderOption,
-  type CascaderRef,
-} from 'comps'
 
-import type { ElementType } from 'react'
+} from 'comps'
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import { useBlockLabels, useHeadingLabels, useListLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 
@@ -17,10 +20,9 @@ import {
   TextFormatIcon,
 } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
-
 import { shouldShowButton as shouldShowBlockquoteButton, toggleBlockquote } from './use-blockquote'
-import { headingIcons, type Level, shouldShowButton as shouldShowHeadingButton, toggleHeading } from './use-heading'
-import { isListActive, listIcons, type ListType, shouldShowButton as shouldShowListButton, toggleList } from './use-list'
+import { headingIcons, shouldShowButton as shouldShowHeadingButton, toggleHeading } from './use-heading'
+import { isListActive, listIcons, shouldShowButton as shouldShowListButton, toggleList } from './use-list'
 import { useTextFormatDropdownMenu } from './use-text-format-dropdown-menu'
 
 /** 文本格式下拉：标题、段落、列表、引用等 */

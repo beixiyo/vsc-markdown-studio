@@ -1,7 +1,7 @@
 import { Button } from 'comps'
 import { forwardRef } from 'react'
-import { cn } from 'utils'
 import { useMarkLabels } from 'tiptap-api/react'
+import { cn } from 'utils'
 import { HighlighterIcon } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
 
@@ -22,16 +22,16 @@ export const ColorHighlightPopoverButton = forwardRef<
       ref={ ref }
       { ...props }
     >
-    <div className="flex flex-col items-center">
-      { children ?? <HighlighterIcon className={ TIPTAP_UI_STYLES.iconHighlight } /> }
-      { activeColor && (
-        <div
-          className="absolute bottom-1 h-1 w-4 rounded-full"
-          style={ { backgroundColor: activeColor } }
-        />
-      ) }
-    </div>
-  </Button>
+      <div className="flex flex-col items-center">
+        { children ?? <HighlighterIcon className={ TIPTAP_UI_STYLES.iconHighlight } /> }
+        { activeColor && (
+          <div
+            className="absolute bottom-1 h-1 w-4 rounded-full"
+            style={ { backgroundColor: activeColor } }
+          />
+        ) }
+      </div>
+    </Button>
   )
 })
 

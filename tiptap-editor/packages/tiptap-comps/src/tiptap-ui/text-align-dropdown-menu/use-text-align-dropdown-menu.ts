@@ -1,12 +1,13 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
+import type { TextAlign } from './use-text-align'
+
 import { useEffect, useMemo, useState } from 'react'
 
 import { useAlignLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 
 import { isExtensionAvailable } from 'tiptap-utils'
-
 import {
   AlignCenterIcon,
   AlignJustifyIcon,
@@ -16,7 +17,7 @@ import {
 import {
   canSetTextAlign,
   isTextAlignActive,
-  type TextAlign,
+
   textAlignIcons,
 } from './use-text-align'
 

@@ -1,9 +1,10 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
+import type { PopoverRef } from 'comps'
 import type { ButtonHTMLAttributes } from 'react'
 import type { UseLinkPopoverConfig } from './use-link-popover'
-import { Popover, type PopoverRef } from 'comps'
+import { Popover } from 'comps'
 
 import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
@@ -63,16 +64,16 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>((
     }
   }, [autoOpenOnLinkActive, isActive])
 
-  if (!isVisible) {
-    return null
-  }
-
   const handleOpen = useCallback(() => {
     onOpenChange?.(true)
     setTimeout(() => {
       inputRef.current?.focus()
     }, 100)
   }, [onOpenChange])
+
+  if (!isVisible) {
+    return null
+  }
 
   return (
     <Popover

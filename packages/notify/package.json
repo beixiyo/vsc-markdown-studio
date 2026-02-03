@@ -27,9 +27,6 @@
   },
   "dependencies": {
     "config": "workspace:*"
-  },
-  "devDependencies": {
-    "@blocknote/core": "workspace:*"
   }
 }
 

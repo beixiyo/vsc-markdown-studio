@@ -2,9 +2,11 @@
 
 import type { Editor } from '@tiptap/react'
 
+import type { Level } from './use-heading'
+
+import type { ListType } from './use-list'
 // --- Hooks ---
 import { useTiptapEditor } from 'tiptap-api/react'
-
 import {
   canToggleBlockquote,
   isBlockquoteActive,
@@ -12,12 +14,12 @@ import {
 import {
   canToggle,
   isHeadingActive,
-  type Level,
+
 } from './use-heading'
 import {
   canToggleList,
   isListActive,
-  type ListType,
+
 } from './use-list'
 
 /**

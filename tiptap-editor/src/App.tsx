@@ -1,4 +1,3 @@
-import type { Resources } from 'tiptap-api/react'
 import { Button } from 'comps'
 import { useState } from 'react'
 import {
@@ -9,27 +8,6 @@ import {
 import { CollaborationSplitPane } from '@/playground/collaboration/split-pane'
 import { Editor } from '@/playground/editor'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
-
-/**
- * 自定义 i18n 语言包：只写需要覆盖的 key，会和内置文案深度合并
- */
-const customI18nResources: Resources = {
-  [LANGUAGES.ZH_CN]: {
-    placeholder: {
-      default: '输入内容，输入 / 唤出命令…',
-    },
-  },
-  [LANGUAGES.EN_US]: {
-    placeholder: {
-      default: 'Type here, press / for commands…',
-    },
-  },
-  [LANGUAGES.JA_JP]: {
-    placeholder: {
-      default: 'ここに入力してください、/ コマンドを押してください…',
-    },
-  },
-}
 
 /**
  * 内部组件：用于暴露全局 i18n 实例
@@ -113,7 +91,7 @@ export default function App() {
   return (
     <TiptapI18nProvider
       defaultLanguage={ LANGUAGES.EN_US }
-      resources={ customI18nResources }
+      storage={ { enabled: true, key: 'tiptap-editor-language' } }
     >
       <AppContent />
     </TiptapI18nProvider>
