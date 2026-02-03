@@ -129,6 +129,16 @@ export const zhCN: Translations = {
     blockquote: '引用',
     mermaid: '图表',
   },
+  mermaid: {
+    editCode: '编辑 Mermaid 代码',
+    placeholder: '请输入 Mermaid 代码…',
+    cancel: '取消',
+    save: '保存',
+    rendering: '正在渲染图表…',
+    renderError: '渲染错误：',
+    retry: '重试',
+    emptyHint: '请输入 Mermaid 代码',
+  },
   placeholder: {
     heading1: '输入标题 1…',
     heading2: '输入标题 2…',

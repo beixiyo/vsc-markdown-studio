@@ -25,6 +25,7 @@
   "dependencies": {
     "hooks": "workspace:*",
     "mermaid": "^11.12.2",
+    "tiptap-api": "workspace:*",
     "tiptap-comps": "workspace:*",
     "comps": "workspace:*",
     "tiptap-utils": "workspace:*",

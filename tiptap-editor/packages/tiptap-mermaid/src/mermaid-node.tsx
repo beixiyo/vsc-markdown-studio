@@ -4,6 +4,7 @@ import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewWrapper } from '@tiptap/react'
 import { Button, Textarea } from 'comps'
 import { memo, useCallback } from 'react'
+import { useMermaidLabels } from 'tiptap-api/react'
 import { CheckIcon, EditIcon, XIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
 import { useMermaidEditor } from './hooks/use-mermaid-editor'
@@ -11,6 +12,7 @@ import { useMermaidRenderer } from './hooks/use-mermaid-renderer'
 import { useMermaidTransform } from './hooks/use-mermaid-transform'
 
 export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updateAttributes, editor }) => {
+  const labels = useMermaidLabels()
   const code = node.attrs.code || ''
   const x = node.attrs.x ?? 0
   const y = node.attrs.y ?? 0
@@ -91,7 +93,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
             <Button
               type="button"
               onClick={ handleEdit }
-              tooltip="编辑 Mermaid 代码"
+              tooltip={ labels.editCode }
               className="p-1.5"
               variant="ghost"
               size="sm"
@@ -109,7 +111,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                   value={ editCode }
                   onChange={ setEditCode }
                   onKeyDown={ handleKeyDown }
-                  placeholder="请输入 Mermaid 代码..."
+                  placeholder={ labels.placeholder }
                   containerClassName="w-full min-h-[200px]"
                   className="font-mono"
                   autoFocus
@@ -122,7 +124,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                     size="sm"
                     leftIcon={ <XIcon className="w-4 h-4" /> }
                   >
-                    取消
+                    { labels.cancel }
                   </Button>
                   <Button
                     type="button"
@@ -131,7 +133,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                     size="sm"
                     leftIcon={ <CheckIcon className="w-4 h-4" /> }
                   >
-                    保存
+                    { labels.save }
                   </Button>
                 </div>
               </div>
@@ -140,7 +142,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
               <>
                 { isRendering && (
                   <div className="text-center text-textSecondary">
-                    正在渲染图表...
+                    { labels.rendering }
                   </div>
                 ) }
                 { error && (
@@ -154,7 +156,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div className="text-sm">
-                        <strong>渲染错误：</strong>
+                        <strong>{ labels.renderError }</strong>
                         { error }
                       </div>
                       <Button
@@ -164,7 +166,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                         size="sm"
                         className="text-xs px-2"
                       >
-                        重试
+                        { labels.retry }
                       </Button>
                     </div>
                   </div>
@@ -179,7 +181,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                       editor?.isEditable && 'cursor-pointer hover:text-textSecondary transition-colors',
                     ) }
                   >
-                    请输入 Mermaid 代码
+                    { labels.emptyHint }
                   </div>
                 ) }
                 {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */ }

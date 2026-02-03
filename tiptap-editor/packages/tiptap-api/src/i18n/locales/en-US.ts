@@ -129,6 +129,16 @@ export const enUS: Translations = {
     blockquote: 'Blockquote',
     mermaid: 'Diagram',
   },
+  mermaid: {
+    editCode: 'Edit Mermaid code',
+    placeholder: 'Enter Mermaid code…',
+    cancel: 'Cancel',
+    save: 'Save',
+    rendering: 'Rendering diagram…',
+    renderError: 'Render error: ',
+    retry: 'Retry',
+    emptyHint: 'Enter Mermaid code',
+  },
   placeholder: {
     heading1: 'Type Heading 1…',
     heading2: 'Type Heading 2…',

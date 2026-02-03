@@ -129,6 +129,16 @@ export const ja: Translations = {
     blockquote: '引用',
     mermaid: '図',
   },
+  mermaid: {
+    editCode: 'Mermaid コードを編集',
+    placeholder: 'Mermaid コードを入力…',
+    cancel: 'キャンセル',
+    save: '保存',
+    rendering: '図を描画中…',
+    renderError: '描画エラー：',
+    retry: '再試行',
+    emptyHint: 'Mermaid コードを入力',
+  },
   placeholder: {
     heading1: '見出し 1 を入力…',
     heading2: '見出し 2 を入力…',

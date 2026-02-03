@@ -127,6 +127,16 @@ export type TiptapEditorTranslations = {
     blockquote: string
     mermaid: string
   }
+  mermaid: {
+    editCode: string
+    placeholder: string
+    cancel: string
+    save: string
+    rendering: string
+    renderError: string
+    retry: string
+    emptyHint: string
+  }
   placeholder: {
     heading1: string
     heading2: string
@@ -332,5 +342,22 @@ export function useSlashLabels() {
     orderedList: t('slash.orderedList'),
     blockquote: t('slash.blockquote'),
     mermaid: t('slash.mermaid'),
+  }
+}
+
+/**
+ * 获取 Mermaid 图表相关标签
+ */
+export function useMermaidLabels() {
+  const t = useTiptapEditorT()
+  return {
+    editCode: t('mermaid.editCode'),
+    placeholder: t('mermaid.placeholder'),
+    cancel: t('mermaid.cancel'),
+    save: t('mermaid.save'),
+    rendering: t('mermaid.rendering'),
+    renderError: t('mermaid.renderError'),
+    retry: t('mermaid.retry'),
+    emptyHint: t('mermaid.emptyHint'),
   }
 }
