@@ -54,11 +54,15 @@ export function useSuggestionData({
         }),
       ),
     )
-      .then((results) => {
+      .then(async (results) => {
         if (currentReq !== requestIdRef.current) {
           return
         }
-        setItems(results.flat())
+        let rawItems = results.flat()
+        if (triggerConfig.filterItems) {
+          rawItems = await Promise.resolve(triggerConfig.filterItems(rawItems))
+        }
+        setItems(rawItems)
         setLoading(false)
       })
       .catch((err) => {

@@ -45,6 +45,8 @@ export function useSuggestionKeyboard({
     },
     el,
     capture: true,
+    /** 焦点在编辑器 contenteditable 内，必须响应键盘导航 */
+    ignoreWhenEditable: false,
   })
 
   useShortCutKey({
@@ -56,6 +58,7 @@ export function useSuggestionKeyboard({
     },
     el,
     capture: true,
+    ignoreWhenEditable: false,
   })
 
   useShortCutKey({
@@ -67,6 +70,7 @@ export function useSuggestionKeyboard({
     },
     el,
     capture: true,
+    ignoreWhenEditable: false,
   })
 
   useShortCutKey({
@@ -78,5 +82,6 @@ export function useSuggestionKeyboard({
     },
     el,
     capture: true,
+    ignoreWhenEditable: false,
   })
 }

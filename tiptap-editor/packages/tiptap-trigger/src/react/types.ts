@@ -21,6 +21,13 @@ export type TriggerConfig = {
    * 允许 ignoreQueryLength 打开（用于空 query 情况）
    */
   allowProgrammaticOpen?: boolean
+  /**
+   * 对数据源返回的 items 进行筛选/排序，用户可自定义过滤逻辑
+   * @example
+   * filterItems: (items) => items.filter(i => i.group !== 'hidden')
+   * filterItems: (items) => items.slice(0, 10) // 限制数量
+   */
+  filterItems?: (items: SuggestionItem[]) => SuggestionItem[] | Promise<SuggestionItem[]>
 }
 
 export type SuggestionConfig = Record<string, TriggerConfig>
