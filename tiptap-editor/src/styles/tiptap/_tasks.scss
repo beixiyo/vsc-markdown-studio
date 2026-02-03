@@ -8,28 +8,35 @@
   ul[data-type="taskList"] {
     list-style: none;
     padding-left: 0;
-    
+
     li {
       display: flex;
+      align-items: flex-start;
       gap: 0.5rem;
       margin-bottom: 4px;
       list-style: none;
       padding-left: 0;
-      
+
       /* 相邻任务项间距 */
       + li {
         margin-top: 4px;
       }
-      
+
+      /* 内容容器 - 允许自动换行 */
+      > div {
+        flex: 1;
+        min-width: 0;
+      }
+
       /* Checkbox 容器 */
       label {
         flex-shrink: 0;
         padding-top: 0.25rem;
         font-weight: 400;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         cursor: pointer;
-        
+
         /* 隐藏原生 checkbox */
         input {
           position: absolute;
@@ -37,7 +44,7 @@
           width: 0;
           height: 0;
         }
-        
+
         /* 自定义 checkbox 样式 */
         span {
           display: block;
@@ -47,7 +54,7 @@
           border-radius: 4px;
           background-color: var(--tt-checklist-bg);
           position: relative;
-          
+
           /* 对勾图标 */
           &::before {
             content: "";
@@ -60,18 +67,18 @@
             transition: opacity 0.15s ease-in-out;
           }
         }
-        
+
         /* 选中状态 */
         input:checked + span {
           background-color: var(--tt-checklist-bg-active);
           border-color: var(--tt-checklist-border-active);
-          
+
           &::before {
             opacity: 1;
           }
         }
       }
-      
+
       /* 已完成任务 - 文字变灰 + 删除线 */
       &[data-checked="true"] > div > p {
         color: var(--tt-task-completed);
