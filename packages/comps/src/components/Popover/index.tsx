@@ -37,7 +37,8 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
     virtualReferenceRect,
     clickOutsideIgnoreSelector,
     followScroll = false,
-    restoreFocusOnOpen = true,
+    restoreFocusOnOpen = false,
+    exitSetMode = false,
   },
   ref,
 ) => {
@@ -48,6 +49,7 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
   const contentRef = useRef<HTMLDivElement>(null)
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const showTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const wasOpenRef = useRef(false)
 
   const { scrollPortalTarget, scrollContainerRef } = useScrollPortal(
     triggerRef,
@@ -105,10 +107,15 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
 
   useEffect(() => {
     if (isOpen) {
+      wasOpenRef.current = true
       onOpen?.()
     }
     else {
-      onClose?.()
+      /** 仅在实际从打开变为关闭时调用 onClose，避免初次 mount 时 isOpen=false 误触发 */
+      if (wasOpenRef.current) {
+        wasOpenRef.current = false
+        onClose?.()
+      }
     }
   }, [isOpen, onOpen, onClose])
 
@@ -233,6 +240,7 @@ export const Popover = memo(forwardRef<PopoverRef, PopoverProps>((
           className={ cn('z-50 rounded-2xl shadow-lg bg-background', contentClassName) }
           style={ floatingStyle }
           variants={ variants }
+          exitSetMode={ exitSetMode }
           onMouseEnter={ handleContentMouseEnter }
           onMouseLeave={ handleContentMouseLeave }
         >

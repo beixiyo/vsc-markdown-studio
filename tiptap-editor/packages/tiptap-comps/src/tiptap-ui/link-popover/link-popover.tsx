@@ -82,6 +82,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>((
       trigger="click"
       onOpen={ handleOpen }
       onClose={ () => onOpenChange?.(false) }
+      restoreFocusOnOpen={ true }
       content={
         <div { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }>
           <LinkMain

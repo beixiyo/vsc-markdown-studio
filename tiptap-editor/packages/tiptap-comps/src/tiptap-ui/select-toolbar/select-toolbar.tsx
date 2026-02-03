@@ -7,7 +7,7 @@ import { useTiptapEditor } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { useSelectToolbar } from './hooks/use-select-toolbar'
-import { useEvent } from './hooks/useEvent';
+import { useEvent } from './hooks/useEvent'
 
 const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((props, ref) => {
   const {
@@ -43,8 +43,8 @@ const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((pro
     <Popover
       ref={ popoverRef }
       trigger="command"
-      followScroll
       exitSetMode
+      restoreFocusOnOpen={ false }
       position={ (placement?.split('-')[0] as any) || 'top' }
       offset={ offsetDistance }
       virtualReferenceRect={ selectionRect }
