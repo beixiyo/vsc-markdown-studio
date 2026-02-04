@@ -4,7 +4,7 @@ import { jaJP } from './ja-JP'
 import { zhCN } from './zh-CN'
 import { zhTW } from './zh-TW'
 
-export const commonResources = {
+export const datePickerResources = {
   [LANGUAGES.ZH_CN]: zhCN,
   [LANGUAGES.EN_US]: enUS,
   [LANGUAGES.ZH_TW]: zhTW,
