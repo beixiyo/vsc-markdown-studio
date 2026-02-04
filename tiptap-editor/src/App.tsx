@@ -1,9 +1,12 @@
+import type {
+  Language,
+} from 'tiptap-api/react'
 import { Button } from 'comps'
 import { useState } from 'react'
 import {
   LANGUAGES,
   TiptapI18nProvider,
-  useI18nInstance,
+  useI18n,
 } from 'tiptap-api/react'
 import { CollaborationSplitPane } from '@/playground/collaboration/split-pane'
 import { Editor } from '@/playground/editor'
@@ -13,7 +16,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher'
  * 内部组件：用于暴露全局 i18n 实例
  */
 function AppContent() {
-  const i18nInstance = useI18nInstance()
+  const { i18n: i18nInstance } = useI18n()
   const [mode, setMode] = useState<'editor' | 'collaboration'>('editor')
 
   /** 暴露全局函数到 window 对象，方便在控制台测试 */

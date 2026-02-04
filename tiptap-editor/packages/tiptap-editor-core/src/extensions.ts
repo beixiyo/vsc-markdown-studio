@@ -9,10 +9,10 @@ import { Typography } from '@tiptap/extension-typography'
 import { Selection } from '@tiptap/extensions'
 import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
-import { getI18nInstance } from 'i18n'
+import { getI18n } from 'i18n'
 
 export function createExtensions() {
-  const i18n = getI18nInstance()
+  const i18n = getI18n()
 
   return [
     // StarterKit：Tiptap 的基础扩展包，包含常用功能

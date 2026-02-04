@@ -2,7 +2,7 @@ import type { EditorView } from '@tiptap/pm/view'
 import type { SpeakerAttributes, SpeakerOptions } from './types'
 import { type CommandProps, mergeAttributes, Node } from '@tiptap/core'
 import { Plugin } from '@tiptap/pm/state'
-import { getI18nInstance } from 'i18n'
+import { getI18n } from 'i18n'
 
 const DEFAULT_TAG = 'strong'
 const TOKEN_NAME = 'speaker'
@@ -47,7 +47,7 @@ function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerO
     ? (Number(originalLabel) + 1).toString()
     : originalLabel
 
-  const i18n = getI18nInstance()
+  const i18n = getI18n()
   if (i18n && originalLabel) {
     /** 强制刷新资源确保最新资源被加载 */
     return i18n.t('speaker.speaker', {
@@ -226,7 +226,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       updateText()
 
       /** 监听语言变更事件 */
-      const i18n = getI18nInstance()
+      const i18n = getI18n()
       const onLanguageChange = () => {
         updateText()
       }

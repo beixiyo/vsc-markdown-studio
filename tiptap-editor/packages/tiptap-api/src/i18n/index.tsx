@@ -6,7 +6,7 @@
 
 import type { I18nProviderProps } from 'i18n/react'
 import { deepMerge } from '@jl-org/tool'
-import { getI18nInstance } from 'i18n'
+import { getI18n } from 'i18n'
 import { I18nProvider } from 'i18n/react'
 import React, { useMemo } from 'react'
 import { tiptapEditorResources } from './resources'
@@ -38,7 +38,6 @@ export type {
 /** 重新导出 i18n/react 的核心 API，方便外部使用 */
 export {
   useI18n,
-  useI18nInstance,
   useLanguage,
   useResources,
   useStorage,
@@ -71,7 +70,7 @@ export function TiptapI18nProvider({
       : tiptapEditorResources
 
     /** 立即同步到全局单例，确保非 React 组件在初始化时就能拿到资源 */
-    const i18n = getI18nInstance()
+    const i18n = getI18n()
     i18n.mergeResources(res, true)
     if (languageToLocale) {
       i18n.setLanguageToLocale(languageToLocale)

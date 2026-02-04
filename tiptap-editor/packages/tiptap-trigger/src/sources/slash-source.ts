@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import type { SuggestionItem, SuggestionItemContext, SuggestionSource, SuggestionSourceParams } from '../types'
-import { getI18nInstance } from 'i18n'
+import { getI18n } from 'i18n'
 import { createElement } from 'react'
 import { AlignLeftIcon, BlockquoteIcon, HeadingOneIcon, HeadingTwoIcon, ListIcon, ListOrderedIcon, SparklesIcon } from 'tiptap-comps/icons'
 
@@ -60,7 +60,7 @@ export type CreateBasicSlashItemsOptions = {
  * @param options.excludeIds 要排除的项 id 列表，用户可据此自定义不显示的项（如不要 mermaid）
  */
 export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlashItemsOptions): SlashItemConfig[] {
-  const i18n = getI18nInstance()
+  const i18n = getI18n()
   const excludeSet = options?.excludeIds?.length
     ? new Set(options.excludeIds)
     : null

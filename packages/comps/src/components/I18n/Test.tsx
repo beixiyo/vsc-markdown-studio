@@ -7,7 +7,7 @@
 
 import type { Language, Resources } from 'i18n'
 import { LANGUAGES } from 'i18n'
-import { I18nProvider, useI18nInstance, useLanguage, useResources, useStorage, useT } from 'i18n/react'
+import { I18nProvider, useI18n, useLanguage, useResources, useStorage, useT } from 'i18n/react'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { cn } from 'utils'
 import { Button } from '../Button'
@@ -714,7 +714,7 @@ StorageManagementTest.displayName = 'StorageManagementTest'
  * 事件监听测试
  */
 const EventTest = memo(() => {
-  const i18n = useI18nInstance()
+  const { i18n } = useI18n()
   const [eventCount, setEventCount] = useState(0)
   const [lastEvent, setLastEvent] = useState<string>('')
 

@@ -14,13 +14,13 @@
 ### 基础用法
 
 ```typescript
-import { createI18nInstance, Language } from '@your-package/i18n2'
+import { createI18n, LANGUAGES } from '@your-package/i18n'
 
 /** 创建实例 */
-const i18n = createI18nInstance({
-  defaultLanguage: Language.ZH_CN,
+const i18n = createI18n({
+  defaultLanguage: LANGUAGES.ZH_CN,
   resources: {
-    [Language.ZH_CN]: {
+    [LANGUAGES.ZH_CN]: {
       common: {
         loading: '加载中...',
         greeting: '你好 {{name}}',
@@ -58,7 +58,7 @@ const resources = {
   },
 } as const
 
-const i18n = createI18nInstance({ resources })
+const i18n = createI18n({ resources })
 const t = createTypedTFunction<typeof resources[typeof Language.ZH_CN]>(i18n)
 
 // ✅ 类型安全：自动补全和类型检查
@@ -117,7 +117,7 @@ unsubscribe()
 
 ```typescript
 /** 使用默认 LocalStorage */
-const i18n = createI18nInstance({
+const i18n = createI18n({
   storage: {
     enabled: true,
     key: 'my-app:language',
@@ -139,7 +139,7 @@ class CustomStorageAdapter implements StorageAdapter {
   }
 }
 
-const i18n = createI18nInstance({
+const i18n = createI18n({
   storage: {
     enabled: true,
     adapter: new CustomStorageAdapter(),
@@ -217,7 +217,6 @@ function MyComponent() {
 - `useLanguage()` - 返回当前语言和切换语言的方法
 - `useResources()` - 返回资源管理相关的方法
 - `useStorage()` - 返回存储管理相关的方法
-- `useI18nInstance()` - 直接返回 i18n 实例
 
 #### I18nProvider Props
 
