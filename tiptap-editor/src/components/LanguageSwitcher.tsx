@@ -1,5 +1,6 @@
 import { Button } from 'comps'
-import { LANGUAGES, useLanguage } from 'tiptap-api/react'
+import { useLanguage } from 'tiptap-api/react'
+import { SUPPORTED_LANGUAGES } from 'tiptap-api'
 
 /**
  * 语言切换组件
@@ -7,18 +8,12 @@ import { LANGUAGES, useLanguage } from 'tiptap-api/react'
 export function LanguageSwitcher() {
   const { language, changeLanguage } = useLanguage()
 
-  const languages = [
-    { value: LANGUAGES.ZH_CN, label: '中文' },
-    { value: LANGUAGES.EN_US, label: 'English' },
-    { value: LANGUAGES.JA_JP, label: '日語' },
-  ]
-
   return (
     <div className="flex gap-2 items-center">
       <span className="text-sm text-textSecondary">
         语言:
       </span>
-      { languages.map(lang => (
+      { SUPPORTED_LANGUAGES.map(lang => (
         <Button
           size="sm"
           key={ lang.value }

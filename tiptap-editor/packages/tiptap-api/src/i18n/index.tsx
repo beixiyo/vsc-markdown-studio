@@ -14,6 +14,10 @@ import { tiptapEditorResources } from './resources'
 /** 导出 tiptap-editor 特定的 i18n 功能 */
 export * from './hooks'
 export { tiptapEditorResources } from './resources'
+export {
+  SUPPORTED_LANGUAGES,
+} from './supported-languages'
+export type { SupportedLanguageOption } from './supported-languages'
 
 export {
   getFirstAvailableLocale,

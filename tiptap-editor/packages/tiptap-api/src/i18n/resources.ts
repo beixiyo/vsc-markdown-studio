@@ -7,9 +7,11 @@ import { LANGUAGES } from 'i18n'
 import { enUS } from './locales/en-US'
 import { ja } from './locales/ja-JP'
 import { zhCN } from './locales/zh-CN'
+import { zhTW } from './locales/zh-TW'
 
 export const tiptapEditorResources: Resources = {
   [LANGUAGES.ZH_CN]: zhCN,
+  [LANGUAGES.ZH_TW]: zhTW,
   [LANGUAGES.EN_US]: enUS,
   [LANGUAGES.JA_JP]: ja,
 }
