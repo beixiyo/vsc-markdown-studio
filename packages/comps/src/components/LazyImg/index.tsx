@@ -4,6 +4,7 @@ import type { LazyImgProps } from './types'
 import { motion } from 'motion/react'
 import { memo, useEffect, useRef, useState } from 'react'
 import { cn } from 'utils'
+import { Loading } from '../Loading/Loading'
 import { PreviewImg } from '../PreviewImg'
 import { ob, observerMap } from './constants'
 import {
@@ -25,7 +26,7 @@ export const LazyImg = memo<LazyImgProps>((
 
     lazy = true,
     src,
-    loadingSrc = new URL('@/assets/svg/loadingSvg.svg', import.meta.url).href,
+    loading,
     errorSrc = 'https://tse4-mm.cn.bing.net/th/id/OIP-C.DP6b1UUJQbIaD8dHSskvggHaGX?w=213&h=183&c=7&r=0&o=5&dpr=1.1&pid=1.7',
 
     errorText = 'The picture was stolen by aliens',
@@ -33,6 +34,7 @@ export const LazyImg = memo<LazyImgProps>((
     keepAspect = true,
     previewable = true,
     showThumbnails = true,
+    previewMaskClosable = true,
     previewImages,
     onClick,
 
@@ -189,16 +191,13 @@ export const LazyImg = memo<LazyImgProps>((
         {/* Loading Placeholder */ }
         { showLoading && (
           <div className="absolute inset-0 z-5 flex flex-col items-center justify-center">
-            <img
-              src={ loadingSrc }
-              alt="Loading..."
-              decoding="async"
-              className={ cn(
-                'w-10 h-10 opacity-50',
-              ) }
-              style={ imgStyle }
-              { ...rest }
-            />
+            { loading || (
+              <Loading
+                loading={ showLoading }
+                variant="skeleton"
+                skeletonProps={ { className: 'rounded-2xl' } }
+              />
+            ) }
             { loadingText && (
               <span className="mt-1 text-xs text-gray-400">{ loadingText }</span>
             ) }
@@ -230,12 +229,14 @@ export const LazyImg = memo<LazyImgProps>((
           alt={ rest.alt || 'Lazy loaded image' }
           decoding="async"
           className={ cn(
-            'absolute top-0 left-0 object-cover w-full h-full transition-transform duration-300',
-            { 'hover:scale-105': showImg },
+            'absolute top-0 left-0 object-cover w-full h-full',
             { 'cursor-zoom-in': previewable && showImg },
             imgClassName,
           ) }
-          style={ imgStyle }
+          style={ {
+            transition: 'all 3s',
+            ...imgStyle,
+          } }
           onClick={ (e) => {
             onClick?.(e)
             if (previewable && showImg)
@@ -261,6 +262,7 @@ export const LazyImg = memo<LazyImgProps>((
           ? previewImages.indexOf(src)
           : 0 }
         showThumbnails={ showThumbnails }
+        maskClosable={ previewMaskClosable }
         onClose={ () => setPreviewVisible(false) }
       />
     ) }

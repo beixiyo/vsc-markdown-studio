@@ -51,6 +51,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
   const showUndoRedo = undo || redo
   const showMarks = bold || italic || strike || underline || highlight || link
   const showScripts = superscript || subscript
+  const MORE_CONTENT_KEEP_OPEN_ATTR = 'data-more-content-keep-open'
 
   const renderMore = () => {
     if (!moreContent)
@@ -72,12 +73,12 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
           trigger={ moreButton }
           options={ moreContent as CascaderOption[] }
           placement="bottom-start"
-          dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
+          dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true', [MORE_CONTENT_KEEP_OPEN_ATTR]: 'true' } as any }
           dropdownHeight={ 500 }
           optionClassName={ TIPTAP_UI_STYLES.cascaderOption }
           optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
           dropdownClassName="min-w-[140px]"
-          clickOutsideIgnoreSelector={ `[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]` }
+          clickOutsideIgnoreSelector={ `[${MORE_CONTENT_KEEP_OPEN_ATTR}="true"]` }
         />
       )
     }
@@ -88,7 +89,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
         position="bottom"
         content={
           <div
-            { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+            { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true', [MORE_CONTENT_KEEP_OPEN_ATTR]: 'true' } }
             className="min-w-[120px]"
           >
             { moreContent }

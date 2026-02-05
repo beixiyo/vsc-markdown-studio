@@ -2,8 +2,9 @@
 
 import type { RefObject } from 'react'
 import type { FileItem, UploaderRef } from '.'
-import { Image, Settings, Upload, X } from 'lucide-react'
+import { Image, Plus, Settings, Upload, X } from 'lucide-react'
 import { useRef, useState } from 'react'
+import { cn } from 'utils'
 import { Uploader } from '.'
 import { Button } from '../Button'
 import { Checkbox } from '../Checkbox/Checkbox'
@@ -31,6 +32,7 @@ export default function UploaderDemoPage() {
     dragAreaClickTrigger: false,
     renderChildrenWithDragArea: false,
     mode: 'default' as 'default' | 'card',
+    useCustomUploadArea: false,
   })
 
   /** 文件变更处理 */
@@ -182,6 +184,17 @@ export default function UploaderDemoPage() {
               </label>
             </div>
 
+            <div className="flex items-center">
+              <Checkbox
+                checked={ settings.useCustomUploadArea }
+                onChange={ e => setSettings(prev => ({ ...prev, useCustomUploadArea: e })) }
+                id="useCustomUploadArea"
+              />
+              <label htmlFor="useCustomUploadArea" className="ml-2 text-sm text-textPrimary">
+                🎨 自定义上传区域 (renderUploadArea)
+              </label>
+            </div>
+
             <div>
               <label className="mb-1 block text-sm text-textPrimary">
                 🔢 最大文件数量
@@ -254,6 +267,46 @@ export default function UploaderDemoPage() {
                   dragAreaClickTrigger={ settings.dragAreaClickTrigger }
                   renderChildrenWithDragArea={ settings.renderChildrenWithDragArea }
                   pasteEls={ [pasteAreaRef] }
+                  renderUploadArea={ settings.useCustomUploadArea
+                    ? ({ getRootProps, renderPreviewList }) => {
+                        const rootProps = getRootProps()
+                        return (
+                          <div
+                            { ...rootProps }
+                            onClick={ e => e.stopPropagation() }
+                          >
+                            {/* 预览列表区域 */ }
+                            { settings.mode === 'card' && (
+                              <div className="flex-1 min-h-0">
+                                { renderPreviewList({
+                                  previewConfig: {
+                                    width: 56,
+                                    height: 56,
+                                    renderAddTrigger: ({ onClick, disabled: addDisabled, width, height }) => (
+                                      <div
+                                        onClick={ (e) => {
+                                          e.stopPropagation()
+                                          onClick()
+                                        } }
+                                        className={ cn(
+                                          'rounded-lg flex items-center justify-center',
+                                          'bg-backgroundTertiary transition-opacity',
+                                          'cursor-pointer hover:opacity-70',
+                                          addDisabled && 'opacity-50 cursor-not-allowed',
+                                        ) }
+                                        style={ { width, height } }
+                                      >
+                                        <Plus className="size-5 text-textSecondary" />
+                                      </div>
+                                    ),
+                                  },
+                                }) }
+                              </div>
+                            ) }
+                          </div>
+                        )
+                      }
+                    : undefined }
                 />
               </div>
             </div>
@@ -394,6 +447,10 @@ export default function UploaderDemoPage() {
                 <li className="flex">
                   <span className="mr-2 text-brand">🎨</span>
                   <span>可自定义预览样式和渲染方式</span>
+                </li>
+                <li className="flex">
+                  <span className="mr-2 text-brand">🧩</span>
+                  <span>通过 renderUploadArea 完全自定义上传区域 JSX</span>
                 </li>
               </ul>
             </div>

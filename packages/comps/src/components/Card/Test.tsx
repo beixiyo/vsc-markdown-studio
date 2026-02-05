@@ -3,10 +3,12 @@
 import { Check, Settings, X } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from 'utils'
+import { Button, ButtonGroup, Slider } from '../index'
 import { ThemeToggle } from '../ThemeToggle'
 import { Card } from './Card'
 import { Card3D } from './Card3D'
 import { GlowBorder } from './GlowBorder'
+import { StackedCards } from './StackedCards'
 
 export default function TestCard() {
   const [settings, setSettings] = useState({
@@ -21,7 +23,13 @@ export default function TestCard() {
   })
 
   const [showSettings, setShowSettings] = useState(false)
-  const [activeTab, setActiveTab] = useState<'3d' | '2d' | 'glow'>('3d')
+  const [activeTab, setActiveTab] = useState<'3d' | '2d' | 'glow' | 'stacked'>('3d')
+
+  const [layers, setLayers] = useState(3)
+  const [offsetX, setOffsetX] = useState(10)
+  const [offsetY, setOffsetY] = useState(10)
+  const [scaleStep, setScaleStep] = useState(0.03)
+  const [opacityStep, setOpacityStep] = useState(0.08)
 
   const toggleSetting = (key: keyof typeof settings) => {
     setSettings(prev => ({
@@ -41,51 +49,23 @@ export default function TestCard() {
     <div className="relative min-h-screen flex flex-col items-center p-4 bg-background">
 
       {/* 标签切换 */ }
-      <div className="mb-6 flex space-x-4">
+      <div className="mb-6 flex items-center gap-4">
         <ThemeToggle />
-
-        <button
-          onClick={ () => setActiveTab('3d') }
-          className={ cn(
-            'px-4 py-2 rounded-md transition-colors',
-            activeTab === '3d'
-              ? 'bg-sky-600 text-white'
-              : 'bg-gray-800 text-gray-400 hover:bg-gray-700',
-          ) }
-        >
-          3D 卡片
-        </button>
-        <button
-          onClick={ () => setActiveTab('2d') }
-          className={ cn(
-            'px-4 py-2 rounded-md transition-colors',
-            activeTab === '2d'
-              ? 'bg-sky-600 text-white'
-              : 'bg-gray-800 text-gray-400 hover:bg-gray-700',
-          ) }
-        >
-          2D 卡片
-        </button>
-        <button
-          onClick={ () => setActiveTab('glow') }
-          className={ cn(
-            'px-4 py-2 rounded-md transition-colors',
-            activeTab === 'glow'
-              ? 'bg-sky-600 text-white'
-              : 'bg-gray-800 text-gray-400 hover:bg-gray-700',
-          ) }
-        >
-          发光边框
-        </button>
+        <ButtonGroup active={ activeTab } onChange={ setActiveTab }>
+          <Button name="3d" size="sm">
+            3D 卡片
+          </Button>
+          <Button name="2d" size="sm">
+            2D 卡片
+          </Button>
+          <Button name="glow" size="sm">
+            发光边框
+          </Button>
+          <Button name="stacked" size="sm">
+            堆叠卡片
+          </Button>
+        </ButtonGroup>
       </div>
-
-      <h1 className="mb-4 text-sky-400 font-bold">
-        { activeTab === '3d'
-          ? '3D 卡片组件演示'
-          : activeTab === '2d'
-            ? '2D 卡片组件演示'
-            : '发光边框组件演示' }
-      </h1>
 
       { activeTab === '3d'
         ? (
@@ -536,66 +516,200 @@ export default function TestCard() {
                 </Card>
               </div>
             )
-          : (
-              <div className="flex flex-wrap gap-8">
-                {/* 发光边框测试 */ }
-                <div className="h-64 w-72">
-                  <GlowBorder
-                    className="h-full rounded-lg"
-                    borderSize={ 2 }
-                    gradientColors={ ['#f0f', '#0ff', '#ff0'] }
-                    animationDuration="4s"
-                  >
-                    <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
-                      <h3 className="text-xl text-white font-semibold">基础发光边框</h3>
-                      <p className="mt-2 text-center text-textSecondary">默认配置的发光边框效果</p>
-                    </div>
-                  </GlowBorder>
-                </div>
+          : activeTab === 'glow'
+            ? (
+                <div className="flex flex-wrap gap-8">
+                  {/* 发光边框测试 */ }
+                  <div className="h-64 w-72">
+                    <GlowBorder
+                      className="h-full rounded-lg"
+                      borderSize={ 2 }
+                      gradientColors={ ['#f0f', '#0ff', '#ff0'] }
+                      animationDuration="4s"
+                    >
+                      <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
+                        <h3 className="text-xl text-white font-semibold">基础发光边框</h3>
+                        <p className="mt-2 text-center text-textSecondary">默认配置的发光边框效果</p>
+                      </div>
+                    </GlowBorder>
+                  </div>
 
-                <div className="h-64 w-72">
-                  <GlowBorder
-                    className="h-full rounded-lg"
-                    borderSize={ 4 }
-                    gradientColors={ ['#db2777', '#fde047', '#34d399', '#db2777'] }
-                    animationDuration="3s"
-                  >
-                    <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
-                      <h3 className="text-xl text-white font-semibold">自定义边框</h3>
-                      <p className="mt-2 text-center text-textSecondary">更宽的边框和自定义颜色</p>
-                    </div>
-                  </GlowBorder>
-                </div>
+                  <div className="h-64 w-72">
+                    <GlowBorder
+                      className="h-full rounded-lg"
+                      borderSize={ 4 }
+                      gradientColors={ ['#db2777', '#fde047', '#34d399', '#db2777'] }
+                      animationDuration="3s"
+                    >
+                      <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
+                        <h3 className="text-xl text-white font-semibold">自定义边框</h3>
+                        <p className="mt-2 text-center text-textSecondary">更宽的边框和自定义颜色</p>
+                      </div>
+                    </GlowBorder>
+                  </div>
 
-                <div className="h-64 w-72">
-                  <GlowBorder
-                    className="h-full rounded-lg"
-                    borderSize={ 6 }
-                    gradientColors={ ['#3b82f6', '#8b5cf6', '#ec4899', '#3b82f6'] }
-                    animationDuration="6s"
-                  >
-                    <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
-                      <h3 className="text-xl text-white font-semibold">慢速旋转</h3>
-                      <p className="mt-2 text-center text-textSecondary">更慢的动画速度和更宽的边框</p>
-                    </div>
-                  </GlowBorder>
-                </div>
+                  <div className="h-64 w-72">
+                    <GlowBorder
+                      className="h-full rounded-lg"
+                      borderSize={ 6 }
+                      gradientColors={ ['#3b82f6', '#8b5cf6', '#ec4899', '#3b82f6'] }
+                      animationDuration="6s"
+                    >
+                      <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
+                        <h3 className="text-xl text-white font-semibold">慢速旋转</h3>
+                        <p className="mt-2 text-center text-textSecondary">更慢的动画速度和更宽的边框</p>
+                      </div>
+                    </GlowBorder>
+                  </div>
 
-                <div className="h-64 w-72">
-                  <GlowBorder
-                    className="h-full rounded-full"
-                    borderSize={ 3 }
-                    gradientColors={ ['#f43f5e', '#fb923c', '#f43f5e'] }
-                    animationDuration="2s"
-                  >
-                    <div className="h-full flex flex-col items-center justify-center rounded-full bg-gray-900 p-4">
-                      <h3 className="text-xl text-white font-semibold">圆形边框</h3>
-                      <p className="mt-2 text-center text-textSecondary">圆形容器的发光边框效果</p>
-                    </div>
-                  </GlowBorder>
+                  <div className="h-64 w-72">
+                    <GlowBorder
+                      className="h-full rounded-full"
+                      borderSize={ 3 }
+                      gradientColors={ ['#f43f5e', '#fb923c', '#f43f5e'] }
+                      animationDuration="2s"
+                    >
+                      <div className="h-full flex flex-col items-center justify-center rounded-full bg-gray-900 p-4">
+                        <h3 className="text-xl text-white font-semibold">圆形边框</h3>
+                        <p className="mt-2 text-center text-textSecondary">圆形容器的发光边框效果</p>
+                      </div>
+                    </GlowBorder>
+                  </div>
                 </div>
-              </div>
-            ) }
+              )
+            : (
+                <div className="w-full max-w-5xl flex flex-col gap-10">
+                  <div className="space-y-2">
+                    <p className="text-xs text-textSecondary">Stacked Cards</p>
+                    <h2 className="text-2xl font-semibold text-textPrimary">
+                      多层堆叠卡片预览
+                    </h2>
+                    <p className="text-sm text-textSecondary">
+                      可调节层数、偏移、缩放与透明度，最大支持 3 层
+                    </p>
+                  </div>
+
+                  <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+                    <div className="flex items-center justify-center rounded-2xl border border-border bg-backgroundSecondary/60 p-8">
+                      <StackedCards
+                        layers={ layers as 1 | 2 | 3 }
+                        offsetX={ offsetX }
+                        offsetY={ offsetY }
+                        scaleStep={ scaleStep }
+                        opacityStep={ opacityStep }
+                        className="h-64 w-80"
+                        topLayerClassName="bg-background"
+                        contentClassName="p-5"
+                      >
+                        <div className="flex h-full flex-col justify-between">
+                          <div className="space-y-2">
+                            <div className="text-xs text-textSecondary">Today</div>
+                            <div className="text-lg font-semibold text-textPrimary">
+                              Design Sync
+                            </div>
+                            <div className="text-sm text-textSecondary">
+                              12:30 - 13:15 · Studio 4A
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <Button>Join</Button>
+                            <Button variant="primary">Details</Button>
+                          </div>
+                        </div>
+                      </StackedCards>
+                    </div>
+
+                    <div className="rounded-2xl border border-border bg-background p-6 shadow-sm">
+                      <div className="space-y-5">
+                        <ControlSlider
+                          label="层数"
+                          value={ layers }
+                          min={ 1 }
+                          max={ 3 }
+                          step={ 1 }
+                          onChange={ v => setLayers(v) }
+                        />
+                        <ControlSlider
+                          label="X 偏移"
+                          value={ offsetX }
+                          min={ 0 }
+                          max={ 20 }
+                          step={ 1 }
+                          unit="px"
+                          onChange={ v => setOffsetX(v) }
+                        />
+                        <ControlSlider
+                          label="Y 偏移"
+                          value={ offsetY }
+                          min={ 0 }
+                          max={ 20 }
+                          step={ 1 }
+                          unit="px"
+                          onChange={ v => setOffsetY(v) }
+                        />
+                        <ControlSlider
+                          label="缩放差"
+                          value={ scaleStep }
+                          min={ 0 }
+                          max={ 0.08 }
+                          step={ 0.01 }
+                          onChange={ v => setScaleStep(v) }
+                        />
+                        <ControlSlider
+                          label="透明度差"
+                          value={ opacityStep }
+                          min={ 0 }
+                          max={ 0.2 }
+                          step={ 0.01 }
+                          onChange={ v => setOpacityStep(v) }
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <StackedCards
+                      layers={ 2 }
+                      offsetX={ 6 }
+                      offsetY={ 12 }
+                      className="h-44 w-full"
+                      topLayerClassName="bg-background"
+                      contentClassName="p-5"
+                    >
+                      <div className="space-y-3">
+                        <div className="text-xs text-textSecondary">Quick View</div>
+                        <div className="text-base font-semibold text-textPrimary">
+                          Weekly Insights
+                        </div>
+                        <p className="text-sm text-textSecondary">
+                          5 updates · 2 pending approvals
+                        </p>
+                      </div>
+                    </StackedCards>
+
+                    <StackedCards
+                      layers={ 3 }
+                      offsetX={ 12 }
+                      offsetY={ 6 }
+                      scaleStep={ 0.02 }
+                      opacityStep={ 0.06 }
+                      className="h-44 w-full"
+                      topLayerClassName="bg-background"
+                      contentClassName="p-5"
+                    >
+                      <div className="space-y-3">
+                        <div className="text-xs text-textSecondary">Focus</div>
+                        <div className="text-base font-semibold text-textPrimary">
+                          Release Checklist
+                        </div>
+                        <p className="text-sm text-textSecondary">
+                          3 items remaining · ETA 2h
+                        </p>
+                      </div>
+                    </StackedCards>
+                  </div>
+                </div>
+              ) }
 
       {/* 设置按钮 */ }
       { activeTab === '3d' && (
@@ -756,6 +870,45 @@ export default function TestCard() {
           </div>
         </div>
       ) }
+    </div>
+  )
+}
+
+function ControlSlider({
+  label,
+  value,
+  min,
+  max,
+  step,
+  unit,
+  onChange,
+}: {
+  label: string
+  value: number
+  min: number
+  max: number
+  step: number
+  unit?: string
+  onChange: (value: number) => void
+}) {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-textSecondary">{ label }</span>
+        <span className="text-sm font-mono text-textTertiary tabular-nums">
+          { value.toFixed(step < 1
+            ? 2
+            : 0) }
+          { unit ?? '' }
+        </span>
+      </div>
+      <Slider
+        value={ value }
+        min={ min }
+        max={ max }
+        step={ step }
+        onChange={ v => onChange(v as number) }
+      />
     </div>
   )
 }

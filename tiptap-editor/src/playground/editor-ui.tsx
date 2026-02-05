@@ -149,24 +149,12 @@ sequenceDiagram
                 code: false,
                 codeBlock: false,
                 strike: false,
-                link: false,
                 underline: false,
                 superscript: false,
                 subscript: false,
                 image: false,
               } }
               moreContent={ [
-                {
-                  value: 'link',
-                  label: (
-                    <SelectToolbar.MoreContentItem>
-                      <LinkPopover
-                        editor={ editor }
-                        hideWhenUnavailable
-                      />
-                    </SelectToolbar.MoreContentItem>
-                  ),
-                },
                 {
                   value: 'strike',
                   label: (
