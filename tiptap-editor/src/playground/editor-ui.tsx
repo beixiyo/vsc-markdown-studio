@@ -30,6 +30,7 @@ export const EditorUI = memo<EditorUIProps>(({
   commentStore,
   toolbarRef,
   readonly = false,
+  showHeaderToolbar = false
 }) => {
   const { editor } = useCurrentEditor()
   const { aiOrchestrator, aiController } = useAiSetup()
@@ -77,7 +78,7 @@ export const EditorUI = memo<EditorUIProps>(({
 
   return (
     <>
-      { !readonly && (
+      { !readonly && showHeaderToolbar && (
         <BaseEditorUI
           isMobile={ isMobile }
           height={ height }

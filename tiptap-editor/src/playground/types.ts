@@ -127,4 +127,5 @@ export type EditorUIProps = {
    * 是否只读模式，默认为 false（可编辑）
    */
   readonly?: boolean
+  showHeaderToolbar?: boolean
 }
