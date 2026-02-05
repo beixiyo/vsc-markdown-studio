@@ -20,6 +20,7 @@ import {
   TextFormatIcon,
 } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
+import { ToolbarMenuItem } from '../menu-item'
 import { shouldShowButton as shouldShowBlockquoteButton, toggleBlockquote } from './use-blockquote'
 import { headingIcons, shouldShowButton as shouldShowHeadingButton, toggleHeading } from './use-heading'
 import { isListActive, listIcons, shouldShowButton as shouldShowListButton, toggleList } from './use-list'
@@ -80,16 +81,14 @@ export const TextFormatDropdownMenu = forwardRef<
 
     const options = useMemo<CascaderOption[]>(() => {
       const result: CascaderOption[] = []
-      const triggerClassName = TIPTAP_UI_STYLES.moreContentTrigger
-      const labelClassName = TIPTAP_UI_STYLES.moreContentLabel
 
       const makeOption = (value: string, labelText: string, Icon: ElementType) => ({
         value,
         label: (
-          <div className={ triggerClassName }>
-            <Icon className={ TIPTAP_UI_STYLES.iconSecondary } />
-            <span className={ labelClassName }>{ labelText }</span>
-          </div>
+          <ToolbarMenuItem
+            icon={ Icon }
+            label={ labelText }
+          />
         ),
       })
 

@@ -14,6 +14,7 @@ import { useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { ChevronDownIcon } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
+import { ToolbarMenuItem } from '../menu-item'
 import { useTextAlignDropdownMenu } from './use-text-align-dropdown-menu'
 
 /** 文本对齐下拉菜单 */
@@ -43,20 +44,15 @@ export const TextAlignDropdownMenu = forwardRef<
     })
 
   const options = useMemo<CascaderOption[]>(() => {
-    const triggerClassName = TIPTAP_UI_STYLES.moreContentTrigger
-    const labelClassName = TIPTAP_UI_STYLES.moreContentLabel
-    return filteredAligns.map((option) => {
-      const Icon = option.icon
-      return {
-        value: option.align,
-        label: (
-          <div className={ triggerClassName }>
-            <Icon className={ TIPTAP_UI_STYLES.iconSecondary } />
-            <span className={ labelClassName }>{ option.label }</span>
-          </div>
-        ),
-      }
-    })
+    return filteredAligns.map((option) => ({
+      value: option.align,
+      label: (
+        <ToolbarMenuItem
+          icon={ option.icon }
+          label={ option.label }
+        />
+      ),
+    }))
   }, [filteredAligns])
 
   const handleValueChange = useCallback((value: string) => {

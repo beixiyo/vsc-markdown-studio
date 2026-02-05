@@ -6,7 +6,7 @@ import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { LinkPopover, MarkButton, SelectToolbar, TIPTAP_UI_STYLES } from 'tiptap-comps'
+import { LinkPopover, MarkButton, SelectToolbar } from 'tiptap-comps'
 
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
@@ -159,66 +159,56 @@ sequenceDiagram
                 {
                   value: 'link',
                   label: (
-                    <LinkPopover
-                      editor={ editor }
-                      showLabel
-                      showTooltip={ false }
-                      hideWhenUnavailable
-                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
-                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
-                    />
+                    <SelectToolbar.MoreContentItem>
+                      <LinkPopover
+                        editor={ editor }
+                        hideWhenUnavailable
+                      />
+                    </SelectToolbar.MoreContentItem>
                   ),
                 },
                 {
                   value: 'strike',
                   label: (
-                    <MarkButton
-                      type="strike"
-                      showLabel
-                      showTooltip={ false }
-                      hideWhenUnavailable
-                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
-                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
-                    />
+                    <SelectToolbar.MoreContentItem>
+                      <MarkButton
+                        type="strike"
+                        hideWhenUnavailable
+                      />
+                    </SelectToolbar.MoreContentItem>
                   ),
                 },
                 {
                   value: 'underline',
                   label: (
-                    <MarkButton
-                      type="underline"
-                      showLabel
-                      showTooltip={ false }
-                      hideWhenUnavailable
-                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
-                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
-                    />
+                    <SelectToolbar.MoreContentItem>
+                      <MarkButton
+                        type="underline"
+                        hideWhenUnavailable
+                      />
+                    </SelectToolbar.MoreContentItem>
                   ),
                 },
                 {
                   value: 'superscript',
                   label: (
-                    <MarkButton
-                      type="superscript"
-                      showLabel
-                      showTooltip={ false }
-                      hideWhenUnavailable
-                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
-                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
-                    />
+                    <SelectToolbar.MoreContentItem>
+                      <MarkButton
+                        type="superscript"
+                        hideWhenUnavailable
+                      />
+                    </SelectToolbar.MoreContentItem>
                   ),
                 },
                 {
                   value: 'subscript',
                   label: (
-                    <MarkButton
-                      type="subscript"
-                      showLabel
-                      showTooltip={ false }
-                      hideWhenUnavailable
-                      className={ TIPTAP_UI_STYLES.moreContentTrigger }
-                      labelClassName={ TIPTAP_UI_STYLES.moreContentLabel }
-                    />
+                    <SelectToolbar.MoreContentItem>
+                      <MarkButton
+                        type="subscript"
+                        hideWhenUnavailable
+                      />
+                    </SelectToolbar.MoreContentItem>
                   ),
                 },
               ] }
