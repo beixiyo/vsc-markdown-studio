@@ -1,6 +1,7 @@
-import { RefObject, useEffect } from "react"
-import { PopoverRef } from "comps"
-import { SELECT_TOOLBAR_EVENTS } from "../constants"
+import type { PopoverRef } from 'comps'
+import type { RefObject } from 'react'
+import { useEffect } from 'react'
+import { SELECT_TOOLBAR_EVENTS } from '../constants'
 
 export function useEvent(enabled: boolean, popoverRef: RefObject<PopoverRef | null>) {
   useEffect(() => {

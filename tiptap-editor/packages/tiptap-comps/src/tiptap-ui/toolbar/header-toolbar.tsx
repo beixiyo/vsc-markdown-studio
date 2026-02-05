@@ -6,9 +6,9 @@ import {
   CodeBlockButton,
   ColorHighlightPopover,
   ColorHighlightPopoverButton,
+  EditorLink,
   ImageUploadButton,
   LinkButton,
-  LinkPopover,
   MarkButton,
   OutlineButton,
   TextAlignDropdownMenu,
@@ -66,7 +66,7 @@ export function HeaderToolbar(props: HeaderToolbarProps) {
               <ColorHighlightPopoverButton onClick={ onHighlighterClick } />
             ) }
         { !isMobile
-          ? <LinkPopover />
+          ? <EditorLink />
           : <LinkButton onClick={ onLinkClick } /> }
       </Toolbar.Group>
 

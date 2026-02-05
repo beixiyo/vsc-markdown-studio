@@ -4,10 +4,10 @@
  */
 
 import type { PopoverRef } from 'comps'
-import type { UseSelectToolbarOptions } from './types'
+import type { UseSelectToolbarOptions } from '../types'
 import { getScrollParents } from 'hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { getSelectionRect, hasSelectedText } from 'tiptap-api'
+import { getSelectionRect, hasSelectedText, isSelectionOnlyLinkText } from 'tiptap-api'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 
 export function useSelectToolbar({
@@ -37,7 +37,7 @@ export function useSelectToolbar({
         return
       }
 
-      const has = hasSelectedText(editor)
+      const has = hasSelectedText(editor) && !isSelectionOnlyLinkText(editor)
 
       if (!has && isInteractingRef.current) {
         return
@@ -85,7 +85,7 @@ export function useSelectToolbar({
     }
 
     const updateRectOnScroll = () => {
-      if (!editor || editor.isDestroyed || !hasSelectedText(editor)) {
+      if (!editor || editor.isDestroyed || !hasSelectedText(editor) || isSelectionOnlyLinkText(editor)) {
         return
       }
       const rect = getSelectionRect(editor)

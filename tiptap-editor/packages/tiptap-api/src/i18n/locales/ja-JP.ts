@@ -60,6 +60,10 @@ export const ja: Translations = {
   },
   link: {
     link: 'リンク',
+    placeholder: 'リンクを貼り付け…',
+    apply: 'リンクを適用',
+    open: '新しいウィンドウで開く',
+    remove: 'リンクを削除',
   },
   speaker: {
     speaker: '話者 {{number}}',

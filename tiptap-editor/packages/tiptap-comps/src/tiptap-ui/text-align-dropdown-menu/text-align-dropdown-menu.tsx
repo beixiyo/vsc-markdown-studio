@@ -44,7 +44,7 @@ export const TextAlignDropdownMenu = forwardRef<
     })
 
   const options = useMemo<CascaderOption[]>(() => {
-    return filteredAligns.map((option) => ({
+    return filteredAligns.map(option => ({
       value: option.align,
       label: (
         <ToolbarMenuItem

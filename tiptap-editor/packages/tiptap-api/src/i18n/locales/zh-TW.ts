@@ -60,6 +60,10 @@ export const zhTW: Translations = {
   },
   link: {
     link: '連結',
+    placeholder: '貼上連結…',
+    apply: '套用連結',
+    open: '在新視窗開啟',
+    remove: '移除連結',
   },
   speaker: {
     speaker: '說話人 {{number}}',

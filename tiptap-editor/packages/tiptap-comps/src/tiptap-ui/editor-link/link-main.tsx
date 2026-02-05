@@ -2,9 +2,8 @@
 
 import type { FC, KeyboardEvent, RefObject } from 'react'
 
-import { Button, Card, Input } from 'comps'
-
-import { useIsBreakpoint } from 'tiptap-api/react'
+import { Button, Input } from 'comps'
+import { useTiptapEditorT } from 'tiptap-api/react'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import {
   CornerDownLeftIcon,
@@ -22,7 +21,7 @@ export const LinkMain: FC<LinkMainProps> = ({
   isActive,
   inputRef,
 }) => {
-  const isMobile = useIsBreakpoint()
+  const t = useTiptapEditorT()
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -32,22 +31,15 @@ export const LinkMain: FC<LinkMainProps> = ({
   }
 
   return (
-    <Card
-      padding="none"
-      bordered={ !isMobile }
-      shadow={
-        isMobile
-          ? 'none'
-          : 'md'
-      }
-      className="min-w-max"
+    <div
+      className="min-w-max shadow-card border-none rounded-xl"
       { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
     >
-      <div className="flex flex-row items-center gap-1 p-1">
+      <div className="flex flex-row items-center gap-1 p-1.5">
         <Input
           ref={ inputRef }
           type="url"
-          placeholder="Paste a link..."
+          placeholder={ t('link.placeholder') }
           value={ url }
           onChange={ setUrl }
           onKeyDown={ handleKeyDown }
@@ -55,30 +47,26 @@ export const LinkMain: FC<LinkMainProps> = ({
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
-          containerClassName="w-48 h-8"
+          containerClassName="min-w-40 h-8 max-w-80 rounded-lg"
           size="sm"
         />
 
-        <div className="flex flex-row items-center">
+        <div className="flex items-center">
           <Button
             type="button"
             onClick={ setLink }
-            tooltip="Apply link"
+            tooltip={ t('link.apply') }
             disabled={ !url && !isActive }
             variant="ghost"
             size="sm"
           >
             <CornerDownLeftIcon className={ TIPTAP_UI_STYLES.icon } />
           </Button>
-        </div>
 
-        <div className="w-px h-4 bg-border/50 mx-1" />
-
-        <div className="flex flex-row items-center gap-0.5">
           <Button
             type="button"
             onClick={ openLink }
-            tooltip="Open in new window"
+            tooltip={ t('link.open') }
             disabled={ !url && !isActive }
             variant="ghost"
             size="sm"
@@ -89,7 +77,7 @@ export const LinkMain: FC<LinkMainProps> = ({
           <Button
             type="button"
             onClick={ removeLink }
-            tooltip="Remove link"
+            tooltip={ t('link.remove') }
             disabled={ !url && !isActive }
             variant="ghost"
             size="sm"
@@ -98,7 +86,7 @@ export const LinkMain: FC<LinkMainProps> = ({
           </Button>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }
 

@@ -58,6 +58,10 @@ export type TiptapEditorTranslations = {
   }
   link: {
     link: string
+    placeholder: string
+    apply: string
+    open: string
+    remove: string
   }
   comment: {
     commentPanel: string

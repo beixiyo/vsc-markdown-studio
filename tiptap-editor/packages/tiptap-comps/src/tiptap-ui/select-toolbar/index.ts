@@ -9,5 +9,5 @@ export const SelectToolbar = Object.assign(_SelectToolbar, {
   MoreContentItem: SelectToolbarMoreContentItem,
 })
 
-export * from './types'
 export * from './select-toolbar-more-content-item'
+export * from './types'

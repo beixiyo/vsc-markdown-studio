@@ -115,6 +115,7 @@ export const Editor = memo<EditorProps>(({
         commentStore={ commentStore }
         toolbarRef={ toolbarRef }
         readonly={ readonly }
+        showHeaderToolbar
       />
     </TiptapEditor>
   )

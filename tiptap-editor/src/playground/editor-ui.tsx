@@ -6,7 +6,7 @@ import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { LinkPopover, MarkButton, SelectToolbar } from 'tiptap-comps'
+import { EditorLinkHover, MarkButton, SelectToolbar } from 'tiptap-comps'
 
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
@@ -30,7 +30,7 @@ export const EditorUI = memo<EditorUIProps>(({
   commentStore,
   toolbarRef,
   readonly = false,
-  showHeaderToolbar = false
+  showHeaderToolbar = false,
 }) => {
   const { editor } = useCurrentEditor()
   const { aiOrchestrator, aiController } = useAiSetup()
@@ -210,6 +210,9 @@ sequenceDiagram
               <CommentButton commentStore={ commentStore } />
             </SelectToolbar.ToolbarContent>
           </SelectToolbar>
+
+          {/* 链接 Hover 编辑层 */ }
+          <EditorLinkHover editor={ editor } />
 
           {/* Slash Suggestion 菜单 */ }
           <SuggestionMenu

@@ -63,6 +63,41 @@ export function hasSelectedText(editor: Editor | null): boolean {
 }
 
 /**
+ * 判断选区是否全部为链接文本
+ */
+export function isSelectionOnlyLinkText(editor: Editor | null): boolean {
+  if (!editor || !editor.state.selection) {
+    return false
+  }
+
+  const { selection } = editor.state
+  if (selection.empty) {
+    return false
+  }
+
+  if (selection instanceof NodeSelection) {
+    return false
+  }
+
+  const { from, to } = selection
+  let hasTextNode = false
+  let hasNonLinkText = false
+
+  editor.state.doc.nodesBetween(from, to, (node) => {
+    if (!node.isText) {
+      return
+    }
+    hasTextNode = true
+    const hasLink = node.marks.some(mark => mark.type.name === 'link')
+    if (!hasLink) {
+      hasNonLinkText = true
+    }
+  })
+
+  return hasTextNode && !hasNonLinkText
+}
+
+/**
  * 获取当前选区范围
  */
 export function getSelectionRange(

@@ -1,6 +1,6 @@
 import { Button } from 'comps'
-import { useLanguage } from 'tiptap-api/react'
 import { SUPPORTED_LANGUAGES } from 'tiptap-api'
+import { useLanguage } from 'tiptap-api/react'
 
 /**
  * 语言切换组件

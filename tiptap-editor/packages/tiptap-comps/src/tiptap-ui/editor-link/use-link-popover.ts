@@ -198,40 +198,6 @@ export function useLinkState(props: {
 
 /**
  * 为 Tiptap 编辑器提供链接弹出框功能的主 Hook
- *
- * @example
- * ```tsx
- * // 简单用法
- * function MyLinkButton() {
- *   const { isVisible, canSet, isActive, Icon, label } = useLinkPopover()
- *
- *   if (!isVisible) return null
- *
- *   return <button disabled={!canSet}>Link</button>
- * }
- *
- * // 高级用法（带配置）
- * function MyAdvancedLinkButton() {
- *   const { isVisible, canSet, isActive, Icon, label } = useLinkPopover({
- *     editor: myEditor,
- *     hideWhenUnavailable: true,
- *     onSetLink: () => console.log('Link set!')
- *   })
- *
- *   if (!isVisible) return null
- *
- *   return (
- *     <MyButton
- *       disabled={!canSet}
- *       aria-label={label}
- *       aria-pressed={isActive}
- *     >
- *       <Icon />
- *       {label}
- *     </MyButton>
- *   )
- * }
- * ```
  */
 export function useLinkPopover(config?: UseLinkPopoverConfig) {
   const {

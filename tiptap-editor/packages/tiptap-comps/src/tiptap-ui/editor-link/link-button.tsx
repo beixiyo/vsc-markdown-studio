@@ -2,11 +2,14 @@
 
 import { Button } from 'comps'
 import { forwardRef } from 'react'
+import { useTiptapEditorT } from 'tiptap-api/react'
 import { LinkIcon } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
 
 export const LinkButton = forwardRef<HTMLButtonElement, LinkButtonProps>(
   ({ className, children, ...props }, ref) => {
+    const t = useTiptapEditorT()
+
     return (
       <Button
         type="button"
@@ -15,8 +18,8 @@ export const LinkButton = forwardRef<HTMLButtonElement, LinkButtonProps>(
         size="sm"
         role="button"
         tabIndex={ -1 }
-        aria-label="Link"
-        tooltip="Link"
+        aria-label={ t('link.link') }
+        tooltip={ t('link.link') }
         ref={ ref }
         { ...props }
       >
@@ -28,4 +31,4 @@ export const LinkButton = forwardRef<HTMLButtonElement, LinkButtonProps>(
 
 LinkButton.displayName = 'LinkButton'
 
-type LinkButtonProps = any
+export type LinkButtonProps = any

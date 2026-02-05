@@ -60,6 +60,10 @@ export const zhCN: Translations = {
   },
   link: {
     link: '链接',
+    placeholder: '粘贴链接…',
+    apply: '应用链接',
+    open: '在新窗口打开',
+    remove: '移除链接',
   },
   speaker: {
     speaker: '说话人 {{number}}',

@@ -60,6 +60,10 @@ export const enUS: Translations = {
   },
   link: {
     link: 'Link',
+    placeholder: 'Paste a link…',
+    apply: 'Apply link',
+    open: 'Open in new window',
+    remove: 'Remove link',
   },
   speaker: {
     speaker: 'Speaker {{number}}',

@@ -5,33 +5,25 @@ import type { PopoverRef } from 'comps'
 import type { ButtonHTMLAttributes } from 'react'
 import type { UseLinkPopoverConfig } from './use-link-popover'
 import { Popover } from 'comps'
-
-import { forwardRef, useCallback, useEffect, useRef } from 'react'
+import { forwardRef, memo, useCallback, useRef } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { TIPTAP_UI_STYLES } from '../constants'
+import { EditorLinkPanel } from './editor-link-panel'
 import { LinkButton } from './link-button'
-import { LinkMain } from './link-main'
 import { useLinkPopover } from './use-link-popover'
 
-/** 链接弹层：设置/编辑/移除链接 */
-export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>((
-  {
-    editor: providedEditor,
-    hideWhenUnavailable = false,
-    onSetLink,
-    onOpenChange,
-    autoOpenOnLinkActive = true,
-    showLabel = false,
-    showTooltip = true,
-    labelClassName,
-    onClick,
-    children,
-    ...buttonProps
-  },
-  ref,
-) => {
+export const EditorLink = memo(forwardRef<HTMLButtonElement, EditorLinkProps>(({
+  editor: providedEditor,
+  hideWhenUnavailable = false,
+  onSetLink,
+  onOpenChange,
+  showLabel = false,
+  showTooltip = true,
+  labelClassName,
+  onClick,
+  children,
+  ...buttonProps
+}, ref) => {
   const { editor } = useTiptapEditor(providedEditor)
   const popoverRef = useRef<PopoverRef>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -58,17 +50,15 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>((
     popoverRef.current?.close()
   }, [setLink])
 
-  useEffect(() => {
-    if (autoOpenOnLinkActive && isActive) {
-      popoverRef.current?.open()
-    }
-  }, [autoOpenOnLinkActive, isActive])
-
   const handleOpen = useCallback(() => {
     onOpenChange?.(true)
     setTimeout(() => {
       inputRef.current?.focus()
     }, 100)
+  }, [onOpenChange])
+
+  const handleClose = useCallback(() => {
+    onOpenChange?.(false)
   }, [onOpenChange])
 
   if (!isVisible) {
@@ -81,29 +71,23 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>((
       contentClassName="p-0"
       trigger="click"
       onOpen={ handleOpen }
-      onClose={ () => onOpenChange?.(false) }
-      restoreFocusOnOpen={ true }
+      onClose={ handleClose }
+      restoreFocusOnOpen
       content={
-        <div { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }>
-          <LinkMain
-            url={ url }
-            setUrl={ setUrl }
-            setLink={ handleSetLink }
-            removeLink={ removeLink }
-            openLink={ openLink }
-            isActive={ isActive }
-            inputRef={ inputRef }
-          />
-        </div>
+        <EditorLinkPanel
+          url={ url }
+          setUrl={ setUrl }
+          applyLink={ handleSetLink }
+          removeLink={ removeLink }
+          openLink={ openLink }
+          isActive={ isActive }
+          inputRef={ inputRef }
+        />
       }
     >
       <LinkButton
         disabled={ !canSet }
-        data-active-state={
-          isActive
-            ? 'on'
-            : 'off'
-        }
+        data-active-state={ isActive ? 'on' : 'off' }
         data-disabled={ !canSet }
         aria-label={ label }
         aria-pressed={ isActive }
@@ -127,26 +111,27 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>((
       </LinkButton>
     </Popover>
   )
-})
+}))
 
-LinkPopover.displayName = 'LinkPopover'
+EditorLink.displayName = 'EditorLink'
 
-export interface LinkPopoverProps
+export interface EditorLinkProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
   UseLinkPopoverConfig {
   /** Popover 打开/关闭状态变化回调 */
   onOpenChange?: (isOpen: boolean) => void
-  /** 当选区命中链接时，是否自动打开弹层（默认 true） */
-  autoOpenOnLinkActive?: boolean
-  /** 为 true 时，使用组件内 tooltip（label）作为按钮旁文案显示 */
+  /**
+   * 为 true 时，使用组件内 tooltip（label）作为按钮旁文案显示
+   * @default false
+   */
   showLabel?: boolean
-  /** 为 false 时不显示悬停 tooltip */
+  /**
+   * 为 false 时不显示悬停 tooltip
+   * @default true
+   */
   showTooltip?: boolean
   /** 文案（label）的 class，用于 showLabel 时的 span */
   labelClassName?: string
+  /** Tiptap 编辑器实例 */
   editor?: Editor | null
 }
-
-export { LinkButton } from './link-button'
-export { LinkContent } from './link-content'
-export type { LinkMainProps } from './link-main'

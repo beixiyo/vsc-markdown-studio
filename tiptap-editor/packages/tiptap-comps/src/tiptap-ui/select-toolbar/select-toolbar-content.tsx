@@ -14,8 +14,8 @@ import { TIPTAP_UI_STYLES } from '../constants'
 import {
   CodeBlockButton,
   ColorHighlightPopover,
+  EditorLink,
   ImageUploadButton,
-  LinkPopover,
   MarkButton,
   TextAlignDropdownMenu,
   TextFormatDropdownMenu,
@@ -140,7 +140,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
             { underline && <MarkButton editor={ editor } type="underline" hideWhenUnavailable /> }
 
             { highlight && <ColorHighlightPopover editor={ editor } hideWhenUnavailable /> }
-            { link && <LinkPopover editor={ editor } hideWhenUnavailable /> }
+            { link && <EditorLink editor={ editor } hideWhenUnavailable /> }
           </Toolbar.Group>
           { (codeBlock || showScripts || textAlign || image || moreContent) && <Toolbar.Separator /> }
         </>
