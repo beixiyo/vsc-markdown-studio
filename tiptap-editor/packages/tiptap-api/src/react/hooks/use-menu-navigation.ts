@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import { useEffect, useState } from 'react'
+import { getEditorElement } from 'tiptap-utils'
 
 /**
  * 菜单导航方向
@@ -209,12 +210,7 @@ export function useMenuNavigation<T>({
     let targetElement: HTMLElement | null = null
 
     if (editor) {
-      try {
-        targetElement = editor.view?.dom
-      }
-      catch (e) {
-        /** 视图不可用 */
-      }
+      targetElement = getEditorElement(editor)
     }
     else if (containerRef?.current) {
       targetElement = containerRef.current

@@ -2,6 +2,7 @@ import type { Placement } from '@floating-ui/react'
 import { useThrottleFn } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getHoverContentFromCoords, type HoverContent } from 'tiptap-api'
+import { getEditorElement } from 'tiptap-utils'
 import { HoverTooltip } from './hover-tooltip'
 
 /**
@@ -135,7 +136,7 @@ export function EditorHoverTooltip({
       return
     }
 
-    const editorElement = editor.view.dom as HTMLElement
+    const editorElement = getEditorElement(editor)
     if (!editorElement) {
       return
     }

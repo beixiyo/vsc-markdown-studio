@@ -1,16 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import { useShortCutKey } from 'hooks'
-
-function getEditorViewDom(editor: Editor | null | undefined): HTMLElement | null {
-  if (!editor)
-    return null
-  try {
-    return editor.view?.dom ?? null
-  }
-  catch {
-    return null
-  }
-}
+import { getEditorElement } from 'tiptap-utils'
 
 interface UseSuggestionKeyboardProps {
   editor: Editor | null | undefined
@@ -32,7 +22,7 @@ export function useSuggestionKeyboard({
   onClose,
 }: UseSuggestionKeyboardProps) {
   const viewDom = active && itemsCount > 0
-    ? getEditorViewDom(editor)
+    ? getEditorElement(editor)
     : null
   const el = viewDom as HTMLElement | null
 

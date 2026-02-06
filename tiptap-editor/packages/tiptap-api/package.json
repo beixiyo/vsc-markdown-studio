@@ -46,6 +46,7 @@
     "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
-    "hooks": "workspace:^"
+    "hooks": "workspace:^",
+    "tiptap-utils": "workspace:^"
   }
 }

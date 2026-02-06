@@ -62,6 +62,24 @@ export function isExtensionAvailable(
 }
 
 /**
+ * 安全获取编辑器 DOM 元素
+ * @param editor - 编辑器实例
+ * @returns 编辑器 DOM 元素，不可用则返回 null
+ */
+export function getEditorElement(editor?: { view?: { dom?: HTMLElement } } | null): HTMLElement | null {
+  if (!editor) {
+    return null
+  }
+
+  try {
+    return (editor.view?.dom as HTMLElement) ?? null
+  }
+  catch {
+    return null
+  }
+}
+
+/**
  * 将焦点移动到编辑器中的下一个节点
  * @param editor - 编辑器实例
  * @returns 布尔值，表示焦点是否已移动

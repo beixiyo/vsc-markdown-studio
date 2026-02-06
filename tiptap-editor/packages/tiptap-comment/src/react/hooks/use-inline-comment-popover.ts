@@ -3,6 +3,7 @@ import type { CommentStore } from '../../comment-store'
 import { useLatestRef } from 'hooks'
 import { useEffect, useMemo, useState } from 'react'
 import { getSelectionRect } from 'tiptap-api'
+import { getEditorElement } from 'tiptap-utils'
 import { DATA_COMMENT_ID } from '../../constants'
 import { commentPluginKey } from '../../plugin'
 import { useComments } from './use-comments'
@@ -31,7 +32,10 @@ export function useInlineCommentPopover(params: {
       return
     }
 
-    const editorDom = editor.view.dom
+    const editorDom = getEditorElement(editor)
+    if (!editorDom) {
+      return
+    }
 
     const handleCommentHighlightClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null

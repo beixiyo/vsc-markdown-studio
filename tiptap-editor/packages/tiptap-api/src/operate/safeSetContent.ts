@@ -1,4 +1,5 @@
 import type { Content, Editor, SetContentOptions } from '@tiptap/core'
+import { getEditorElement } from 'tiptap-utils'
 
 /**
  * 安全地设置编辑器内容，同时保持用户的光标位置和滚动位置
@@ -35,7 +36,7 @@ export function safeSetContent(
   const { from, to } = editor.state.selection
 
   // 2. 保存滚动位置（编辑器容器）
-  const editorElement = editor.view.dom.parentElement
+  const editorElement = getEditorElement(editor)?.parentElement ?? null
   const scrollTop = editorElement?.scrollTop ?? 0
   const scrollLeft = editorElement?.scrollLeft ?? 0
 

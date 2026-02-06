@@ -2,6 +2,7 @@ import type { Editor } from '@tiptap/react'
 import type { HoverContent } from '../../operate'
 import { useThrottleFn } from 'hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { getEditorElement } from 'tiptap-utils'
 import { getHoverContentFromCoords } from '../../operate'
 
 export interface UseHoverDetectionConfig {
@@ -169,18 +170,7 @@ export function useHoverDetection(
       return
     }
 
-    let editorElement: HTMLElement | null = null
-    try {
-      if (!editor.view) {
-        return
-      }
-      editorElement = editor.view.dom as HTMLElement
-    }
-    catch (e) {
-      /** 视图不可用，暂不绑定 */
-      return
-    }
-
+    const editorElement = getEditorElement(editor)
     if (!editorElement) {
       return
     }

@@ -1,4 +1,5 @@
 import type { Editor } from '@tiptap/core'
+import { getEditorElement } from 'tiptap-utils'
 
 /**
  * 取消选择
@@ -10,10 +11,5 @@ export function unSelect(editor: Editor | null) {
 
   const docSize = editor.state.doc.content.size
   editor.commands.setTextSelection(docSize)
-  try {
-    editor.view?.dom?.blur()
-  }
-  catch (e) {
-    // 视图不可用
-  }
+  getEditorElement(editor)?.blur()
 }

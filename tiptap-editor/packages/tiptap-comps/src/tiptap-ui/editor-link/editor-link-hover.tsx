@@ -5,7 +5,7 @@ import type { PopoverRef } from 'comps'
 import { Popover } from 'comps'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { normalizeLinkUrl, sanitizeUrl } from 'tiptap-utils'
+import { getEditorElement, normalizeLinkUrl, sanitizeUrl } from 'tiptap-utils'
 import { EditorLinkPanel } from './editor-link-panel'
 
 export const EditorLinkHover = memo<EditorLinkHoverProps>(({
@@ -172,7 +172,10 @@ export const EditorLinkHover = memo<EditorLinkHoverProps>(({
     if (!linkEl) {
       return
     }
-    const editorElement = editor.view.dom as HTMLElement
+    const editorElement = getEditorElement(editor)
+    if (!editorElement) {
+      return
+    }
     if (!editorElement.contains(linkEl)) {
       return
     }
@@ -209,7 +212,10 @@ export const EditorLinkHover = memo<EditorLinkHoverProps>(({
     if (!editor || !enabled) {
       return
     }
-    const editorElement = editor.view.dom as HTMLElement
+    const editorElement = getEditorElement(editor)
+    if (!editorElement) {
+      return
+    }
     editorElement.addEventListener('mouseover', handleMouseOver)
     editorElement.addEventListener('mouseout', handleMouseOut)
 

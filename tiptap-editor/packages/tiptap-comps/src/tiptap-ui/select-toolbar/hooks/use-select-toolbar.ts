@@ -8,7 +8,7 @@ import type { UseSelectToolbarOptions } from '../types'
 import { getScrollParents } from 'hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getSelectionRect, hasSelectedText, isSelectionOnlyLinkText } from 'tiptap-api'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { getEditorElement, SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 
 export function useSelectToolbar({
   editor,
@@ -76,11 +76,8 @@ export function useSelectToolbar({
       return
     }
 
-    let editorElement: HTMLElement | null = null
-    try {
-      editorElement = editor.view.dom as HTMLElement
-    }
-    catch {
+    const editorElement = getEditorElement(editor)
+    if (!editorElement) {
       return
     }
 
@@ -115,14 +112,7 @@ export function useSelectToolbar({
       return
     }
 
-    let editorElement: HTMLElement | null = null
-    try {
-      editorElement = editor.view.dom as HTMLElement
-    }
-    catch {
-      return
-    }
-
+    const editorElement = getEditorElement(editor)
     if (!editorElement) {
       return
     }
