@@ -3,122 +3,122 @@
    基于 Markdown Mobile 排版规范
    ============================================ */
 
-.tiptap.ProseMirror {
-  /* 段落 */
-  p {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.75;
-    margin-top: 0;
-    margin-bottom: 0;
-    
-    &:not(:first-child):not(td p):not(th p) {
-      margin-top: 1.25rem;
-    }
-    
-    /* 段落后紧跟列表，间距 6px */
-    + ul,
-    + ol {
-      margin-top: 6px;
-    }
-  }
-  
-  /* 标题 */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    position: relative;
-    font-weight: bold;
-    line-height: 1.75;
-    margin-top: 44px;
-    margin-bottom: 8px;
-    color: var(--tt-text-primary);
-    
-    /* 文档第一个标题无上间距 */
-    &:first-child {
+   .tiptap.ProseMirror {
+    /* 段落 */
+    p {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.75;
       margin-top: 0;
+      margin-bottom: 0;
+
+      &:not(:first-child):not(td p):not(th p) {
+        margin-top: 1.25rem;
+      }
+
+      /* 段落后紧跟列表，间距 6px */
+      + ul,
+      + ol {
+        margin-top: 6px;
+      }
+    }
+
+    /* 标题 */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      position: relative;
+      font-weight: bold;
+      line-height: 1.75;
+      margin-top: 44px;
+      margin-bottom: 8px;
+      color: var(--tt-text-primary);
+
+      /* 文档第一个标题无上间距 */
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    /* 标题字号 */
+    h1 {
+      font-size: 17px;
+    }
+
+    h2 {
+      font-size: 16px;
+    }
+
+    h3 {
+      font-size: 16px;
+    }
+
+    h4,
+    h5,
+    h6 {
+      font-size: 16px;
+    }
+
+    /* 文本样式 */
+    b,
+    strong {
+      font-weight: 600;
+    }
+
+    small {
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    /* 上下标 */
+    sub,
+    sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline;
+    }
+
+    sub {
+      bottom: -0.25em;
+    }
+
+    sup {
+      top: -0.5em;
+    }
+
+    /* 高亮 */
+    mark {
+      background-color: var(--tt-highlight-bg);
+      color: var(--tt-text-primary);
+      padding: 0.1em 0.2em;
+      border-radius: 2px;
+    }
+
+    /* 删除线 */
+    del,
+    s {
+      text-decoration: line-through;
+    }
+
+    /* 下划线 */
+    u {
+      text-decoration: underline;
+    }
+
+    /* 斜体 */
+    em,
+    i {
+      font-style: italic;
+    }
+
+    /* 缩写 */
+    abbr[title] {
+      border-bottom: none;
+      -webkit-text-decoration: underline dotted;
+      text-decoration: underline dotted;
     }
   }
-  
-  /* 标题字号 */
-  h1 {
-    font-size: 18px;
-  }
-  
-  h2 {
-    font-size: 18px;
-  }
-  
-  h3 {
-    font-size: 17px;
-  }
-  
-  h4,
-  h5,
-  h6 {
-    font-size: 16px;
-  }
-  
-  /* 文本样式 */
-  b,
-  strong {
-    font-weight: 600;
-  }
-  
-  small {
-    font-size: 12px;
-    font-weight: 400;
-  }
-  
-  /* 上下标 */
-  sub,
-  sup {
-    font-size: 75%;
-    line-height: 0;
-    position: relative;
-    vertical-align: baseline;
-  }
-  
-  sub {
-    bottom: -0.25em;
-  }
-  
-  sup {
-    top: -0.5em;
-  }
-  
-  /* 高亮 */
-  mark {
-    background-color: var(--tt-highlight-bg);
-    color: var(--tt-text-primary);
-    padding: 0.1em 0.2em;
-    border-radius: 2px;
-  }
-  
-  /* 删除线 */
-  del,
-  s {
-    text-decoration: line-through;
-  }
-  
-  /* 下划线 */
-  u {
-    text-decoration: underline;
-  }
-  
-  /* 斜体 */
-  em,
-  i {
-    font-style: italic;
-  }
-  
-  /* 缩写 */
-  abbr[title] {
-    border-bottom: none;
-    -webkit-text-decoration: underline dotted;
-    text-decoration: underline dotted;
-  }
-}
