@@ -44,7 +44,7 @@ const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((pro
       ref={ popoverRef }
       trigger="command"
       exitSetMode
-      restoreFocusOnOpen={ false }
+      restoreFocusOnOpen
       position={ (placement?.split('-')[0] as any) || 'top' }
       offset={ offsetDistance }
       virtualReferenceRect={ selectionRect }
