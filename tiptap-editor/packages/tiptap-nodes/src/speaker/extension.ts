@@ -64,7 +64,9 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
   inline: true,
   group: 'inline',
   atom: true,
-  selectable: false,
+  selectable: true,
+  draggable: false,
+  isolating: true,
 
   addOptions() {
     return {
@@ -169,12 +171,15 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
     return [
       {
         tag: `${tag}[data-speaker-original-label]`,
+        priority: 1000,
       },
       {
         tag: '[data-speaker-original-label]',
+        priority: 1000,
       },
       {
         tag: 'speaker',
+        priority: 1000,
         getAttrs: (node) => {
           if (typeof node === 'string') {
             return false
@@ -195,6 +200,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
     return ({ node, HTMLAttributes }) => {
       const tag = this.options.renderTag ?? DEFAULT_TAG
       const dom = document.createElement(tag)
+      dom.setAttribute('contenteditable', 'false')
 
       const updateText = () => {
         dom.textContent = resolveDisplayText(node.attrs, this.options)
@@ -211,6 +217,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       }
       const attrs = mergeAttributes(
         HTMLAttributes,
+        { class: 'tiptap-speaker' },
         this.options.className
           ? { class: this.options.className }
           : {},
@@ -243,6 +250,8 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
           }
           return true
         },
+        stopEvent: () => false,
+        ignoreMutation: () => true,
         destroy: () => {
           i18n.off('language:change', onLanguageChange)
         },
@@ -273,6 +282,11 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       attrs,
       text,
     ]
+  },
+
+  renderText({ node }) {
+    const label = node.attrs.originalLabel || ''
+    return `[speaker:${label}]`
   },
 
   addCommands() {
@@ -400,7 +414,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
               }
 
               onClick(attrs, event as MouseEvent)
-              return true
+              return false
             },
           },
         },
