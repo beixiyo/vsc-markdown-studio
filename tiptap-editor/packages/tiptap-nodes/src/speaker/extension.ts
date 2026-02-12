@@ -285,8 +285,8 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
   },
 
   renderText({ node }) {
-    const label = node.attrs.originalLabel || ''
-    return `[speaker:${label}]`
+    const text = resolveDisplayText(node.attrs, this.options)
+    return text
   },
 
   addCommands() {
