@@ -132,7 +132,7 @@ export const AIMenu = memo<MyAIMenuProps>((props) => {
     style={ style }
   >
     <div className="flex items-start justify-between gap-3">
-      <div className="flex items-center gap-2 text-textPrimary dark:text-white">
+      <div className="flex items-center gap-2 text-text dark:text-white">
         <Sparkles className="h-4 w-4 text-primary" />
         <span className="text-base font-semibold">AI 助手</span>
       </div>
@@ -140,7 +140,7 @@ export const AIMenu = memo<MyAIMenuProps>((props) => {
       <button
         type="button"
         onClick={ handleClose }
-        className="h-8 w-8 flex items-center justify-center rounded-full text-textSecondary transition-colors hover:bg-backgroundSubtle dark:hover:bg-neutral-800"
+        className="h-8 w-8 flex items-center justify-center rounded-full text-text2 transition-colors hover:bg-backgroundSubtle dark:hover:bg-neutral-800"
       >
         <X className="h-4 w-4" />
       </button>
@@ -151,7 +151,7 @@ export const AIMenu = memo<MyAIMenuProps>((props) => {
         'flex items-center gap-2 text-sm',
         isError
           ? 'text-danger'
-          : 'text-textSecondary dark:text-neutral-400',
+          : 'text-text2 dark:text-neutral-400',
       ) }>
         {
           isBusy
@@ -164,7 +164,7 @@ export const AIMenu = memo<MyAIMenuProps>((props) => {
       </div>
 
       <p className={ cn(
-        'text-xs leading-relaxed text-textSecondary dark:text-neutral-500',
+        'text-xs leading-relaxed text-text2 dark:text-neutral-500',
         isError
           ? 'text-danger'
           : undefined,
@@ -182,10 +182,10 @@ export const AIMenu = memo<MyAIMenuProps>((props) => {
             onChange={ event => setPrompt(event.target.value) }
             onKeyDown={ handleKeyDown }
             placeholder="请描述你想生成的内容，例如总结当前段落"
-            className="min-h-[110px] w-full resize-none rounded-2xl border border-border bg-backgroundSubtle px-4 py-3 text-sm text-textPrimary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-neutral-800 dark:text-neutral-50"
+            className="min-h-[110px] w-full resize-none rounded-2xl border border-border bg-backgroundSubtle px-4 py-3 text-sm text-text outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-neutral-800 dark:text-neutral-50"
           />
 
-          <div className="flex items-center justify-between text-xs text-textSecondary dark:text-neutral-500">
+          <div className="flex items-center justify-between text-xs text-text2 dark:text-neutral-500">
             <span>按 Ctrl 或 ⌘ + Enter 快速提交</span>
             <span>
               { prompt.trim().length }
@@ -206,21 +206,21 @@ export const AIMenu = memo<MyAIMenuProps>((props) => {
       }
 
       {
-        isBusy && <div className="rounded-2xl border border-dashed border-border bg-backgroundSubtle px-4 py-6 text-center text-sm text-textSecondary dark:bg-neutral-800 dark:text-neutral-400">
+        isBusy && <div className="rounded-2xl border border-dashed border-border bg-backgroundSubtle px-4 py-6 text-center text-sm text-text2 dark:bg-neutral-800 dark:text-neutral-400">
           正在同步内容到 AI...
         </div>
       }
 
       {
         canReview && <div className="space-y-4">
-          <div className="rounded-2xl border border-border bg-backgroundSubtle px-4 py-3 text-sm text-textPrimary dark:bg-neutral-800 dark:text-neutral-50">
+          <div className="rounded-2xl border border-border bg-backgroundSubtle px-4 py-3 text-sm text-text dark:bg-neutral-800 dark:text-neutral-50">
             建议已写入文档中，请在编辑器中检查标记区域
           </div>
           <div className="flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={ handleReject }
-              className="flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-textSecondary transition-colors hover:bg-backgroundSubtle dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
+              className="flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-text2 transition-colors hover:bg-backgroundSubtle dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
             >
               拒绝
             </button>

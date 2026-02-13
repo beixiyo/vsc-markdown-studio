@@ -136,7 +136,7 @@ export const CommentItem = memo(({
               </span>
             ) }
           </div>
-          <span className="text-xs text-textTertiary">
+          <span className="text-xs text-text3">
             { formatDate('YYYY-MM-dd HH:mm:ss', new Date(comment.createdAt), { locales: language }) }
           </span>
         </div>
@@ -210,19 +210,19 @@ export const CommentItem = memo(({
         <button
           type="button"
           onClick={ () => handleJumpToComment(comment.replyTo) }
-          className="mt-3 flex w-full items-center gap-2 rounded-xl bg-backgroundSecondary px-3 py-2 text-left text-sm text-systemBlue transition-all hover:bg-borderSecondary"
+          className="mt-3 flex w-full items-center gap-2 rounded-xl bg-background2 px-3 py-2 text-left text-sm text-systemBlue transition-all hover:bg-border2"
         >
           <span className="text-[12px] font-semibold">
             @
             { comment.replyToAuthor.name }
           </span>
-          <span className="text-textSecondary">
+          <span className="text-text2">
             { comment.replyToContent || '...' }
           </span>
         </button>
       ) }
 
-      <div className="mt-3 rounded-xl bg-backgroundSecondary px-3 py-2 text-sm leading-6 text-textSecondary">
+      <div className="mt-3 rounded-xl bg-background2 px-3 py-2 text-sm leading-6 text-text2">
         { comment.content }
       </div>
     </div>

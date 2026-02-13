@@ -195,7 +195,7 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
         { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
       >
         <div className="rounded-2xl border border-border bg-background shadow-lg">
-          <div className="flex items-center justify-between border-b border-border px-3 py-2 text-xs text-textSecondary">
+          <div className="flex items-center justify-between border-b border-border px-3 py-2 text-xs text-text2">
             <span>{ labels.currentComment }</span>
             <button
               type="button"
@@ -203,7 +203,7 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
                 closeInlineComment()
               } }
               aria-label={ labels.closeCurrent }
-              className="flex size-6 items-center justify-center text-textSecondary transition-colors hover:bg-backgroundSecondary rounded-xl"
+              className="flex size-6 items-center justify-center text-text2 transition-colors hover:bg-background2 rounded-xl"
             >
               <CloseIcon className="h-4 w-4" />
             </button>

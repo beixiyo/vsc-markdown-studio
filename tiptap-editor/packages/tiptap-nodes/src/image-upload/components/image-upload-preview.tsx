@@ -45,10 +45,10 @@ export const ImageUploadPreview: React.FC<ImageUploadPreviewProps> = ({
             <CloudUploadIcon className="text-textSpecial" />
           </div>
           <div className="flex flex-col">
-            <span className="text-textPrimary font-medium text-sm leading-normal line-clamp-1">
+            <span className="text-text font-medium text-sm leading-normal line-clamp-1">
               { fileItem.file.name }
             </span>
-            <span className="text-textSecondary font-semibold text-xs leading-normal">
+            <span className="text-text2 font-semibold text-xs leading-normal">
               { formatFileSize(fileItem.file.size) }
             </span>
           </div>

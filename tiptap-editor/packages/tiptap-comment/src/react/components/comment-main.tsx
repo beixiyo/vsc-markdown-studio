@@ -56,7 +56,7 @@ const InnerCommentMain = forwardRef<CommentMainRef, CommentMainProps>((props, re
       { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
     >
       <div className="flex flex-col gap-3 p-4 max-[480px]:p-3">
-        <div className="text-sm font-semibold text-textPrimary flex justify-between">
+        <div className="text-sm font-semibold text-text flex justify-between">
           <span>{ t('comment.addComment') }</span>
         </div>
         <Textarea
@@ -69,12 +69,12 @@ const InnerCommentMain = forwardRef<CommentMainRef, CommentMainProps>((props, re
           autoFocus
           rows={ 3 }
         />
-        <div className="text-xs text-textSecondary">
+        <div className="text-xs text-text2">
           { t('comment.submitHint') }
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-3 border-t border-borderSecondary px-4 py-3 max-[480px]:px-3 max-[480px]:py-2.5">
+      <div className="flex items-center justify-between gap-3 border-t border-border2 px-4 py-3 max-[480px]:px-3 max-[480px]:py-2.5">
         <div className="inline-flex items-center">
           <Button
             type="button"

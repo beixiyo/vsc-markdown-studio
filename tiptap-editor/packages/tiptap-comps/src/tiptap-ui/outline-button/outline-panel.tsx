@@ -24,11 +24,11 @@ export const OutlinePanel = memo<OutlinePanelProps>(({ editor }) => {
     return items.map(item => (
       <div key={ item.id } style={ { marginLeft: depth * 12 } }>
         <div
-          className="cursor-pointer rounded px-2 py-1 text-sm transition-colors text-textSecondary hover:bg-backgroundSecondary"
+          className="cursor-pointer rounded px-2 py-1 text-sm transition-colors text-text2 hover:bg-background2"
           onClick={ () => handleJump(item.position) }
         >
           <div className="flex items-center gap-2">
-            <span className="text-xs text-textTertiary">
+            <span className="text-xs text-text3">
               H
               { item.level }
             </span>

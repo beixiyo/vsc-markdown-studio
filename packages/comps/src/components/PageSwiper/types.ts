@@ -2,6 +2,10 @@ import type { RefObject } from 'react'
 
 export type PageSwiperProps = {
   /**
+   * 内容区域类名
+   */
+  contentClassName?: string
+  /**
    * 是否显示预览模式，左右两侧留白能看到预览内容
    * @default false
    */
@@ -51,6 +55,11 @@ export type PageSwiperProps = {
    * 组件引用对象
    */
   ref?: RefObject<PageSwiperRef | null>
+  /**
+   * 是否启用滚轮切换
+   * @default true
+   */
+  enableWheel?: boolean
 } & React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
 
 export type PageSwiperRef = {

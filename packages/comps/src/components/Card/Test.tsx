@@ -1,5 +1,6 @@
 'use client'
 
+import type { StackedCardsVariant } from './StackedCards'
 import { Check, Settings, X } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from 'utils'
@@ -9,6 +10,18 @@ import { Card } from './Card'
 import { Card3D } from './Card3D'
 import { GlowBorder } from './GlowBorder'
 import { StackedCards } from './StackedCards'
+
+function VariantBackdrop({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative w-72 overflow-hidden rounded-2xl p-4">
+      <div className="absolute inset-0 bg-gradient-to-br from-systemBlue/30 via-systemPurple/25 to-systemOrange/30" />
+      <div className="absolute inset-0 bg-background/30 dark:bg-background/10" />
+      <div className="relative">
+        { children }
+      </div>
+    </div>
+  )
+}
 
 export default function TestCard() {
   const [settings, setSettings] = useState({
@@ -25,6 +38,7 @@ export default function TestCard() {
   const [showSettings, setShowSettings] = useState(false)
   const [activeTab, setActiveTab] = useState<'3d' | '2d' | 'glow' | 'stacked'>('3d')
 
+  const [stackedVariant, setStackedVariant] = useState<StackedCardsVariant>('shadow')
   const [layers, setLayers] = useState(3)
   const [offsetX, setOffsetX] = useState(10)
   const [offsetY, setOffsetY] = useState(10)
@@ -101,7 +115,7 @@ export default function TestCard() {
                 <div className="flex flex-col p-4">
                   <div className="mb-4">
                     <h2 className="text-xl text-sky-400 font-bold">天空之城</h2>
-                    <p className="text-sm text-textSecondary">探索云端的奇幻世界</p>
+                    <p className="text-sm text-text2">探索云端的奇幻世界</p>
                   </div>
 
                   <div className="flex grow items-center justify-center">
@@ -111,7 +125,7 @@ export default function TestCard() {
                   </div>
 
                   <div className="mt-4">
-                    <p className="text-sm text-textSecondary">
+                    <p className="text-sm text-text2">
                       漂浮在云端的神秘城市，充满了未知的魔法和科技。每一个角落都蕴藏着令人惊叹的奇迹。
                     </p>
                     <button className="mt-4 rounded-md bg-sky-600 px-4 py-2 text-white transition-colors hover:bg-sky-500">
@@ -144,7 +158,7 @@ export default function TestCard() {
                   </div>
 
                   <div className="mt-4">
-                    <p className="text-sm text-textSecondary">
+                    <p className="text-sm text-text2">
                       这里的花朵会在夜晚发光，树木会唱歌，每一种植物都有自己独特的魔法能力。
                     </p>
                     <button className="mt-4 rounded-md bg-fuchsia-600 px-4 py-2 text-white transition-colors hover:bg-fuchsia-500">
@@ -197,7 +211,7 @@ export default function TestCard() {
                 <Card
                   title="带操作的卡片"
                   headerActions={
-                    <button className="rounded-full p-1 hover:bg-backgroundSecondary">
+                    <button className="rounded-full p-1 hover:bg-background2">
                       <Settings className="h-4 w-4" />
                     </button>
                   }
@@ -241,38 +255,36 @@ export default function TestCard() {
                 </Card>
 
                 {/* 新增变体 */ }
-                <Card
-                  title="Glass 变体"
-                  variant="glass"
-                  className="w-72"
-                >
-                  <p className="text-sm">毛玻璃效果，透明背景带模糊效果。</p>
-                </Card>
+                <VariantBackdrop>
+                  <Card
+                    title="Glass 变体"
+                    variant="glass"
+                    className="w-full"
+                  >
+                    <p className="text-sm">毛玻璃效果：需要有背景对比才能明显看到模糊与半透明。</p>
+                  </Card>
+                </VariantBackdrop>
 
-                <Card
-                  title="Transparent 变体"
-                  variant="transparent"
-                  className="w-72"
-                  bordered
-                >
-                  <p className="text-sm">完全透明的背景，只有边框。</p>
-                </Card>
+                <VariantBackdrop>
+                  <Card
+                    title="Transparent 变体"
+                    variant="transparent"
+                    className="w-full"
+                    bordered
+                  >
+                    <p className="text-sm">完全透明：会透出背后的渐变背景。</p>
+                  </Card>
+                </VariantBackdrop>
 
-                <Card
-                  title="Dark 变体"
-                  variant="dark"
-                  className="w-72"
-                >
-                  <p className="text-sm">深色主题变体，适合深色模式。</p>
-                </Card>
-
-                <Card
-                  title="Elevated 变体"
-                  variant="elevated"
-                  className="w-72"
-                >
-                  <p className="text-sm">提升效果变体，带有增强的阴影。</p>
-                </Card>
+                <VariantBackdrop>
+                  <Card
+                    title="Dark 变体"
+                    variant="dark"
+                    className="w-full"
+                  >
+                    <p className="text-sm">深色风格：在浅色背景/渐变背景上更容易看出对比。</p>
+                  </Card>
+                </VariantBackdrop>
 
                 {/* 不同阴影效果 */ }
                 <Card
@@ -329,6 +341,14 @@ export default function TestCard() {
                   className="w-72"
                 >
                   <p className="text-sm">内阴影效果。</p>
+                </Card>
+
+                <Card
+                  title="自定义阴影 (number)"
+                  shadow={ 35 }
+                  className="w-72"
+                >
+                  <p className="text-sm">通过 number 自定义阴影强度。</p>
                 </Card>
 
                 {/* 不同圆角效果 */ }
@@ -396,6 +416,14 @@ export default function TestCard() {
                   <p className="text-sm">全圆角效果（适合正方形卡片）。</p>
                 </Card>
 
+                <Card
+                  title="自定义圆角 (number)"
+                  rounded={ 14 }
+                  className="w-72"
+                >
+                  <p className="text-sm">通过 number 自定义圆角像素值。</p>
+                </Card>
+
                 {/* 悬浮效果 */ }
                 <Card
                   title="悬浮效果"
@@ -405,39 +433,13 @@ export default function TestCard() {
                   <p className="text-sm">鼠标悬浮时显示阴影和边框效果。</p>
                 </Card>
 
-                <Card
-                  title="提升效果 (2px)"
-                  className="w-72"
-                  elevation={ 2 }
-                >
-                  <p className="text-sm">鼠标悬浮时卡片上移2像素。</p>
-                </Card>
-
-                <Card
-                  title="提升效果 (4px)"
-                  className="w-72"
-                  elevation={ 4 }
-                >
-                  <p className="text-sm">鼠标悬浮时卡片上移4像素。</p>
-                </Card>
-
-                <Card
-                  title="提升效果 (8px)"
-                  className="w-72"
-                  elevation={ 8 }
-                >
-                  <p className="text-sm">鼠标悬浮时卡片上移8像素。</p>
-                </Card>
-
                 {/* 内边距 */ }
                 <Card
                   title="无内边距"
                   className="w-72"
                   padding="none"
                 >
-                  <div className="bg-backgroundSecondary p-4">
-                    <p className="text-sm">无内边距效果，内容区域没有默认的内边距。</p>
-                  </div>
+                  <p className="text-sm">无内边距效果，内容区域没有默认的内边距。</p>
                 </Card>
 
                 <Card
@@ -479,17 +481,17 @@ export default function TestCard() {
                   imageAlt="风景图"
                   headerActions={
                     <div className="flex space-x-1">
-                      <button className="rounded-full p-1 hover:bg-backgroundSecondary">
+                      <button className="rounded-full p-1 hover:bg-background2">
                         <Settings className="h-4 w-4" />
                       </button>
-                      <button className="rounded-full p-1 hover:bg-backgroundSecondary">
+                      <button className="rounded-full p-1 hover:bg-background2">
                         <X className="h-4 w-4" />
                       </button>
                     </div>
                   }
                   footer={
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-textSecondary">最后更新: 今天</span>
+                      <span className="text-xs text-text2">最后更新: 今天</span>
                       <button className="rounded-md bg-sky-500 px-3 py-1 text-white transition-colors hover:bg-sky-600">
                         查看详情
                       </button>
@@ -501,11 +503,10 @@ export default function TestCard() {
                   rounded="lg"
                   className="w-72"
                   hoverEffect
-                  elevation={ 2 }
                 >
                   <div className="space-y-2">
                     <h4 className="font-medium">完整功能展示</h4>
-                    <p className="text-sm text-textSecondary">
+                    <p className="text-sm text-text2">
                       这个卡片展示了所有可用的功能，包括标题、图片、内容、底部、分隔线和自定义样式。
                     </p>
                     <div className="flex space-x-2">
@@ -529,7 +530,7 @@ export default function TestCard() {
                     >
                       <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
                         <h3 className="text-xl text-white font-semibold">基础发光边框</h3>
-                        <p className="mt-2 text-center text-textSecondary">默认配置的发光边框效果</p>
+                        <p className="mt-2 text-center text-text2">默认配置的发光边框效果</p>
                       </div>
                     </GlowBorder>
                   </div>
@@ -543,7 +544,7 @@ export default function TestCard() {
                     >
                       <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
                         <h3 className="text-xl text-white font-semibold">自定义边框</h3>
-                        <p className="mt-2 text-center text-textSecondary">更宽的边框和自定义颜色</p>
+                        <p className="mt-2 text-center text-text2">更宽的边框和自定义颜色</p>
                       </div>
                     </GlowBorder>
                   </div>
@@ -557,7 +558,7 @@ export default function TestCard() {
                     >
                       <div className="h-full flex flex-col items-center justify-center rounded-lg bg-gray-900 p-4">
                         <h3 className="text-xl text-white font-semibold">慢速旋转</h3>
-                        <p className="mt-2 text-center text-textSecondary">更慢的动画速度和更宽的边框</p>
+                        <p className="mt-2 text-center text-text2">更慢的动画速度和更宽的边框</p>
                       </div>
                     </GlowBorder>
                   </div>
@@ -571,7 +572,7 @@ export default function TestCard() {
                     >
                       <div className="h-full flex flex-col items-center justify-center rounded-full bg-gray-900 p-4">
                         <h3 className="text-xl text-white font-semibold">圆形边框</h3>
-                        <p className="mt-2 text-center text-textSecondary">圆形容器的发光边框效果</p>
+                        <p className="mt-2 text-center text-text2">圆形容器的发光边框效果</p>
                       </div>
                     </GlowBorder>
                   </div>
@@ -580,18 +581,19 @@ export default function TestCard() {
             : (
                 <div className="w-full max-w-5xl flex flex-col gap-10">
                   <div className="space-y-2">
-                    <p className="text-xs text-textSecondary">Stacked Cards</p>
-                    <h2 className="text-2xl font-semibold text-textPrimary">
+                    <p className="text-xs text-text2">Stacked Cards</p>
+                    <h2 className="text-2xl font-semibold text-text">
                       多层堆叠卡片预览
                     </h2>
-                    <p className="text-sm text-textSecondary">
+                    <p className="text-sm text-text2">
                       可调节层数、偏移、缩放与透明度，最大支持 3 层
                     </p>
                   </div>
 
                   <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-                    <div className="flex items-center justify-center rounded-2xl border border-border bg-backgroundSecondary/60 p-8">
+                    <div className="flex items-center justify-center rounded-2xl border border-border bg-background5/20 p-8">
                       <StackedCards
+                        variant={ stackedVariant }
                         layers={ layers as 1 | 2 | 3 }
                         offsetX={ offsetX }
                         offsetY={ offsetY }
@@ -603,11 +605,11 @@ export default function TestCard() {
                       >
                         <div className="flex h-full flex-col justify-between">
                           <div className="space-y-2">
-                            <div className="text-xs text-textSecondary">Today</div>
-                            <div className="text-lg font-semibold text-textPrimary">
+                            <div className="text-xs text-text2">Today</div>
+                            <div className="text-lg font-semibold text-text">
                               Design Sync
                             </div>
-                            <div className="text-sm text-textSecondary">
+                            <div className="text-sm text-text2">
                               12:30 - 13:15 · Studio 4A
                             </div>
                           </div>
@@ -621,6 +623,23 @@ export default function TestCard() {
 
                     <div className="rounded-2xl border border-border bg-background p-6 shadow-sm">
                       <div className="space-y-5">
+                        <div className="space-y-2">
+                          <span className="text-sm text-text2">样式变体</span>
+                          <ButtonGroup
+                            active={ stackedVariant }
+                            onChange={ v => setStackedVariant(v as StackedCardsVariant) }
+                          >
+                            <Button name="border" size="sm">
+                              边框
+                            </Button>
+                            <Button name="shadow" size="sm">
+                              阴影
+                            </Button>
+                            <Button name="background" size="sm">
+                              背景色
+                            </Button>
+                          </ButtonGroup>
+                        </div>
                         <ControlSlider
                           label="层数"
                           value={ layers }
@@ -669,6 +688,7 @@ export default function TestCard() {
 
                   <div className="grid gap-6 sm:grid-cols-2">
                     <StackedCards
+                      variant={ stackedVariant }
                       layers={ 2 }
                       offsetX={ 6 }
                       offsetY={ 12 }
@@ -677,17 +697,18 @@ export default function TestCard() {
                       contentClassName="p-5"
                     >
                       <div className="space-y-3">
-                        <div className="text-xs text-textSecondary">Quick View</div>
-                        <div className="text-base font-semibold text-textPrimary">
+                        <div className="text-xs text-text2">Quick View</div>
+                        <div className="text-base font-semibold text-text">
                           Weekly Insights
                         </div>
-                        <p className="text-sm text-textSecondary">
+                        <p className="text-sm text-text2">
                           5 updates · 2 pending approvals
                         </p>
                       </div>
                     </StackedCards>
 
                     <StackedCards
+                      variant={ stackedVariant }
                       layers={ 3 }
                       offsetX={ 12 }
                       offsetY={ 6 }
@@ -698,11 +719,11 @@ export default function TestCard() {
                       contentClassName="p-5"
                     >
                       <div className="space-y-3">
-                        <div className="text-xs text-textSecondary">Focus</div>
-                        <div className="text-base font-semibold text-textPrimary">
+                        <div className="text-xs text-text2">Focus</div>
+                        <div className="text-base font-semibold text-text">
                           Release Checklist
                         </div>
-                        <p className="text-sm text-textSecondary">
+                        <p className="text-sm text-text2">
                           3 items remaining · ETA 2h
                         </p>
                       </div>
@@ -894,8 +915,8 @@ function ControlSlider({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-textSecondary">{ label }</span>
-        <span className="text-sm font-mono text-textTertiary tabular-nums">
+        <span className="text-sm text-text2">{ label }</span>
+        <span className="text-sm font-mono text-text3 tabular-nums">
           { value.toFixed(step < 1
             ? 2
             : 0) }

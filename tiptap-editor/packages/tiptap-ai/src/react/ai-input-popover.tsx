@@ -126,7 +126,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
           >
             <div className="flex items-center gap-2">
               <SparklesIcon className="h-4 w-4 text-brand" />
-              <span className="text-sm font-semibold text-textSecondary">
+              <span className="text-sm font-semibold text-text2">
                 { t(AI_LABELS.IDLE) }
               </span>
             </div>
@@ -144,7 +144,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
               autoResize
             />
             <div className="flex items-center justify-between">
-              <span className="text-xs text-textTertiary">
+              <span className="text-xs text-text3">
                 { t(AI_LABELS.HINT) }
               </span>
               <div className="flex items-center gap-2">

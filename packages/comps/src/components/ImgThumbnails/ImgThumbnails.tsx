@@ -3,6 +3,7 @@
 import type { ImgThumbnailsProps } from './types'
 import { memo, useCallback, useEffect, useRef } from 'react'
 import { cn } from 'utils'
+import { LazyImg } from '../LazyImg'
 
 /**
  * 图片缩略图预览组件
@@ -13,7 +14,11 @@ export const ImgThumbnails = memo<ImgThumbnailsProps>(({
   currentIndex,
   onImageChange,
   className,
+  containerClassName,
   orientation = 'vertical',
+  style,
+  hideBorder = false,
+  hideHighlight = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -61,6 +66,17 @@ export const ImgThumbnails = memo<ImgThumbnailsProps>(({
     }
   }, [orientation])
 
+  const getButtonClassName = (index: number) => {
+    const base = 'relative flex-shrink-0 overflow-hidden rounded-lg transition-all'
+    const highlightClassName = currentIndex === index
+      ? 'border border-systemOrange shadow-lg shadow-systemOrange/50 scale-105'
+      : 'border border-transparent hover:border-border hover:scale-102'
+
+    return hideHighlight
+      ? base
+      : `${base} ${highlightClassName}`
+  }
+
   /** 当当前索引变化时，滚动到对应位置 */
   useEffect(() => {
     scrollToIndex(currentIndex)
@@ -88,7 +104,7 @@ export const ImgThumbnails = memo<ImgThumbnailsProps>(({
     checkScrollButtons()
   }, [images, checkScrollButtons])
 
-  if (images.length <= 1) {
+  if (images.length === 0) {
     return null
   }
 
@@ -103,54 +119,51 @@ export const ImgThumbnails = memo<ImgThumbnailsProps>(({
       <div
         ref={ scrollContainerRef }
         className={ cn(
-          'flex gap-2 p-1',
+          'flex gap-2 w-fit',
           'scrollbar-thin scrollbar-thumb-border/50 scrollbar-track-transparent',
-          'bg-backgroundSecondary/30 backdrop-blur-sm rounded-xl border border-border',
+          'bg-background2/30 backdrop-blur-sm rounded-xl',
+          !hideBorder && 'border border-border p-1',
           isVertical
             ? 'flex-col overflow-y-auto overflow-x-hidden'
             : 'flex-row overflow-x-auto overflow-y-hidden',
+          containerClassName,
         ) }
         style={ isVertical
           ? {
               maxHeight: 'calc(95vh - 80px)',
               maxWidth: '80px',
+              ...style,
             }
           : {
-              maxWidth: 'calc(95vw - 80px)',
+              maxWidth: '100%',
               maxHeight: '80px',
+              ...style,
             } }
       >
         { images.map((src, index) => (
           <button
             key={ `${src}-${index}` }
             onClick={ () => onImageChange(index) }
-            className={ cn(
-              'relative flex-shrink-0 overflow-hidden rounded-lg',
-              'transition-all border',
-              currentIndex === index
-                ? 'border-systemOrange shadow-lg shadow-systemOrange/50 scale-105'
-                : 'border-transparent hover:border-border hover:scale-102',
-            ) }
+            className={ cn(getButtonClassName(index)) }
             style={ {
               width: 60,
               height: 60,
             } }
             aria-label={ `切换到第 ${index + 1} 张图片` }
           >
-            <img
+            <LazyImg
               src={ src }
               alt={ `缩略图 ${index + 1}` }
-              className={ cn(
-                'w-full h-full object-cover transition-all',
+              previewable={ false }
+              className="w-full h-full"
+              imgClassName={ cn(
+                'w-full h-full object-cover hover:opacity-100',
                 currentIndex === index
                   ? 'opacity-100'
-                  : 'opacity-80 hover:opacity-100',
+                  : 'opacity-80',
               ) }
               draggable={ false }
             />
-            { currentIndex === index && (
-              <div className="absolute inset-0 bg-systemOrange/10 pointer-events-none" />
-            ) }
           </button>
         )) }
       </div>

@@ -66,7 +66,7 @@ export const ImageUploadDragArea: React.FC<ImageUploadDragAreaProps> = ({
   return (
     <div
       className={ cn(
-        'p-8 md:p-6 border-[1.5px] border-dashed border-border rounded-lg text-center cursor-pointer relative overflow-hidden transition-all duration-200 hover:border-borderStrong',
+        'p-8 md:p-6 border-[1.5px] border-dashed border-border rounded-lg text-center cursor-pointer relative overflow-hidden transition-all duration-200 hover:border-border3',
         {
           'border-brand bg-brand/5': isDragActive,
           'border-brand bg-brand/10': isDragOver,

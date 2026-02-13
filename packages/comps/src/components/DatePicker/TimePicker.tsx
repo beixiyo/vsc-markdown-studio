@@ -1,10 +1,15 @@
 'use client'
 
 import type { TimePickerProps } from './types'
+import { clamp } from '@jl-org/tool'
 import { getHours, getMinutes, getSeconds, setHours, setMinutes, setSeconds } from 'date-fns'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { cn } from 'utils'
 import { useT } from '../../i18n'
+import { Button } from '../Button'
+import { Cascader } from '../Cascader'
+import { Popover } from '../Popover'
+import { DATA_DATE_PICKER_IGNORE } from './constants'
 
 export const TimePicker = memo<TimePickerProps>(({
   value,
@@ -12,177 +17,229 @@ export const TimePicker = memo<TimePickerProps>(({
   precision = 'day',
   disabled = false,
   className,
+  use12Hours = false,
+  onConfirm,
+  showConfirm = true,
+  timeIcon,
+  minuteStep = 1,
 }) => {
-  const [hours, setHoursState] = useState(() => getHours(value))
-  const [minutes, setMinutesState] = useState(() => getMinutes(value))
-  const [seconds, setSecondsState] = useState(() => getSeconds(value))
+  const t = useT()
+  const hours = getHours(value)
+  const minutes = getMinutes(value)
+  const seconds = getSeconds(value)
 
-  const hoursRef = useRef<HTMLDivElement>(null)
-  const minutesRef = useRef<HTMLDivElement>(null)
-  const secondsRef = useRef<HTMLDivElement>(null)
-
-  /** 同步外部值变化 */
-  useEffect(() => {
-    setHoursState(getHours(value))
-    setMinutesState(getMinutes(value))
-    setSecondsState(getSeconds(value))
-  }, [value])
-
-  /** 判断是否需要显示时间选择器 */
   const showHour = precision === 'hour' || precision === 'minute' || precision === 'second'
   const showMinute = precision === 'minute' || precision === 'second'
   const showSecond = precision === 'second'
 
-  /** 生成选项数组 */
-  const hourOptions = Array.from({ length: 24 }, (_, i) => i)
-  const minuteOptions = Array.from({ length: 60 }, (_, i) => i)
-  const secondOptions = Array.from({ length: 60 }, (_, i) => i)
+  const isPM = hours >= 12
 
-  /** 更新日期对象 */
-  const updateDate = useCallback((newHours: number, newMinutes: number, newSeconds: number) => {
-    let newDate = value
-    if (showHour) {
-      newDate = setHours(newDate, newHours)
-    }
-    if (showMinute) {
-      newDate = setMinutes(newDate, newMinutes)
-    }
-    if (showSecond) {
-      newDate = setSeconds(newDate, newSeconds)
-    }
-    onChange(newDate)
-  }, [value, onChange, showHour, showMinute, showSecond])
+  const displayHour = useMemo(() => {
+    if (!use12Hours)
+      return hours
+    const h = hours % 12
+    return h === 0
+      ? 12
+      : h
+  }, [hours, use12Hours])
 
-  /** 处理小时变化 */
-  const handleHourChange = useCallback((hour: number) => {
-    setHoursState(hour)
-    /** 根据 precision 决定更新哪些字段 */
-    const newMinutes = showMinute
-      ? minutes
-      : 0
-    const newSeconds = showSecond
-      ? seconds
-      : 0
-    updateDate(hour, newMinutes, newSeconds)
-  }, [minutes, seconds, updateDate, showMinute, showSecond])
-
-  /** 处理分钟变化 */
-  const handleMinuteChange = useCallback((minute: number) => {
-    setMinutesState(minute)
-    /** 根据 precision 决定更新哪些字段 */
-    const newSeconds = showSecond
-      ? seconds
-      : 0
-    updateDate(hours, minute, newSeconds)
-  }, [hours, seconds, updateDate, showSecond])
-
-  /** 处理秒变化 */
-  const handleSecondChange = useCallback((second: number) => {
-    setSecondsState(second)
-    updateDate(hours, minutes, second)
-  }, [hours, minutes, updateDate])
-
-  /** 滚动到选中项 */
-  const scrollToSelected = useCallback((ref: React.RefObject<HTMLDivElement | null>, selected: number) => {
-    if (ref.current) {
-      const item = ref.current.querySelector(`[data-value="${selected}"]`)
-      if (item) {
-        item.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  const handleHourChange = useCallback((newHour: number) => {
+    let finalHour = newHour
+    if (use12Hours) {
+      if (isPM) {
+        finalHour = newHour === 12
+          ? 12
+          : newHour + 12
+      }
+      else {
+        finalHour = newHour === 12
+          ? 0
+          : newHour
       }
     }
-  }, [])
+    onChange(setHours(value, finalHour))
+  }, [value, onChange, use12Hours, isPM])
 
-  useEffect(() => {
-    if (showHour && hoursRef.current) {
-      scrollToSelected(hoursRef, hours)
+  const handleMinuteChange = useCallback((newMinute: number) => {
+    onChange(setMinutes(value, newMinute))
+  }, [value, onChange])
+
+  const handleSecondChange = useCallback((newSecond: number) => {
+    onChange(setSeconds(value, newSecond))
+  }, [value, onChange])
+
+  const toggleAMPM = useCallback(() => {
+    const newHour = isPM
+      ? hours - 12
+      : hours + 12
+    onChange(setHours(value, newHour))
+  }, [hours, isPM, onChange, value])
+
+  const hourOptions = useMemo(() => {
+    if (use12Hours) {
+      return Array.from({ length: 12 }, (_, i) => i + 1)
     }
-  }, [showHour, hours, scrollToSelected])
+    return Array.from({ length: 24 }, (_, i) => i)
+  }, [use12Hours])
 
-  useEffect(() => {
-    if (showMinute && minutesRef.current) {
-      scrollToSelected(minutesRef, minutes)
-    }
-  }, [showMinute, minutes, scrollToSelected])
+  const minuteOptions = useMemo(() => {
+    return Array.from({ length: Math.ceil(60 / minuteStep) }, (_, i) => i * minuteStep)
+  }, [minuteStep])
 
-  useEffect(() => {
-    if (showSecond && secondsRef.current) {
-      scrollToSelected(secondsRef, seconds)
-    }
-  }, [showSecond, seconds, scrollToSelected])
+  const secondOptions = Array.from({ length: 60 }, (_, i) => i)
 
-  const t = useT()
+  const ampmOptions = useMemo(() => [
+    { label: t('datePicker.am') || '上午', value: 'AM' },
+    { label: t('datePicker.pm') || '下午', value: 'PM' },
+  ], [t])
 
-  /** 如果不需要显示时间选择器，返回 null */
-  if (!showHour) {
-    return null
-  }
+  const periodPosition = t('datePicker.periodPosition') || 'left'
 
-  /** 渲染选择器列 */
-  const renderPickerColumn = (
-    ref: React.RefObject<HTMLDivElement | null>,
+  const ampmSelector = useMemo(() => {
+    if (!use12Hours)
+      return null
+    return (
+      <Cascader
+        options={ ampmOptions }
+        value={ isPM
+          ? 'PM'
+          : 'AM' }
+        disabled={ disabled }
+        onChange={ (val) => {
+          const shouldBePM = val === 'PM'
+          if (shouldBePM !== isPM) {
+            toggleAMPM()
+          }
+        } }
+        trigger={
+          <div className="flex items-center bg-background2 rounded-xl px-3 h-[40px] cursor-pointer select-none text-xs font-medium text-text hover:bg-background3 transition-colors">
+            { isPM
+              ? t('datePicker.pm') || '下午'
+              : t('datePicker.am') || '上午' }
+          </div>
+        }
+        dropdownClassName="!min-w-[80px]"
+        dropdownProps={ { [DATA_DATE_PICKER_IGNORE]: 'true' } as any }
+      />
+    )
+  }, [use12Hours, ampmOptions, isPM, disabled, toggleAMPM, t])
+
+  const renderOptionList = (
     options: number[],
     selected: number,
-    onChange: (value: number) => void,
-    label: string,
-  ) => {
-    return (
-      <div className="flex flex-col items-center w-12">
-        <div className="text-xs text-textSecondary mb-1">{ label }</div>
-        <div
-          ref={ ref }
-          className={ cn(
-            'h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent',
-            'scroll-smooth w-full',
-          ) }
-          style={ {
-            scrollbarWidth: 'thin',
-          } }
-        >
-          { options.map(option => (
-            <div
-              key={ option }
-              data-value={ option }
-              className={ cn(
-                'px-2 py-1 text-sm cursor-pointer text-center rounded-lg',
-                'hover:bg-brand hover:text-buttonTertiary transition-all',
-                {
-                  'bg-buttonPrimary text-buttonTertiary font-medium': option === selected,
-                  'text-textPrimary': option !== selected,
-                  'opacity-50 cursor-not-allowed': disabled,
-                },
-              ) }
-              onClick={ () => !disabled && onChange(option) }
-            >
-              { String(option).padStart(2, '0') }
-            </div>
-          )) }
-        </div>
+    onSelect: (val: number) => void,
+  ) => (
+    <div
+      className="max-h-60 overflow-y-auto p-2 scrollbar-none"
+      { ...({ [DATA_DATE_PICKER_IGNORE]: 'true' } as any) }
+    >
+      <div
+        className="grid gap-1"
+        style={ {
+          gridTemplateColumns: `repeat(${clamp(options.length, 1, 6)}, 1fr)`,
+        } }
+      >
+        { options.map(option => (
+          <div
+            key={ option }
+            className={ cn(
+              'size-8 flex items-center justify-center text-xs rounded-full cursor-pointer transition-all',
+              option === selected
+                ? 'bg-button text-button3'
+                : 'hover:bg-background3 text-text',
+            ) }
+            onClick={ () => onSelect(option) }
+          >
+            { String(option).padStart(2, '0') }
+          </div>
+        )) }
       </div>
-    )
-  }
+    </div>
+  )
+
+  if (!showHour)
+    return null
 
   return (
-    <div className={ cn('flex items-center gap-2 px-3 py-4 border-l border-border', className) }>
-      { showHour && renderPickerColumn(
-        hoursRef,
-        hourOptions,
-        hours,
-        handleHourChange,
-        t('datePicker.hour'),
-      ) }
-      { showMinute && renderPickerColumn(
-        minutesRef,
-        minuteOptions,
-        minutes,
-        handleMinuteChange,
-        t('datePicker.minute'),
-      ) }
-      { showSecond && renderPickerColumn(
-        secondsRef,
-        secondOptions,
-        seconds,
-        handleSecondChange,
-        t('datePicker.second'),
+    <div className={ cn('flex items-center justify-between', className) }>
+      <div className="flex items-center gap-2">
+        { periodPosition === 'left' && ampmSelector }
+
+        <div
+          className="flex items-center justify-center bg-background2 rounded-xl gap-2"
+          style={ {
+            width: showSecond
+              ? 116
+              : 88,
+            height: 40,
+          } }
+        >
+          { timeIcon }
+
+          <div className="flex items-center gap-1 text-sm text-text">
+            <Popover
+              trigger="click"
+              position="top"
+              disabled={ disabled }
+              content={ renderOptionList(hourOptions, displayHour, handleHourChange) }
+            >
+              <div
+                className="cursor-pointer hover:text-brand transition-colors"
+              >
+                { String(displayHour).padStart(2, '0') }
+              </div>
+            </Popover>
+
+            { showMinute && (
+              <>
+                <span className="text-text">:</span>
+                <Popover
+                  trigger="click"
+                  position="top"
+                  disabled={ disabled }
+                  content={ renderOptionList(minuteOptions, minutes, handleMinuteChange) }
+                >
+                  <div
+                    className="cursor-pointer transition-colors hover:text-brand"
+                  >
+                    { String(minutes).padStart(2, '0') }
+                  </div>
+                </Popover>
+              </>
+            ) }
+
+            { showSecond && (
+              <>
+                <span className="text-text4">:</span>
+                <Popover
+                  trigger="click"
+                  position="top"
+                  disabled={ disabled }
+                  content={ renderOptionList(secondOptions, seconds, handleSecondChange) }
+                >
+                  <span
+                    className="cursor-pointer hover:text-brand transition-colors"
+                  >
+                    { String(seconds).padStart(2, '0') }
+                  </span>
+                </Popover>
+              </>
+            ) }
+          </div>
+        </div>
+
+        { periodPosition === 'right' && ampmSelector }
+      </div>
+
+      { showConfirm && (
+        <Button
+          onClick={ onConfirm }
+          disabled={ disabled }
+          variant="primary"
+          className="h-[40px]"
+        >
+          { t('datePicker.confirm') || '确认' }
+        </Button>
       ) }
     </div>
   )

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import type { Size } from '../../types'
 
 export interface ToggleItem {
@@ -66,12 +66,12 @@ export interface StackButtonProps {
   itemClassName?: string
   /**
    * 激活项的类名
-   * @default 'bg-buttonPrimary border-0'
+   * @default 'bg-button border-0'
    */
   activeClassName?: string
   /**
    * 非激活项的类名
-   * @default 'bg-buttonSecondary border-0'
+   * @default 'bg-button2 border-0'
    */
   inactiveClassName?: string
   /**
@@ -86,12 +86,20 @@ export interface StackButtonProps {
   rightClassName?: string
   /**
    * 位于激活项左侧且非第一项的类名（堆叠项）
-   * @default 'border-l border-borderSecondary'
+   * @default 'border-l border-border2'
    */
   stackedLeftClassName?: string
   /**
    * 位于激活项右侧且非最后一项的类名（堆叠项）
-   * @default 'border-r border-borderSecondary'
+   * @default 'border-r border-border2'
    */
   stackedRightClassName?: string
+  /**
+   * 位于激活项左侧且非第一项时的行内样式（堆叠项）
+   */
+  stackedLeftStyle?: CSSProperties
+  /**
+   * 位于激活项右侧且非最后一项时的行内样式（堆叠项）
+   */
+  stackedRightStyle?: CSSProperties
 }

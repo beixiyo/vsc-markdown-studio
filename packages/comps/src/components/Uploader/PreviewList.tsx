@@ -52,7 +52,7 @@ export const PreviewList = memo<PreviewListProps>((props) => {
         'overflow-hidden rounded-2xl',
         'transition-all duration-200',
         {
-          'hover:shadow-md hover:border-borderStrong': !disabled,
+          'hover:shadow-md hover:border-border3': !disabled,
           'opacity-75': disabled,
         },
       ) }
@@ -106,7 +106,7 @@ export const PreviewList = memo<PreviewListProps>((props) => {
           'size-6 transition-colors',
           disabled
             ? 'text-textDisabled'
-            : 'text-textQuaternary group-hover:text-textSecondary',
+            : 'text-text4 group-hover:text-text2',
         ) } />
       </Border>
     </div>
@@ -131,7 +131,7 @@ export const PreviewList = memo<PreviewListProps>((props) => {
     <div
       className={ cn(
         'overflow-auto flex flex-wrap gap-3 sm:gap-4 shrink-0 w-full',
-        'scrollbar-thin scrollbar-thumb-borderStrong',
+        'scrollbar-thin scrollbar-thumb-border3',
         'scrollbar-track-transparent',
         !isCardMode && 'mt-4',
         className,

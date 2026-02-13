@@ -1,6 +1,6 @@
 import type { PageSwiperProps } from './types'
-import { useShortCutKey } from 'hooks'
-import { Children, memo, useCallback, useImperativeHandle, useRef, useState } from 'react'
+import { useResizeObserver, useShortCutKey, useWheelDirection } from 'hooks'
+import { Children, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { cn } from 'utils'
 import { Indicator } from './Indicator'
 import { NavigationButtons } from './NavigationButtons'
@@ -10,6 +10,7 @@ import { usePageNavigation } from './usePageNavigation'
 export const PageSwiper = memo<PageSwiperProps>((props) => {
   const {
     className,
+    contentClassName,
     style,
     children,
 
@@ -23,6 +24,7 @@ export const PageSwiper = memo<PageSwiperProps>((props) => {
     showButtons = false,
     showIndicator = true,
     gap = 40,
+    enableWheel = false,
     ref,
   } = props
 
@@ -44,7 +46,7 @@ export const PageSwiper = memo<PageSwiperProps>((props) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   /** 页面导航逻辑 */
-  const { calculateTranslateX, applyTransform, getContainerWidth } = usePageNavigation({
+  const { calculateTranslateX, applyTransform, getContainerWidth, isAnimatingRef } = usePageNavigation({
     showPreview: effectiveShowPreview,
     previewWidth,
     gap,
@@ -108,6 +110,30 @@ export const PageSwiper = memo<PageSwiperProps>((props) => {
     }
   }, [currentIndex, childrenLength, handleIndexChange, applyTransform])
 
+  /** 滚轮控制上一页 / 下一页 */
+  const handleWheel = useWheelDirection(
+    {
+      onScrollUp: () => {
+        if (childrenLength > 1)
+          goToPrev()
+      },
+      onScrollDown: () => {
+        if (childrenLength > 1)
+          goToNext()
+      },
+    },
+    {
+      // 适当提高阈值，避免触控板轻微抖动导致误触发
+      threshold: 20,
+      // 默认阻止容器自身滚动，专注于翻页（若内部仍可滚动则不会触发）
+      preventDefault: true,
+      stopPropagation: true,
+      enable: enableWheel,
+      useClosestScrollableParent: true,
+      boundaryContainerRef: containerRef,
+    },
+  )
+
   useShortCutKey({
     key: 'ArrowLeft',
     fn: () => goToPrev(),
@@ -126,11 +152,19 @@ export const PageSwiper = memo<PageSwiperProps>((props) => {
     getChildrenLength: () => childrenLength,
   }), [goToNext, goToPrev, goToIndex, currentIndex, childrenLength])
 
+  useResizeObserver([containerRef], () => {
+    if (isAnimatingRef.current) {
+      return
+    }
+    applyTransform(currentIndex, false)
+  })
+
   return (
     <div
       ref={ containerRef }
-      className={ cn('overflow-hidden w-full h-full relative', className) }
+      className={ cn('w-full h-full relative', className) }
       style={ style }
+      onWheel={ handleWheel }
       onMouseDown={ handleDragStart }
       onTouchStart={ handleDragStart }
       onMouseMove={ handleDragMove }
@@ -162,7 +196,7 @@ export const PageSwiper = memo<PageSwiperProps>((props) => {
               className="flex-shrink-0 h-full flex flex-col"
               style={ { width: pageWidth } }
             >
-              <div className="flex-1 overflow-y-auto">
+              <div className={ cn('flex-1 overflow-y-auto', contentClassName) }>
                 { child }
               </div>
             </div>

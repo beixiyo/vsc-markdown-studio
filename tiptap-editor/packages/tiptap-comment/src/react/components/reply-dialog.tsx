@@ -55,8 +55,8 @@ export const ReplyDialog = memo(({
       ) }
     >
       { replyToPreview && (
-        <div className="flex items-start gap-2 rounded-xl bg-toningYellowBgColor px-3 py-2 text-sm text-textSecondary shadow-inner">
-          <span className="text-textTertiary">↩︎</span>
+        <div className="flex items-start gap-2 rounded-xl bg-toningYellowBgColor px-3 py-2 text-sm text-text2 shadow-inner">
+          <span className="text-text3">↩︎</span>
           <span className="leading-6">{ replyToPreview }</span>
         </div>
       ) }

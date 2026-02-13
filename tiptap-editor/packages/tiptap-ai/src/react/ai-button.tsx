@@ -96,7 +96,7 @@ export const AIButton = memo(
             {children ?? (
               <>
                 <SparklesIcon className="size-4" />
-                {text && <span className="text-base text-textSecondary">{text}</span>}
+                {text && <span className="text-base text-text2">{text}</span>}
               </>
             )}
           </Button>

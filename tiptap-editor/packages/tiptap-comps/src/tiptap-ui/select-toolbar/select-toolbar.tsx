@@ -53,7 +53,7 @@ const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((pro
         <div
           { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
           className={ cn(
-            'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-textSecondary rounded-lg shadow-lg z-50',
+            'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-text2 rounded-lg shadow-lg z-50',
             className,
           ) }
         >

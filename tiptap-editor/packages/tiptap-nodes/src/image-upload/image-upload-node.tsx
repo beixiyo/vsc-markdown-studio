@@ -95,7 +95,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
         <div className="flex flex-col gap-3">
           { fileItems.length > 1 && (
             <div className="flex items-center justify-between py-2 border-b border-border mb-2 max-[480px]:flex-col max-[480px]:items-start max-[480px]:gap-2">
-              <span className="text-sm font-medium text-textPrimary">
+              <span className="text-sm font-medium text-text">
                 { t('image.uploading', {
                   count: fileItems.length,
                   plural: fileItems.length === 1

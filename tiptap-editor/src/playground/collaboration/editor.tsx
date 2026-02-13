@@ -195,7 +195,7 @@ export const CollaborationEditor = memo<CollaborationEditorProps>(({ ydoc, provi
 
       <div
         className={ cn(
-          'flex items-center justify-between gap-4 px-4 py-2 border-t border-border text-xs text-textSecondary',
+          'flex items-center justify-between gap-4 px-4 py-2 border-t border-border text-xs text-text2',
           'sticky bottom-0 bg-background z-100',
         ) }
       >

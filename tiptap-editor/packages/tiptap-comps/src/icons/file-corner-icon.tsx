@@ -4,7 +4,7 @@ export const FileCornerIcon: React.FC = () => (
   <svg
     width="10"
     height="10"
-    className="absolute top-0 right-1 bottom-0 text-borderSecondary"
+    className="absolute top-0 right-1 bottom-0 text-border2"
     viewBox="0 0 10 10"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"

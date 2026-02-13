@@ -74,14 +74,14 @@ export const AIActionPanel = memo<AIActionPanelProps>(
     return (
       <div
         className={ cn(
-          'flex min-w-[12rem] items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-textPrimary shadow-card backdrop-blur-[12px]',
+          'flex min-w-[12rem] items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 text-text shadow-card backdrop-blur-[12px]',
           className,
         ) }
       >
         { status === 'processing' && (
           <div className="flex items-center gap-2">
             <LoadingIcon size="sm" />
-            <span className="text-sm text-textPrimary">
+            <span className="text-sm text-text">
               { t(AI_LABELS.PROCESSING) }
             </span>
           </div>
@@ -90,7 +90,7 @@ export const AIActionPanel = memo<AIActionPanelProps>(
         { status === 'preview' && (
           <>
             { previewText && (
-              <div className="flex-1 max-w-[14rem] overflow-hidden text-ellipsis whitespace-nowrap text-sm text-textSecondary">
+              <div className="flex-1 max-w-[14rem] overflow-hidden text-ellipsis whitespace-nowrap text-sm text-text2">
                 { previewText }
               </div>
             ) }

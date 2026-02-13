@@ -1,6 +1,6 @@
 'use client'
 
-import type { Option } from '../Select/types'
+import type { CascaderOption } from '../Cascader'
 import type { CalendarHeaderProps } from './types'
 import { getMonth, getYear, setMonth, setYear, startOfMonth } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -8,7 +8,8 @@ import { memo, useCallback, useMemo } from 'react'
 import { cn } from 'utils'
 import { useT } from '../../i18n'
 import { Button } from '../Button'
-import { Select } from '../Select'
+import { Cascader } from '../Cascader'
+import { DATA_DATE_PICKER_IGNORE } from './constants'
 import { addMonth, isAfter, isBefore, subtractMonth } from './utils'
 
 export const CalendarHeader = memo<CalendarHeaderProps>(({
@@ -17,7 +18,15 @@ export const CalendarHeader = memo<CalendarHeaderProps>(({
   minDate,
   maxDate,
   className,
+  yearRange = 20,
+  prevIcon,
+  nextIcon,
+  superPrevIcon,
+  superNextIcon,
 }) => {
+  const t = useT()
+  const headerOrder = t('datePicker.headerOrder') || 'ym'
+
   const currentYear = getYear(currentMonth)
   const currentMonthIndex = getMonth(currentMonth) // 0-11
 
@@ -25,11 +34,11 @@ export const CalendarHeader = memo<CalendarHeaderProps>(({
   const yearOptions = useMemo(() => {
     const startYear = minDate
       ? getYear(minDate)
-      : currentYear - 10
+      : currentYear - yearRange
     const endYear = maxDate
       ? getYear(maxDate)
-      : currentYear + 10
-    const years: Option[] = []
+      : currentYear + yearRange
+    const years: CascaderOption[] = []
     for (let year = startYear; year <= endYear; year++) {
       years.push({
         value: String(year),
@@ -37,12 +46,12 @@ export const CalendarHeader = memo<CalendarHeaderProps>(({
       })
     }
     return years
-  }, [minDate, maxDate, currentYear])
+  }, [minDate, maxDate, currentYear, yearRange])
 
   /** 生成月份选项列表 */
   const monthOptions = useMemo(() => {
-    const months: Option[] = []
-    const monthNames = Array.from({ length: 12 }, (_, i) => `${i + 1}`)
+    const months: CascaderOption[] = []
+    const monthsNames = t('datePicker.months', { returnObjects: true }) as unknown as string[]
 
     for (let i = 0; i < 12; i++) {
       const testDate = startOfMonth(setMonth(setYear(new Date(), currentYear), i))
@@ -51,12 +60,12 @@ export const CalendarHeader = memo<CalendarHeaderProps>(({
 
       months.push({
         value: String(i),
-        label: monthNames[i],
-        disabled: isDisabled,
+        label: monthsNames?.[i] || `${i + 1}`,
+        disabled: !!isDisabled,
       })
     }
     return months
-  }, [currentYear, minDate, maxDate])
+  }, [currentYear, minDate, maxDate, t])
 
   const handleYearChange = useCallback((value: string) => {
     const newYear = Number.parseInt(value)
@@ -64,12 +73,10 @@ export const CalendarHeader = memo<CalendarHeaderProps>(({
 
     /** 检查新日期是否在允许范围内 */
     if (minDate && isBefore(newDate, startOfMonth(minDate))) {
-      /** 如果新日期早于最小日期，设置为最小日期所在月份 */
       onMonthChange(startOfMonth(minDate))
       return
     }
     if (maxDate && isAfter(newDate, startOfMonth(maxDate))) {
-      /** 如果新日期晚于最大日期，设置为最大日期所在月份 */
       onMonthChange(startOfMonth(maxDate))
       return
     }
@@ -111,10 +118,17 @@ export const CalendarHeader = memo<CalendarHeaderProps>(({
   const canGoPrev = !minDate || !isBefore(subtractMonth(currentMonth, 1), minDate)
   const canGoNext = !maxDate || !isAfter(addMonth(currentMonth, 1), maxDate)
 
-  const t = useT()
-
   return (
-    <div className={ cn('flex items-center gap-2 mb-4', className) }>
+    <div className={ cn('flex items-center gap-2 h-10', className) }>
+      { superPrevIcon && (
+        <Button
+          variant="ghost"
+          iconOnly
+          size="sm"
+          onClick={ () => onMonthChange(subtractMonth(currentMonth, 12)) }
+          leftIcon={ superPrevIcon }
+        />
+      ) }
       <Button
         variant="ghost"
         iconOnly
@@ -122,28 +136,86 @@ export const CalendarHeader = memo<CalendarHeaderProps>(({
         disabled={ !canGoPrev }
         onClick={ handlePrevMonth }
         aria-label={ t('datePicker.prevMonth') }
-        leftIcon={ <ChevronLeft className="h-4 w-4 text-textPrimary" /> }
+        leftIcon={ prevIcon || <ChevronLeft className="h-5 w-5 text-text" /> }
       />
 
-      <div className="flex items-center gap-2 flex-1 justify-center">
-        <Select
-          options={ yearOptions }
-          value={ String(currentYear) }
-          onChange={ handleYearChange }
-          placeholder={ t('datePicker.selectYear') }
-          className="w-24"
-          dropdownHeight={ 200 }
-          showDownArrow={ true }
-        />
-        <Select
-          options={ monthOptions }
-          value={ String(currentMonthIndex) }
-          onChange={ handleMonthChange }
-          placeholder={ t('datePicker.selectMonth') }
-          className="w-20"
-          dropdownHeight={ 200 }
-          showDownArrow={ true }
-        />
+      <div className="flex items-center flex-1 justify-center">
+        { headerOrder === 'my'
+          ? (
+              <>
+                <Cascader
+                  options={ monthOptions }
+                  value={ String(currentMonthIndex) }
+                  onChange={ handleMonthChange }
+                  dropdownMinWidth={ 120 }
+                  dropdownHeight={ 250 }
+                  dropdownProps={ { [DATA_DATE_PICKER_IGNORE]: 'true' } as any }
+                  trigger={
+                    <div
+                      className="text-sm text-text hover:bg-background2 px-2 rounded-xl transition-all duration-200 cursor-pointer font-medium"
+                      { ...{ [DATA_DATE_PICKER_IGNORE]: 'true' } }
+                    >
+                      { monthOptions.find(opt => opt.value === String(currentMonthIndex))?.label }
+                    </div>
+                  }
+                />
+                <Cascader
+                  options={ yearOptions }
+                  value={ String(currentYear) }
+                  onChange={ handleYearChange }
+                  dropdownMinWidth={ 100 }
+                  dropdownHeight={ 250 }
+                  dropdownProps={ { [DATA_DATE_PICKER_IGNORE]: 'true' } as any }
+                  trigger={
+                    <div
+                      className="text-sm text-text hover:bg-background2 px-2 rounded-xl transition-all duration-200 cursor-pointer ml-1"
+                      { ...{ [DATA_DATE_PICKER_IGNORE]: 'true' } }
+                    >
+                      { currentYear }
+                    </div>
+                  }
+                />
+              </>
+            )
+          : (
+              <>
+                <Cascader
+                  options={ yearOptions }
+                  value={ String(currentYear) }
+                  onChange={ handleYearChange }
+                  dropdownMinWidth={ 100 }
+                  dropdownHeight={ 250 }
+                  dropdownProps={ { [DATA_DATE_PICKER_IGNORE]: 'true' } as any }
+                  trigger={
+                    <div
+                      className="text-sm text-text hover:bg-background2 px-2 rounded-xl transition-all duration-200 cursor-pointer"
+                      { ...{ [DATA_DATE_PICKER_IGNORE]: 'true' } }
+                    >
+                      { currentYear }
+                    </div>
+                  }
+                />
+                <span className="text-sm font-medium px-2">{ t('datePicker.yearSuffix') || '年' }</span>
+
+                <Cascader
+                  options={ monthOptions }
+                  value={ String(currentMonthIndex) }
+                  onChange={ handleMonthChange }
+                  dropdownMinWidth={ 80 }
+                  dropdownHeight={ 250 }
+                  dropdownProps={ { [DATA_DATE_PICKER_IGNORE]: 'true' } as any }
+                  trigger={
+                    <div
+                      className="text-sm text-text hover:bg-background2 px-2 rounded-xl transition-all duration-200 cursor-pointer"
+                      { ...{ [DATA_DATE_PICKER_IGNORE]: 'true' } }
+                    >
+                      { currentMonthIndex + 1 }
+                    </div>
+                  }
+                />
+                <span className="text-sm font-medium px-2">{ t('datePicker.monthSuffix') || '月' }</span>
+              </>
+            ) }
       </div>
 
       <Button
@@ -153,8 +225,17 @@ export const CalendarHeader = memo<CalendarHeaderProps>(({
         disabled={ !canGoNext }
         onClick={ handleNextMonth }
         aria-label={ t('datePicker.nextMonth') }
-        leftIcon={ <ChevronRight className="h-4 w-4 text-textPrimary" /> }
+        leftIcon={ nextIcon || <ChevronRight className="h-5 w-5 text-text" /> }
       />
+      { superNextIcon && (
+        <Button
+          variant="ghost"
+          iconOnly
+          size="sm"
+          onClick={ () => onMonthChange(addMonth(currentMonth, 12)) }
+          leftIcon={ superNextIcon }
+        />
+      ) }
     </div>
   )
 })

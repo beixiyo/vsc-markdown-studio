@@ -1,11 +1,14 @@
 'use client'
 
 import type { CalendarProps } from './types'
+import { Clock } from 'lucide-react'
 import { memo, useCallback } from 'react'
 import { cn } from 'utils'
-import { Button, ButtonGroup } from '../Button'
+import { useT } from '../../i18n'
+import { Button } from '../Button'
 import { CalendarGrid } from './CalendarGrid'
 import { CalendarHeader } from './CalendarHeader'
+import { DATA_DATE_PICKER_IGNORE } from './constants'
 import { TimePicker } from './TimePicker'
 
 export const Calendar = memo<CalendarProps>(({
@@ -23,12 +26,28 @@ export const Calendar = memo<CalendarProps>(({
   tempDate,
   onDateHover,
   precision = 'day',
+  use12Hours = false,
   selectingType,
   onSelectingTypeChange,
   onTimeChange,
+  onConfirm,
+  onAddTime,
+  onMouseLeave,
+  yearRange,
+  prevIcon,
+  nextIcon,
+  superPrevIcon,
+  superNextIcon,
+  timeIcon,
+  extraFooter,
+  renderCell,
+  minuteStep = 1,
 }) => {
-  // Calendar 组件完全受控，使用外部传入的 currentMonth
-  /** 如果没有传入，则根据 selectedDate 或 selectedRange 计算默认值 */
+  const t = useT()
+  /**
+   * Calendar 组件完全受控，使用外部传入的 currentMonth
+   * 如果没有传入，则根据 selectedDate 或 selectedRange 计算默认值
+   */
   const currentMonth = externalCurrentMonth
     || selectedDate
     || selectedRange?.start
@@ -75,59 +94,78 @@ export const Calendar = memo<CalendarProps>(({
     timeValue = selectedDate || new Date()
   }
 
+  const TimeIcon = timeIcon || <Clock className="size-3.5 text-iconColor" />
+
   return (
-    <div className={ cn('w-full flex flex-col', className) }>
-      { rangeMode && (
-        <div className="flex border-b border-border p-2 bg-background">
-          <ButtonGroup
-            active={ selectingType }
-            onChange={ val => onSelectingTypeChange?.(val as 'start' | 'end') }
-            className="w-full"
-            rounded="lg"
-          >
-            <Button name="start" className="flex-1 text-xs">
-              开始日期
-            </Button>
-            <Button name="end" className="flex-1 text-xs">
-              结束日期
-            </Button>
-          </ButtonGroup>
-        </div>
-      ) }
-      <div className="flex">
-        <div
-          className="flex-1 p-4"
-          onMouseLeave={ () => onDateHover?.(null) }
-        >
-          <CalendarHeader
-            currentMonth={ currentMonth }
-            onMonthChange={ handleMonthChange }
-            minDate={ minDate }
-            maxDate={ maxDate }
-          />
-          <CalendarGrid
-            currentMonth={ currentMonth }
-            selectedDate={ selectedDate }
-            onSelect={ onSelect }
-            disabledDate={ disabledDate }
-            minDate={ minDate }
-            maxDate={ maxDate }
-            weekStartsOn={ weekStartsOn }
-            rangeMode={ rangeMode }
-            selectedRange={ selectedRange }
-            selectingType={ selectingType }
-            onSelectingTypeChange={ onSelectingTypeChange }
-            tempDate={ tempDate }
-            onDateHover={ onDateHover }
-          />
-        </div>
+    <div
+      className={ cn('w-full flex flex-col', className) }
+      onMouseLeave={ onMouseLeave }
+    >
+      <div
+        className="flex-1 gap-4 flex flex-col"
+        onMouseLeave={ () => onDateHover?.(null) }
+      >
+        <CalendarHeader
+          currentMonth={ currentMonth }
+          onMonthChange={ handleMonthChange }
+          minDate={ minDate }
+          maxDate={ maxDate }
+          yearRange={ yearRange }
+          prevIcon={ prevIcon }
+          nextIcon={ nextIcon }
+          superPrevIcon={ superPrevIcon }
+          superNextIcon={ superNextIcon }
+        />
+        <CalendarGrid
+          currentMonth={ currentMonth }
+          selectedDate={ selectedDate }
+          onSelect={ onSelect }
+          disabledDate={ disabledDate }
+          minDate={ minDate }
+          maxDate={ maxDate }
+          weekStartsOn={ weekStartsOn }
+          rangeMode={ rangeMode }
+          selectedRange={ selectedRange }
+          selectingType={ selectingType }
+          onSelectingTypeChange={ onSelectingTypeChange }
+          tempDate={ tempDate }
+          onDateHover={ onDateHover }
+          renderCell={ renderCell }
+        />
+
         { showTimePicker && (
           <TimePicker
             value={ timeValue }
             onChange={ handleTimeChange }
             precision={ precision }
+            use12Hours={ use12Hours }
+            onConfirm={ onConfirm }
+            timeIcon={ TimeIcon }
+            minuteStep={ minuteStep }
           />
         ) }
+
+        { !showTimePicker && (
+          <div
+            className="flex items-center justify-between"
+            { ...({ [DATA_DATE_PICKER_IGNORE]: 'true' } as any) }
+          >
+            { onAddTime && <Button
+              variant="secondary"
+              className="border-none text-text3"
+              onClick={ () => onAddTime?.() }
+              leftIcon={ TimeIcon }
+            >
+              { t('datePicker.addTime') || 'Add Time' }
+            </Button>}
+
+            <Button variant="primary" onClick={ onConfirm }>
+              { t('datePicker.confirm') || '确认' }
+            </Button>
+          </div>
+        ) }
+
+        { extraFooter }
       </div>
     </div>
   )

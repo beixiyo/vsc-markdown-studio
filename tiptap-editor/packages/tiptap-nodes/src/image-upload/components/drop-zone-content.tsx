@@ -25,12 +25,12 @@ export const DropZoneContent: React.FC<DropZoneContentProps> = ({
       </div>
 
       <div className="flex flex-col items-center justify-center gap-1 mt-4 select-none">
-        <span className="text-textPrimary font-medium text-sm leading-normal">
+        <span className="text-text font-medium text-sm leading-normal">
           <em className="not-italic underline">{ t('image.uploadClick') }</em>
           { ' ' }
           { t('image.uploadDrag') }
         </span>
-        <span className="text-textSecondary font-semibold text-xs leading-normal">
+        <span className="text-text2 font-semibold text-xs leading-normal">
           { t('image.uploadLimit', {
             limit,
             maxSize: maxSizeMB,

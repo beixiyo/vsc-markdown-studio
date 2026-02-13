@@ -3,11 +3,13 @@
 import type { CalendarCellProps } from './types'
 import { memo } from 'react'
 import { cn } from 'utils'
-import { formatDate } from './utils'
+import { formatDate, isBeforeToday } from './utils'
 
 export const CalendarCell = memo<CalendarCellProps>(({
   date,
   isCurrentMonth,
+  isPreviousMonth,
+  isNextMonth,
   isToday,
   isSelected,
   isDisabled,
@@ -19,6 +21,7 @@ export const CalendarCell = memo<CalendarCellProps>(({
   onClick,
   onMouseEnter,
   className,
+  renderCell,
 }) => {
   const dayNumber = date.getDate()
 
@@ -37,32 +40,27 @@ export const CalendarCell = memo<CalendarCellProps>(({
       aria-selected={ isConfirmed || isTemp }
       aria-disabled={ isDisabled }
       className={ cn(
-        'relative size-9 p-0 flex items-center justify-center rounded-xl',
-        'transition-colors cursor-pointer',
+        'relative size-8 flex items-center justify-center rounded-full',
+        'transition-all duration-300 cursor-pointer hover:bg-background3',
         'disabled:cursor-not-allowed disabled:opacity-50',
         {
-          'text-textSecondary': !isCurrentMonth,
-          'text-textPrimary': isCurrentMonth,
+          'text-textDisabled': !isCurrentMonth && isPreviousMonth,
+          'text-text4': (!isCurrentMonth && isNextMonth) || (isCurrentMonth && !isToday && isBeforeToday(date)),
+          'text-text': isCurrentMonth && (isToday || !isBeforeToday(date)),
           // 1. 已确定的选中点 (单个选中 或 范围的起始点) - 使用中性色 (黑白)
-          'bg-buttonPrimary text-buttonTertiary z-20 hover:opacity-90': isConfirmed,
-          // 2. 预览中的临时点 (正在选择的起点或终点) - 使用品牌色
-          'bg-brand text-white z-10 hover:bg-brand/90': isTemp,
+          'bg-button text-button3 z-20 hover:bg-button/70': isConfirmed,
           // 3. 范围内的中间区域 - 使用浅品牌色
-          'bg-brand/10 text-textPrimary': isInRange && !isConfirmed && !isTemp,
+          'bg-brand/10 text-text': isInRange && !isConfirmed && !isTemp,
           // 4. 今天（非选中状态）
-          'font-semibold': isToday && !isConfirmed && !isTemp,
+          'text-brand/10 text-text': isToday && !isConfirmed && !isTemp,
           // 5. 普通悬停
-          'hover:bg-backgroundSecondary': !isConfirmed && !isTemp && !isInRange && !isDisabled,
+          '': !isConfirmed && !isTemp && !isInRange && !isDisabled,
+          'bg-brand/10': isToday && !isConfirmed && !isTemp,
         },
         className,
       ) }
     >
-      {isToday && !isConfirmed && !isTemp && (
-        <span className="absolute inset-0 flex items-center justify-center">
-          <span className="size-1.5 rounded-full bg-brand" />
-        </span>
-      )}
-      <span className="relative z-10">{dayNumber}</span>
+      { renderCell ? renderCell(date) : <span className="relative z-10 text-sm">{ dayNumber }</span> }
     </button>
   )
 })

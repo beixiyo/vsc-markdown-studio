@@ -6,36 +6,36 @@
 .tiptap.ProseMirror {
   /* 颜色变量 */
   --tt-link-text: rgb(var(--brand));
-  --tt-text-primary: rgb(var(--textPrimary));
-  --tt-text-secondary: rgb(var(--textPrimary) / 0.7);
-  --tt-text-muted: rgb(var(--textPrimary) / 0.5);
-  --tt-placeholder: rgb(var(--textPrimary) / 0.4);
+  --tt-text-primary: rgb(var(--text));
+  --tt-text-secondary: rgb(var(--text) / 0.7);
+  --tt-text-muted: rgb(var(--text) / 0.5);
+  --tt-placeholder: rgb(var(--text) / 0.4);
 
   --tt-bg-primary: rgb(var(--background));
-  --tt-bg-secondary: rgb(var(--backgroundSecondary));
-  --tt-bg-tertiary: rgb(var(--backgroundTertiary));
+  --tt-bg-secondary: rgb(var(--background2));
+  --tt-bg-tertiary: rgb(var(--background3));
 
   --tt-border-primary: rgb(var(--border));
-  --tt-border-secondary: rgb(var(--borderSecondary));
+  --tt-border-secondary: rgb(var(--border2));
 
   --tt-brand: rgb(var(--brand));
   --tt-brand-alpha-20: rgb(var(--brand) / 0.2);
 
   /* 特定功能颜色 */
-  --tt-code-bg: rgb(var(--backgroundSecondary));
-  --tt-code-text: rgb(var(--textPrimary));
-  --tt-code-border: rgb(var(--borderSecondary));
+  --tt-code-bg: rgb(var(--background2));
+  --tt-code-text: rgb(var(--text));
+  --tt-code-border: rgb(var(--border2));
 
-  --tt-blockquote-border: rgb(var(--textPrimary));
-  --tt-blockquote-text: rgb(var(--textPrimary) / 0.7);
+  --tt-blockquote-border: rgb(var(--text));
+  --tt-blockquote-text: rgb(var(--text) / 0.7);
 
-  --tt-hr-color: rgb(var(--borderSecondary));
+  --tt-hr-color: rgb(var(--border2));
 
   --tt-list-marker: rgb(var(--brand));
 
   --tt-table-border: rgb(var(--border));
   --tt-table-bg: rgb(var(--background));
-  --tt-table-bg-alt: rgb(var(--backgroundSecondary));
+  --tt-table-bg-alt: rgb(var(--background2));
 
   --tt-task-completed: #999;
 
@@ -43,16 +43,16 @@
   --tt-selection-bg: rgb(var(--brand) / 0.2);
 
   /* Checklist 颜色 */
-  --tt-checklist-bg: rgb(var(--backgroundTertiary));
-  --tt-checklist-bg-active: rgb(var(--textPrimary));
-  --tt-checklist-border: rgb(var(--borderSecondary));
-  --tt-checklist-border-active: rgb(var(--textPrimary));
+  --tt-checklist-bg: rgb(var(--background3));
+  --tt-checklist-bg-active: rgb(var(--text));
+  --tt-checklist-border: rgb(var(--border2));
+  --tt-checklist-border-active: rgb(var(--text));
   --tt-checklist-check-icon: rgb(var(--background));
 
   /* AI 插入颜色 */
   --tt-ai-insertion: rgb(var(--brand));
 
   /* Thread 颜色 */
-  --tt-thread-text: rgb(var(--textPrimary));
+  --tt-thread-text: rgb(var(--text));
   --tt-thread-bg: var(--toningYellowBgColor);
 }

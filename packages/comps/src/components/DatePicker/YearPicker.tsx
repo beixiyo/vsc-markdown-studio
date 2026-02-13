@@ -11,6 +11,7 @@ import { AnimateShow } from '../Animate'
 import { Button } from '../Button'
 import { useFormField } from '../Form/useFormField'
 import { PickerInput } from './components/PickerInput'
+import { CONTAINER_CLASSNAME } from './constants'
 import { useClickOutside } from './hooks/useClickOutside'
 import { usePickerFloating } from './hooks/usePickerFloating'
 import { usePickerState } from './hooks/usePickerState'
@@ -35,15 +36,19 @@ const InnerYearPicker = forwardRef<YearPickerRef, YearPickerProps>(({
   disabledYear,
   minDate,
   maxDate,
-  yearRange = 10,
+  yearRange = 20,
   className,
   inputClassName,
   dropdownClassName,
   name,
   error,
   errorMessage,
-  showClear = true,
+  showClear = false,
   icon,
+  clearIcon,
+  prevIcon,
+  nextIcon,
+  extraFooter,
 }, ref) => {
   /** 使用 useFormField 处理表单集成 */
   const {
@@ -202,7 +207,8 @@ const InnerYearPicker = forwardRef<YearPickerRef, YearPickerProps>(({
   const dropdownContent = isOpen && (
     <AnimateShow
       show={ shouldAnimate }
-      variants="scale"
+      variants="fade"
+      className={ cn(CONTAINER_CLASSNAME) }
       visibilityMode
       animateOnMount={ false }
       display="block"
@@ -214,7 +220,7 @@ const InnerYearPicker = forwardRef<YearPickerRef, YearPickerProps>(({
       <div
         ref={ dropdownRef }
         className={ cn(
-          'bg-background border border-border rounded-lg shadow-lg p-4 min-w-72',
+          'min-w-72',
           dropdownClassName,
         ) }
       >
@@ -227,10 +233,10 @@ const InnerYearPicker = forwardRef<YearPickerRef, YearPickerProps>(({
             disabled={ !canGoPrev }
             onClick={ () => handleYearRangeChange('prev') }
             aria-label={ t('datePicker.prevYearRange') }
-            leftIcon={ <ChevronLeft className="h-4 w-4 text-textPrimary" /> }
+            leftIcon={ prevIcon || <ChevronLeft className="h-4 w-4 text-text" /> }
           />
 
-          <div className="text-sm font-semibold text-textPrimary">
+          <div className="text-sm font-semibold text-text">
             { getYear(subtractYear(currentYear, yearRange)) }
             { ' ' }
             -
@@ -244,7 +250,7 @@ const InnerYearPicker = forwardRef<YearPickerRef, YearPickerProps>(({
             disabled={ !canGoNext }
             onClick={ () => handleYearRangeChange('next') }
             aria-label={ t('datePicker.nextYearRange') }
-            leftIcon={ <ChevronRight className="h-4 w-4 text-textPrimary" /> }
+            leftIcon={ nextIcon || <ChevronRight className="h-4 w-4 text-text" /> }
           />
         </div>
 
@@ -258,6 +264,12 @@ const InnerYearPicker = forwardRef<YearPickerRef, YearPickerProps>(({
           maxDate={ maxDate }
           yearRange={ yearRange }
         />
+
+        { extraFooter && (
+          <div className="mt-4 border-t border-border pt-4">
+            { extraFooter }
+          </div>
+        ) }
       </div>
     </AnimateShow>
   )
@@ -287,6 +299,7 @@ const InnerYearPicker = forwardRef<YearPickerRef, YearPickerProps>(({
                 onClick={ handleTriggerClick }
                 inputClassName={ inputClassName }
                 icon={ icon }
+                clearIcon={ clearIcon }
               />
             </div>
           ) }

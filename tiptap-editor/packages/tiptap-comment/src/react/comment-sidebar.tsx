@@ -195,7 +195,7 @@ export const CommentSidebar = memo(({
                 { labels.resolved }
               </Button>
             </div>
-            <span className="text-xs text-textSecondary">
+            <span className="text-xs text-text2">
               { labels.total(comments.length) }
             </span>
           </div>
@@ -208,7 +208,7 @@ export const CommentSidebar = memo(({
           >
             { comments.length === 0
               ? (
-                  <div className="flex items-center justify-center rounded-xl border border-dashed border-border bg-backgroundSecondary px-3 py-6 text-sm text-textSecondary">
+                  <div className="flex items-center justify-center rounded-xl border border-dashed border-border bg-background2 px-3 py-6 text-sm text-text2">
                     { labels.empty }
                   </div>
                 )

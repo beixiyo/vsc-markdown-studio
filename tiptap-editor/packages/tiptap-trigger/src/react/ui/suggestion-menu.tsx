@@ -111,7 +111,7 @@ export const SuggestionMenu = memo(({
         className={ cn(
           'min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-lg',
           'border border-border bg-background',
-          'text-textPrimary shadow-card outline-none',
+          'text-text shadow-card outline-none',
         ) }
         tabIndex={ -1 }
         onMouseDownCapture={ (event) => {
@@ -122,19 +122,19 @@ export const SuggestionMenu = memo(({
         { ...getFloatingProps() }
       >
         { loading && (
-          <div className="px-3 py-2 text-sm text-textSecondary">
+          <div className="px-3 py-2 text-sm text-text2">
             { labels.loading }
           </div>
         ) }
 
         { !loading && error && (
-          <div className="px-3 py-2 text-sm text-textSecondary">
+          <div className="px-3 py-2 text-sm text-text2">
             { error.message || labels.loadFailed }
           </div>
         ) }
 
         { !loading && !error && items.length === 0 && (
-          <div className="px-3 py-2 text-sm text-textSecondary">
+          <div className="px-3 py-2 text-sm text-text2">
             { query
               ? labels.noMatch
               : labels.noItems }

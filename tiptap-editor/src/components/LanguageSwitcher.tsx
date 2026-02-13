@@ -10,7 +10,7 @@ export function LanguageSwitcher() {
 
   return (
     <div className="flex gap-2 items-center">
-      <span className="text-sm text-textSecondary">
+      <span className="text-sm text-text2">
         语言:
       </span>
       { SUPPORTED_LANGUAGES.map(lang => (

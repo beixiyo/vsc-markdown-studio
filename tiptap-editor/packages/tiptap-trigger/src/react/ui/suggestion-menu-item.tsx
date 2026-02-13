@@ -19,23 +19,23 @@ export const SuggestionMenuItem = memo(forwardRef<HTMLButtonElement, SuggestionM
         onClick={ onClick }
         className={ cn(
           'flex w-full items-start gap-3 px-3 py-2 text-left',
-          'text-textPrimary',
+          'text-text',
           'transition-colors duration-150',
           active
-            ? 'bg-backgroundSecondary'
-            : 'bg-transparent border-0 cursor-pointer hover:bg-backgroundSecondary',
+            ? 'bg-background2'
+            : 'bg-transparent border-0 cursor-pointer hover:bg-background2',
         ) }
       >
-        <div className={ cn('mt-[2px] flex shrink-0 items-center justify-center text-textPrimary', !item.icon && 'h-5 w-5') }>
+        <div className={ cn('mt-[2px] flex shrink-0 items-center justify-center text-text', !item.icon && 'h-5 w-5') }>
           { item.icon ?? <div className="h-5 w-5" /> }
         </div>
         <div className="flex flex-1 flex-col">
-          <span className="text-sm font-medium text-textPrimary">
+          <span className="text-sm font-medium text-text">
             { item.title }
           </span>
           { item.subtitle
             ? (
-                <span className="text-xs text-textSecondary">
+                <span className="text-xs text-text2">
                   { item.subtitle }
                 </span>
               )

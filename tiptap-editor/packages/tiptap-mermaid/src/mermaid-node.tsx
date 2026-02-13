@@ -76,7 +76,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
         ref={ containerRef }
         className={ cn(
           'mermaid-container min-h-[100px] p-4 relative rounded-lg',
-          'bg-backgroundSecondary',
+          'bg-background2',
           'transition-colors',
           selected
             ? 'border border-brand'
@@ -141,7 +141,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
           : (
               <>
                 { isRendering && (
-                  <div className="text-center text-textSecondary">
+                  <div className="text-center text-text2">
                     { labels.rendering }
                   </div>
                 ) }
@@ -177,8 +177,8 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
                       ? handleEdit
                       : undefined }
                     className={ cn(
-                      'text-center text-textQuaternary py-5',
-                      editor?.isEditable && 'cursor-pointer hover:text-textSecondary transition-colors',
+                      'text-center text-text4 py-5',
+                      editor?.isEditable && 'cursor-pointer hover:text-text2 transition-colors',
                     ) }
                   >
                     { labels.emptyHint }

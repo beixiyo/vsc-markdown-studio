@@ -20,7 +20,7 @@ export const TIPTAP_UI_STYLES = {
   moreContentOptionLabel: 'flex-1 min-w-0',
 
   /** 工具栏/触发器按钮旁文案（图标+文字）的 label 样式 */
-  triggerLabel: 'text-base text-textSecondary',
+  triggerLabel: 'text-base text-text2',
   /** 高亮按钮激活态图标（如 HighlighterIcon 的红色） */
   iconHighlight: 'size-4 text-systemRed',
 } as const

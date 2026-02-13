@@ -12,6 +12,7 @@ import {
   useCascaderMenuStack,
   useCascaderOpen,
   useCascaderPosition,
+  useCascaderScroll,
   useCascaderValue,
 } from './hooks'
 
@@ -118,6 +119,8 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>(({
     handleOptionClick,
   })
 
+  useCascaderScroll(isOpen, dropdownRef, menuStack)
+
   useEffect(() => {
     if (isOpen)
       resetOnOpen()
@@ -140,20 +143,20 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>(({
     >
       <div
         className={ cn(
-          'bg-background rounded-xl shadow-card flex text-textPrimary',
+          'bg-background rounded-xl shadow-card flex text-text',
           dropdownClassName,
         ) }
         onMouseLeave={ handleDropdownMouseLeave }
         { ...dropdownProps }
       >
-        {menuStack.map((menuOptions, level) => (
+        { menuStack.map((menuOptions, level) => (
           <div
             key={ level }
             className="overflow-auto"
             style={ { maxHeight: dropdownHeight } }
           >
             <div className="py-1" style={ { minWidth: `${dropdownMinWidth}px` } }>
-              {menuOptions.map((option, idx) => (
+              { menuOptions.map((option, idx) => (
                 <CascaderOption
                   key={ option.value }
                   option={ option }
@@ -168,10 +171,10 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>(({
                   chevronIconClassName={ optionChevronIconClassName }
                   optionClickIgnoreSelector={ optionClickIgnoreSelector }
                 />
-              ))}
+              )) }
             </div>
           </div>
-        ))}
+        )) }
       </div>
     </AnimateShow>
   )
@@ -188,21 +191,21 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>(({
 
   return (
     <>
-      {trigger
+      { trigger
         ? (
             <div { ...triggerProps } onClick={ handleTriggerClick }>
-              {trigger}
+              { trigger }
             </div>
           )
         : (
             <div { ...triggerProps } />
-          )}
-      {createPortal(dropdownContent, document.body)}
-      {actualError && actualErrorMessage && (
+          ) }
+      { createPortal(dropdownContent, document.body) }
+      { actualError && actualErrorMessage && (
         <div className="mt-1 text-xs text-danger">
-          {actualErrorMessage}
+          { actualErrorMessage }
         </div>
-      )}
+      ) }
     </>
   )
 })

@@ -6,7 +6,7 @@ export const FileIcon: React.FC = () => (
     height="57"
     viewBox="0 0 43 57"
     fill="currentColor"
-    className="text-backgroundTertiary absolute"
+    className="text-background3 absolute"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path

@@ -11,6 +11,7 @@ import { AnimateShow } from '../Animate'
 import { Button } from '../Button'
 import { useFormField } from '../Form/useFormField'
 import { PickerInput } from './components/PickerInput'
+import { CONTAINER_CLASSNAME } from './constants'
 import { useClickOutside } from './hooks/useClickOutside'
 import { usePickerFloating } from './hooks/usePickerFloating'
 import { usePickerState } from './hooks/usePickerState'
@@ -41,8 +42,12 @@ const InnerMonthPicker = forwardRef<MonthPickerRef, MonthPickerProps>(({
   name,
   error,
   errorMessage,
-  showClear = true,
+  showClear = false,
   icon,
+  clearIcon,
+  prevIcon,
+  nextIcon,
+  extraFooter,
 }, ref) => {
   /** 使用 useFormField 处理表单集成 */
   const {
@@ -200,7 +205,7 @@ const InnerMonthPicker = forwardRef<MonthPickerRef, MonthPickerProps>(({
   const dropdownContent = isOpen && (
     <AnimateShow
       show={ shouldAnimate }
-      variants="scale"
+      variants="fade"
       visibilityMode
       animateOnMount={ false }
       display="block"
@@ -208,11 +213,11 @@ const InnerMonthPicker = forwardRef<MonthPickerRef, MonthPickerProps>(({
         ...style,
         zIndex: 50,
       } }
+      className={ cn(CONTAINER_CLASSNAME) }
     >
       <div
         ref={ dropdownRef }
         className={ cn(
-          'bg-background border border-border rounded-lg shadow-lg p-4',
           dropdownClassName,
         ) }
       >
@@ -225,10 +230,10 @@ const InnerMonthPicker = forwardRef<MonthPickerRef, MonthPickerProps>(({
             disabled={ !canGoPrev }
             onClick={ () => handleYearChange('prev') }
             aria-label={ t('datePicker.prevYear') }
-            leftIcon={ <ChevronLeft className="h-4 w-4 text-textPrimary" /> }
+            leftIcon={ prevIcon || <ChevronLeft className="h-4 w-4 text-text" /> }
           />
 
-          <div className="text-sm font-semibold text-textPrimary">
+          <div className="text-sm font-semibold text-text">
             { getYearLabel(currentYear) }
           </div>
 
@@ -239,7 +244,7 @@ const InnerMonthPicker = forwardRef<MonthPickerRef, MonthPickerProps>(({
             disabled={ !canGoNext }
             onClick={ () => handleYearChange('next') }
             aria-label={ t('datePicker.nextYear') }
-            leftIcon={ <ChevronRight className="h-4 w-4 text-textPrimary" /> }
+            leftIcon={ nextIcon || <ChevronRight className="h-4 w-4 text-text" /> }
           />
         </div>
 
@@ -252,6 +257,12 @@ const InnerMonthPicker = forwardRef<MonthPickerRef, MonthPickerProps>(({
           minDate={ minDate }
           maxDate={ maxDate }
         />
+
+        { extraFooter && (
+          <div className="mt-4 border-t border-border pt-4">
+            { extraFooter }
+          </div>
+        ) }
       </div>
     </AnimateShow>
   )
@@ -281,6 +292,7 @@ const InnerMonthPicker = forwardRef<MonthPickerRef, MonthPickerProps>(({
                 onClick={ handleTriggerClick }
                 inputClassName={ inputClassName }
                 icon={ icon }
+                clearIcon={ clearIcon }
               />
             </div>
           ) }

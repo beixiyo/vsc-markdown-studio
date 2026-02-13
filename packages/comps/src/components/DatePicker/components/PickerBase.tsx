@@ -5,6 +5,7 @@ import { memo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from 'utils'
 import { AnimateShow } from '../../Animate'
+import { CONTAINER_CLASSNAME } from '../constants'
 import { useClickOutside } from '../hooks/useClickOutside'
 import { usePickerFloating } from '../hooks/usePickerFloating'
 
@@ -71,34 +72,29 @@ export const PickerBase = memo<PickerBaseProps>(({
 
   const dropdownContent = isOpen && (
     <AnimateShow
-      show={ shouldAnimate }
       ref={ dropdownRef }
-      variants="scale"
-      visibilityMode
-      animateOnMount={ false }
-      display="block"
+      variants="fade"
       style={ {
         ...style,
         zIndex: 50,
       } }
+      className={ cn(CONTAINER_CLASSNAME, dropdownClassName) }
     >
-      <div className={ cn('bg-background border border-border rounded-lg shadow-lg', dropdownClassName) }>
-        {dropdown}
-      </div>
+      { dropdown }
     </AnimateShow>
   )
 
   return (
     <div className={ cn('inline-block w-full', className) }>
       <div ref={ triggerRef } className="w-full">
-        {trigger}
+        { trigger }
       </div>
-      {createPortal(dropdownContent, document.body)}
-      {error && errorMessage && (
+      { createPortal(dropdownContent, document.body) }
+      { error && errorMessage && (
         <div className="mt-1 text-xs text-danger">
-          {errorMessage}
+          { errorMessage }
         </div>
-      )}
+      ) }
     </div>
   )
 })
