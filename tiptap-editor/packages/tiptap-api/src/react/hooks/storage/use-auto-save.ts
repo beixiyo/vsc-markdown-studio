@@ -25,7 +25,7 @@ export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }
     loadFromStorage().then((savedContent) => {
       const initialContent = savedContent || ''
       setContent(initialContent)
-      setEditorContent(editor, initialContent, false)
+      setEditorContent(editor, initialContent)
     })
   }, [loadFromStorage, editor])
 
@@ -34,7 +34,7 @@ export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }
     (editor: Editor) => {
       const currentContent = getEditorContent(editor) || ''
       setContent(currentContent)
-      _debouncedSave(editor)
+      _debouncedSave()
     },
     [_debouncedSave],
   )

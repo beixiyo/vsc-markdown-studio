@@ -18,7 +18,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         run: async ({ operate }, logger) => {
           contentBackup.markdown = operate.getMarkdown()
           const sample = '# 测试标题'
-          const ok = operate.setMarkdown(sample, true)
+          const ok = operate.setMarkdown(sample)
           if (!ok) {
             throw new Error('setMarkdown 返回 false')
           }
@@ -30,7 +30,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -41,7 +41,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         run: ({ operate }) => {
           contentBackup.markdown = contentBackup.markdown ?? operate.getMarkdown()
           const html = '<p>HTML 测试片段</p>'
-          const ok = operate.setHTML(html, true)
+          const ok = operate.setHTML(html)
           if (!ok) {
             throw new Error('setHTML 返回 false')
           }
@@ -52,7 +52,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -63,7 +63,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         run: ({ operate }) => {
           const original = operate.getMarkdown()
           const sample = '# 导出测试\n\n[speaker:1] 参与讨论'
-          operate.setMarkdown(sample, true)
+          operate.setMarkdown(sample)
           const exported = operate.getMarkdown()
           const hasTitle = exported?.includes('导出测试')
           const hasSpeaker = exported?.includes('[speaker:1]')
@@ -74,7 +74,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -85,7 +85,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         run: ({ operate }) => {
           const original = operate.getMarkdown()
           const sample = '# HTML 导出\n\n[speaker:1] 出现在段落中'
-          operate.setMarkdown(sample, true)
+          operate.setMarkdown(sample)
           const html = operate.getHTML()
           const hasTitle = html?.includes('HTML 导出')
           const hasSpeakerName = html?.includes('data-speaker-name="Alice"')
@@ -97,7 +97,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -108,7 +108,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
           const sample = 'JSON 导出测试 [speaker:1]'
-          operate.setMarkdown(sample, true)
+          operate.setMarkdown(sample)
           const json = editor?.getJSON()
           const hasContent = Array.isArray(json?.content) && json.content.length > 0
           const first = json?.content?.[0]
@@ -124,7 +124,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -142,7 +142,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
           const sample = '初始文本'
-          operate.setMarkdown(sample, true)
+          operate.setMarkdown(sample)
           const docSize = editor?.state.doc.content.size ?? 0
           operate.setTextCursorPosition(docSize)
           const appended = '，追加内容'
@@ -158,7 +158,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -175,7 +175,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         description: '验证 setSelection 能设置范围，getSelection 与 getSelectedText 可读取',
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
-          operate.setMarkdown('选择测试文本', true)
+          operate.setMarkdown('选择测试文本')
           const docSize = editor?.state.doc.content.size ?? 0
           const from = 1
           const to = Math.min(from + 4, docSize)
@@ -195,7 +195,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -205,7 +205,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         description: '验证 setTextCursorPosition 能移动光标，getTextCursorPosition 能读到位置',
         run: ({ operate }) => {
           const original = operate.getMarkdown()
-          operate.setMarkdown('光标测试', true)
+          operate.setMarkdown('光标测试')
           const targetPos = 1
           const ok = operate.setTextCursorPosition(targetPos)
           if (!ok) {
@@ -219,7 +219,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -238,7 +238,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
           const original = operate.getMarkdown()
           const url = 'https://example.com'
           const linkText = '示例链接'
-          operate.setMarkdown('链接测试', true)
+          operate.setMarkdown('链接测试')
           const created = operate.createLink(url, linkText)
           if (!created) {
             throw new Error('createLink 返回 false')
@@ -260,7 +260,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },
@@ -304,17 +304,17 @@ export const defaultOperateSuites: OperateTestSuite[] = [
           if (!focused) {
             throw new Error('focus 返回 false')
           }
-          operate.setMarkdown('非空内容', true)
+          operate.setMarkdown('非空内容')
           if (operate.isEmpty()) {
             throw new Error('isEmpty 对非空文档返回 true')
           }
-          operate.setMarkdown('', true)
+          operate.setMarkdown('')
           const empty = operate.isEmpty()
           if (!empty) {
             throw new Error('isEmpty 对空文档返回 false')
           }
           if (original !== null) {
-            operate.setMarkdown(original, true)
+            operate.setMarkdown(original)
           }
         },
       },
@@ -331,7 +331,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         description: '验证 undo/redo 可正确恢复与重做内容',
         run: ({ operate }) => {
           const original = operate.getMarkdown()
-          operate.setMarkdown('历史测试', true)
+          operate.setMarkdown('历史测试')
           const token = '【追加段落】'
           operate.insertText(token)
           const afterInsert = operate.getMarkdown() ?? ''
@@ -355,7 +355,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
             throw new Error('redo 后未找回追加内容')
           }
           if (original !== null) {
-            operate.setMarkdown(original, true)
+            operate.setMarkdown(original)
           }
         },
       },
@@ -365,7 +365,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         description: '验证 setHeading 与 setParagraph 能切换节点类型',
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
-          operate.setMarkdown('段落命令测试', true)
+          operate.setMarkdown('段落命令测试')
           operate.setSelection(1, 1)
           const headingOk = operate.command.setHeading(1)
           if (!headingOk) {
@@ -384,7 +384,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
             throw new Error('设置段落后节点类型不是 paragraph')
           }
           if (original !== null) {
-            operate.setMarkdown(original, true)
+            operate.setMarkdown(original)
           }
         },
       },
@@ -401,7 +401,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         description: '验证 scrollToRange 与 scrollToRangeSelection 返回成功',
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
-          operate.setMarkdown('滚动测试段落\n\n第二段内容', true)
+          operate.setMarkdown('滚动测试段落\n\n第二段内容')
           const docSize = editor?.state.doc.content.size ?? 0
           const pos = Math.min(2, docSize)
           const okRange = scrollToRange(editor, pos)
@@ -413,7 +413,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
             throw new Error('scrollToRangeSelection 返回 false')
           }
           if (original !== null) {
-            operate.setMarkdown(original, true)
+            operate.setMarkdown(original)
           }
         },
       },
@@ -424,7 +424,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
           const keyword = '滚动定位关键字'
-          operate.setMarkdown(`段落一\n\n${keyword} 出现在这里`, true)
+          operate.setMarkdown(`段落一\n\n${keyword} 出现在这里`)
           const okSelect = selectAndScrollToText(editor, keyword)
           if (!okSelect) {
             throw new Error('selectAndScrollToText 返回 false')
@@ -434,7 +434,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
             throw new Error('scrollToText 返回 false')
           }
           if (original !== null) {
-            operate.setMarkdown(original, true)
+            operate.setMarkdown(original)
           }
         },
       },
@@ -451,7 +451,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         description: '验证 getHoverContent 在有效位置返回内容',
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
-          operate.setMarkdown('Hover 内容测试', true)
+          operate.setMarkdown('Hover 内容测试')
           const docSize = editor?.state.doc.content.size ?? 0
           const pos = Math.min(1, docSize)
           const content = getHoverContent(editor, pos)
@@ -462,7 +462,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
             throw new Error('getHoverContent 返回的文本不包含预期关键字')
           }
           if (original !== null) {
-            operate.setMarkdown(original, true)
+            operate.setMarkdown(original)
           }
         },
       },
@@ -479,7 +479,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         description: '验证 speakerMap 合并后渲染的 data-speaker-* 属性包含映射值',
         run: ({ operate }) => {
           const original = operate.getMarkdown()
-          operate.setMarkdown('[speaker:1]', true)
+          operate.setMarkdown('[speaker:1]')
           const html = operate.getHTML() || ''
           const hasName = html.includes('data-speaker-name="Alice"')
           const hasId = html.includes('data-speaker-id="u1"')
@@ -490,7 +490,7 @@ export const defaultOperateSuites: OperateTestSuite[] = [
         },
         cleanup: ({ operate }) => {
           if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown, true)
+            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },

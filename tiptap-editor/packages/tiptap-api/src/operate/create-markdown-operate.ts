@@ -22,7 +22,7 @@ export function createMarkdownOperate(editor: Editor | null) {
     /**
      * 设置文档内容
      */
-    setContent: (content: Content, emitUpdate?: boolean) => setEditorContent(editor, content, emitUpdate),
+    setContent: (content: Content) => setEditorContent(editor, content),
     /**
      * 获取 HTML 格式内容
      */
@@ -31,7 +31,7 @@ export function createMarkdownOperate(editor: Editor | null) {
      * 设置 HTML 格式内容
      * @param html HTML 字符串
      */
-    setHTML: (html: string, emitUpdate?: boolean) => setEditorHTML(editor, html, emitUpdate),
+    setHTML: (html: string) => setEditorHTML(editor, html),
     /**
      * 获取 Markdown 格式内容
      */
@@ -40,7 +40,7 @@ export function createMarkdownOperate(editor: Editor | null) {
      * 设置 Markdown 格式内容
      * @param markdown Markdown 字符串
      */
-    setMarkdown: (markdown: string, emitUpdate?: boolean) => setEditorMarkdown(editor, markdown, emitUpdate),
+    setMarkdown: (markdown: string) => setEditorMarkdown(editor, markdown),
 
     // ======================
     /** 文本 */

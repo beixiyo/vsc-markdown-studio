@@ -8,9 +8,6 @@ export default defineConfig({
   plugins: [
     dts({
       tsconfigPath: './tsconfig.json',
-      compilerOptions: {
-        rootDir: fileURLToPath(new URL('./src', import.meta.url)),
-      }
     })
   ],
 
