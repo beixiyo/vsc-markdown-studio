@@ -113,7 +113,7 @@ export function TestPanel() {
 
   return <div className="fixed right-3 top-3 z-50 flex flex-col p-3 rounded-md bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-200 dark:border-neutral-800 shadow max-w-48 max-h-[80vh] overflow-y-auto">
     <div
-      className="text-xs font-medium text-neutral-600 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700 pb-2 mb-2 flex-shrink-0 flex justify-between items-center cursor-pointer"
+      className="text-xs font-medium text-neutral-600 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700 pb-2 mb-2 shrink-0 flex justify-between items-center cursor-pointer"
       onClick={ () => setIsCollapsed(!isCollapsed) }
     >
       <span>测试面板</span>
@@ -133,7 +133,7 @@ export function TestPanel() {
     <div className="pt-2">
       <button
         onClick={ handleRunAllTests }
-        className="px-3 py-1.5 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium mb-2 flex-shrink-0 w-full"
+        className="px-3 py-1.5 rounded text-sm bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium mb-2 shrink-0 w-full"
         title="依次执行所有测试"
       >
         🎯 全部测试

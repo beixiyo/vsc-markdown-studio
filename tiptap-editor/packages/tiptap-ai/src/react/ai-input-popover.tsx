@@ -170,7 +170,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
             </div>
           </div>
         }
-        contentClassName="p-0 backdrop-blur-[12px] bg-background/80"
+        contentClassName="p-0 backdrop-blur-md bg-background/80"
       >
         { children }
       </Popover>

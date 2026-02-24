@@ -138,7 +138,7 @@ export function HoverTooltip({
     <FloatingPortal>
       <div
         ref={ refs.setFloating }
-        className={ `fixed py-2 px-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded text-xs leading-tight text-gray-800 dark:text-gray-200 break-words shadow-md z-50 pointer-events-none ${className}` }
+        className={ `fixed py-2 px-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded text-xs leading-tight text-gray-800 dark:text-gray-200 wrap-break-word shadow-md z-50 pointer-events-none ${className}` }
         style={ style }
       >
         {displayContent}

@@ -3,8 +3,8 @@
  */
 
 export const AI_CLASSES = {
-  PREVIEW: 'bg-gradient-to-r from-amber-400/20 to-emerald-500/20 border-b-2 border-amber-400/50 rounded-sm',
-  PROCESSING: 'bg-gradient-to-r from-blue-500/15 to-purple-600/15 border-b-2 border-blue-500/40 animate-pulse',
+  PREVIEW: 'bg-linear-to-r from-amber-400/20 to-emerald-500/20 border-b-2 border-amber-400/50 rounded-sm',
+  PROCESSING: 'bg-linear-to-r from-blue-500/15 to-purple-600/15 border-b-2 border-blue-500/40 animate-pulse',
   ERROR: 'bg-red-500/15 border-b-2 border-red-500/50 rounded-sm',
 }
 

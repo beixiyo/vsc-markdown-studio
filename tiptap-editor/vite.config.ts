@@ -5,6 +5,7 @@ import { codeInspectorPlugin } from 'code-inspector-plugin'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import AutoImport from 'unplugin-auto-import/vite'
+import tailwindcss from '@tailwindcss/vite'
 
 const filename = fileURLToPath(new URL(import.meta.url).href)
 const __dirname = dirname(filename)
@@ -18,6 +19,7 @@ export default defineConfig(({ command }) => {
         hideConsole: true,
       }),
       react(),
+      tailwindcss(),
       dts({ tsconfigPath: './tsconfig.app.json' }),
       AutoImport({
         imports: ['react'],

@@ -48,7 +48,7 @@ const InnerCommentMain = forwardRef<CommentMainRef, CommentMainProps>((props, re
   return (
     <div
       className={ cn(
-        'relative z-50 min-w-[320px] max-w-[400px] rounded-xl border border-border bg-background shadow-card backdrop-blur-[12px] animate-in fade-in max-[480px]:min-w-[280px] max-[480px]:max-w-[320px]',
+        'relative z-50 min-w-[320px] max-w-[400px] rounded-xl border border-border bg-background shadow-card backdrop-blur-md animate-in fade-in max-[480px]:min-w-[280px] max-[480px]:max-w-[320px]',
         className,
       ) }
       role="dialog"

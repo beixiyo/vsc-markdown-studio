@@ -4,6 +4,7 @@ import { codeInspectorPlugin } from 'code-inspector-plugin'
 import AutoImport from 'unplugin-auto-import/vite'
 import { defineConfig } from 'vite'
 import { autoParseStyles } from '@jl-org/js-to-style'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ command }) => {
   return {
@@ -13,6 +14,7 @@ export default defineConfig(({ command }) => {
         editor: 'cursor',
       }),
       react(),
+      tailwindcss(),
       AutoImport({
         imports: ['react', 'react-router-dom'],
         dts: './src/auto-imports.d.ts',
@@ -21,8 +23,6 @@ export default defineConfig(({ command }) => {
         jsPath: fileURLToPath(new URL('../styles/variable.ts', import.meta.url)),
         cssPath: fileURLToPath(new URL('../styles/css/autoVariables.css', import.meta.url)),
         scssPath: fileURLToPath(new URL('../styles/scss/autoVariables.scss', import.meta.url)),
-        dev: true,
-        build: true,
       }),
     ],
     resolve: {

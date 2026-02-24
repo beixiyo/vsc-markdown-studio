@@ -1,7 +1,7 @@
 'use client'
 
 import type { KeepAliveProps } from './type'
-import { memo, Suspense, use } from 'react'
+import { memo, Suspense, use, useEffect, useRef, useState } from 'react'
 import { KeepAliveContext } from './context'
 
 const Wrapper = memo<KeepAliveProps>(({ children, active }) => {
@@ -29,8 +29,10 @@ export const KeepAlive = memo(({
   uniqueKey: key,
   active,
   children,
+  forceRender = false,
 }: KeepAliveProps & { uniqueKey?: keyof any }) => {
   const { findEffect } = use(KeepAliveContext)
+  const [renderKey, setRenderKey] = useState(0)
   /**
    * 触发钩子
    */
@@ -39,13 +41,16 @@ export const KeepAlive = memo(({
 
     if (active) {
       activeEffect.forEach(fn => fn())
+      if (forceRender) {
+        setRenderKey(v => v + 1)
+      }
     }
     else {
       deactiveEffect.forEach(fn => fn())
     }
-  }, [active, findEffect, key])
+  }, [active, findEffect, key, forceRender])
 
-  return <Suspense fallback={ null }>
+  return <Suspense fallback={ null } key={ renderKey }>
     <Wrapper active={ active }>
       { children }
     </Wrapper>

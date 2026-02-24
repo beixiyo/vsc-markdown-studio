@@ -66,7 +66,7 @@ export const SetColorItem = memo<DragHandleMenuProps>(() => {
             >
               <div className="flex gap-2 items-center">
                 <div
-                  className="size-3 rounded-full flex-shrink-0"
+                  className="size-3 rounded-full shrink-0"
                   style={ { background: value.gradient } }
                 />
                 <span>{ value.label }</span>

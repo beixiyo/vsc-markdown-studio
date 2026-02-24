@@ -28,7 +28,7 @@ export const checklistStyles = `
   user-select: none;
   cursor: pointer;
   flex: 0 0 18px;
-  flex-shrink: 0;
+  shrink: 0;
 }
 
 .bn-checklist-checkbox.is-checked {

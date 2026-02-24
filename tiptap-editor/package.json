@@ -50,7 +50,7 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hotkeys-hook": "^5.2.1",
-    "tailwind-merge": "^2.5.4",
+    "tailwind-merge": "^3.3.1",
     "i18n": "workspace:*",
     "tiptap-ai": "workspace:*",
     "tiptap-api": "workspace:*",
