@@ -31,7 +31,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
 
@@ -56,7 +55,6 @@
       "tiptap-nodes": ["./packages/tiptap-nodes/src/index.ts"],
       "tiptap-nodes/speaker": ["./packages/tiptap-nodes/src/speaker/index.ts"],
       "tiptap-nodes/image-upload": ["./packages/tiptap-nodes/src/image-upload/index.tsx"],
-      "tiptap-nodes/horizontal-rule": ["./packages/tiptap-nodes/src/horizontal-rule/index.ts"],
 
       "tiptap-editor-core": ["./packages/tiptap-editor-core/src/index.ts"],
       "tiptap-utils": ["./packages/tiptap-utils/src/index.ts"],

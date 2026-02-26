@@ -14,7 +14,6 @@ import { useTheme } from 'hooks'
 
 const extensions = [
   StarterKit.configure({
-    horizontalRule: false,
     link: {
       openOnClick: false,
       enableClickSelection: true,

@@ -10,7 +10,7 @@ import { CommentMark, CommentStore } from 'tiptap-comment'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 import { MermaidNode } from 'tiptap-mermaid'
 
-import { HorizontalRule, ImageUploadNode, preprocessSpeakerTags, SpeakerNode } from 'tiptap-nodes'
+import { ImageUploadNode, preprocessSpeakerTags, SpeakerNode } from 'tiptap-nodes'
 import { SuggestionTrigger } from 'tiptap-trigger'
 import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-utils'
 import content from './data/content.json' with { type: 'json' }
@@ -52,8 +52,6 @@ export const Editor = memo<EditorProps>(({
     extensions: [
       /** AI 预览装饰扩展 */
       AI,
-      /** 自定义水平线节点 */
-      HorizontalRule,
       /** Slash / Suggestion 扩展 */
       SuggestionTrigger.configure(),
       /** Mermaid 图表节点扩展 */

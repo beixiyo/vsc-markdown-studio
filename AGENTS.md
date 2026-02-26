@@ -90,7 +90,7 @@
 
 ### 5. Node Extensions (节点扩展)
 - **位置**: `tiptap-editor/packages/tiptap-nodes/src/`
-- **内容**: 整合了所有自定义节点扩展（如 Speaker, ImageUpload, HorizontalRule 等）
+- **内容**: 整合了所有自定义节点扩展（如 Speaker, ImageUpload 等）
 
 ### 6. Hooks (钩子函数)
 - **位置**: `tiptap-editor/packages/tiptap-api/src/react/hooks/`
@@ -131,7 +131,7 @@
 
 #### `tiptap-nodes/`
 - 自定义节点扩展包
-- 包含：Speaker, ImageUpload, HorizontalRule 等节点实现
+- 包含：Speaker, ImageUpload 等节点实现
 
 #### `tiptap-trigger/`
 - 触发器包

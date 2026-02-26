@@ -65,7 +65,7 @@ export function canSetTextAlign(
     return false
   if (
     !isExtensionAvailable(editor, 'textAlign')
-    || isNodeTypeSelected(editor, ['image', 'horizontalRule'])
+    || isNodeTypeSelected(editor, ['image'])
   ) {
     return false
   }

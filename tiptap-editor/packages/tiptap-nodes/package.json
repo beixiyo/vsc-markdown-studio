@@ -13,6 +13,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./code-block": {
+      "types": "./dist/code-block/index.d.ts",
+      "import": "./dist/code-block/index.js",
+      "require": "./dist/code-block/index.cjs"
+    },
     "./speaker": {
       "types": "./dist/speaker/index.d.ts",
       "import": "./dist/speaker/index.js",
@@ -22,11 +27,6 @@
       "types": "./dist/image-upload/index.d.ts",
       "import": "./dist/image-upload/index.js",
       "require": "./dist/image-upload/index.cjs"
-    },
-    "./horizontal-rule": {
-      "types": "./dist/horizontal-rule/index.d.ts",
-      "import": "./dist/horizontal-rule/index.js",
-      "require": "./dist/horizontal-rule/index.cjs"
     }
   },
   "files": [
@@ -37,20 +37,21 @@
     "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
-    "@tiptap/extension-horizontal-rule": "^3.13.0",
-    "tiptap-comps": "workspace:*",
+    "@tiptap/extension-code-block-lowlight": "^3.13.0",
     "comps": "workspace:*",
+    "lowlight": "^3.3.0",
+    "styles": "workspace:*",
+    "tiptap-comps": "workspace:*",
     "tiptap-utils": "workspace:*",
-    "utils": "workspace:*",
-    "styles": "workspace:*"
+    "utils": "workspace:*"
   },
   "peerDependencies": {
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "@tiptap/pm": "^3.13.0",
-    "@tiptap/react": "^3.13.0",
     "@tiptap/core": "^3.13.0",
     "@tiptap/markdown": "^3.13.0",
-    "i18n": "workspace:*"
+    "@tiptap/pm": "^3.13.0",
+    "@tiptap/react": "^3.13.0",
+    "i18n": "workspace:*",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
   }
 }

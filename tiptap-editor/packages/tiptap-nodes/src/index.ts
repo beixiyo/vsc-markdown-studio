@@ -1,5 +1,5 @@
 import './index.css'
 
-export * from './horizontal-rule'
+export * from './code-block'
 export * from './image-upload'
 export * from './speaker'

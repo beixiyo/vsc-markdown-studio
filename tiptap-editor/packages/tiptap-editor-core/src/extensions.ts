@@ -10,6 +10,7 @@ import { Selection } from '@tiptap/extensions'
 import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
 import { getI18n } from 'i18n'
+import { CodeBlock } from 'tiptap-nodes/code-block'
 
 export function createExtensions() {
   const i18n = getI18n()
@@ -17,8 +18,8 @@ export function createExtensions() {
   return [
     // StarterKit：Tiptap 的基础扩展包，包含常用功能
     StarterKit.configure({
-      /** 禁用内置的水平线扩展，使用自定义的 HorizontalRule */
-      horizontalRule: false,
+      /** 禁用内置的代码块扩展，使用自定义的 CodeBlock */
+      codeBlock: false,
       /** 链接扩展配置 */
       link: {
         /** 点击链接自动打开 */
@@ -27,6 +28,9 @@ export function createExtensions() {
         enableClickSelection: true,
       },
     }),
+
+    /** 自定义代码块扩展：支持语言切换和语法高亮 */
+    CodeBlock,
 
     /** Markdown 扩展：支持 Markdown 输入和复制粘贴转换 */
     Markdown.configure({

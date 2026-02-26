@@ -1,8 +1,8 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
-import pkg from './package.json' with { type: 'json' }
 import basePkg from '../../../package.json' with { type: 'json' }
+import pkg from './package.json' with { type: 'json' }
 
 export default defineConfig({
   plugins: [
@@ -15,15 +15,18 @@ export default defineConfig({
     outDir: './dist',
     lib: {
       entry: {
-        index: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
-        speaker: fileURLToPath(new URL('./src/speaker/index.ts', import.meta.url)),
+        'index': fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+        'speaker': fileURLToPath(new URL('./src/speaker/index.ts', import.meta.url)),
         'image-upload': fileURLToPath(new URL('./src/image-upload/index.tsx', import.meta.url)),
-        'horizontal-rule': fileURLToPath(new URL('./src/horizontal-rule/index.ts', import.meta.url)),
+        'code-block': fileURLToPath(new URL('./src/code-block/index.ts', import.meta.url)),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => {
-        const ext = format === 'es' ? 'js' : 'cjs'
-        if (entryName === 'index') return `index.${ext}`
+        const ext = format === 'es'
+          ? 'js'
+          : 'cjs'
+        if (entryName === 'index')
+          return `index.${ext}`
         return `${entryName}/index.${ext}`
       },
     },
