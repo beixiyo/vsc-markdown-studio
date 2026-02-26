@@ -1,8 +1,8 @@
+import type { DiagramColors } from 'beautiful-mermaid'
 /**
  * Mermaid 主题配置工具函数
  */
 import { THEMES } from 'beautiful-mermaid'
-import type { DiagramColors } from 'beautiful-mermaid'
 
 /**
  * 获取 Mermaid 主题配置

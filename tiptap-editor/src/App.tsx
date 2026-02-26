@@ -84,6 +84,7 @@ function AppContent() {
             onSpeakerClick={ (attrs) => {
               console.log('speaker click', attrs)
             } }
+            readonly={ false }
           />
         : <CollaborationSplitPane /> }
     </div>

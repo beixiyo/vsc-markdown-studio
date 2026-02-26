@@ -1,22 +1,24 @@
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
 import { DOMSerializer } from '@tiptap/pm/model'
-import { Plugin } from '@tiptap/pm/state'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { common, createLowlight } from 'lowlight'
 
 import { CodeBlockNode } from './code-block-node'
+import 'highlight.js/styles/atom-one-dark.css'
 
-/**
- * 使用 lowlight v3 提供的 createLowlight + common 语法高亮配置
- */
 const lowlight = createLowlight(common)
 
 export const CodeBlock = CodeBlockLowlight.extend({
+  addNodeView() {
+    return ReactNodeViewRenderer(CodeBlockNode)
+  },
+
   addAttributes() {
     return {
       ...this.parent?.(),
       language: {
-        default: 'plaintext',
+        default: 'javascript',
         parseHTML: (element) => {
           const dataLanguage = element.getAttribute('data-language')
           if (dataLanguage)
@@ -32,7 +34,7 @@ export const CodeBlock = CodeBlockLowlight.extend({
             : null
         },
         renderHTML: (attrs) => {
-          const language = attrs.language || 'plaintext'
+          const language = attrs.language || 'javascript'
           return {
             'data-language': language,
             'class': `language-${language}`,
@@ -42,14 +44,14 @@ export const CodeBlock = CodeBlockLowlight.extend({
     }
   },
 
-  addNodeView() {
-    return ReactNodeViewRenderer(CodeBlockNode)
-  },
-
   addProseMirrorPlugins() {
     const editor = this.editor
+    const parentPlugins = this.parent?.() || []
+
     return [
+      ...parentPlugins,
       new Plugin({
+        key: new PluginKey('code-block-copy-handler'),
         props: {
           handleDOMEvents: {
             copy(view, event) {
@@ -82,7 +84,5 @@ export const CodeBlock = CodeBlockLowlight.extend({
   },
 }).configure({
   lowlight,
-  defaultLanguage: 'plaintext',
+  defaultLanguage: 'javascript',
 })
-
-export default CodeBlock

@@ -78,6 +78,61 @@ export const EditorUI = memo<EditorUIProps>(({
 
   return (
     <>
+      { !readonly && showHeaderToolbar && (
+        <BaseEditorUI
+          isMobile={ isMobile }
+          height={ height }
+          mobileView={ mobileView }
+          setMobileView={ setMobileView }
+          toolbarRef={ toolbarRef }
+        >
+          <Toolbar.Group>
+            { commentStore && (
+              <CommentSidebar
+                commentStore={ commentStore }
+                editor={ editor }
+                open={ commentSidebarOpen }
+                onOpenChange={ (openPanel) => {
+                  setCommentSidebarOpen(openPanel)
+                } }
+                activeCommentId={ activeCommentId ?? undefined }
+              />
+            ) }
+          </Toolbar.Group>
+          <Toolbar.Group>
+            <OperateTestDropdownMenu
+              suites={ operateTestSuites }
+              portal={ isMobile }
+              onRunAll={ runAllOperateTests }
+              onRunSuite={ runOperateSuite }
+              running={ operateRunning }
+              disabled={ !editor }
+            />
+            <Button
+              size="sm"
+              onClick={ () => {
+                if (editor) {
+                  const markdown = `\`\`\`mermaid
+sequenceDiagram
+    Alice->>Bob: Hello Bob!
+    Bob-->>Alice: Hello Alice!
+    Alice->>Bob: How are you?
+    Bob-->>Alice: I'm fine, thanks!
+\`\`\``
+                  editor.commands.setContent(markdown, { contentType: 'markdown' })
+                  unSelect(editor)
+                }
+              } }
+              disabled={ !editor }
+              title="插入 Mermaid 时序图"
+            >
+              Mermaid
+            </Button>
+            <SelectionTestButton />
+            <ScrollTestButton />
+          </Toolbar.Group>
+        </BaseEditorUI>
+      ) }
 
       {/* 测试 HoverTooltip */ }
       <EditorHoverTooltip editor={ editor } enabled={ false } />

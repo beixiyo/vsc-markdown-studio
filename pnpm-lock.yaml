@@ -585,9 +585,6 @@ importers:
       '@tiptap/extension-code-block-lowlight':
         specifier: ^3.13.0
         version: 3.20.0(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/extension-code-block@3.17.1(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1)(highlight.js@11.11.1)(lowlight@3.3.0)
-      '@tiptap/extension-horizontal-rule':
-        specifier: ^3.13.0
-        version: 3.17.1(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1)
       '@tiptap/markdown':
         specifier: ^3.13.0
         version: 3.17.1(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1)
@@ -600,6 +597,9 @@ importers:
       comps:
         specifier: workspace:*
         version: link:../../../packages/comps
+      highlight.js:
+        specifier: ^11.11.1
+        version: 11.11.1
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n

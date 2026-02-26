@@ -40,7 +40,7 @@ export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
   }
 
   return (
-    <NodeViewWrapper className="group my-3 rounded-lg border border-border bg-background2 overflow-hidden text-text">
+    <NodeViewWrapper className="group my-3 rounded-lg border border-border bg-transparent overflow-hidden text-text">
       <div className="flex justify-self-end mt-1 select-none" aria-hidden>
         <Cascader
           options={ CODE_LANGUAGES }
@@ -68,6 +68,7 @@ export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
       </div>
 
       <pre className="overflow-auto text-xs leading-relaxed p-3 relative">
+        {/* placeholder */ }
         <span
           className="code-block-placeholder absolute left-3 top-3"
           aria-hidden
@@ -76,10 +77,11 @@ export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
             ? t('placeholder.codeBlock')
             : '' }
         </span>
+
         <NodeViewContent
           className={ language
             ? `language-${language}`
-            : undefined }
+            : '' }
         />
       </pre>
     </NodeViewWrapper>

@@ -18,7 +18,6 @@ export function createExtensions() {
   return [
     // StarterKit：Tiptap 的基础扩展包，包含常用功能
     StarterKit.configure({
-      /** 禁用内置的代码块扩展，使用自定义的 CodeBlock */
       codeBlock: false,
       /** 链接扩展配置 */
       link: {

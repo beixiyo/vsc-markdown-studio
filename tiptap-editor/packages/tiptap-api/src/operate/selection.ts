@@ -59,6 +59,22 @@ export function hasSelectedText(editor: Editor | null): boolean {
     }
   }
 
+  /**
+   * 检查选区是否在 codeBlock 内部。
+   * 如果选区起点所在的节点是 codeBlock，或者属于 codeBlock 的后代，则不显示 SelectionToolbar。
+   */
+  let isInsideCodeBlock = false
+  editor.state.doc.nodesBetween(selection.from, selection.to, (node) => {
+    if (node.type.name === 'codeBlock') {
+      isInsideCodeBlock = true
+      return false
+    }
+  })
+
+  if (isInsideCodeBlock) {
+    return false
+  }
+
   return true
 }
 
