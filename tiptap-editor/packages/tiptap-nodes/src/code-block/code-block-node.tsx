@@ -1,7 +1,8 @@
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
-import { Button } from 'comps'
-import React, { useMemo, useState } from 'react'
+import { Button, Cascader } from 'comps'
+import { useT } from 'i18n/react'
+import React, { useMemo } from 'react'
 
 type CodeLanguage = {
   value: string
@@ -23,8 +24,9 @@ const CODE_LANGUAGES: CodeLanguage[] = [
 ]
 
 export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
+  const t = useT()
   const language: string = props.node.attrs.language || 'plaintext'
-  const [open, setOpen] = useState(false)
+  const isEmpty = props.node.content.size === 0
 
   const activeLanguage = useMemo<CodeLanguage>(() => {
     return (
@@ -35,64 +37,45 @@ export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
 
   const handleSelectLanguage = (value: string) => {
     props.updateAttributes({ language: value })
-    setOpen(false)
   }
 
   return (
-    <NodeViewWrapper className="group my-3 rounded-lg border border-border bg-background2 text-text">
-      <div className="flex items-center justify-between border-b border-border bg-background3 px-3 py-1.5 text-[11px] leading-none text-text2">
-        <div className="relative inline-flex items-center">
-          <Button
-            type="button"
-            size="sm"
-            variant="ghost"
-            className="h-6 px-2 text-[11px] leading-none text-text2 hover:bg-background"
-            tabIndex={ -1 }
-            onClick={ (event) => {
-              event.preventDefault()
-              event.stopPropagation()
-              setOpen(prev => !prev)
-            } }
-          >
-            <span className="truncate max-w-[120px]">
-              { activeLanguage.label }
-            </span>
-            <span className="ml-1 text-[10px] text-text2">
-              ▾
-            </span>
-          </Button>
-
-          { open && (
-            <div
-              className="absolute right-0 top-[110%] z-50 mt-1 w-40 rounded-md border border-border bg-background shadow-card"
-              onClick={ event => event.stopPropagation() }
+    <NodeViewWrapper className="group my-3 rounded-lg border border-border bg-background2 overflow-hidden text-text">
+      <div className="flex justify-self-end mt-1 select-none" aria-hidden>
+        <Cascader
+          options={ CODE_LANGUAGES }
+          value={ language }
+          onChange={ handleSelectLanguage }
+          placement="bottom-end"
+          dropdownHeight={ 260 }
+          className="mr-2 select-none"
+          trigger={
+            <Button
+              size="sm"
+              className="text-text2 text-[11px] py-0 select-none"
+              tabIndex={ -1 }
+              onMouseDown={ (event) => {
+                event.preventDefault()
+                event.stopPropagation()
+              } }
             >
-              <ul className="max-h-64 overflow-auto py-1 text-xs">
-                { CODE_LANGUAGES.map(lang => (
-                  <li key={ lang.value }>
-                    <button
-                      type="button"
-                      className="flex w-full cursor-pointer items-center justify-between px-3 py-1.5 text-left text-text hover:bg-background2"
-                      onClick={ () => handleSelectLanguage(lang.value) }
-                    >
-                      <span className="truncate">
-                        { lang.label }
-                      </span>
-                      { lang.value === language && (
-                        <span className="ml-2 text-[10px] text-systemOrange">
-                          ●
-                        </span>
-                      ) }
-                    </button>
-                  </li>
-                )) }
-              </ul>
-            </div>
-          ) }
-        </div>
+              <span className="truncate max-w-[120px] select-none">
+                { activeLanguage.label }
+              </span>
+            </Button>
+          }
+        />
       </div>
 
-      <pre className="overflow-auto px-3 py-2 text-xs leading-relaxed">
+      <pre className="overflow-auto text-xs leading-relaxed p-3 relative">
+        <span
+          className="code-block-placeholder absolute left-3 top-3"
+          aria-hidden
+        >
+          { isEmpty
+            ? t('placeholder.codeBlock')
+            : '' }
+        </span>
         <NodeViewContent
           className={ language
             ? `language-${language}`

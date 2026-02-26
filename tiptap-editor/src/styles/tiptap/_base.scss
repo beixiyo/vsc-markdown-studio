@@ -78,4 +78,9 @@
     pointer-events: none;
     opacity: 0.5;
   }
+
+  /* 代码块使用组件内 placeholder，隐藏扩展在外层加的占位符 */
+  .is-empty[data-placeholder]:has(pre)::before {
+    display: none;
+  }
 }

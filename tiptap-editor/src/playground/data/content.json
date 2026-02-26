@@ -105,7 +105,7 @@
     {
       "type": "codeBlock",
       "attrs": {
-        "language": null
+        "language": "bash"
       },
       "content": [
         {
