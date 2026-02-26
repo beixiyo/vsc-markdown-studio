@@ -40,7 +40,6 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
     retryRender,
   } = useMermaidRenderer({
     code,
-    node,
     isEditing,
   })
 

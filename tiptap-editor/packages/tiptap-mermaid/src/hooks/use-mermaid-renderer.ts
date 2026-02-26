@@ -1,15 +1,13 @@
 /**
  * Mermaid 渲染逻辑 Hook
  */
-import type { NodeViewProps } from '@tiptap/react'
+import { renderMermaidSVGAsync } from 'beautiful-mermaid'
 import { useTheme } from 'hooks'
-import mermaid from 'mermaid'
-import { useEffect, useId, useRef, useState } from 'react'
-import { getMermaidThemeConfig } from '../utils/mermaid-theme'
+import { useEffect, useRef, useState } from 'react'
+import { getMermaidThemeColors } from '../utils/mermaid-theme'
 
 interface UseMermaidRendererOptions {
   code: string
-  node: NodeViewProps['node']
   isEditing: boolean
 }
 
@@ -18,7 +16,6 @@ interface UseMermaidRendererOptions {
  */
 export function useMermaidRenderer({
   code,
-  node,
   isEditing,
 }: UseMermaidRendererOptions) {
   const renderContainerRef = useRef<HTMLDivElement>(null)
@@ -30,10 +27,6 @@ export function useMermaidRenderer({
   const [theme] = useTheme()
   const isDarkMode = theme === 'dark'
 
-  /** 优先使用节点 ID，否则使用 React 19 的 useId 生成稳定 ID */
-  const stableId = useId()
-  const renderId = node.attrs.id || `mermaid-${stableId}`
-
   /** 渲染 Mermaid 图表 */
   useEffect(() => {
     if (isEditing || !code || !renderContainerRef.current) {
@@ -42,7 +35,7 @@ export function useMermaidRenderer({
 
     let cancelled = false
 
-    const renderMermaid = async () => {
+    const doRender = async () => {
       if (!renderContainerRef.current || cancelled) {
         return
       }
@@ -55,38 +48,12 @@ export function useMermaidRenderer({
       }
 
       try {
-        /** 根据主题配置 mermaid */
-        mermaid.initialize(getMermaidThemeConfig(isDarkMode))
+        /** 使用 beautiful-mermaid 渲染 */
+        const svg = await renderMermaidSVGAsync(code, getMermaidThemeColors(isDarkMode))
 
-        /** 使用 mermaid.render API（mermaid v11+ 推荐方式） */
-        if (typeof mermaid.render === 'function') {
-          const { svg } = await mermaid.render(renderId, code)
-          if (renderContainerRef.current && !cancelled) {
-            renderContainerRef.current.innerHTML = svg
-            setError(null)
-          }
-        }
-        else {
-          /** 降级方案：使用 mermaid.run API（旧版本兼容） */
-          if (typeof mermaid.run !== 'function') {
-            throw new TypeError('Mermaid API 不可用：需要 mermaid.render 或 mermaid.run')
-          }
-
-          const mermaidDiv = document.createElement('div')
-          mermaidDiv.className = 'mermaid'
-          mermaidDiv.id = renderId
-          mermaidDiv.textContent = code
-          renderContainerRef.current.appendChild(mermaidDiv)
-
-          /** 等待下一个 tick 确保 DOM 已更新 */
-          await new Promise(resolve => requestAnimationFrame(resolve))
-
-          if (renderContainerRef.current && !cancelled) {
-            await mermaid.run({
-              nodes: [mermaidDiv],
-              suppressErrors: true,
-            })
-          }
+        if (renderContainerRef.current && !cancelled) {
+          renderContainerRef.current.innerHTML = svg
+          setError(null)
         }
       }
       catch (err) {
@@ -104,7 +71,7 @@ export function useMermaidRenderer({
       }
     }
 
-    renderMermaid()
+    doRender()
 
     return () => {
       cancelled = true
@@ -113,7 +80,7 @@ export function useMermaidRenderer({
         renderContainerRef.current.innerHTML = ''
       }
     }
-  }, [code, isEditing, isDarkMode, renderId, retryKey])
+  }, [code, isEditing, isDarkMode, retryKey])
 
   /** 重试渲染 */
   const retryRender = () => {

@@ -23,22 +23,22 @@
     "dist"
   ],
   "dependencies": {
+    "beautiful-mermaid": "^1.0.2",
+    "comps": "workspace:*",
     "hooks": "workspace:*",
-    "mermaid": "^11.12.2",
+    "styles": "workspace:*",
     "tiptap-api": "workspace:*",
     "tiptap-comps": "workspace:*",
-    "comps": "workspace:*",
     "tiptap-utils": "workspace:*",
-    "uuid": "^13.0.0",
     "utils": "workspace:*",
-    "styles": "workspace:*"
+    "uuid": "^13.0.0"
   },
   "peerDependencies": {
-    "i18n": "workspace:*",
     "@tiptap/core": "^3.13.0",
     "@tiptap/markdown": "^3.13.0",
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
+    "i18n": "workspace:*",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
   },
