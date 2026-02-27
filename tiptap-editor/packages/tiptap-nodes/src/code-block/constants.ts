@@ -27,12 +27,23 @@ export const CODE_LANGUAGES: CodeLanguage[] = [
   { value: 'rust', label: 'Rust' },
   { value: 'sql', label: 'SQL' },
   { value: 'yaml', label: 'YAML' },
-  { value: 'dockerfile', label: 'Docker' },
   { value: 'makefile', label: 'Makefile' },
   { value: 'swift', label: 'Swift' },
   { value: 'kotlin', label: 'Kotlin' },
   { value: 'php', label: 'PHP' },
   { value: 'ruby', label: 'Ruby' },
+  { value: 'lua', label: 'Lua' },
+  { value: 'vim', label: 'Vim' },
+  { value: 'ini', label: 'INI' },
+  { value: 'diff', label: 'Diff' },
+  { value: 'dockerfile', label: 'Docker' },
+  { value: 'perl', label: 'Perl' },
+  { value: 'r', label: 'R' },
+  { value: 'dart', label: 'Dart' },
+  { value: 'haskell', label: 'Haskell' },
+  { value: 'clojure', label: 'Clojure' },
+  { value: 'elixir', label: 'Elixir' },
+  { value: 'erlang', label: 'Erlang' },
 ]
 
 export const LANGUAGE_ALIASES: Record<string, string> = {
@@ -47,4 +58,6 @@ export const LANGUAGE_ALIASES: Record<string, string> = {
   cs: 'csharp',
   c: 'c',
   rs: 'rust',
+  viml: 'vim',
+  conf: 'ini',
 }
