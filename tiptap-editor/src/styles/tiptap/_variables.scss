@@ -26,8 +26,9 @@
   --tt-code-text: rgb(var(--text));
   --tt-code-border: rgb(var(--border2));
 
-  --tt-blockquote-border: rgb(var(--text));
-  --tt-blockquote-text: rgb(var(--text) / 0.7);
+  --tt-blockquote-bg: var(--tt-bg-secondary);
+  --tt-blockquote-border: var(--tt-border-secondary);
+  --tt-blockquote-text: var(--tt-text-secondary);
 
   --tt-hr-color: rgb(var(--border2));
 
