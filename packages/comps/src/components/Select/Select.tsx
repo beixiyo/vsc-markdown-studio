@@ -1,6 +1,7 @@
 'use client'
 
 import type { SelectProps } from './types'
+import { useTheme } from 'hooks'
 import { ChevronDown, Loader2, Search } from 'lucide-react'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { cn } from 'utils'
@@ -9,39 +10,43 @@ import { useFormField } from '../Form/useFormField'
 import { useSelectKeyboard, useSelectMenuStack, useSelectOpen } from './hooks'
 import { SelectOption } from './SelectOption'
 
-function InnerSelect<T extends string | string[] = string>({
-  options,
-  value,
-  defaultValue,
-  onChange,
-  onClick,
-  onClickOutside,
+function InnerSelect<T extends string | string[] = string>(props: SelectProps<T>) {
+  const [theme] = useTheme()
+  const {
+    options,
+    value,
+    defaultValue,
+    onChange,
+    onClick,
+    onClickOutside,
 
-  className,
-  placeholderClassName,
-  optionClassName,
-  optionContentClassName,
-  optionLabelClassName,
-  optionCheckIconClassName,
-  optionChevronIconClassName,
-  placeholder = 'Select option',
-  placeholderIcon,
-  dropdownHeight = 150,
+    className,
+    placeholderClassName,
+    optionClassName,
+    optionContentClassName,
+    optionLabelClassName,
+    optionCheckIconClassName,
+    optionChevronIconClassName,
+    placeholder = 'Select option',
+    placeholderIcon,
+    dropdownHeight = 150,
 
-  showEmpty = true,
-  showDownArrow = true,
-  disabled = false,
-  loading = false,
-  multiple = false,
-  rotate = true,
-  maxSelect,
-  searchable = false,
-  required = false,
+    showEmpty = true,
+    showDownArrow = true,
+    disabled = false,
+    loading = false,
+    multiple = false,
+    rotate = true,
+    maxSelect,
+    searchable = false,
+    required = false,
 
-  name,
-  error,
-  errorMessage,
-}: SelectProps<T>) {
+    name,
+    error,
+    errorMessage,
+    bordered = theme !== 'light',
+  } = props
+
   const isCascading = useMemo(() => options.some(opt => opt.children && opt.children.length > 0), [options])
   const [searchQuery, setSearchQuery] = useState('')
   const [currentLabel, setCurrentLabel] = useState<React.ReactNode>('')
@@ -197,6 +202,7 @@ function InnerSelect<T extends string | string[] = string>({
           className={ cn(
             'absolute w-auto mt-1 bg-background rounded-xl shadow-card z-50 flex text-text',
             'transition-all duration-200 ease-in-out origin-top',
+            bordered && 'border border-border',
             isOpen
               ? 'opacity-100 scale-y-100 translate-y-0'
               : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none',
@@ -236,8 +242,9 @@ function InnerSelect<T extends string | string[] = string>({
     return (
       <div
         className={ cn(
-          'absolute w-full mt-1 bg-background border border-border rounded-lg shadow-card z-50 overflow-auto text-text',
+          'absolute w-full mt-1 bg-background rounded-lg shadow-card z-50 overflow-auto text-text',
           'transition-all duration-200 ease-in-out origin-top',
+          bordered && 'border border-border',
           isOpen
             ? 'opacity-100 scale-y-100 translate-y-0'
             : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none',
@@ -255,6 +262,7 @@ function InnerSelect<T extends string | string[] = string>({
                 value={ searchQuery }
                 onChange={ e => setSearchQuery(e.target.value) }
                 onClick={ e => e.stopPropagation() }
+                onKeyDown={ e => e.stopPropagation() }
               />
             </div>
           </div>
@@ -306,9 +314,9 @@ function InnerSelect<T extends string | string[] = string>({
             'transition-all duration-200 ease-in-out',
             disabled
               ? 'bg-background2 cursor-not-allowed'
-              : 'cursor-pointer hover:border-border2 active:border-border3',
+              : 'cursor-pointer hover:border-border2 active:border-border2',
             isOpen
-              ? 'border-border3 ring-1 ring-border3/20'
+              ? 'border-border2 ring-1 ring-border3/20'
               : 'border-border',
             actualError
               ? 'border-danger'

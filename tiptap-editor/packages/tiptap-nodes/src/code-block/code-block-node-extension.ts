@@ -105,5 +105,5 @@ export const CodeBlock = CodeBlockLowlight.extend({
   },
 }).configure({
   lowlight,
-  defaultLanguage: 'javascript',
+  defaultLanguage: 'typescript',
 })

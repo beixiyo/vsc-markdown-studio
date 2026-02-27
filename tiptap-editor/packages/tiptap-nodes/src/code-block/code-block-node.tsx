@@ -30,6 +30,7 @@ export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
     <NodeViewWrapper className="group my-3 rounded-lg border border-border bg-transparent overflow-hidden text-text">
       <div className="flex justify-self-end mt-1 select-none" aria-hidden>
         <Cascader
+          searchable
           options={ CODE_LANGUAGES }
           value={ language }
           onChange={ handleSelectLanguage }
