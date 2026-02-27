@@ -1,15 +1,32 @@
+import { textblockTypeInputRule } from '@tiptap/core'
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
 import { DOMSerializer } from '@tiptap/pm/model'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { common, createLowlight } from 'lowlight'
-
 import { CodeBlockNode } from './code-block-node'
+
+import { LANGUAGE_ALIASES } from './constants'
 import 'highlight.js/styles/atom-one-dark.css'
 
 const lowlight = createLowlight(common)
 
 export const CodeBlock = CodeBlockLowlight.extend({
+  addInputRules() {
+    return [
+      textblockTypeInputRule({
+        find: /^(?:```|~~~)([a-z1-9]*)\s$/,
+        type: this.type,
+        getAttributes: (match) => {
+          const lang = match[1]?.toLowerCase()
+          return {
+            language: LANGUAGE_ALIASES[lang] || lang || null,
+          }
+        },
+      }),
+    ]
+  },
+
   addNodeView() {
     return ReactNodeViewRenderer(CodeBlockNode)
   },
@@ -21,17 +38,21 @@ export const CodeBlock = CodeBlockLowlight.extend({
         default: 'javascript',
         parseHTML: (element) => {
           const dataLanguage = element.getAttribute('data-language')
-          if (dataLanguage)
-            return dataLanguage
+          if (dataLanguage) {
+            return LANGUAGE_ALIASES[dataLanguage] || dataLanguage
+          }
 
           const className = element.getAttribute('class') || ''
           const match = className
             .split(' ')
             .find(cls => cls.startsWith('language-'))
 
-          return match
-            ? match.replace('language-', '')
-            : null
+          if (match) {
+            const lang = match.replace('language-', '')
+            return LANGUAGE_ALIASES[lang] || lang
+          }
+
+          return null
         },
         renderHTML: (attrs) => {
           const language = attrs.language || 'javascript'

@@ -3,40 +3,27 @@ import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
 import { Button, Cascader } from 'comps'
 import { useT } from 'i18n/react'
 import React, { useMemo } from 'react'
-
-type CodeLanguage = {
-  value: string
-  label: string
-}
-
-const CODE_LANGUAGES: CodeLanguage[] = [
-  { value: 'plaintext', label: 'Plain text' },
-  { value: 'javascript', label: 'JavaScript' },
-  { value: 'typescript', label: 'TypeScript' },
-  { value: 'tsx', label: 'TSX' },
-  { value: 'jsx', label: 'JSX' },
-  { value: 'json', label: 'JSON' },
-  { value: 'css', label: 'CSS' },
-  { value: 'html', label: 'HTML' },
-  { value: 'markdown', label: 'Markdown' },
-  { value: 'bash', label: 'Bash' },
-  { value: 'python', label: 'Python' },
-]
+import { CODE_LANGUAGES, type CodeLanguage } from './constants'
 
 export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
   const t = useT()
   const language: string = props.node.attrs.language || 'plaintext'
   const isEmpty = props.node.content.size === 0
 
-  const activeLanguage = useMemo<CodeLanguage>(() => {
+  const activeLanguage = useMemo(() => {
     return (
-      CODE_LANGUAGES.find(lang => lang.value === language)
-      ?? { value: language, label: language || 'Plain text' }
+      CODE_LANGUAGES.find((lang: CodeLanguage) => lang.value === language)
+      || CODE_LANGUAGES.find((lang: CodeLanguage) => lang.value === 'plaintext')!
     )
   }, [language])
 
-  const handleSelectLanguage = (value: string) => {
+  const setLanguage = (value: string) => {
     props.updateAttributes({ language: value })
+  }
+
+  const handleSelectLanguage = (value: string | string[]) => {
+    const lang = Array.isArray(value) ? value[value.length - 1] : value
+    setLanguage(lang)
   }
 
   return (
