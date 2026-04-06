@@ -1,16 +1,15 @@
 import { Extension } from '@tiptap/core'
-import type { GetHoverContentOptions, HoverHighlightSpec } from 'tiptap-api'
+import type {
+  GetHoverContentOptions,
+  HoverHighlightLayer,
+  HoverHighlightSpec,
+} from 'tiptap-api'
 import { getHoverContentFromViewCoords, getHoverHighlightSpecs } from 'tiptap-api'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { pointerExitedDocument } from './pointer-exited-document'
 
 export const hoverContextHighlightKey = new PluginKey('hoverContextHighlight')
-
-const layerClass: Record<string, string> = {
-  block: 'tiptap-hover-context-block',
-  context: 'tiptap-hover-context-snippet',
-  line: 'tiptap-hover-context-line',
-}
 
 /**
  * 为 hover 上下文探测提供可映射的 Decoration，不改变文档内容
@@ -26,10 +25,16 @@ export const HoverContextHighlight = Extension.create<HoverContextHighlightOptio
       hoverContentOptions: {},
       disableOnDrag: true,
       disableOnSelection: false,
+      layerClassNames: {
+        block: 'rounded-sm box-decoration-clone bg-brand/15',
+        context: 'rounded-sm box-decoration-clone bg-brand/25',
+        line: 'rounded-sm box-decoration-clone bg-systemOrange/25',
+      },
     }
   },
 
   addProseMirrorPlugins() {
+    const extension = this
     const opts = this.options
 
     return [
@@ -43,11 +48,14 @@ export const HoverContextHighlight = Extension.create<HoverContextHighlightOptio
               if (meta === null || !Array.isArray(meta) || meta.length === 0)
                 return DecorationSet.empty
 
+              const layerClassNames = extension.options.layerClassNames
+              const fallback = layerClassNames.context
+
               const decorations: Decoration[] = []
               for (const spec of meta as HoverHighlightSpec[]) {
                 if (spec.from >= spec.to)
                   continue
-                const cls = layerClass[spec.layer] ?? 'tiptap-hover-context-snippet'
+                const cls = layerClassNames[spec.layer] ?? fallback
                 decorations.push(
                   Decoration.inline(spec.from, spec.to, { class: cls }),
                 )
@@ -96,9 +104,9 @@ export const HoverContextHighlight = Extension.create<HoverContextHighlightOptio
             const rect = dom.getBoundingClientRect()
             const inside
               = clientX >= rect.left
-                && clientX <= rect.right
-                && clientY >= rect.top
-                && clientY <= rect.bottom
+              && clientX <= rect.right
+              && clientY >= rect.top
+              && clientY <= rect.bottom
             if (!inside) {
               clear()
               return
@@ -188,13 +196,6 @@ export const HoverContextHighlight = Extension.create<HoverContextHighlightOptio
   },
 })
 
-function pointerExitedDocument(event: MouseEvent): boolean {
-  const rel = event.relatedTarget
-  if (rel == null)
-    return true
-  return !(rel instanceof Node && document.documentElement.contains(rel))
-}
-
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     hoverContextHighlight: {
@@ -220,4 +221,6 @@ export type HoverContextHighlightOptions = {
   disableOnDrag: boolean
   /** 有选区时是否清除高亮 */
   disableOnSelection: boolean
+  /** 各分层对应的 Decoration 类名（建议使用 Tailwind） */
+  layerClassNames: Record<HoverHighlightLayer, string>
 }

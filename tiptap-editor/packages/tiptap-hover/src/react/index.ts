@@ -1,3 +1,5 @@
 export * from './editor-hover-tooltip'
 export * from './hover-tooltip'
+export type { EditorHoverTooltipProps, HoverTooltipProps } from './types'
 export * from './use-hover-detection'
+export type { UseHoverTooltipParams, UseHoverTooltipResult } from './use-hover-tooltip'

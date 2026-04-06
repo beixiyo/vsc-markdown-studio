@@ -72,8 +72,14 @@ export function createExtensions() {
     /** 选择扩展：增强选择功能 */
     Selection,
 
-    /** Hover 探测用的临时背景高亮（不改变文档） */
-    HoverContextHighlight,
+    /** Hover 探测用的临时背景高亮（不改变文档）；分层样式为 Tailwind 类名 */
+    HoverContextHighlight.configure({
+      layerClassNames:  {
+        block: 'rounded-sm box-decoration-clone bg-brand/15',
+        context: 'rounded-sm box-decoration-clone bg-brand/25',
+        line: 'rounded-sm box-decoration-clone bg-systemOrange/25',
+      },
+    }),
     /** Placeholder 扩展：为空节点显示占位符 */
     Placeholder.configure({
       placeholder: ({ node }) => {

@@ -557,6 +557,9 @@ importers:
       tiptap-utils:
         specifier: workspace:*
         version: link:../tiptap-utils
+      utils:
+        specifier: workspace:*
+        version: link:../../../packages/utils
 
   tiptap-editor/packages/tiptap-mermaid:
     dependencies:
