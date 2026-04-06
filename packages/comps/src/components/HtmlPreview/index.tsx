@@ -4,7 +4,7 @@ import type { MoveableProps } from '../Moveable'
 import { onUnmounted } from 'hooks'
 import { Maximize2, Minimize2, RefreshCw } from 'lucide-react'
 import { motion } from 'motion/react'
-import { useEffect, useId, useRef, useState } from 'react'
+import { memo, useEffect, useId, useRef, useState } from 'react'
 import { cn, createZIndexStore } from 'utils'
 import { Button } from '../Button'
 import { MacTabDot } from '../MacTabDot'
@@ -30,7 +30,7 @@ export const HtmlPreview = memo<HtmlPreviewProps>(({
   canRotate = false,
   canResize = true,
   showBorder = false,
-  color = '#3b82f6',
+  color = 'rgb(var(--brand) / 1)',
   minWidth = 400,
   minHeight = 260,
   maxWidth = Infinity,
@@ -155,7 +155,7 @@ export const HtmlPreview = memo<HtmlPreviewProps>(({
           key={ iframeKey }
           ref={ iframeRef }
           className="h-full w-full border-none"
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts"
           title={ title }
         />
         {/* 透明遮罩层，只在变换操作时显示，用于阻止iframe事件干扰 */ }

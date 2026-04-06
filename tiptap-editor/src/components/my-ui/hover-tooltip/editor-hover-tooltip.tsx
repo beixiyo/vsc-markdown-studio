@@ -36,6 +36,15 @@ export function EditorHoverTooltip({
   /** 节流更新 hover 内容 */
   const handleHoverContentUpdate = useThrottleFn(
     (coords: { x: number, y: number }) => {
+      /** useThrottleFn 在 deps 变化时会无参触发一次，需跳过 */
+      if (
+        coords == null
+        || !Number.isFinite(coords.x)
+        || !Number.isFinite(coords.y)
+      ) {
+        return
+      }
+
       if (!enabled || !editor || !editor.view) {
         setHoverContent(null)
         return
@@ -99,8 +108,8 @@ export function EditorHoverTooltip({
       const newPosition = { x: event.clientX, y: event.clientY }
       setMousePosition(newPosition)
 
-      /** 节流更新内容 */
-      handleHoverContentUpdate()
+      /** 节流更新内容（必须传入视口坐标，否则 posAtCoords 无效） */
+      handleHoverContentUpdate(newPosition)
     },
     [enabled, editor, handleHoverContentUpdate],
   )
@@ -177,14 +186,35 @@ export function EditorHoverTooltip({
       const markNames = hoverContent.marks.map(m => m.type).join(', ')
       parts.push(`标记: ${markNames}`)
     }
-    if (hoverContent.textContent) {
+    if (hoverContent.lineInBlockText?.trim()) {
+      const line = hoverContent.lineInBlockText.trim()
+      const truncated = line.length > 120
+        ? `${line.slice(0, 120)}...`
+        : line
+      parts.push(`行: ${truncated}`)
+    }
+    else if (hoverContent.blockText?.trim()) {
+      const block = hoverContent.blockText.trim()
+      const truncated = block.length > 120
+        ? `${block.slice(0, 120)}...`
+        : block
+      parts.push(`块: ${truncated}`)
+    }
+    else if (hoverContent.textContent) {
       const text = hoverContent.textContent.trim()
       if (text) {
         const truncated = text.length > 50
           ? `${text.slice(0, 50)}...`
           : text
-        parts.push(`文本: ${truncated}`)
+        parts.push(`叶子: ${truncated}`)
       }
+    }
+    if (hoverContent.contextText?.trim()) {
+      const ctx = hoverContent.contextText.trim()
+      const truncated = ctx.length > 100
+        ? `${ctx.slice(0, 100)}...`
+        : ctx
+      parts.push(`上下文: ${truncated}`)
     }
     if (hoverContent.pos !== undefined) {
       parts.push(`位置: ${hoverContent.pos}`)

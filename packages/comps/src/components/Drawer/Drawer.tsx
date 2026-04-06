@@ -2,6 +2,7 @@
 
 import type { DrawerProps } from './types'
 import { X } from 'lucide-react'
+import { forwardRef, memo, useEffect } from 'react'
 import { getDrawerClasses } from './tool'
 
 export const Drawer = memo(forwardRef<HTMLDivElement, DrawerProps>((
@@ -58,7 +59,7 @@ export const Drawer = memo(forwardRef<HTMLDivElement, DrawerProps>((
     }
   }, [open, onClose])
 
-  const drawerClasses = getDrawerClasses(position, 'absolute bg-white shadow-lg transition-all duration-300 ease-in-out')
+  const drawerClasses = getDrawerClasses(position, 'absolute bg-background shadow-lg transition-all duration-300 ease-in-out')
   const transformClass = getTransformClass()
 
   return (

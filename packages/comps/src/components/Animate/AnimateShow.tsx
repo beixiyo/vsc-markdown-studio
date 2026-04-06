@@ -6,7 +6,7 @@ import { useCustomEffect } from 'hooks'
 import { motion, useAnimationControls } from 'motion/react'
 import { forwardRef, memo, useRef, useState } from 'react'
 import { cn } from 'utils'
-import { animateVariants, DURTAION, variantsMap } from './constants'
+import { animateVariants, DURATION, variantsMap } from './constants'
 
 const InnerAnimateShow = forwardRef<HTMLDivElement, AnimateShowProps>((
   {
@@ -18,7 +18,7 @@ const InnerAnimateShow = forwardRef<HTMLDivElement, AnimateShowProps>((
     display = 'block',
     visibilityMode = false,
 
-    duration = DURTAION,
+    duration = DURATION,
     variants = 'top-bottom',
     exitSetMode,
     animateOnMount = false,
@@ -27,7 +27,8 @@ const InnerAnimateShow = forwardRef<HTMLDivElement, AnimateShowProps>((
   ref,
 ) => {
   const controller = useAnimationControls()
-  const [isAnimating, setIsAnimating] = useState(true)
+  /** 与 `show` 对齐：关闭态首帧即 `display:none`，避免 SSR/水合后 effect 运行前整块可见（如 Aside 抽屉闪屏） */
+  const [isAnimating, setIsAnimating] = useState(show)
   const isFirstMount = useRef(true)
 
   useCustomEffect(

@@ -1,4 +1,5 @@
 import type { StepProps, StepsProps } from './types'
+import { memo } from 'react'
 import { cn } from 'utils'
 import { FONT_SIZE_MULTIPLE } from './constants'
 import { StepIcon } from './StepIcon'
@@ -49,8 +50,8 @@ export const StepItem = memo<StepProps & {
           { 'p-[2px]': !icon },
           { 'bg-neutral-900 dark:bg-white text-white dark:text-neutral-900': status === 'finish' },
           { 'bg-danger text-white': status === 'error' },
-          { 'bg-neutral-900/10 dark:bg-white/10 text-neutral-900 dark:text-white border border-neutral-900 dark:border-white animate-spin': status === 'process' },
-          { 'bg-gray-200 text-gray-500': status === 'wait' },
+          { 'bg-neutral-900/10 dark:bg-white/10 text-neutral-900 dark:text-white border border-neutral-900 dark:border-white': status === 'process' },
+          { 'bg-background3 text-text3': status === 'wait' },
         ) }
         style={ stepSize }
       >
@@ -73,7 +74,7 @@ export const StepItem = memo<StepProps & {
               : 'w-[2px] h-full absolute left-2 top-5',
             status === 'finish'
               ? 'bg-neutral-900 dark:bg-white'
-              : 'bg-gray-200',
+              : 'bg-background3',
           ) }
         />
       ) }
@@ -93,8 +94,8 @@ export const StepItem = memo<StepProps & {
               'font-medium',
               status === 'process'
                 ? 'text-neutral-900 dark:text-white'
-                : 'text-gray-500',
-              { 'text-black': status === 'finish' },
+                : 'text-text3',
+              { 'text-text': status === 'finish' },
               { 'text-danger': status === 'error' },
             ) }
             style={ fontSize }
@@ -104,7 +105,7 @@ export const StepItem = memo<StepProps & {
 
           { description && !isHorizontal && (
             <div
-              className={ cn('text-gray-500 mt-1') }
+              className={ cn('text-text3 mt-1') }
               style={ fontSize }
             >
               { description }

@@ -35,7 +35,7 @@ export interface ModalProps {
 
   isOpen: boolean
   onClose?: () => void
-  onOk?: () => void
+  onOk?: () => void | Promise<void>
 
   titleText?: string
   /**
@@ -72,7 +72,7 @@ export interface ModalProps {
   bordered?: boolean
   children?: ReactNode
   /**
-   * @default 99
+   * @default 50
    */
   zIndex?: number
   /**
@@ -84,11 +84,13 @@ export interface ModalProps {
    */
   escToClose?: boolean
   /**
-   * @default false
+   * @default true
    */
   center?: boolean
 }
 
 export type ModelType<ModalInstanceType> = ModalInstanceType & {
   [key in ModalVariant]: (props: Partial<ModalProps>) => ComponentController
+} & {
+  show: (Component: any, props?: Partial<ModalProps>) => ComponentController
 }

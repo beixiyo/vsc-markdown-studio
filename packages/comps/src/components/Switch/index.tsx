@@ -3,7 +3,8 @@
 import type { VariantProps } from 'class-variance-authority'
 import type { SizeStyle } from '../../types'
 import { cva } from 'class-variance-authority'
-import React, { memo, useCallback } from 'react'
+import { useLatestCallback } from 'hooks'
+import React, { memo } from 'react'
 import { cn } from 'utils'
 import { useFormField } from '../Form'
 
@@ -95,11 +96,11 @@ const thumbVariants = cva(
 
 export const Switch = memo<SwitchProps>((props) => {
   const {
-    checked = false,
+    checked,
     onChange,
     disabled = false,
     size = 'md',
-    background = '#2563EB',
+    background = 'rgb(var(--button) / 1)',
     checkedIcon,
     uncheckedIcon,
     name,
@@ -117,10 +118,11 @@ export const Switch = memo<SwitchProps>((props) => {
   const [internalChecked, setInternalChecked] = React.useState(defaultChecked)
 
   /** 判断是否为受控组件 */
-  const isControlled = checked !== undefined && onChange !== undefined
+  const isControlled = checked !== undefined
 
   /** 使用 useFormField hook 处理表单集成 */
   const {
+    isInForm,
     actualValue: formChecked,
     actualError,
     actualErrorMessage,
@@ -139,22 +141,26 @@ export const Switch = memo<SwitchProps>((props) => {
     ? formChecked
     : internalChecked
 
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useLatestCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled)
       return
 
     const newChecked = event.target.checked
 
-    /** 如果是受控组件，调用外部onChange */
     if (isControlled) {
       handleChangeVal(newChecked, event)
       handleBlur()
     }
     else {
-      /** 非受控模式下，更新内部状态 */
       setInternalChecked(newChecked)
+      handleChangeVal(newChecked, event)
+      handleBlur()
+      /** useFormField 非受控+非表单时不触发 onChange，需手动调用 */
+      if (!isInForm) {
+        onChange?.(newChecked)
+      }
     }
-  }, [disabled, handleChangeVal, handleBlur, isControlled])
+  })
 
   return (
     <div className={ cn('flex flex-col', containerClassName) }>

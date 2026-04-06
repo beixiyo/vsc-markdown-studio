@@ -3,7 +3,7 @@
 import type { StepsProps } from './types'
 import { timer } from '@jl-org/tool'
 import { ChevronUp, CircleCheck, CircleDashed, Loader2 } from 'lucide-react'
-import React from 'react'
+import { Fragment, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { cn } from 'utils'
 import { StepItem } from './StepItem'
 
@@ -64,9 +64,9 @@ export const Steps = memo((
         'overflow-auto space-y-3 p-2 min-w-72',
         slotClassName,
       ) }>
-        <h3 className="flex flex-col gap-1 text-sm text-gray-900 font-medium">
+        <h3 className="flex flex-col gap-1 text-sm text-text font-medium">
           <span className="font-bold">Task lists:</span>
-          <span className="text-gray-400">
+          <span className="text-text2">
             { `${time}s` }
           </span>
         </h3>
@@ -78,15 +78,15 @@ export const Steps = memo((
                 : task.inProgress
 
                   ? <Loader2 className="h-5 w-5 animate-spin text-neutral-900 dark:text-white" />
-                  : <CircleDashed className="h-5 w-5 text-gray-400" /> }
+                  : <CircleDashed className="h-5 w-5 text-text2" /> }
               <span
                 className={ cn(
                   'text-sm',
                   task.completed
-                    ? 'text-gray-400'
+                    ? 'text-text2'
                     : task.inProgress
-                      ? 'text-gray-800'
-                      : 'text-gray-500',
+                      ? 'text-text'
+                      : 'text-text2',
                 ) }
               >
                 { task.title }
@@ -116,7 +116,7 @@ export const Steps = memo((
           : null
 
         return (
-          <React.Fragment key={ index }>
+          <Fragment key={ index }>
             <StepItem
               { ...item }
               index={ index }
@@ -141,17 +141,17 @@ export const Steps = memo((
                   // If current item is finished OR next item is finished/process, color the line
                   item.status === 'finish' || nextItemStatus === 'finish' || nextItemStatus === 'process'
                     ? 'bg-neutral-900 dark:bg-white'
-                    : 'bg-gray-200',
+                    : 'bg-background3',
                 ) }
               />
             ) }
-          </React.Fragment>
+          </Fragment>
         )
       }) }
 
       { showProgress && items.length > 0 && (
         <div className="ml-auto flex items-center">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-text2">
             { Math.min(current + 1, items.length) }
             /
             { items.length }
@@ -160,7 +160,7 @@ export const Steps = memo((
           { expandable && (
             <button
               onClick={ toggleExpand }
-              className="rounded-md p-1 transition-colors hover:bg-gray-100"
+              className="rounded-md p-1 transition-colors hover:bg-background3"
               aria-expanded={ expanded }
               aria-label={ expanded
                 ? 'Collapse details'
@@ -188,7 +188,7 @@ export const Steps = memo((
   )
 
   return <div
-    className={ cn('rounded-lg border border-gray-200 p-2 relative', className) }
+    className={ cn('rounded-lg border border-border p-2 relative', className) }
   >
     {/* Main content */ }
     { stepsSection }
@@ -203,8 +203,8 @@ export const Steps = memo((
             : 'opacity-0 pointer-events-none',
 
           expandDirection === 'up'
-            ? 'absolute left-1/2 bottom-full mb-2 z-50 bg-white border border-gray-200 rounded-lg p-2 shadow-md -translate-x-1/2'
-            : 'border-t border-gray-200',
+            ? 'absolute left-1/2 bottom-full mb-2 z-50 bg-background border border-border rounded-lg p-2 shadow-md -translate-x-1/2'
+            : 'border-t border-border',
 
           expanded && expandDirection === 'up'
             ? 'translate-y-0'

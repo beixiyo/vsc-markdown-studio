@@ -6,7 +6,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import { cn } from 'utils'
 import { Loading } from '../Loading/Loading'
 import { PreviewImg } from '../PreviewImg'
-import { ob, observerMap } from './constants'
+import { getOb, observerMap } from './constants'
 import {
   applyLoadAnimation,
   isImageElementComplete,
@@ -23,9 +23,11 @@ function extractRadiusClass(className?: string) {
     .split(' ')
     .map(cls => cls.trim())
     .filter(Boolean)
-    .filter(cls => cls.startsWith('rounded-sm'))
+    .filter(cls => cls.startsWith('rounded'))
 
-  return radiusClasses.length > 0 ? radiusClasses.join(' ') : undefined
+  return radiusClasses.length > 0
+    ? radiusClasses.join(' ')
+    : undefined
 }
 
 export const LazyImg = memo<LazyImgProps>((
@@ -67,7 +69,9 @@ export const LazyImg = memo<LazyImgProps>((
   const mergedRadiusClass = extractRadiusClass(className || imgClassName)
 
   /** 计算当前应该下发的 src */
-  const currentSrc = (!lazy || isImageCached || showImg) ? src : undefined
+  const currentSrc = !lazy || isImageCached || showImg
+    ? src
+    : undefined
 
   // --- 事件处理 ---
   const handleLoad = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -96,7 +100,7 @@ export const LazyImg = memo<LazyImgProps>((
      * 如果是 lazy 模式，加载失败也需要 unobserve
      */
     if (lazy && imgRef.current) {
-      ob.unobserve(imgRef.current)
+      getOb().unobserve(imgRef.current)
       observerMap.delete(imgRef.current)
     }
     setShowLoading(false)
@@ -166,13 +170,13 @@ export const LazyImg = memo<LazyImgProps>((
       }
 
       observerMap.set(imgElement, { src })
-      ob.observe(imgElement)
+      getOb().observe(imgElement)
     }
 
     // --- 清理函数 ---
     return () => {
       if (imgElement) {
-        ob.unobserve(imgElement)
+        getOb().unobserve(imgElement)
         observerMap.delete(imgElement)
       }
     }

@@ -1,11 +1,10 @@
-import { colorAddOpacity } from '@jl-org/tool'
 import { motion } from 'motion/react'
+import { memo } from 'react'
 import { cn } from 'utils'
 
 const FloatingPaths = memo<FloatingPathsProps>((
   {
     position,
-    color = 'rgb(15, 23, 42)',
     className,
   },
 ) => {
@@ -15,7 +14,6 @@ const FloatingPaths = memo<FloatingPathsProps>((
     } -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${152 - i * 5 * position
     } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${684 - i * 5 * position
     } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-    color: colorAddOpacity(color, 0.1 + i * 0.03),
     width: 0.5 + i * 0.03,
   }))
 
@@ -90,6 +88,5 @@ export type BgPathsProps = {
 
 type FloatingPathsProps = {
   position: number
-  color?: string
   className?: string
 }

@@ -1,6 +1,7 @@
 import type { ColumnQueue, ItemRect, RenderItem, WaterfallItem } from './types'
 import { genArr, rafThrottle } from '@jl-org/tool'
 import { onMounted, useUpdateEffect } from 'hooks'
+import { useMemo, useRef, useState } from 'react'
 
 /**
  * 虚拟瀑布流
@@ -132,7 +133,11 @@ export function useVirtualWaterfall<T extends WaterfallItem>(
   }
 
   const addInQueue = () => {
-    const queue = queueState.queue
+    /** 深拷贝 queue，避免直接 mutate React state */
+    const queue = queueState.queue.map(col => ({
+      list: [...col.list],
+      height: col.height,
+    }))
     let len = queueState.len
 
     for (let i = 0; i < pageSize; i++) {
@@ -150,7 +155,7 @@ export function useVirtualWaterfall<T extends WaterfallItem>(
       currentColumn.height += item.h
       len++
     }
-    setQueueState({ queue: [...queue], len })
+    setQueueState({ queue, len })
   }
 
   const loadMoreList = () => {
@@ -165,7 +170,7 @@ export function useVirtualWaterfall<T extends WaterfallItem>(
 
   const onScroll = rafThrottle(() => {
     const { scrollTop, clientHeight } = getContainerEl()
-    setScrollState({ ...scrollState, scrollTop })
+    setScrollState(prev => ({ ...prev, scrollTop }))
 
     if (scrollTop + clientHeight > getComputedHeight().minHeight) {
       loadMoreList()

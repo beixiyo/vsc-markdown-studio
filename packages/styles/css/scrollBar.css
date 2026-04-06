@@ -40,7 +40,6 @@
 
 * {
   scrollbar-width: thin;
-  /* Firefox 滚动条颜色：thumb track */
+  /* 滚动条颜色：thumb track */
   scrollbar-color: var(--scrollbarThumb) var(--scrollbarTrack);
 }
-

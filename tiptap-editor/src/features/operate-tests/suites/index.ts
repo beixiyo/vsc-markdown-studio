@@ -461,6 +461,9 @@ export const defaultOperateSuites: OperateTestSuite[] = [
           if (content.textContent && !content.textContent.includes('Hover')) {
             throw new Error('getHoverContent 返回的文本不包含预期关键字')
           }
+          if (!content.blockText?.includes('Hover')) {
+            throw new Error('getHoverContent 未返回包含关键字的 blockText')
+          }
           if (original !== null) {
             operate.setMarkdown(original)
           }

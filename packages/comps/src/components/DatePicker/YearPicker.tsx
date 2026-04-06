@@ -4,12 +4,12 @@ import type { YearPickerProps, YearPickerRef } from './types'
 import { useShortCutKey } from 'hooks'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { forwardRef, memo, useCallback, useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { cn } from 'utils'
 import { useT } from '../../i18n'
 import { AnimateShow } from '../Animate'
 import { Button } from '../Button'
-import { useFormField } from '../Form/useFormField'
+import { useFormField } from '../Form'
+import { SafePortal } from '../SafePortal'
 import { PickerInput } from './components/PickerInput'
 import { CONTAINER_CLASSNAME } from './constants'
 import { useClickOutside } from './hooks/useClickOutside'
@@ -303,7 +303,9 @@ const InnerYearPicker = forwardRef<YearPickerRef, YearPickerProps>(({
               />
             </div>
           ) }
-      { createPortal(dropdownContent, document.body) }
+
+      <SafePortal>{ dropdownContent }</SafePortal>
+
       { actualError && actualErrorMessage && (
         <div className="mt-1 text-xs text-danger">
           { actualErrorMessage }

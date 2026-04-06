@@ -47,19 +47,20 @@ export function useSelectKeyboard(options: {
       return
     }
 
+    // input 元素（editable / search）自行处理按键，不拦截
+    if ((e.target as HTMLElement).tagName === 'INPUT') {
+      if (e.key === 'Escape') {
+        setIsOpen(false)
+      }
+      return
+    }
+
     e.preventDefault()
 
     if (e.key === 'Escape') {
       setIsOpen(false)
       return
     }
-
-    // If typing in search input, don't preventDefault or handle other keys
-    if ((e.target as HTMLElement).tagName === 'INPUT') {
-      return
-    }
-
-    e.preventDefault()
 
     if (isCascading) {
       const level = highlightedIndices.length - 1

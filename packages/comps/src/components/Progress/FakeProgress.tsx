@@ -3,7 +3,8 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { clamp, FakeProgress as Progress } from '@jl-org/tool'
 import classnames from 'clsx'
-import { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useState } from 'react'
+import { useLatestRef } from 'hooks'
+import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react'
 import { ProgressBar } from './ProgressBar'
 
 function InnerFakeProgress({
@@ -13,36 +14,46 @@ function InnerFakeProgress({
   done,
   onChange: _onChange,
   uniqueKey,
-  colors = ['#3276F91A', '#01D0BD'],
+  colors = ['rgb(var(--brand) / 0.1)', 'rgb(var(--brand) / 1)'],
 
   showText = true,
   showBar = true,
   onlyProgressBar,
 
 }: FakeProgressProps, ref: React.Ref<FakeProgressRef>) {
+  const canUseStorage = typeof localStorage !== 'undefined'
   const [val, setVal] = useState(0)
+  const onChangeRef = useLatestRef(_onChange)
+  const initialProgress = uniqueKey && canUseStorage
+    ? Number(localStorage.getItem(uniqueKey) || 0)
+    : 0
 
-  const progress = useMemo(() => new Progress({
-    autoStart: false,
-    timeConstant: 240000,
-    initialProgress: uniqueKey
-      ? +(localStorage.getItem(uniqueKey) || 0)
-      : 0,
+  const progress = useMemo(() => {
+    const instance = new Progress({
+      autoStart: false,
+      timeConstant: 240000,
+      initialProgress,
 
-    onChange: (val) => {
-      setVal(val)
-      _onChange?.(val)
-      uniqueKey && localStorage.setItem(uniqueKey, val.toString())
+      onChange: (val) => {
+        setVal(val)
+        onChangeRef.current?.(val)
+        if (uniqueKey && canUseStorage) {
+          localStorage.setItem(uniqueKey, val.toString())
+        }
 
-      val >= 0.95 && progress.stop()
-    },
-  }), [_onChange, uniqueKey])
+        val >= 0.95 && instance.stop()
+      },
+    })
+    return instance
+  }, [initialProgress, canUseStorage, uniqueKey])
 
   const clear = useCallback(() => {
     progress.end()
     progress.stop()
-    uniqueKey && localStorage.removeItem(uniqueKey)
-  }, [progress, uniqueKey])
+    if (uniqueKey && canUseStorage) {
+      localStorage.removeItem(uniqueKey)
+    }
+  }, [canUseStorage, progress, uniqueKey])
 
   /** 将方法暴露给ref */
   useImperativeHandle(ref, () => ({
@@ -79,7 +90,7 @@ function InnerFakeProgress({
     ) }
     style={ style }
   >
-    {/* { showLogo && <LogoLoading size={ size } /> } */}
+    {/* { showLogo && <LogoLoading size={ size } /> } */ }
 
     { showText && <p>
       <span>Estimated 2 minutes, please wait patiently... </span>
@@ -114,8 +125,7 @@ export type FakeProgressProps = {
   onlyProgressBar?: boolean
   /**
    * 渐变颜色数组，支持多个颜色
-   * @default ['#3276F91A', '#01D0BD']
-   * @example ['#3b82f6', '#a855f7', '#ec4899']
+   * @default ['rgb(var(--brand) / 0.1)', 'rgb(var(--brand) / 1)']
    */
   colors?: string[]
 
