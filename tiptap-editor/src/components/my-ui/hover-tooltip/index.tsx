@@ -1,2 +1,1 @@
-export * from './editor-hover-tooltip'
-export * from './hover-tooltip'
+export * from 'tiptap-hover/react'

@@ -1,13 +1,25 @@
 import type { Placement } from '@floating-ui/react'
+import type { Editor } from '@tiptap/core'
 import { useThrottleFn } from 'hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { getHoverContentFromCoords, type HoverContent } from 'tiptap-api'
+import {
+  getHoverContentFromCoords,
+  type HoverContent,
+} from 'tiptap-api'
 import { getEditorElement } from 'tiptap-utils'
+
 import { HoverTooltip } from './hover-tooltip'
 
+/** 指针离开当前文档（含移出浏览器窗口）时 relatedTarget 为空或不在 document 内 */
+function pointerExitedDocument(event: MouseEvent): boolean {
+  const rel = event.relatedTarget
+  if (rel == null)
+    return true
+  return !(rel instanceof Node && document.documentElement.contains(rel))
+}
+
 /**
- * 编辑器专用的 Hover Tooltip 包装器
- * 保持向后兼容性
+ * 仅展示 Hover 探测结果的 Tooltip，不负责编辑器内高亮（高亮由 HoverContextHighlight 扩展在插件 view 中同步）
  */
 export function EditorHoverTooltip({
   editor,
@@ -19,7 +31,7 @@ export function EditorHoverTooltip({
   offsetDistance = 8,
   placement = 'top-start',
 }: {
-  editor: any
+  editor: Editor | null
   enabled?: boolean
   throttleDelay?: number
   disableOnDrag?: boolean
@@ -152,15 +164,23 @@ export function EditorHoverTooltip({
 
     editorElementRef.current = editorElement
 
-    /** 添加事件监听 */
+    const handleDocumentMouseOut = (event: MouseEvent) => {
+      if (!pointerExitedDocument(event))
+        return
+      setMousePosition(null)
+      setHoverContent(null)
+    }
+
     editorElement.addEventListener('mousemove', handleMouseMove)
     editorElement.addEventListener('mouseleave', handleMouseLeave)
+    document.addEventListener('mouseout', handleDocumentMouseOut)
     document.addEventListener('dragstart', handleDragStart)
     document.addEventListener('dragend', handleDragEnd)
 
     return () => {
       editorElement.removeEventListener('mousemove', handleMouseMove)
       editorElement.removeEventListener('mouseleave', handleMouseLeave)
+      document.removeEventListener('mouseout', handleDocumentMouseOut)
       document.removeEventListener('dragstart', handleDragStart)
       document.removeEventListener('dragend', handleDragEnd)
       setMousePosition(null)
@@ -192,13 +212,6 @@ export function EditorHoverTooltip({
         ? `${line.slice(0, 120)}...`
         : line
       parts.push(`行: ${truncated}`)
-    }
-    else if (hoverContent.blockText?.trim()) {
-      const block = hoverContent.blockText.trim()
-      const truncated = block.length > 120
-        ? `${block.slice(0, 120)}...`
-        : block
-      parts.push(`块: ${truncated}`)
     }
     else if (hoverContent.textContent) {
       const text = hoverContent.textContent.trim()

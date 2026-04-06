@@ -1,5 +1,5 @@
 {
-  "name": "tiptap-editor-core",
+  "name": "tiptap-hover",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -16,6 +16,16 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       }
+    },
+    "./react": {
+      "require": {
+        "types": "./dist/react/index.d.ts",
+        "default": "./dist/react/index.cjs"
+      },
+      "import": {
+        "types": "./dist/react/index.d.ts",
+        "default": "./dist/react/index.js"
+      }
     }
   },
   "files": [
@@ -26,26 +36,16 @@
     "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
-    "tiptap-hover": "workspace:*"
+    "hooks": "workspace:*",
+    "tiptap-api": "workspace:*",
+    "tiptap-utils": "workspace:*"
   },
   "peerDependencies": {
+    "@floating-ui/react": "^0.27.16",
     "@tiptap/core": "^3.13.0",
-    "@tiptap/extension-highlight": "^3.13.0",
-    "@tiptap/extension-image": "^3.13.0",
-    "@tiptap/extension-list": "^3.13.0",
-    "@tiptap/extension-placeholder": "^3.13.0",
-    "@tiptap/extension-subscript": "^3.13.0",
-    "@tiptap/extension-superscript": "^3.13.0",
-    "@tiptap/extension-text-align": "^3.13.0",
-    "@tiptap/extension-typography": "^3.13.0",
-    "@tiptap/extensions": "^3.13.0",
-    "@tiptap/markdown": "^3.13.0",
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
-    "@tiptap/starter-kit": "^3.13.0",
     "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "i18n": "workspace:*"
+    "react-dom": "^19.2.1"
   }
 }
-

@@ -280,6 +280,9 @@ importers:
       tiptap-editor-core:
         specifier: workspace:*
         version: link:packages/tiptap-editor-core
+      tiptap-hover:
+        specifier: workspace:*
+        version: link:packages/tiptap-hover
       tiptap-mermaid:
         specifier: workspace:*
         version: link:packages/tiptap-mermaid
@@ -521,6 +524,39 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
+      tiptap-hover:
+        specifier: workspace:*
+        version: link:../tiptap-hover
+
+  tiptap-editor/packages/tiptap-hover:
+    dependencies:
+      '@floating-ui/react':
+        specifier: ^0.27.16
+        version: 0.27.17(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@tiptap/core':
+        specifier: ^3.13.0
+        version: 3.17.1(@tiptap/pm@3.17.1)
+      '@tiptap/pm':
+        specifier: ^3.13.0
+        version: 3.17.1
+      '@tiptap/react':
+        specifier: ^3.13.0
+        version: 3.17.1(@floating-ui/dom@1.7.5)(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))(@tiptap/pm@3.17.1)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      hooks:
+        specifier: workspace:*
+        version: link:../../../packages/hooks
+      react:
+        specifier: ^19.2.1
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.3(react@19.2.3)
+      tiptap-api:
+        specifier: workspace:*
+        version: link:../tiptap-api
+      tiptap-utils:
+        specifier: workspace:*
+        version: link:../tiptap-utils
 
   tiptap-editor/packages/tiptap-mermaid:
     dependencies:

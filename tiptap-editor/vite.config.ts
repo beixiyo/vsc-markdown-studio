@@ -77,6 +77,9 @@ export default defineConfig(({ command }) => {
 
         'tiptap-utils': path.resolve(__dirname, './packages/tiptap-utils/src/index.ts'),
 
+        'tiptap-hover/react': path.resolve(__dirname, './packages/tiptap-hover/src/react/index.ts'),
+        'tiptap-hover': path.resolve(__dirname, './packages/tiptap-hover/src/index.ts'),
+
         'tiptap-editor-core': path.resolve(__dirname, './packages/tiptap-editor-core/src/index.ts'),
 
         'hooks': path.resolve(__dirname, '../packages/hooks/src/index.ts'),

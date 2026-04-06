@@ -11,6 +11,7 @@ import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
 import { getI18n } from 'i18n'
 import { CodeBlock } from 'tiptap-nodes/code-block'
+import { HoverContextHighlight } from 'tiptap-hover'
 
 export function createExtensions() {
   const i18n = getI18n()
@@ -70,6 +71,9 @@ export function createExtensions() {
 
     /** 选择扩展：增强选择功能 */
     Selection,
+
+    /** Hover 探测用的临时背景高亮（不改变文档） */
+    HoverContextHighlight,
     /** Placeholder 扩展：为空节点显示占位符 */
     Placeholder.configure({
       placeholder: ({ node }) => {

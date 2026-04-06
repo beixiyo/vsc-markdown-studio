@@ -1,9 +1,16 @@
 import type { Editor } from '@tiptap/react'
-import type { HoverContent } from '../../operate'
 import { useThrottleFn } from 'hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { HoverContent } from 'tiptap-api'
+import { getHoverContentFromCoords } from 'tiptap-api'
 import { getEditorElement } from 'tiptap-utils'
-import { getHoverContentFromCoords } from '../../operate'
+
+function pointerExitedDocument(event: MouseEvent): boolean {
+  const rel = event.relatedTarget
+  if (rel == null)
+    return true
+  return !(rel instanceof Node && document.documentElement.contains(rel))
+}
 
 export interface UseHoverDetectionConfig {
   /** Tiptap 编辑器实例 */
@@ -178,15 +185,23 @@ export function useHoverDetection(
     const currentEditorElement = editorElement
     editorElementRef.current = currentEditorElement
 
+    const handleDocumentMouseOut = (event: MouseEvent) => {
+      if (!pointerExitedDocument(event))
+        return
+      handleHoverContent(null)
+    }
+
     /** 添加事件监听 */
     currentEditorElement.addEventListener('mousemove', handleMouseMove)
     currentEditorElement.addEventListener('mouseleave', handleMouseLeave)
+    document.addEventListener('mouseout', handleDocumentMouseOut)
     document.addEventListener('dragstart', handleDragStart)
     document.addEventListener('dragend', handleDragEnd)
 
     return () => {
       currentEditorElement.removeEventListener('mousemove', handleMouseMove)
       currentEditorElement.removeEventListener('mouseleave', handleMouseLeave)
+      document.removeEventListener('mouseout', handleDocumentMouseOut)
       document.removeEventListener('dragstart', handleDragStart)
       document.removeEventListener('dragend', handleDragEnd)
     }

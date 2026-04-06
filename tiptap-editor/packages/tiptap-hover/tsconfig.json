@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "types": [
+      "@tiptap/starter-kit",
+      "@tiptap/markdown"
+    ]
+  },
+  "include": ["src"]
+}

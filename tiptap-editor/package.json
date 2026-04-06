@@ -59,6 +59,7 @@
     "tiptap-utils": "workspace:*",
     "styles": "workspace:*",
     "tiptap-editor-core": "workspace:*",
+    "tiptap-hover": "workspace:*",
     "tiptap-mermaid": "workspace:*",
     "tiptap-nodes": "workspace:*",
     "utils": "workspace:*",
