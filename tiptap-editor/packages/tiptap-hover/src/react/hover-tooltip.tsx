@@ -1,33 +1,94 @@
 'use client'
 
-import { FloatingPortal } from '@floating-ui/react'
+import { SafePortal } from 'comps'
+import type { FloatingPlacement } from 'hooks'
+import type { HTMLAttributes } from 'react'
 import { memo } from 'react'
 import { cn } from 'utils'
 
-import type { HoverTooltipProps } from './types'
+import type { EditorHoverTooltipProps, HoverTooltipProps } from './types'
+import { useEditorHoverTooltip } from './use-editor-hover-tooltip'
 import { useHoverTooltip } from './use-hover-tooltip'
+
+const HOVER_TOOLTIP_EDITOR_IDLE: EditorHoverTooltipProps = {
+  editor: null,
+  enabled: false,
+}
+
+function isEditorModeProps(props: HoverTooltipProps): props is EditorHoverTooltipProps {
+  return 'editor' in props
+}
+
+function arrowAnchorClass(placement: FloatingPlacement): string {
+  const side = placement.split('-')[0]
+  switch (side) {
+    case 'top':
+      return 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2'
+    case 'bottom':
+      return 'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2'
+    case 'left':
+      return 'right-0 top-1/2 -translate-y-1/2 translate-x-1/2'
+    case 'right':
+      return 'left-0 top-1/2 -translate-y-1/2 -translate-x-1/2'
+    default:
+      return 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2'
+  }
+}
+
+const DOM_PROP_KEYS = new Set([
+  'editor',
+  'throttleDelay',
+  'disableOnDrag',
+  'disableOnSelection',
+  'formatContent',
+  'content',
+  'mousePosition',
+  'enabled',
+  'offsetDistance',
+  'placement',
+  'showArrow',
+  'maxWidth',
+  'className',
+  'style',
+])
+
+function pickDomRest(props: HoverTooltipProps): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...props }
+  for (const k of DOM_PROP_KEYS)
+    delete out[k]
+
+  return out
+}
 
 export const HoverTooltip = memo((props: HoverTooltipProps) => {
   const {
     className,
     style,
     enabled = true,
-    content,
-    mousePosition,
-    formatContent,
     offsetDistance = 8,
     placement = 'top-start',
     showArrow = true,
     maxWidth = 300,
-    ...htmlRest
   } = props
 
+  const editorMode = isEditorModeProps(props)
+  const editorDerived = useEditorHoverTooltip(editorMode ? props : HOVER_TOOLTIP_EDITOR_IDLE)
+
+  const content = editorMode
+    ? editorDerived.formattedContent
+    : props.content
+  const mousePosition = editorMode
+    ? editorDerived.mousePosition
+    : props.mousePosition
+  const formatContent = editorMode
+    ? undefined
+    : props.formatContent
+
   const {
-    arrowRef,
-    arrowStyle,
     displayContent,
+    floatingRef,
     floatingStyles,
-    refs,
+    resolvedPlacement,
     shouldShow,
   } = useHoverTooltip({
     content,
@@ -40,16 +101,18 @@ export const HoverTooltip = memo((props: HoverTooltipProps) => {
     showArrow,
   })
 
+  const htmlRest = pickDomRest(props)
+
   if (!shouldShow)
     return null
 
   return (
-    <FloatingPortal>
+    <SafePortal>
       <div
-        { ...htmlRest }
-        ref={ refs.setFloating }
+        { ...htmlRest as HTMLAttributes<HTMLDivElement> }
+        ref={ floatingRef }
         className={ cn(
-          'pointer-events-none fixed z-50 rounded border border-border bg-background2 px-3 py-2 text-xs leading-tight text-text shadow-md wrap-break-word',
+          'pointer-events-none z-50 rounded border border-border bg-background2 px-3 py-2 text-xs leading-tight text-text shadow-md wrap-break-word',
           className,
         ) }
         style={ { ...floatingStyles, ...style } }
@@ -57,16 +120,15 @@ export const HoverTooltip = memo((props: HoverTooltipProps) => {
         {displayContent}
         {showArrow && (
           <div
-            ref={ arrowRef }
-            className="absolute size-2 -translate-x-1/2 -translate-y-1/2 rotate-45 border border-border bg-background2"
-            style={ {
-              ...arrowStyle,
-              clipPath: 'polygon(0% 0%, 100% 100%, 0% 100%)',
-            } }
+            className={ cn(
+              'absolute size-2 rotate-45 border border-border bg-background2',
+              arrowAnchorClass(resolvedPlacement),
+            ) }
+            style={ { clipPath: 'polygon(0% 0%, 100% 100%, 0% 100%)' } }
           />
         )}
       </div>
-    </FloatingPortal>
+    </SafePortal>
   )
 })
 

@@ -1,36 +1,46 @@
-import type { Placement } from '@floating-ui/react'
 import type { Editor } from '@tiptap/core'
+import type { FloatingPlacement } from 'hooks'
 import type { HoverContent } from 'tiptap-api'
 import type { HTMLAttributes, ReactNode } from 'react'
 
-export type HoverTooltipProps = {
-  /** 是否启用 tooltip */
-  enabled?: boolean
-  /** tooltip 内容 */
-  content?: string | ReactNode
-  /** 鼠标位置 */
-  mousePosition?: { x: number, y: number } | null
-  /** 自定义格式化函数 */
-  formatContent?: (rawContent: unknown) => string | ReactNode
-  /** tooltip 偏移量 */
-  offsetDistance?: number
-  /** tooltip 位置 */
-  placement?: Placement
-  /** 是否显示箭头 */
-  showArrow?: boolean
-  /** 自定义样式 */
-  className?: string
-  /** 最大宽度 */
-  maxWidth?: number | string
-} & Omit<HTMLAttributes<HTMLDivElement>, 'content' | 'ref'>
+type HoverTooltipDomProps = Omit<HTMLAttributes<HTMLDivElement>, 'content' | 'ref'>
 
-export type EditorHoverTooltipProps = {
-  editor: Editor | null
+type HoverTooltipShared = HoverTooltipDomProps & {
   enabled?: boolean
+  offsetDistance?: number
+  placement?: FloatingPlacement
+  showArrow?: boolean
+  className?: string
+  maxWidth?: number | string
+}
+
+/**
+ * 绑定 Tiptap：内部监听 `editor` DOM 指针并填充内容与坐标
+ */
+export type HoverTooltipEditorModeProps = HoverTooltipShared & {
+  editor: Editor | null
   throttleDelay?: number
   disableOnDrag?: boolean
   disableOnSelection?: boolean
   formatContent?: (content: HoverContent | null) => string | ReactNode
-  offsetDistance?: number
-  placement?: Placement
+  content?: never
+  mousePosition?: never
 }
+
+/**
+ * 自由模式：由外部传入 `content` 与 `mousePosition`
+ */
+export type HoverTooltipFreeModeProps = HoverTooltipShared & {
+  editor?: never
+  content?: string | ReactNode
+  mousePosition?: { x: number, y: number } | null
+  formatContent?: (rawContent: unknown) => string | ReactNode
+  throttleDelay?: never
+  disableOnDrag?: never
+  disableOnSelection?: never
+}
+
+export type HoverTooltipProps = HoverTooltipEditorModeProps | HoverTooltipFreeModeProps
+
+/** 与带 `editor` 的 `HoverTooltipProps` 相同；保留别名以兼容旧 import */
+export type EditorHoverTooltipProps = HoverTooltipEditorModeProps

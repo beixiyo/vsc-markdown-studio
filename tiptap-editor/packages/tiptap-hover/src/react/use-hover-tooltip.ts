@@ -1,34 +1,26 @@
-import {
-  arrow,
-  autoUpdate,
-  flip,
-  offset,
-  shift,
-  useFloating,
-  type UseFloatingReturn,
-} from '@floating-ui/react'
+import { useFloatingPosition, type FloatingPlacement } from 'hooks'
 import type { CSSProperties, ReactNode, RefObject } from 'react'
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import type { HoverTooltipProps } from './types'
 
 export type UseHoverTooltipParams = Pick<
   HoverTooltipProps,
   | 'content'
   | 'enabled'
-  | 'formatContent'
   | 'maxWidth'
   | 'mousePosition'
   | 'offsetDistance'
   | 'placement'
   | 'showArrow'
->
+> & {
+  formatContent?: (rawContent: unknown) => ReactNode
+}
 
 export type UseHoverTooltipResult = {
-  arrowRef: RefObject<HTMLDivElement | null>
-  arrowStyle: CSSProperties
   displayContent: ReactNode
+  floatingRef: RefObject<HTMLDivElement | null>
   floatingStyles: CSSProperties
-  refs: UseFloatingReturn['refs']
+  resolvedPlacement: FloatingPlacement
   shouldShow: boolean
 }
 
@@ -40,50 +32,35 @@ export function useHoverTooltip(props: UseHoverTooltipParams): UseHoverTooltipRe
     formatContent,
     offsetDistance = 8,
     placement = 'top-start',
-    showArrow = true,
+    showArrow: _showArrow = true,
     maxWidth = 300,
   } = props
 
-  const arrowRef = useRef<HTMLDivElement>(null)
+  const referenceRef = useRef<HTMLDivElement>(null)
+  const floatingRef = useRef<HTMLDivElement>(null)
 
-  const { refs, floatingStyles, middlewareData } = useFloating({
-    placement,
-    open: Boolean(content) && enabled,
-    whileElementsMounted: autoUpdate,
-    middleware: [
-      offset(offsetDistance),
-      flip({
-        crossAxis: placement.includes('-'),
-        fallbackAxisSideDirection: 'start',
-        padding: 8,
-      }),
-      shift({ padding: 8 }),
-      ...(showArrow
-        ? [arrow({ element: arrowRef })]
-        : []),
-    ],
-  })
+  const shouldShow = Boolean(content) && enabled && Boolean(mousePosition)
 
-  useEffect(() => {
-    if (!enabled || !mousePosition)
-      return
+  const virtualReferenceRect = useMemo(() => {
+    if (!mousePosition)
+      return null
+    return new DOMRect(mousePosition.x, mousePosition.y, 0, 0)
+  }, [mousePosition])
 
-    const virtualElement = {
-      getBoundingClientRect: () => ({
-        width: 0,
-        height: 0,
-        x: mousePosition.x,
-        y: mousePosition.y,
-        top: mousePosition.y,
-        right: mousePosition.x,
-        bottom: mousePosition.y,
-        left: mousePosition.x,
-      }),
-      contextElement: document.body,
-    }
-
-    refs.setReference(virtualElement)
-  }, [enabled, mousePosition, refs])
+  const { style, placement: resolvedPlacement } = useFloatingPosition(
+    referenceRef,
+    floatingRef,
+    {
+      enabled: shouldShow,
+      placement,
+      offset: offsetDistance,
+      boundaryPadding: 8,
+      flip: true,
+      shift: true,
+      autoUpdate: true,
+      virtualReferenceRect,
+    },
+  )
 
   const displayContent = useMemo(() => {
     if (!content)
@@ -95,33 +72,18 @@ export function useHoverTooltip(props: UseHoverTooltipParams): UseHoverTooltipRe
     return content
   }, [content, formatContent])
 
-  const shouldShow = Boolean(content) && enabled && Boolean(mousePosition)
-
-  const arrowStyle
-    = showArrow && middlewareData.arrow
-      ? {
-          left: middlewareData.arrow.x != null
-            ? `${middlewareData.arrow.x}px`
-            : '',
-          top: middlewareData.arrow.y != null
-            ? `${middlewareData.arrow.y}px`
-            : '',
-        }
-      : {}
-
-  const mergedFloatingStyle = {
-    ...floatingStyles,
+  const floatingStyles: CSSProperties = useMemo(() => ({
+    ...style,
     maxWidth: typeof maxWidth === 'number'
       ? `${maxWidth}px`
       : maxWidth,
-  }
+  }), [style, maxWidth])
 
   return {
-    arrowRef,
-    arrowStyle,
     displayContent,
-    floatingStyles: mergedFloatingStyle,
-    refs,
+    floatingRef,
+    floatingStyles,
+    resolvedPlacement,
     shouldShow,
   }
 }

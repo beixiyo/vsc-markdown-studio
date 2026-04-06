@@ -9,7 +9,7 @@ import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, us
 import { EditorLinkHover, MarkButton, SelectToolbar } from 'tiptap-comps'
 
 import { SuggestionMenu } from 'tiptap-trigger/react'
-import { EditorHoverTooltip } from '@/components/my-ui/hover-tooltip'
+import { HoverTooltip } from 'tiptap-hover/react'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
@@ -135,7 +135,7 @@ sequenceDiagram
       ) }
 
       {/* 测试 HoverTooltip */ }
-      <EditorHoverTooltip editor={ editor } enabled />
+      <HoverTooltip editor={ editor } enabled />
 
       { !readonly && (
         <>
