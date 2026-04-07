@@ -3,33 +3,97 @@
 import type { BlockActionMenuProps } from './types'
 import { TextSelection } from '@tiptap/pm/state'
 import { SafePortal } from 'comps'
+import { getScrollParents, useFloatingPosition } from 'hooks'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { getEditorElement } from 'tiptap-utils'
 import { DragHandleIcon } from '../../icons'
 
 export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = true }) => {
   const [hoverNodePos, setHoverNodePos] = useState<number | null>(null)
-  const [position, setPosition] = useState<{ top: number, left: number } | null>(null)
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [scrollContainer, setScrollContainer] = useState<HTMLElement | null>(null)
+  const floatingRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (editor && editor.view && typeof document !== 'undefined') {
+      const editorElement = getEditorElement(editor)
+      if (editorElement) {
+        const parent = getScrollParents(editorElement)[0] ?? document.body
+        setScrollContainer(parent as HTMLElement)
+      }
+    }
+  }, [editor])
+
+  useEffect(() => {
+    if (!scrollContainer || scrollContainer === document.body)
+      return
+    const prev = scrollContainer.style.position
+    if (getComputedStyle(scrollContainer).position === 'static') {
+      scrollContainer.style.position = 'relative'
+    }
+    return () => {
+      if (prev === '')
+        scrollContainer.style.position = ''
+      else scrollContainer.style.position = prev
+    }
+  }, [scrollContainer])
 
   const hideMenu = useCallback(() => {
     if (hideTimerRef.current)
       return
     hideTimerRef.current = setTimeout(() => {
-      setPosition(null)
       setHoverNodePos(null)
       hideTimerRef.current = null
     }, 500) // 延迟 500ms 隐藏，给用户移动鼠标的时间
   }, [])
 
-  const showMenu = useCallback((top: number, left: number, pos: number) => {
+  const showMenu = useCallback((pos: number) => {
     if (hideTimerRef.current) {
       clearTimeout(hideTimerRef.current)
       hideTimerRef.current = null
     }
-    setPosition({ top, left })
     setHoverNodePos(pos)
   }, [])
+
+  const getVirtualReferenceRect = useCallback(() => {
+    if (!editor || !editor.view || hoverNodePos === null)
+      return null
+    try {
+      const dom = editor.view.nodeDOM(hoverNodePos) as HTMLElement
+      if (!dom || !dom.getBoundingClientRect)
+        return null
+
+      const rect = dom.getBoundingClientRect()
+      const editorElement = getEditorElement(editor)
+      if (!editorElement)
+        return null
+
+      const editorRect = editorElement.getBoundingClientRect()
+
+      // 💡 在这里设置 top 的偏移量
+      // 把高度设置为 0，配合下方的 'bottom-start'，可以使得菜单的绝对 Top 精确对齐到这里的 Y 坐标
+      // 如果觉得 rect.top 还是太高，可以在这里微调，例如：rect.top + 2
+      const topOffset = rect.top + 2
+      return new DOMRect(editorRect.left - 24, topOffset, 0, 0)
+    }
+    catch (e) {
+      return null
+    }
+  }, [editor, hoverNodePos])
+
+  const { style: floatingStyle } = useFloatingPosition(
+    { current: null },
+    floatingRef,
+    {
+      enabled: enabled && hoverNodePos !== null,
+      getVirtualReferenceRect,
+      placement: 'bottom-start', // 💡 改为 bottom-start，让菜单的顶边对齐基准点的底边（也就是精确对齐 topOffset）
+      offset: 0,
+      flip: false,
+      shift: false, // 禁用翻转和偏移约束，让它完全贴紧计算出的 DOMRect
+      containerRef: { current: scrollContainer },
+    },
+  )
 
   const handleMouseMove = useCallback((event: MouseEvent) => {
     if (!editor || !editor.view || !enabled) {
@@ -59,20 +123,7 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     }
 
     if (blockPos !== -1) {
-      const dom = view.nodeDOM(blockPos) as HTMLElement
-      if (dom && dom.getBoundingClientRect) {
-        const rect = dom.getBoundingClientRect()
-        const editorRect = getEditorElement(editor)?.getBoundingClientRect()
-
-        if (editorRect) {
-          /** 定位在块的左侧 */
-          showMenu(
-            rect.top,
-            editorRect.left - 24, // 编辑器左边缘向外偏移 24px
-            blockPos,
-          )
-        }
-      }
+      showMenu(blockPos)
     }
     else {
       hideMenu()
@@ -116,19 +167,17 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     }
   }, [])
 
-  if (!enabled || !position || hoverNodePos === null || !editor) {
+  if (!enabled || hoverNodePos === null || !editor) {
     return null
   }
 
   return (
-    <SafePortal>
+    <SafePortal target={ scrollContainer !== document.body ? scrollContainer : undefined }>
       <div
+        ref={ floatingRef }
         data-block-action-menu="true"
-        className="fixed z-50 flex items-center justify-center w-5 h-6 cursor-pointer text-text2 hover:bg-background2 hover:text-text rounded transition-colors"
-        style={ {
-          top: position.top,
-          left: position.left,
-        } }
+        className="z-50 flex items-center justify-center w-5 h-6 cursor-pointer text-text2 hover:bg-background2 hover:text-text rounded transition-colors"
+        style={ floatingStyle }
         onClick={ () => {
           /** 选中该块的文本内容 */
           const node = editor.state.doc.nodeAt(hoverNodePos)
