@@ -1,14 +1,8 @@
 import type { Editor } from '@tiptap/react'
 import type { Comment, CommentStore } from '../../comment-store'
-import {
-  autoUpdate,
-  flip,
-  FloatingPortal,
-  offset,
-  shift,
-  useFloating,
-} from '@floating-ui/react'
-import { memo, useEffect, useMemo } from 'react'
+import { SafePortal } from 'comps'
+import { useFloatingPosition } from 'hooks'
+import { memo, useMemo, useRef } from 'react'
 import { getSelectionRect } from 'tiptap-api'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
@@ -86,59 +80,24 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
     }
   }, [editor, inlineCommentRange, inlineCommentRect])
 
-  /**
-   * 将评论对应的 DOMRect 转成 Floating UI 的虚拟元素
-   * 这样就可以使用 autoUpdate，在滚动/窗口变化时自动更新位置，避免闪烁
-   */
-  const virtualElement = useMemo(() => {
-    const rect = getCurrentRect()
-    if (!rect) {
-      return null
-    }
+  const contentRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLElement>(null)
 
-    return {
-      getBoundingClientRect: () => getCurrentRect() ?? new DOMRect(0, 0, 0, 0),
-      contextElement: editor?.view?.dom,
+  const { style: floatingStyles } = useFloatingPosition(
+    triggerRef,
+    contentRef,
+    {
+      enabled: Boolean(inlineComment && getCurrentRect()),
+      placement: 'bottom-start',
+      offset: 8,
+      flip: true,
+      shift: true,
+      boundaryPadding: 8,
+      getVirtualReferenceRect: getCurrentRect,
     }
-  }, [getCurrentRect, editor])
-
-  /**
-   * Floating UI 定位中间件
-   * - offset: 与选中区域保持 8px 间距
-   * - flip / shift: 自动避免遮挡视口边缘
-   */
-  const middleware = useMemo(
-    () => [
-      offset(8),
-      flip({
-        fallbackAxisSideDirection: 'start',
-        padding: 8,
-      }),
-      shift({
-        padding: 8,
-      }),
-    ],
-    [],
   )
 
-  /**
-   * 使用 Floating UI 进行智能定位
-   * 交给 autoUpdate 监听滚动、窗口变化等，保证浮层跟随页面滚动且不闪烁
-   */
-  const { refs, floatingStyles } = useFloating({
-    placement: 'bottom-start',
-    whileElementsMounted: autoUpdate,
-    middleware,
-  })
-
   const labels = useCommentLabels()
-
-  /** 绑定虚拟元素为 reference */
-  useEffect(() => {
-    if (virtualElement) {
-      refs.setReference(virtualElement)
-    }
-  }, [virtualElement, refs])
 
   const maxHeight = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -176,53 +135,52 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
     }
   }, [getCurrentRect, maxHeightProp])
 
-  if (!inlineComment || !getCurrentRect() || !editor || !commentStore) {
-    return null
-  }
-
   return (
-    <FloatingPortal>
-      <div
-        ref={ refs.setFloating }
-        className={ cn(
-          'bn-inline-comment-popover max-w-[360px] overflow-y-auto',
-          className,
-        ) }
-        style={ {
-          ...floatingStyles,
-          maxHeight: maxHeight.maxHeight,
-        } }
-        { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
-      >
-        <div className="rounded-2xl border border-border bg-background shadow-lg">
-          <div className="flex items-center justify-between border-b border-border px-3 py-2 text-xs text-text2">
-            <span>{ labels.currentComment }</span>
-            <button
-              type="button"
-              onClick={ () => {
-                closeInlineComment()
-              } }
-              aria-label={ labels.closeCurrent }
-              className="flex size-6 items-center justify-center text-text2 transition-colors hover:bg-background2 rounded-xl"
-            >
-              <CloseIcon className="h-4 w-4" />
-            </button>
-          </div>
+    <SafePortal>
+      { inlineComment && getCurrentRect() && editor && commentStore && (
+        <div
+          ref={ contentRef }
+          className={ cn(
+            'bn-inline-comment-popover max-w-[360px] overflow-y-auto',
+            className,
+          ) }
+          style={ {
+            ...floatingStyles,
+            maxHeight: maxHeight.maxHeight,
+            zIndex: 50,
+          } }
+          { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+        >
+          <div className="rounded-2xl border border-border bg-background shadow-lg">
+            <div className="flex items-center justify-between border-b border-border px-3 py-2 text-xs text-text2">
+              <span>{ labels.currentComment }</span>
+              <button
+                type="button"
+                onClick={ () => {
+                  closeInlineComment()
+                } }
+                aria-label={ labels.closeCurrent }
+                className="flex size-6 items-center justify-center text-text2 transition-colors hover:bg-background2 rounded-xl"
+              >
+                <CloseIcon className="h-4 w-4" />
+              </button>
+            </div>
 
-          <div className="p-3 space-y-3">
-            { inlineThread.map(comment => (
-              <CommentItem
-                key={ comment.id }
-                comment={ comment }
-                editor={ editor }
-                commentStore={ commentStore }
-                isActive={ comment.id === inlineComment.id }
-              />
-            )) }
+            <div className="p-3 space-y-3">
+              { inlineThread.map(comment => (
+                <CommentItem
+                  key={ comment.id }
+                  comment={ comment }
+                  editor={ editor }
+                  commentStore={ commentStore }
+                  isActive={ comment.id === inlineComment.id }
+                />
+              )) }
+            </div>
           </div>
         </div>
-      </div>
-    </FloatingPortal>
+      ) }
+    </SafePortal>
   )
 })
 

@@ -28,7 +28,6 @@
     "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.27.16",
     "@hocuspocus/provider": "^2.15.0",
     "@tiptap/core": "^3.13.0",
     "@tiptap/extension-collaboration": "^3.13.0",

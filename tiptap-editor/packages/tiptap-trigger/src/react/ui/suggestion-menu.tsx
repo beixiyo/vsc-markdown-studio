@@ -1,15 +1,7 @@
 import type { SuggestionItem } from '../../types'
-import {
-  autoUpdate,
-  flip,
-  FloatingPortal,
-  offset,
-  shift,
-  useDismiss,
-  useFloating,
-  useInteractions,
-} from '@floating-ui/react'
-import { memo, useEffect, useMemo, useRef } from 'react'
+import { SafePortal } from 'comps'
+import { useFloatingPosition } from 'hooks'
+import { memo, useEffect, useRef } from 'react'
 import { useCommentLabels } from 'tiptap-api/react'
 import { cn } from 'utils'
 import { SuggestionMenuItem } from './suggestion-menu-item'
@@ -26,20 +18,6 @@ export type SuggestionMenuProps = {
   onSelect: (index: number) => void | Promise<void>
 }
 
-const defaultRect: DOMRect = {
-  width: 0,
-  height: 0,
-  x: 0,
-  y: 0,
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  toJSON() {
-    return ''
-  },
-}
-
 export const SuggestionMenu = memo(({
   open,
   items,
@@ -52,39 +30,24 @@ export const SuggestionMenu = memo(({
   onSelect,
 }: SuggestionMenuProps) => {
   const labels = useCommentLabels()
-  const virtualElement = useMemo(() => {
-    if (!referenceRect) {
-      return null
+  
+  const contentRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLElement>(null)
+  
+  const { style: floatingStyles } = useFloatingPosition(
+    triggerRef,
+    contentRef,
+    {
+      enabled: open && Boolean(referenceRect),
+      placement: 'bottom-start',
+      offset: 6,
+      flip: true,
+      shift: true,
+      boundaryPadding: 8,
+      virtualReferenceRect: referenceRect,
     }
-    return {
-      getBoundingClientRect: () => referenceRect ?? defaultRect,
-    }
-  }, [referenceRect])
+  )
 
-  const { refs, floatingStyles, context } = useFloating({
-    placement: 'bottom-start',
-    open: open && Boolean(referenceRect),
-    whileElementsMounted: autoUpdate,
-    middleware: [
-      offset(6),
-      flip({
-        fallbackAxisSideDirection: 'start',
-        padding: 8,
-      }),
-      shift({
-        padding: 8,
-      }),
-    ],
-  })
-
-  useEffect(() => {
-    if (virtualElement && open) {
-      refs.setReference(virtualElement)
-    }
-  }, [virtualElement, open, refs])
-
-  const dismiss = useDismiss(context)
-  const { getFloatingProps } = useInteractions([dismiss])
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([])
 
   useEffect(() => {
@@ -99,66 +62,63 @@ export const SuggestionMenu = memo(({
     }
   }, [activeIndex, open])
 
-  if (!open || !referenceRect) {
-    return null
-  }
-
   return (
-    <FloatingPortal>
-      <div
-        ref={ refs.setFloating }
-        style={ floatingStyles }
-        className={ cn(
-          'min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-lg',
-          'border border-border bg-background',
-          'text-text shadow-card outline-none',
-        ) }
-        tabIndex={ -1 }
-        onMouseDownCapture={ (event) => {
-          /** 保持编辑器焦点，避免 focusout 立刻关闭菜单导致点击失效 */
-          event.preventDefault()
-          event.stopPropagation()
-        } }
-        { ...getFloatingProps() }
-      >
-        { loading && (
-          <div className="px-3 py-2 text-sm text-text2">
-            { labels.loading }
-          </div>
-        ) }
+    <SafePortal>
+      { open && referenceRect && (
+        <div
+          ref={ contentRef }
+          style={ { ...floatingStyles, zIndex: 50 } }
+          className={ cn(
+            'min-w-[220px] max-w-[320px] max-h-[320px] overflow-auto rounded-lg',
+            'border border-border bg-background',
+            'text-text shadow-card outline-hidden',
+          ) }
+          tabIndex={ -1 }
+          onMouseDownCapture={ (event) => {
+            /** 保持编辑器焦点，避免 focusout 立刻关闭菜单导致点击失效 */
+            event.preventDefault()
+            event.stopPropagation()
+          } }
+        >
+          { loading && (
+            <div className="px-3 py-2 text-sm text-text2">
+              { labels.loading }
+            </div>
+          ) }
 
-        { !loading && error && (
-          <div className="px-3 py-2 text-sm text-text2">
-            { error.message || labels.loadFailed }
-          </div>
-        ) }
+          { !loading && error && (
+            <div className="px-3 py-2 text-sm text-text2">
+              { error.message || labels.loadFailed }
+            </div>
+          ) }
 
-        { !loading && !error && items.length === 0 && (
-          <div className="px-3 py-2 text-sm text-text2">
-            { query
-              ? labels.noMatch
-              : labels.noItems }
-          </div>
-        ) }
+          { !loading && !error && items.length === 0 && (
+            <div className="px-3 py-2 text-sm text-text2">
+              { query
+                ? labels.noMatch
+                : labels.noItems }
+            </div>
+          ) }
 
-        { !loading && !error && items.length > 0 && (
-          <>
-            { items.map((item, index) => (
-              <SuggestionMenuItem
-                key={ item.id }
-                item={ item }
-                active={ index === activeIndex }
-                onMouseEnter={ () => onActiveIndexChange(index) }
-                onClick={ () => onSelect(index) }
-                ref={ (node) => {
-                  itemRefs.current[index] = node
-                } }
-              />
-            )) }
-          </>
-        ) }
-      </div>
-    </FloatingPortal>
+          { !loading && !error && items.length > 0 && (
+            <>
+              { items.map((item, index) => (
+                <SuggestionMenuItem
+                  key={ item.id }
+                  item={ item }
+                  active={ index === activeIndex }
+                  onMouseEnter={ () => onActiveIndexChange(index) }
+                  onClick={ () => onSelect(index) }
+                  ref={ (node) => {
+                    itemRefs.current[index] = node
+                  } }
+                />
+              )) }
+            </>
+          ) }
+        </div>
+      ) }
+    </SafePortal>
   )
 })
 

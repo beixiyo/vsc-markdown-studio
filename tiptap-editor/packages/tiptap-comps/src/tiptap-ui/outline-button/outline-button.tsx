@@ -1,17 +1,7 @@
 import type { ButtonProps } from 'comps'
-import {
-  autoUpdate,
-  flip,
-  FloatingPortal,
-  offset,
-  shift,
-  useDismiss,
-  useFloating,
-  useInteractions,
-  useMergeRefs,
-} from '@floating-ui/react'
-import { Button } from 'comps'
-import { forwardRef, useCallback, useState } from 'react'
+import { Button, SafePortal } from 'comps'
+import { useClickOutside, useComposedRef, useFloatingPosition } from 'hooks'
+import { forwardRef, useCallback, useRef, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { ListIcon } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
@@ -31,37 +21,47 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
     const { editor } = useTiptapEditor()
     const [isOpen, setIsOpen] = useState(false)
 
-    const { refs, floatingStyles, context } = useFloating({
-      open: isOpen,
-      onOpenChange: (open) => {
-        setIsOpen(open)
-        onOpenChange?.(open)
+    const triggerRef = useRef<HTMLButtonElement>(null)
+    const contentRef = useRef<HTMLDivElement>(null)
+
+    const { setRef: mergedRef } = useComposedRef<HTMLButtonElement>({
+      ref,
+      onMounted: (node) => {
+        triggerRef.current = node
       },
-      placement: 'bottom-start',
-      whileElementsMounted: autoUpdate,
-      middleware: [
-        offset(8),
-        flip({
-          padding: 8,
-        }),
-        shift({ padding: 8 }),
-      ],
     })
 
-    const dismiss = useDismiss(context)
-    const { getReferenceProps, getFloatingProps } = useInteractions([dismiss])
+    const { style: floatingStyle } = useFloatingPosition(triggerRef, contentRef, {
+      enabled: isOpen,
+      placement: 'bottom-start',
+      offset: 8,
+      flip: true,
+      shift: true,
+      boundaryPadding: 8,
+    })
+
+    const close = useCallback(() => {
+      setIsOpen(false)
+      onOpenChange?.(false)
+    }, [onOpenChange])
+
+    useClickOutside([
+      triggerRef as React.RefObject<HTMLElement>,
+      contentRef as React.RefObject<HTMLElement>
+    ], close, { enabled: isOpen })
 
     const handleClick = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(event)
         if (event.defaultPrevented)
           return
-        setIsOpen(prev => !prev)
+        
+        const nextOpen = !isOpen
+        setIsOpen(nextOpen)
+        onOpenChange?.(nextOpen)
       },
-      [onClick],
+      [onClick, isOpen, onOpenChange],
     )
-
-    const mergedRef = useMergeRefs([ref, refs.setReference])
 
     return (
       <>
@@ -76,24 +76,21 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
           tooltip="大纲"
           className={ className }
           { ...buttonProps }
-          { ...getReferenceProps({
-            onClick: handleClick,
-          }) }
+          onClick={ handleClick }
           ref={ mergedRef }
         >
           <ListIcon className={ TIPTAP_UI_STYLES.icon } />
         </Button>
-        { isOpen && (
-          <FloatingPortal>
+        <SafePortal>
+          { isOpen && (
             <div
-              ref={ refs.setFloating }
-              style={ floatingStyles }
-              { ...getFloatingProps() }
+              ref={ contentRef }
+              style={ { ...floatingStyle, zIndex: 50 } }
             >
               <OutlinePanel editor={ editor } />
             </div>
-          </FloatingPortal>
-        ) }
+          ) }
+        </SafePortal>
       </>
     )
   },

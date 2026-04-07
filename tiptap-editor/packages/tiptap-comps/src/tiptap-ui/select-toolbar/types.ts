@@ -1,6 +1,6 @@
-import type { Placement } from '@floating-ui/react'
 import type { Editor } from '@tiptap/core'
 import type { CascaderOption } from 'comps'
+import type { FloatingPlacement } from 'hooks'
 import type { PropsWithChildren, ReactNode } from 'react'
 
 export type SelectToolbarProps = {
@@ -26,7 +26,7 @@ export type SelectToolbarProps = {
    * 工具栏位置
    * @default 'top'
    */
-  placement?: Placement
+  placement?: FloatingPlacement
   /**
    * 自定义样式类名
    */
