@@ -10,8 +10,8 @@ import { Selection } from '@tiptap/extensions'
 import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
 import { getI18n } from 'i18n'
-import { CodeBlock } from 'tiptap-nodes/code-block'
 import { HoverContextHighlight } from 'tiptap-hover'
+import { CodeBlock } from 'tiptap-nodes/code-block'
 
 export function createExtensions() {
   const i18n = getI18n()
@@ -74,7 +74,7 @@ export function createExtensions() {
 
     /** Hover 探测用的临时背景高亮（不改变文档）；分层样式为 Tailwind 类名 */
     HoverContextHighlight.configure({
-      layerClassNames:  {
+      layerClassNames: {
         block: 'rounded-sm box-decoration-clone bg-brand/15',
         context: 'rounded-sm box-decoration-clone bg-brand/25',
         line: 'rounded-sm box-decoration-clone bg-systemOrange/25',

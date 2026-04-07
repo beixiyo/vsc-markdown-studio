@@ -1,12 +1,12 @@
 'use client'
 
-import { SafePortal } from 'comps'
 import type { FloatingPlacement } from 'hooks'
 import type { HTMLAttributes } from 'react'
-import { memo } from 'react'
-import { cn } from 'utils'
-
 import type { EditorHoverTooltipProps, HoverTooltipProps } from './types'
+import { SafePortal } from 'comps'
+import { memo } from 'react'
+
+import { cn } from 'utils'
 import { useEditorHoverTooltip } from './use-editor-hover-tooltip'
 import { useHoverTooltip } from './use-hover-tooltip'
 
@@ -61,7 +61,7 @@ function pickDomRest(props: HoverTooltipProps): Record<string, unknown> {
 }
 
 // Helper function to format the hover content
-const renderContent = (content: React.ReactNode) => {
+function renderContent(content: React.ReactNode) {
   if (typeof content !== 'string') {
     return content
   }
@@ -73,12 +73,12 @@ const renderContent = (content: React.ReactNode) => {
 
   return (
     <div className="flex flex-col gap-1">
-      {entries.map((entry, index) => {
+      { entries.map((entry, index) => {
         const parts = entry.split(': ')
         if (parts.length < 2) {
           return (
-            <div key={index} className="text-text">
-              {entry}
+            <div key={ index } className="text-text">
+              { entry }
             </div>
           )
         }
@@ -87,14 +87,15 @@ const renderContent = (content: React.ReactNode) => {
         const value = parts.slice(1).join(': ')
 
         return (
-          <div key={index} className="flex gap-1.5">
+          <div key={ index } className="flex gap-1.5">
             <span className="text-systemOrange font-medium whitespace-nowrap">
-              {label}:
+              { label }
+              :
             </span>
-            <span className="text-text">{value}</span>
+            <span className="text-text">{ value }</span>
           </div>
         )
-      })}
+      }) }
     </div>
   )
 }
@@ -156,8 +157,8 @@ export const HoverTooltip = memo((props: HoverTooltipProps) => {
         ) }
         style={ { ...floatingStyles, ...style } }
       >
-        {renderContent(displayContent)}
-        {showArrow && (
+        { renderContent(displayContent) }
+        { showArrow && (
           <div
             className={ cn(
               'absolute size-2 rotate-45 border border-border bg-background2',
@@ -165,7 +166,7 @@ export const HoverTooltip = memo((props: HoverTooltipProps) => {
             ) }
             style={ { clipPath: 'polygon(0% 0%, 100% 100%, 0% 100%)' } }
           />
-        )}
+        ) }
       </div>
     </SafePortal>
   )

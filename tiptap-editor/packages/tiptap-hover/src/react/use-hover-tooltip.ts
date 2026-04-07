@@ -1,7 +1,7 @@
-import { useFloatingPosition, type FloatingPlacement } from 'hooks'
 import type { CSSProperties, ReactNode, RefObject } from 'react'
-import { useMemo, useRef } from 'react'
 import type { HoverTooltipProps } from './types'
+import { type FloatingPlacement, useFloatingPosition } from 'hooks'
+import { useMemo, useRef } from 'react'
 
 export type UseHoverTooltipParams = Pick<
   HoverTooltipProps,

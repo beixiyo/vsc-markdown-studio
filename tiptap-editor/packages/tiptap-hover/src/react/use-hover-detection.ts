@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/react'
+import type { HoverContent } from 'tiptap-api'
 import { useLatestCallback, useThrottleFn } from 'hooks'
 import { useEffect, useRef, useState } from 'react'
-import type { HoverContent } from 'tiptap-api'
 import { getHoverContentFromCoords } from 'tiptap-api'
 import { getEditorElement } from 'tiptap-utils'
 

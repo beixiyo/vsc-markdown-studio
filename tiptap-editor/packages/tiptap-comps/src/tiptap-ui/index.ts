@@ -1,3 +1,4 @@
+export * from './block-action-menu'
 export * from './code-block-button'
 export * from './color-highlight-button'
 export * from './color-highlight-popover'

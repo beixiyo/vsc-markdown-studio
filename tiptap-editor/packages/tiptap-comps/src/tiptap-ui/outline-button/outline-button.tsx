@@ -47,7 +47,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
 
     useClickOutside([
       triggerRef as React.RefObject<HTMLElement>,
-      contentRef as React.RefObject<HTMLElement>
+      contentRef as React.RefObject<HTMLElement>,
     ], close, { enabled: isOpen })
 
     const handleClick = useCallback(
@@ -55,7 +55,7 @@ export const OutlineButton = forwardRef<HTMLButtonElement, OutlineButtonProps>(
         onClick?.(event)
         if (event.defaultPrevented)
           return
-        
+
         const nextOpen = !isOpen
         setIsOpen(nextOpen)
         onOpenChange?.(nextOpen)

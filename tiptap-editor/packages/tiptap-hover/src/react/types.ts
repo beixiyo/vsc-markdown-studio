@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { FloatingPlacement } from 'hooks'
-import type { HoverContent } from 'tiptap-api'
 import type { HTMLAttributes, ReactNode } from 'react'
+import type { HoverContent } from 'tiptap-api'
 
 type HoverTooltipDomProps = Omit<HTMLAttributes<HTMLDivElement>, 'content' | 'ref'>
 

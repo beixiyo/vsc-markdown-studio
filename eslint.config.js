@@ -51,6 +51,7 @@ export default antfu({
       'no-alert': 'off', // 允许使用 alert()
       'node/prefer-global/buffer': 'off', // 允许使用 Buffer
       'no-cond-assign': 'off', // 允许在条件语句中赋值
+      'ts/no-this-alias': 'off', // 允许使用 this 别名
 
       /**
        * 这个配置没用，还是删除换行，几十年了也不修复

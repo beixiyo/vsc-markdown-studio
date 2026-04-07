@@ -1,12 +1,12 @@
-import { Extension } from '@tiptap/core'
 import type {
   GetHoverContentOptions,
   HoverHighlightLayer,
   HoverHighlightSpec,
 } from 'tiptap-api'
-import { getHoverContentFromViewCoords, getHoverHighlightSpecs } from 'tiptap-api'
+import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { getHoverContentFromViewCoords, getHoverHighlightSpecs } from 'tiptap-api'
 import { pointerExitedDocument } from './pointer-exited-document'
 
 export const hoverContextHighlightKey = new PluginKey('hoverContextHighlight')
@@ -104,9 +104,9 @@ export const HoverContextHighlight = Extension.create<HoverContextHighlightOptio
             const rect = dom.getBoundingClientRect()
             const inside
               = clientX >= rect.left
-              && clientX <= rect.right
-              && clientY >= rect.top
-              && clientY <= rect.bottom
+                && clientX <= rect.right
+                && clientY >= rect.top
+                && clientY <= rect.bottom
             if (!inside) {
               clear()
               return

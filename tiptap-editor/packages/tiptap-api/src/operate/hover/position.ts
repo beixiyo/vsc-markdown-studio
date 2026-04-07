@@ -1,5 +1,5 @@
-import type { Editor } from '@tiptap/react'
 import type { EditorView } from '@tiptap/pm/view'
+import type { Editor } from '@tiptap/react'
 
 import type { HoverPosition } from './types'
 

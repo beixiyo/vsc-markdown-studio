@@ -96,99 +96,99 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updat
 
       { isEditing
         ? (
-          <div className="flex flex-col gap-3 p-4 h-full">
-            <Textarea
-              ref={ textareaRef }
-              value={ editCode }
-              onChange={ setEditCode }
-              onKeyDown={ handleKeyDown }
-              placeholder={ labels.placeholder }
-              containerClassName="border-none p-0 h-48"
-              className="text-xs leading-relaxed bg-transparent p-0"
-              autoFocus
-            />
-            <div className="flex gap-2 justify-end">
-              <Button
-                type="button"
-                onClick={ handleCancel }
-                variant="ghost"
-                size="sm"
-              >
-                { labels.cancel }
-              </Button>
-              <Button
-                type="button"
-                onClick={ handleSave }
-                variant="primary"
-                size="sm"
-              >
-                { labels.save }
-              </Button>
+            <div className="flex flex-col gap-3 p-4 h-full">
+              <Textarea
+                ref={ textareaRef }
+                value={ editCode }
+                onChange={ setEditCode }
+                onKeyDown={ handleKeyDown }
+                placeholder={ labels.placeholder }
+                containerClassName="border-none p-0 h-48"
+                className="text-xs leading-relaxed bg-transparent p-0"
+                autoFocus
+              />
+              <div className="flex gap-2 justify-end">
+                <Button
+                  type="button"
+                  onClick={ handleCancel }
+                  variant="ghost"
+                  size="sm"
+                >
+                  { labels.cancel }
+                </Button>
+                <Button
+                  type="button"
+                  onClick={ handleSave }
+                  variant="primary"
+                  size="sm"
+                >
+                  { labels.save }
+                </Button>
+              </div>
             </div>
-          </div>
-        )
+          )
         : (
-          <>
-            { isRendering && (
-              <div className="text-center text-text2">
-                { labels.rendering }
-              </div>
-            ) }
-
-            { error && (
-              <div
-                className={ cn(
-                  'p-3 rounded-xl',
-                  'bg-danger/10',
-                  'border border-danger/20',
-                  'text-danger',
-                ) }
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="text-sm">
-                    <strong>{ labels.renderError }</strong>
-                    { error }
-                  </div>
-                  <Button
-                    type="button"
-                    onClick={ retryRender }
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs px-2"
-                  >
-                    { labels.retry }
-                  </Button>
+            <>
+              { isRendering && (
+                <div className="text-center text-text2">
+                  { labels.rendering }
                 </div>
-              </div>
-            ) }
+              ) }
 
-            { !code && (
+              { error && (
+                <div
+                  className={ cn(
+                    'p-3 rounded-xl',
+                    'bg-danger/10',
+                    'border border-danger/20',
+                    'text-danger',
+                  ) }
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="text-sm">
+                      <strong>{ labels.renderError }</strong>
+                      { error }
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={ retryRender }
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs px-2"
+                    >
+                      { labels.retry }
+                    </Button>
+                  </div>
+                </div>
+              ) }
+
+              { !code && (
+                <div
+                  onClick={ editor?.isEditable
+                    ? handleEdit
+                    : undefined }
+                  className={ cn(
+                    'text-center text-text4 py-5',
+                    editor?.isEditable && 'cursor-pointer hover:text-text2 transition-colors',
+                  ) }
+                >
+                  { labels.emptyHint }
+                </div>
+              ) }
+
+              {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */ }
               <div
-                onClick={ editor?.isEditable
-                  ? handleEdit
-                  : undefined }
-                className={ cn(
-                  'text-center text-text4 py-5',
-                  editor?.isEditable && 'cursor-pointer hover:text-text2 transition-colors',
-                ) }
-              >
-                { labels.emptyHint }
-              </div>
-            ) }
-
-            {/** 专门用于渲染 Mermaid SVG 的容器，与 React 管理的 UI 分离 */ }
-            <div
-              ref={ renderContainerRef }
-              style={ {
-                transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
-                transformOrigin: '0 0',
-                transition: isDragging
-                  ? 'none'
-                  : 'transform 0.1s ease-out',
-              } }
-            />
-          </>
-        ) }
+                ref={ renderContainerRef }
+                style={ {
+                  transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
+                  transformOrigin: '0 0',
+                  transition: isDragging
+                    ? 'none'
+                    : 'transform 0.1s ease-out',
+                } }
+              />
+            </>
+          ) }
     </NodeViewWrapper>
   )
 })

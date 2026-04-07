@@ -1,3 +1,4 @@
+import type { EditorHoverTooltipProps } from './types'
 import { useLatestCallback, useThrottleFn } from 'hooks'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
@@ -5,9 +6,7 @@ import {
   type HoverContent,
 } from 'tiptap-api'
 import { getEditorElement } from 'tiptap-utils'
-
 import { pointerExitedDocument } from '../pointer-exited-document'
-import type { EditorHoverTooltipProps } from './types'
 
 export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
   const {

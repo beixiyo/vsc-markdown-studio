@@ -1,17 +1,13 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { useCallback } from 'react'
 import { useHeadingLabels, useTiptapEditor } from 'tiptap-api/react'
 
 import {
-  findNodePosition,
   isNodeInSchema,
   isNodeTypeSelected,
-  isValidPosition,
   selectionWithinConvertibleTypes,
-  unwrapNodeSelectionToText,
 } from 'tiptap-utils'
 import {
   HeadingFiveIcon,
@@ -84,8 +80,8 @@ export function canToggle(
 
   if (!turnInto) {
     return level
-      ? editor.can().setNode('heading', { level })
-      : editor.can().setNode('heading')
+      ? editor.can().toggleHeading({ level })
+      : editor.can().toggleHeading({ level: 1 })
   }
 
   // Ensure selection is in nodes we're allowed to convert
@@ -106,8 +102,8 @@ export function canToggle(
   // Either we can set heading directly on the selection,
   // or we can clear formatting/nodes to arrive at a heading.
   return level
-    ? editor.can().setNode('heading', { level }) || editor.can().clearNodes()
-    : editor.can().setNode('heading') || editor.can().clearNodes()
+    ? editor.can().toggleHeading({ level }) || editor.can().clearNodes()
+    : editor.can().toggleHeading({ level: 1 }) || editor.can().clearNodes()
 }
 
 /**
@@ -144,48 +140,26 @@ export function toggleHeading(
     : [level]
   const toggleLevel = levels.find(l => canToggle(editor, l))
 
-  if (!toggleLevel)
+  if (!toggleLevel) {
     return false
+  }
 
   try {
-    const view = editor.view
-    let state = view.state
-    let tr = state.tr
-
-    // No selection, find the cursor position
-    if (state.selection.empty || state.selection instanceof TextSelection) {
-      const pos = findNodePosition({
-        editor,
-        node: state.selection.$anchor.node(1),
-      })?.pos
-      if (!isValidPosition(pos))
-        return false
-
-      tr = tr.setSelection(NodeSelection.create(state.doc, pos))
-      view.dispatch(tr)
-      state = view.state
-    }
-
-    const selection = state.selection
-    let chain = editor.chain().focus()
-
-    chain = unwrapNodeSelectionToText(selection, state.doc, chain)
-
     const isActive = levels.some(l =>
       editor.isActive('heading', { level: l }),
     )
 
+    const chain = editor.chain().focus()
+
+    // 修复：不要去把 TextSelection 乱转换，Tiptap 能够原生处理
     const toggle = isActive
       ? chain.setNode('paragraph')
       : chain.setNode('heading', { level: toggleLevel })
 
-    toggle.run()
-
-    editor.chain().focus().selectTextblockEnd().run()
-
-    return true
+    return toggle.run()
   }
-  catch {
+  catch (e) {
+    console.error('toggleHeading: error', e)
     return false
   }
 }

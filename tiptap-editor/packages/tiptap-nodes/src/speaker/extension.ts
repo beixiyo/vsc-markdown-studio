@@ -42,7 +42,7 @@ function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerO
    * 通过配置的方法格式化标签（或使用默认逻辑）
    */
   const originalLabel = attrs.originalLabel ?? ''
-  const displayLabel = options.formatLabel 
+  const displayLabel = options.formatLabel
     ? options.formatLabel(originalLabel)
     : originalLabel
 

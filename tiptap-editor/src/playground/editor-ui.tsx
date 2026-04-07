@@ -6,10 +6,9 @@ import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { EditorLinkHover, MarkButton, SelectToolbar } from 'tiptap-comps'
-
-import { SuggestionMenu } from 'tiptap-trigger/react'
+import { BlockActionMenu, EditorLinkHover, MarkButton, SelectToolbar } from 'tiptap-comps'
 import { HoverTooltip } from 'tiptap-hover/react'
+import { SuggestionMenu } from 'tiptap-trigger/react'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
@@ -135,7 +134,10 @@ sequenceDiagram
       ) }
 
       {/* 测试 HoverTooltip */ }
-      {/* <HoverTooltip editor={ editor } enabled /> */}
+      <HoverTooltip editor={ editor } enabled={ false } />
+
+      {/* 块级操作悬浮菜单 */ }
+      <BlockActionMenu editor={ editor } enabled={ !readonly } />
 
       { !readonly && (
         <>

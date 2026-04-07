@@ -30,10 +30,10 @@ export const SuggestionMenu = memo(({
   onSelect,
 }: SuggestionMenuProps) => {
   const labels = useCommentLabels()
-  
+
   const contentRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLElement>(null)
-  
+
   const { style: floatingStyles } = useFloatingPosition(
     triggerRef,
     contentRef,
@@ -45,7 +45,7 @@ export const SuggestionMenu = memo(({
       shift: true,
       boundaryPadding: 8,
       virtualReferenceRect: referenceRect,
-    }
+    },
   )
 
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([])

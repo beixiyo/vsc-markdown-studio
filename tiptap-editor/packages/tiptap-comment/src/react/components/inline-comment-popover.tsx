@@ -94,7 +94,7 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
       shift: true,
       boundaryPadding: 8,
       getVirtualReferenceRect: getCurrentRect,
-    }
+    },
   )
 
   const labels = useCommentLabels()

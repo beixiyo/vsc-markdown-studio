@@ -2,13 +2,13 @@ import type { EditorState } from '@tiptap/pm/state'
 import type { EditorView } from '@tiptap/pm/view'
 import type { Editor } from '@tiptap/react'
 
+import type { GetHoverContentOptions, HoverContent } from './types'
 import {
   docPosAtFlatOffset,
   findInnermostBlockDepth,
   leafTextWithHardBreaks,
 } from './internal'
 import { getHoverPosition, getHoverPositionFromView } from './position'
-import type { GetHoverContentOptions, HoverContent } from './types'
 
 /**
  * 从文档位置提取内容信息（仅依赖 EditorState，供扩展 / PM 插件使用）
@@ -55,7 +55,6 @@ export function getHoverContentAtPos(
 
     let blockType: string | undefined
     let blockAttrs: Record<string, unknown> | undefined
-    let parentType: string | undefined
     let blockFromOut: number | undefined
     let blockToOut: number | undefined
     let blockText: string | undefined
@@ -129,7 +128,7 @@ export function getHoverContentAtPos(
       }
     }
 
-    parentType = $pos.depth > 0
+    const parentType = $pos.depth > 0
       ? $pos.parent.type.name
       : undefined
 

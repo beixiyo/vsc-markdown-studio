@@ -7,7 +7,7 @@
  * @see plan/comment-system-architecture.md 了解架构详情
  */
 
-import { type CommentRange } from './plugin'
+import type { CommentRange } from './plugin'
 
 /**
  * 附件接口
@@ -540,4 +540,3 @@ export class CommentStore {
     this.notify()
   }
 }
-
