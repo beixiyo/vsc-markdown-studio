@@ -39,12 +39,11 @@ function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerO
   }
 
   /**
-   * 处理数字索引，从 1 开始
-   * 如果 originalLabel 是数字，则显示为数字 + 1
+   * 通过配置的方法格式化标签（或使用默认逻辑）
    */
   const originalLabel = attrs.originalLabel ?? ''
-  const displayLabel = (originalLabel && !Number.isNaN(Number(originalLabel)))
-    ? (Number(originalLabel) + 1).toString()
+  const displayLabel = options.formatLabel 
+    ? options.formatLabel(originalLabel)
     : originalLabel
 
   const i18n = getI18n()
@@ -74,6 +73,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       className: undefined,
       renderTag: DEFAULT_TAG,
       onClick: undefined,
+      formatLabel: undefined,
     }
   },
 

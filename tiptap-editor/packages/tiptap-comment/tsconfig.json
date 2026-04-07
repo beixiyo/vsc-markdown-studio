@@ -4,11 +4,12 @@
     "src"
   ],
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": "./dist",
     "jsx": "react-jsx",
-    "composite": false
+    "composite": false,
+    "types": ["vite/client"]
   }
 }

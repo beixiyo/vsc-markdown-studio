@@ -11,6 +11,7 @@ import {
   isNodeTypeSelected,
   isValidPosition,
   selectionWithinConvertibleTypes,
+  unwrapNodeSelectionToText,
 } from 'tiptap-utils'
 import {
   HeadingFiveIcon,
@@ -168,26 +169,7 @@ export function toggleHeading(
     const selection = state.selection
     let chain = editor.chain().focus()
 
-    // Handle NodeSelection
-    if (selection instanceof NodeSelection) {
-      const firstChild = selection.node.firstChild?.firstChild
-      const lastChild = selection.node.lastChild?.lastChild
-
-      const from = firstChild
-        ? selection.from + firstChild.nodeSize
-        : selection.from + 1
-
-      const to = lastChild
-        ? selection.to - lastChild.nodeSize
-        : selection.to - 1
-
-      const resolvedFrom = state.doc.resolve(from)
-      const resolvedTo = state.doc.resolve(to)
-
-      chain = chain
-        .setTextSelection(TextSelection.between(resolvedFrom, resolvedTo))
-        .clearNodes()
-    }
+    chain = unwrapNodeSelectionToText(selection, state.doc, chain)
 
     const isActive = levels.some(l =>
       editor.isActive('heading', { level: l }),

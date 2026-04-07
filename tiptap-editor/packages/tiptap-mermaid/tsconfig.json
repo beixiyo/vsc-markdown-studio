@@ -4,13 +4,15 @@
     "src"
   ],
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "./dist",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": "./dist",
     "jsx": "react-jsx",
     "composite": false,
     "types": [
-      "@tiptap/markdown"
-    ]
+      "@tiptap/markdown",
+      "vite/client"
+    ],
+    "rootDir": "./src"
   }
 }

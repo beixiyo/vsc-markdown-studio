@@ -4,12 +4,15 @@
     "src"
   ],
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist",
+    "outDir": "./dist",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": "./dist",
     "jsx": "react-jsx",
     "composite": false,
-    "types": ["@tiptap/starter-kit"]
+    "types": [
+      "@tiptap/starter-kit",
+      "vite/client"
+    ],
+    "rootDir": "./src"
   }
 }

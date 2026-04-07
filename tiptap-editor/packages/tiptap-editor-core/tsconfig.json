@@ -1,19 +1,19 @@
 {
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist",
+    "outDir": "./dist",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": "./dist",
     "jsx": "react-jsx",
     "composite": false,
     "types": [
       "@tiptap/starter-kit",
-      "@tiptap/markdown"
-    ]
+      "@tiptap/markdown",
+      "vite/client"
+    ],
+    "rootDir": "./src"
   },
   "include": [
     "src"
   ]
 }
-

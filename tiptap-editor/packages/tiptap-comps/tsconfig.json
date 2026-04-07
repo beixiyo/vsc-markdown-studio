@@ -4,23 +4,36 @@
     "src"
   ],
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "dist",
+    "outDir": "./dist",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": "./dist",
     "jsx": "react-jsx",
     "composite": false,
     "types": [
       "@tiptap/starter-kit",
-      "@tiptap/extension-text-align"
+      "@tiptap/extension-text-align",
+      "vite/client"
     ],
     "paths": {
-      "comps": ["../../../packages/comps/src"],
-      "hooks": ["../../../packages/hooks/src"],
-      "utils": ["../../../packages/utils/src"],
-      "styles": ["../../../packages/styles/src"],
-      "tiptap-api/*": ["../tiptap-api/src/*"],
-      "tiptap-utils": ["../tiptap-utils/src/index.ts"]
-    }
+      "comps": [
+        "../../../packages/comps/src"
+      ],
+      "hooks": [
+        "../../../packages/hooks/src"
+      ],
+      "utils": [
+        "../../../packages/utils/src"
+      ],
+      "styles": [
+        "../../../packages/styles/src"
+      ],
+      "tiptap-api/*": [
+        "../tiptap-api/src/*"
+      ],
+      "tiptap-utils": [
+        "../tiptap-utils/src/index.ts"
+      ]
+    },
+    "rootDir": "./src"
   }
 }

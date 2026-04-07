@@ -12,17 +12,43 @@ import {
 } from '@tiptap/pm/state'
 import { cellAround, CellSelection } from '@tiptap/pm/tables'
 import {
+  type ChainedCommands,
   type Editor,
   findParentNodeClosestToPos,
   type NodeWithPos,
 } from '@tiptap/react'
 
 /**
- * 确定当前选择是否包含类型与提供的节点类型名称之一匹配的节点
- * @param editor Tiptap 编辑器实例
- * @param nodeTypeNames 要匹配的节点类型名称列表
- * @param checkAncestorNodes 是否检查深度链上的祖先节点类型
+ * 如果当前选择是 NodeSelection，将其转换为内部内容的 TextSelection，并清除格式。
+ * 常用于把选中整个块节点（如 Heading、List）转换为普通文本后重新应用其他格式。
  */
+export function unwrapNodeSelectionToText(
+  selection: Selection,
+  doc: PMNode,
+  chain: ChainedCommands,
+): ChainedCommands {
+  if (selection instanceof NodeSelection) {
+    const firstChild = selection.node.firstChild?.firstChild
+    const lastChild = selection.node.lastChild?.lastChild
+
+    const from = firstChild
+      ? selection.from + firstChild.nodeSize
+      : selection.from + 1
+
+    const to = lastChild
+      ? selection.to - lastChild.nodeSize
+      : selection.to - 1
+
+    const resolvedFrom = doc.resolve(from)
+    const resolvedTo = doc.resolve(to)
+
+    return chain
+      .setTextSelection(TextSelection.between(resolvedFrom, resolvedTo))
+      .clearNodes()
+  }
+  return chain
+}
+
 export function isNodeTypeSelected(
   editor: Editor | null,
   nodeTypeNames: string[] = [],

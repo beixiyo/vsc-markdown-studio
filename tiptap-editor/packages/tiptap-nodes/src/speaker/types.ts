@@ -50,4 +50,8 @@ export type SpeakerOptions = {
    * @default undefined
    */
   onClick?: (attrs: SpeakerAttributes, event: MouseEvent) => void
+  /**
+   * 格式化展示的标签文本（例如数字索引 + 1）
+   */
+  formatLabel?: (label: string) => string
 }

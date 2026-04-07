@@ -144,6 +144,25 @@ export function createTiptapEditorBridge(editor: Editor, options?: { onConflict?
   let originalText: string | null = null
   let isPreviewing = false
 
+  const restoreOriginalText = () => {
+    const currentRange = getDecorationRange()
+    if (originalText && currentRange) {
+      editor
+        .chain()
+        .setTextSelection(currentRange)
+        .deleteSelection()
+        .insertContent(originalText, {
+          parseOptions: { preserveWhitespace: 'full' },
+        })
+        .setMeta('addToHistory', false)
+        .setMeta('ai-internal', true)
+        .run()
+    }
+    clearDecorations()
+    originalText = null
+    isPreviewing = false
+  }
+
   return {
     renderPreview: (preview: NormalizedResponse, selection?: SelectionPayload) => {
       const currentRange = getDecorationRange()
@@ -193,24 +212,7 @@ export function createTiptapEditorBridge(editor: Editor, options?: { onConflict?
       updateDecorations(replaceFrom, newTo, AI_CLASSES.PREVIEW)
     },
 
-    clearPreview: () => {
-      const currentRange = getDecorationRange()
-      if (originalText && currentRange) {
-        editor
-          .chain()
-          .setTextSelection(currentRange)
-          .deleteSelection()
-          .insertContent(originalText, {
-            parseOptions: { preserveWhitespace: 'full' },
-          })
-          .setMeta('addToHistory', false)
-          .setMeta('ai-internal', true)
-          .run()
-      }
-      clearDecorations()
-      originalText = null
-      isPreviewing = false
-    },
+    clearPreview: restoreOriginalText,
 
     showProcessing: (selection?: SelectionPayload) => {
       const sel = selection ?? getSelectionPayload()
@@ -276,24 +278,7 @@ export function createTiptapEditorBridge(editor: Editor, options?: { onConflict?
       setTimeout(() => clearDecorations(), 3000)
     },
 
-    onCancel: () => {
-      const currentRange = getDecorationRange()
-      if (originalText && currentRange) {
-        editor
-          .chain()
-          .setTextSelection(currentRange)
-          .deleteSelection()
-          .insertContent(originalText, {
-            parseOptions: { preserveWhitespace: 'full' },
-          })
-          .setMeta('addToHistory', false)
-          .setMeta('ai-internal', true)
-          .run()
-      }
-      clearDecorations()
-      originalText = null
-      isPreviewing = false
-    },
+    onCancel: restoreOriginalText,
   }
 }
 
