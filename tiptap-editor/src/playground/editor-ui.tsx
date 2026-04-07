@@ -135,7 +135,7 @@ sequenceDiagram
       ) }
 
       {/* 测试 HoverTooltip */ }
-      <HoverTooltip editor={ editor } enabled />
+      {/* <HoverTooltip editor={ editor } enabled /> */}
 
       { !readonly && (
         <>

@@ -60,6 +60,45 @@ function pickDomRest(props: HoverTooltipProps): Record<string, unknown> {
   return out
 }
 
+// Helper function to format the hover content
+const renderContent = (content: React.ReactNode) => {
+  if (typeof content !== 'string') {
+    return content
+  }
+
+  const entries = content.split(' | ')
+  if (entries.length <= 1) {
+    return content
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
+      {entries.map((entry, index) => {
+        const parts = entry.split(': ')
+        if (parts.length < 2) {
+          return (
+            <div key={index} className="text-text">
+              {entry}
+            </div>
+          )
+        }
+
+        const label = parts[0]
+        const value = parts.slice(1).join(': ')
+
+        return (
+          <div key={index} className="flex gap-1.5">
+            <span className="text-systemOrange font-medium whitespace-nowrap">
+              {label}:
+            </span>
+            <span className="text-text">{value}</span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 export const HoverTooltip = memo((props: HoverTooltipProps) => {
   const {
     className,
@@ -117,7 +156,7 @@ export const HoverTooltip = memo((props: HoverTooltipProps) => {
         ) }
         style={ { ...floatingStyles, ...style } }
       >
-        {displayContent}
+        {renderContent(displayContent)}
         {showArrow && (
           <div
             className={ cn(
