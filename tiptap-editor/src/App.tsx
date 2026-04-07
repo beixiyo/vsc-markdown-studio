@@ -91,12 +91,17 @@ function AppContent() {
   )
 }
 
+const DevAgentation = import.meta.env.DEV
+  ? lazy(() => import('agentation').then(m => ({ default: m.Agentation })))
+  : () => null
+
 export default function App() {
   return (
     <TiptapI18nProvider
       defaultLanguage={ LANGUAGES.EN_US }
       storage={ { enabled: true, key: 'tiptap-editor-language' } }
     >
+      <DevAgentation />
       <AppContent />
     </TiptapI18nProvider>
   )
