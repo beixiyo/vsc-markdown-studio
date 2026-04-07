@@ -8,8 +8,8 @@
     position: relative;
     margin: 0;
     padding: 0 1em;
-    background-color: var(--tt-blockquote-bg);
-    color: var(--tt-blockquote-text);
+    background-color: rgb(var(--background2));
+    color: rgb(var(--text) / 0.7);
     
     /* 左侧竖线 */
     &::before {
@@ -19,7 +19,7 @@
       top: 0;
       bottom: 0;
       width: 0.25em;
-      background-color: var(--tt-blockquote-border);
+      background-color: rgb(var(--border2));
       border-radius: 2px;
     }
     

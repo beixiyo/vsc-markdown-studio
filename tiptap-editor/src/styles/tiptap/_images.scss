@@ -15,7 +15,7 @@
     
     /* 选中状态 */
     &.ProseMirror-selectednode {
-      outline: 3px solid var(--tt-brand);
+      outline: 3px solid rgb(var(--brand));
       outline-offset: 2px;
     }
     

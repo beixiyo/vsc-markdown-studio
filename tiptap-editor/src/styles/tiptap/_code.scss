@@ -8,9 +8,9 @@
   code {
     font-family: "JetBrains Mono NL", ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
     font-size: 12px;
-    background-color: var(--tt-code-bg);
-    color: var(--tt-code-text);
-    border: 1px solid var(--tt-code-border);
+    background-color: rgb(var(--background2));
+    color: rgb(var(--text));
+    border: 1px solid rgb(var(--border2));
     padding: 0.2em 0.4em;
     border-radius: 6px;
     white-space: break-spaces;
@@ -29,12 +29,12 @@
     font-size: 12px;
     line-height: 1.45;
     background-color: transparent;
-    color: var(--tt-text-primary);
+    color: rgb(var(--text));
     overflow: auto;
     word-wrap: normal;
 
     .code-block-placeholder {
-      color: var(--tt-placeholder);
+      color: rgb(var(--text) / 0.4);
       opacity: 0.5;
       pointer-events: none;
     }
@@ -62,12 +62,12 @@
     font-size: 11px;
     line-height: 10px;
     padding: 0.25rem;
-    color: var(--tt-code-text);
+    color: rgb(var(--text));
     vertical-align: middle;
-    background-color: var(--tt-code-bg);
-    border: solid 1px var(--tt-code-border);
+    background-color: rgb(var(--background2));
+    border: solid 1px rgb(var(--border2));
     border-radius: 6px;
-    box-shadow: inset 0 -1px 0 var(--tt-code-border);
+    box-shadow: inset 0 -1px 0 rgb(var(--border2));
   }
 
   /* 代码块中的删除线 */

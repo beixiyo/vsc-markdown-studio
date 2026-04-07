@@ -24,7 +24,7 @@
     th,
     td {
       padding: 6px 13px;
-      border: 1px solid var(--tt-table-border);
+      border: 1px solid rgb(var(--border));
       
       /* 单元格内最后元素无下边距 */
       > *:last-child {
@@ -44,12 +44,12 @@
     
     /* 表格行 */
     tr {
-      background-color: var(--tt-table-bg);
-      border-top: 1px solid var(--tt-table-border);
+      background-color: rgb(var(--background));
+      border-top: 1px solid rgb(var(--border));
       
       /* 斑马纹 - 偶数行浅底 */
       &:nth-child(2n) {
-        background-color: var(--tt-table-bg-alt);
+        background-color: rgb(var(--background2));
       }
     }
   }

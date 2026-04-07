@@ -35,7 +35,7 @@
       line-height: 1.75;
       margin-top: 44px;
       margin-bottom: 8px;
-      color: var(--tt-text-primary);
+      color: rgb(var(--text));
 
       /* 文档第一个标题无上间距 */
       &:first-child {
@@ -92,8 +92,8 @@
 
     /* 高亮 */
     mark {
-      background-color: var(--tt-highlight-bg);
-      color: var(--tt-text-primary);
+      background-color: var(--toningYellowBgColor);
+      color: rgb(var(--text));
       padding: 0.1em 0.2em;
       border-radius: 2px;
     }

@@ -55,11 +55,11 @@
   li {
     line-height: 1.5;
     margin-bottom: 4px;
-    color: var(--tt-text-primary);
+    color: rgb(var(--text));
     
     /* Marker 颜色 */
     &::marker {
-      color: var(--tt-list-marker);
+      color: rgb(var(--brand));
     }
     
     /* 列表项之间间距 */
