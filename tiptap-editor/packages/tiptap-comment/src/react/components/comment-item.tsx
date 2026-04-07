@@ -77,10 +77,10 @@ export const CommentItem = memo(({
   }
 
   const containerClass = cn(
-    'rounded-2xl border border-border bg-background p-4 shadow-card transition-all hover:shadow-md',
+    'rounded-xl border border-border bg-background p-4 shadow-sm transition-all hover:shadow-md group',
     comment.status === 'resolved'
-    && 'border-systemGreen/30 bg-systemGreen/5',
-    isActive && 'border-brand shadow-lg',
+    && 'border-systemGreen/20 bg-systemGreen/5',
+    isActive && 'shadow-md',
   )
 
   if (isEditing) {
@@ -125,23 +125,23 @@ export const CommentItem = memo(({
         : 'false' }
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-systemBlue">
+            <span className="text-[13px] font-medium text-text">
               { comment.author.name }
             </span>
             { comment.status === 'resolved' && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-systemGreen/10 px-2 py-0.5 text-[12px] font-semibold text-systemGreen">
+              <span className="inline-flex items-center gap-1 rounded bg-systemGreen/10 px-1.5 py-0.5 text-[11px] font-medium text-systemGreen">
                 { labels.resolved }
               </span>
             ) }
           </div>
-          <span className="text-xs text-text3">
-            { formatDate('YYYY-MM-dd HH:mm:ss', new Date(comment.createdAt), { locales: language }) }
+          <span className="text-[11px] text-text3">
+            { formatDate('YYYY-MM-dd HH:mm', new Date(comment.createdAt), { locales: language }) }
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button
             type="button"
             onClick={ () => handleJumpToComment() }
@@ -210,19 +210,19 @@ export const CommentItem = memo(({
         <button
           type="button"
           onClick={ () => handleJumpToComment(comment.replyTo) }
-          className="mt-3 flex w-full items-center gap-2 rounded-xl bg-background2 px-3 py-2 text-left text-sm text-systemBlue transition-all hover:bg-border2"
+          className="mt-2.5 flex w-full items-center gap-2 rounded bg-background2/50 px-2.5 py-1.5 text-left text-[12px] text-text2 transition-all hover:bg-background2"
         >
-          <span className="text-[12px] font-semibold">
+          <span className="font-medium text-text">
             @
             { comment.replyToAuthor.name }
           </span>
-          <span className="text-text2">
+          <span className="truncate">
             { comment.replyToContent || '...' }
           </span>
         </button>
       ) }
 
-      <div className="mt-3 rounded-xl bg-background2 px-3 py-2 text-sm leading-6 text-text2">
+      <div className="mt-2 text-[13px] leading-relaxed text-text2">
         { comment.content }
       </div>
     </div>

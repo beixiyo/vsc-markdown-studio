@@ -1,8 +1,7 @@
 import type { Editor } from '@tiptap/react'
 import type { Comment, CommentStore } from '../../comment-store'
-import { SafePortal } from 'comps'
-import { useFloatingPosition } from 'hooks'
-import { memo, useMemo, useRef } from 'react'
+import { Popover, type PopoverRef } from 'comps'
+import { memo, useEffect, useMemo, useRef } from 'react'
 import { getSelectionRect } from 'tiptap-api'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
@@ -80,22 +79,16 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
     }
   }, [editor, inlineCommentRange, inlineCommentRect])
 
-  const contentRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLElement>(null)
+  const popoverRef = useRef<PopoverRef>(null)
 
-  const { style: floatingStyles } = useFloatingPosition(
-    triggerRef,
-    contentRef,
-    {
-      enabled: Boolean(inlineComment && getCurrentRect()),
-      placement: 'bottom-start',
-      offset: 8,
-      flip: true,
-      shift: true,
-      boundaryPadding: 8,
-      getVirtualReferenceRect: getCurrentRect,
-    },
-  )
+  useEffect(() => {
+    if (inlineComment && getCurrentRect() && editor && commentStore) {
+      popoverRef.current?.open()
+    }
+    else {
+      popoverRef.current?.close()
+    }
+  }, [inlineComment, getCurrentRect, editor, commentStore])
 
   const labels = useCommentLabels()
 
@@ -136,51 +129,58 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
   }, [getCurrentRect, maxHeightProp])
 
   return (
-    <SafePortal>
+    <>
       { inlineComment && getCurrentRect() && editor && commentStore && (
-        <div
-          ref={ contentRef }
-          className={ cn(
-            'bn-inline-comment-popover max-w-[360px] overflow-y-auto',
-            className,
-          ) }
-          style={ {
-            ...floatingStyles,
-            maxHeight: maxHeight.maxHeight,
-            zIndex: 50,
-          } }
-          { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
-        >
-          <div className="rounded-2xl border border-border bg-background shadow-lg">
-            <div className="flex items-center justify-between border-b border-border px-3 py-2 text-xs text-text2">
-              <span>{ labels.currentComment }</span>
-              <button
-                type="button"
-                onClick={ () => {
-                  closeInlineComment()
-                } }
-                aria-label={ labels.closeCurrent }
-                className="flex size-6 items-center justify-center text-text2 transition-colors hover:bg-background2 rounded-xl"
-              >
-                <CloseIcon className="h-4 w-4" />
-              </button>
-            </div>
+        <Popover
+          ref={ popoverRef }
+          trigger="command"
+          position="bottom"
+          virtualReferenceRect={ getCurrentRect() }
+          onClose={ closeInlineComment }
+          clickOutsideToClose={ false }
+          content={
+            <div
+              className={ cn(
+                'bn-inline-comment-popover max-w-[360px] overflow-y-auto w-full min-w-[300px]',
+                className,
+              ) }
+              style={ {
+                maxHeight: maxHeight.maxHeight,
+              } }
+              { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+            >
+              <div className="flex items-center justify-between border-b border-border/50 px-4 py-2.5">
+                <span className="text-[13px] font-medium text-text">{ labels.currentComment }</span>
+                <button
+                  type="button"
+                  onClick={ () => {
+                    closeInlineComment()
+                  } }
+                  aria-label={ labels.closeCurrent }
+                  className="flex size-6 items-center justify-center text-text3 transition-colors hover:bg-background2 hover:text-text rounded-md"
+                >
+                  <CloseIcon className="h-3.5 w-3.5" />
+                </button>
+              </div>
 
-            <div className="p-3 space-y-3">
-              { inlineThread.map(comment => (
-                <CommentItem
-                  key={ comment.id }
-                  comment={ comment }
-                  editor={ editor }
-                  commentStore={ commentStore }
-                  isActive={ comment.id === inlineComment.id }
-                />
-              )) }
+              <div className="p-2.5 space-y-2">
+                { inlineThread.map(comment => (
+                  <CommentItem
+                    key={ comment.id }
+                    comment={ comment }
+                    editor={ editor }
+                    commentStore={ commentStore }
+                    isActive={ comment.id === inlineComment.id }
+                  />
+                )) }
+              </div>
             </div>
-          </div>
-        </div>
+          }
+        >
+          <div />
+        </Popover>
       ) }
-    </SafePortal>
+    </>
   )
 })
 

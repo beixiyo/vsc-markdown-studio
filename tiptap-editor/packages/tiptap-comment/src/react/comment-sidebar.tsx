@@ -131,44 +131,40 @@ export const CommentSidebar = memo(({
       content={
         <div
           className={ cn(
-            'w-[380px] max-w-[calc(100vw-32px)] flex flex-col gap-4 p-4',
+            'w-[340px] max-w-[calc(100vw-32px)] flex flex-col gap-0 p-0',
             className,
           ) }
           { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
         >
-          <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
             <div className="flex items-center gap-2">
-              <span className="text-base font-semibold text-systemBlue">
+              <span className="text-[13px] font-medium text-text">
                 { labels.commentPanel }
               </span>
-              <span className="rounded-full bg-brand/10 px-2.5 py-1 text-xs font-semibold text-brand">
+              <span className="rounded bg-background2 px-1.5 py-0.5 text-[11px] font-medium text-text2">
                 { comments.length }
-                {' '}
-                { labels.items }
               </span>
             </div>
 
-            <Button
+            <button
               type="button"
               onClick={ () => popoverRef.current?.close() }
-              variant="ghost"
-              size="sm"
-              className="size-6"
+              className="flex size-6 items-center justify-center rounded-md text-text3 transition-colors hover:bg-background2 hover:text-text"
             >
-              <CloseIcon className="h-4 w-4" />
-            </Button>
+              <CloseIcon className="h-3.5 w-3.5" />
+            </button>
           </div>
 
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between px-4 py-2 bg-background2/30">
+            <div className="flex items-center gap-1">
               <Button
                 type="button"
                 onClick={ () => setStatusFilter('all') }
                 variant={ statusFilter === 'all'
                   ? 'primary'
-                  : 'default' }
+                  : 'ghost' }
                 size="sm"
-                className="rounded-full px-3"
+                className={ cn('h-7 px-2.5 text-[12px] font-medium rounded-md', statusFilter !== 'all' && 'text-text2 hover:text-text') }
               >
                 { labels.all }
               </Button>
@@ -177,9 +173,9 @@ export const CommentSidebar = memo(({
                 onClick={ () => setStatusFilter('active') }
                 variant={ statusFilter === 'active'
                   ? 'primary'
-                  : 'default' }
+                  : 'ghost' }
                 size="sm"
-                className="rounded-full px-3"
+                className={ cn('h-7 px-2.5 text-[12px] font-medium rounded-md', statusFilter !== 'active' && 'text-text2 hover:text-text') }
               >
                 { labels.active }
               </Button>
@@ -188,28 +184,23 @@ export const CommentSidebar = memo(({
                 onClick={ () => setStatusFilter('resolved') }
                 variant={ statusFilter === 'resolved'
                   ? 'primary'
-                  : 'default' }
+                  : 'ghost' }
                 size="sm"
-                className="rounded-full px-3"
+                className={ cn('h-7 px-2.5 text-[12px] font-medium rounded-md', statusFilter !== 'resolved' && 'text-text2 hover:text-text') }
               >
                 { labels.resolved }
               </Button>
             </div>
-            <span className="text-xs text-text2">
-              { labels.total(comments.length) }
-            </span>
           </div>
-
-          <div className="h-px w-full bg-border" />
 
           <div
             ref={ listRef }
-            className="max-h-[70vh] space-y-3 overflow-y-auto pr-1"
+            className="max-h-[60vh] overflow-y-auto p-3 space-y-2"
           >
             { comments.length === 0
               ? (
-                  <div className="flex items-center justify-center rounded-xl border border-dashed border-border bg-background2 px-3 py-6 text-sm text-text2">
-                    { labels.empty }
+                  <div className="flex flex-col items-center justify-center py-12 text-text3">
+                    <span className="text-[13px]">{ labels.empty }</span>
                   </div>
                 )
               : (
@@ -231,11 +222,16 @@ export const CommentSidebar = memo(({
     >
       <button
         type="button"
+        onClick={ () => {
+          if (isControlled) {
+            handleOpenChange(!open)
+          }
+        } }
         aria-label={ labels.viewComments }
-        className="flex items-center gap-2 rounded-full border border-border bg-background py-1 px-2 text-sm font-semibold text-systemBlue shadow-card transition-all hover:border-brand/50 hover:shadow-md"
+        className="flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-md text-[13px] font-medium text-text2 hover:text-text hover:bg-background2 transition-colors border border-transparent"
       >
-        <span className="text-base">💬</span>
-        <span className="rounded-full text-xs font-semibold">
+        <span className="opacity-80">💬</span>
+        <span>
           { comments.length }
         </span>
       </button>
