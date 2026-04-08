@@ -2,7 +2,7 @@
 
 import type { BlockActionMenuProps } from './types'
 import { TextSelection } from '@tiptap/pm/state'
-import { SafePortal } from 'comps'
+import { AnimateShow, SafePortal } from 'comps'
 import { getScrollParents, useFloatingPosition } from 'hooks'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { getEditorElement } from 'tiptap-utils'
@@ -173,14 +173,19 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
 
   return (
     <SafePortal target={ scrollContainer !== document.body ? scrollContainer : undefined }>
-      { hoverNodePos !== null && (
+      <AnimateShow
+        show={ hoverNodePos !== null }
+        variants="fade"
+        duration={ .5 }
+      >
         <div
           ref={ floatingRef }
           data-block-action-menu="true"
-          className="z-50 flex items-center justify-center w-5 h-6 cursor-pointer text-text2 hover:bg-background2 hover:text-text rounded transition-colors"
+          className="z-50 flex items-center justify-center w-5 h-6 cursor-pointer text-text2 hover:bg-background2 hover:text-text rounded transition-all duration-200 ease-out"
           style={ floatingStyle }
           onClick={ () => {
             /** 选中该块的文本内容 */
+            if (hoverNodePos === null) return
             const node = editor.state.doc.nodeAt(hoverNodePos)
 
             if (node) {
@@ -206,7 +211,7 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
         >
           <DragHandleIcon />
         </div>
-      ) }
+      </AnimateShow>
     </SafePortal>
   )
 })
