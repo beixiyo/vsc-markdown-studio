@@ -104,7 +104,6 @@ export function useHoverDetection(
     },
     {
       delay: throttleDelay,
-      deps: [enabled, editor, isDragging, disableOnDrag, disableOnSelection, handleHoverContent],
     },
   )
 

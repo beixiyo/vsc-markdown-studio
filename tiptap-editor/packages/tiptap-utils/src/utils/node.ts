@@ -1,8 +1,9 @@
 /**
  * 节点操作相关工具函数
  */
-import type { Node as PMNode } from '@tiptap/pm/model'
+import type { Node as PMNode, Slice } from '@tiptap/pm/model'
 import type { Transaction } from '@tiptap/pm/state'
+import type { EditorView } from '@tiptap/pm/view'
 import type { Editor } from '@tiptap/react'
 import { TextSelection } from '@tiptap/pm/state'
 
@@ -188,4 +189,14 @@ export function selectCurrentBlockContent(editor: Editor) {
       }
     }
   }
+}
+
+/**
+ * 为剪贴板序列化节点内容
+ * @param view ProseMirror EditorView
+ * @param slice ProseMirror Slice (通常是从选区获取的内容)
+ * @returns 序列化后的 DOM 元素
+ */
+export function serializeNodeForClipboard(view: EditorView, slice: Slice) {
+  return view.someProp('clipboardSerializer')?.serializeFragment(slice.content)
 }

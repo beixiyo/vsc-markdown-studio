@@ -5,8 +5,12 @@ import { TextSelection } from '@tiptap/pm/state'
 import { AnimateShow, SafePortal } from 'comps'
 import { getScrollParents, useFloatingPosition } from 'hooks'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { useHoverDetection } from 'tiptap-hover/react'
 import { getEditorElement } from 'tiptap-utils'
 import { DragHandleIcon } from '../../icons'
+import { useBlockDrag } from './use-block-drag'
+
+const HIDE_DELAY = 500
 
 export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = true }) => {
   const [hoverNodePos, setHoverNodePos] = useState<number | null>(null)
@@ -38,22 +42,26 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     }
   }, [scrollContainer])
 
+  const cancelHideTimer = useCallback(() => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current)
+      hideTimerRef.current = null
+    }
+  }, [])
+
   const hideMenu = useCallback(() => {
     if (hideTimerRef.current)
       return
     hideTimerRef.current = setTimeout(() => {
       setHoverNodePos(null)
       hideTimerRef.current = null
-    }, 500) // 延迟 500ms 隐藏，给用户移动鼠标的时间
+    }, HIDE_DELAY)
   }, [])
 
   const showMenu = useCallback((pos: number) => {
-    if (hideTimerRef.current) {
-      clearTimeout(hideTimerRef.current)
-      hideTimerRef.current = null
-    }
+    cancelHideTimer()
     setHoverNodePos(pos)
-  }, [])
+  }, [cancelHideTimer])
 
   const getVirtualReferenceRect = useCallback(() => {
     if (!editor || !editor.view || hoverNodePos === null)
@@ -70,13 +78,16 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
 
       const editorRect = editorElement.getBoundingClientRect()
 
-      // 💡 在这里设置 top 的偏移量
+      // 动态读取编辑器的 paddingLeft 作为偏移量，避免硬编码 -24
+      const computedStyle = window.getComputedStyle(editorElement)
+      const paddingLeft = Number.parseFloat(computedStyle.paddingLeft) || 24
+
       // 把高度设置为 0，配合下方的 'bottom-start'，可以使得菜单的绝对 Top 精确对齐到这里的 Y 坐标
-      // 如果觉得 rect.top 还是太高，可以在这里微调，例如：rect.top + 2
       const topOffset = rect.top + 2
-      return new DOMRect(editorRect.left - 24, topOffset, 0, 0)
+      return new DOMRect(editorRect.left - paddingLeft, topOffset, 0, 0)
     }
     catch (e) {
+      console.warn('[BlockActionMenu] failed to get reference rect:', e)
       return null
     }
   }, [editor, hoverNodePos])
@@ -95,22 +106,25 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     },
   )
 
-  const handleMouseMove = useCallback((event: MouseEvent) => {
+  const { hoverContent } = useHoverDetection({
+    editor,
+    enabled,
+    throttleDelay: 50, // 减小延迟以提高鼠标追随性
+  })
+
+  useEffect(() => {
     if (!editor || !editor.view || !enabled) {
       hideMenu()
       return
     }
 
-    const view = editor.view
-    const coords = { left: event.clientX, top: event.clientY }
-    const pos = view.posAtCoords(coords)
-
-    if (!pos) {
+    if (!hoverContent) {
       hideMenu()
       return
     }
 
-    const $pos = view.state.doc.resolve(pos.pos)
+    const { pos } = hoverContent
+    const $pos = editor.state.doc.resolve(pos)
     let blockPos = -1
 
     /** 查找最近的块级节点 */
@@ -128,44 +142,13 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     else {
       hideMenu()
     }
-  }, [editor, enabled, hideMenu, showMenu])
-
-  const handleMouseLeave = useCallback((e: MouseEvent) => {
-    /** 如果移动到了拖拽手柄本身，不隐藏 */
-    const relatedTarget = e.relatedTarget as HTMLElement
-    if (relatedTarget && relatedTarget.closest('[data-block-action-menu]')) {
-      if (hideTimerRef.current) {
-        clearTimeout(hideTimerRef.current)
-        hideTimerRef.current = null
-      }
-      return
-    }
-    hideMenu()
-  }, [hideMenu])
+  }, [hoverContent, editor, enabled, hideMenu, showMenu])
 
   useEffect(() => {
-    if (!editor || !enabled)
-      return
-    const element = getEditorElement(editor)
-    if (!element)
-      return
+    return cancelHideTimer
+  }, [cancelHideTimer])
 
-    element.addEventListener('mousemove', handleMouseMove)
-    element.addEventListener('mouseleave', handleMouseLeave)
-
-    return () => {
-      element.removeEventListener('mousemove', handleMouseMove)
-      element.removeEventListener('mouseleave', handleMouseLeave)
-    }
-  }, [editor, enabled, handleMouseMove, handleMouseLeave])
-
-  useEffect(() => {
-    return () => {
-      if (hideTimerRef.current) {
-        clearTimeout(hideTimerRef.current)
-      }
-    }
-  }, [])
+  const { onDragStart, onDragEnd } = useBlockDrag(editor, hoverNodePos, hideMenu)
 
   if (!enabled || !editor) {
     return null
@@ -176,16 +159,20 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
       <AnimateShow
         show={ hoverNodePos !== null }
         variants="fade"
-        duration={ .5 }
+        duration={ 0.5 }
       >
         <div
           ref={ floatingRef }
           data-block-action-menu="true"
-          className="z-50 flex items-center justify-center w-5 h-6 cursor-pointer text-text2 hover:bg-background2 hover:text-text rounded transition-all duration-200 ease-out"
+          draggable="true"
+          className="z-50 flex items-center justify-center w-5 h-6 cursor-grab active:cursor-grabbing text-text2 hover:bg-background2 hover:text-text rounded transition-all duration-200 ease-out"
           style={ floatingStyle }
+          onDragStart={ onDragStart }
+          onDragEnd={ onDragEnd }
           onClick={ () => {
             /** 选中该块的文本内容 */
-            if (hoverNodePos === null) return
+            if (hoverNodePos === null)
+              return
             const node = editor.state.doc.nodeAt(hoverNodePos)
 
             if (node) {
@@ -194,14 +181,9 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
               editor.view.focus()
             }
           } }
-          onMouseEnter={ () => {
-            if (hideTimerRef.current) {
-              clearTimeout(hideTimerRef.current)
-              hideTimerRef.current = null
-            }
-          } }
+          onMouseEnter={ cancelHideTimer }
           onMouseLeave={ (e) => {
-            /** 如果移动回编辑器，不立即隐藏，由编辑器的 mousemove/mouseleave 处理 */
+            /** 如果移动回编辑器，不立即隐藏，由编辑器的 useHoverDetection 处理 */
             const relatedTarget = e.relatedTarget as HTMLElement
             if (relatedTarget && relatedTarget.closest('.tiptap')) {
               return

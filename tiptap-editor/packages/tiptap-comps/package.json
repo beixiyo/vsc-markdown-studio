@@ -35,6 +35,7 @@
   "dependencies": {
     "comps": "workspace:*",
     "tiptap-api": "workspace:*",
+    "tiptap-hover": "workspace:*",
     "tiptap-utils": "workspace:*",
     "hooks": "workspace:*",
     "utils": "workspace:*",

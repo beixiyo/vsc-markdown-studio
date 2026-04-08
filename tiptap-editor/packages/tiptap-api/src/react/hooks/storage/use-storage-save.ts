@@ -32,7 +32,7 @@ export function useStorageSave(options: UseStorageSaveOptions = {}) {
   /** 防抖保存函数 */
   const debouncedSave = useDebounceFn((editor: Editor) => {
     saveToStorage(editor)
-  }, { delay: debounceMs, deps: [saveToStorage] })
+  }, { delay: debounceMs })
 
   /** 立即保存函数（不使用防抖） */
   const immediateSave = useCallback(async (editor: Editor): Promise<boolean> => {

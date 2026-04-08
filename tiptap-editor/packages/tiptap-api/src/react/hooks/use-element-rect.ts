@@ -128,7 +128,6 @@ export function useElementRect({
     },
     {
       delay: throttleMs,
-      deps: [enabled, getTargetElement],
     },
   )
 

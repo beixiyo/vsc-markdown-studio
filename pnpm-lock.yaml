@@ -461,6 +461,9 @@ importers:
       tiptap-api:
         specifier: workspace:*
         version: link:../tiptap-api
+      tiptap-hover:
+        specifier: workspace:*
+        version: link:../tiptap-hover
       tiptap-utils:
         specifier: workspace:*
         version: link:../tiptap-utils

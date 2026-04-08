@@ -57,7 +57,6 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
     },
     {
       delay: throttleDelay,
-      deps: [enabled, editor, isDragging, disableOnDrag, disableOnSelection],
     },
   )
 
