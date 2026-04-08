@@ -167,44 +167,46 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     }
   }, [])
 
-  if (!enabled || hoverNodePos === null || !editor) {
+  if (!enabled || !editor) {
     return null
   }
 
   return (
     <SafePortal target={ scrollContainer !== document.body ? scrollContainer : undefined }>
-      <div
-        ref={ floatingRef }
-        data-block-action-menu="true"
-        className="z-50 flex items-center justify-center w-5 h-6 cursor-pointer text-text2 hover:bg-background2 hover:text-text rounded transition-colors"
-        style={ floatingStyle }
-        onClick={ () => {
-          /** 选中该块的文本内容 */
-          const node = editor.state.doc.nodeAt(hoverNodePos)
+      { hoverNodePos !== null && (
+        <div
+          ref={ floatingRef }
+          data-block-action-menu="true"
+          className="z-50 flex items-center justify-center w-5 h-6 cursor-pointer text-text2 hover:bg-background2 hover:text-text rounded transition-colors"
+          style={ floatingStyle }
+          onClick={ () => {
+            /** 选中该块的文本内容 */
+            const node = editor.state.doc.nodeAt(hoverNodePos)
 
-          if (node) {
-            const selection = TextSelection.create(editor.state.doc, hoverNodePos, hoverNodePos + node.nodeSize)
-            editor.view.dispatch(editor.state.tr.setSelection(selection))
-            editor.view.focus()
-          }
-        } }
-        onMouseEnter={ () => {
-          if (hideTimerRef.current) {
-            clearTimeout(hideTimerRef.current)
-            hideTimerRef.current = null
-          }
-        } }
-        onMouseLeave={ (e) => {
-          /** 如果移动回编辑器，不立即隐藏，由编辑器的 mousemove/mouseleave 处理 */
-          const relatedTarget = e.relatedTarget as HTMLElement
-          if (relatedTarget && relatedTarget.closest('.tiptap')) {
-            return
-          }
-          hideMenu()
-        } }
-      >
-        <DragHandleIcon />
-      </div>
+            if (node) {
+              const selection = TextSelection.create(editor.state.doc, hoverNodePos, hoverNodePos + node.nodeSize)
+              editor.view.dispatch(editor.state.tr.setSelection(selection))
+              editor.view.focus()
+            }
+          } }
+          onMouseEnter={ () => {
+            if (hideTimerRef.current) {
+              clearTimeout(hideTimerRef.current)
+              hideTimerRef.current = null
+            }
+          } }
+          onMouseLeave={ (e) => {
+            /** 如果移动回编辑器，不立即隐藏，由编辑器的 mousemove/mouseleave 处理 */
+            const relatedTarget = e.relatedTarget as HTMLElement
+            if (relatedTarget && relatedTarget.closest('.tiptap')) {
+              return
+            }
+            hideMenu()
+          } }
+        >
+          <DragHandleIcon />
+        </div>
+      ) }
     </SafePortal>
   )
 })
