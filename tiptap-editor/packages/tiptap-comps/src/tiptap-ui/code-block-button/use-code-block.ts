@@ -1,7 +1,6 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { useCallback } from 'react'
 
 // --- Hooks ---
@@ -9,10 +8,8 @@ import { useTiptapEditor, useTiptapEditorT } from 'tiptap-api/react'
 
 // --- Lib ---
 import {
-  findNodePosition,
   isNodeInSchema,
   isNodeTypeSelected,
-  isValidPosition,
   selectionWithinConvertibleTypes,
 } from 'tiptap-utils'
 // --- Icons ---
@@ -92,48 +89,7 @@ export function toggleCodeBlock(editor: Editor | null): boolean {
     return false
 
   try {
-    const view = editor.view
-    let state = view.state
-    let tr = state.tr
-
-    // No selection, find the the cursor position
-    if (state.selection.empty || state.selection instanceof TextSelection) {
-      const pos = findNodePosition({
-        editor,
-        node: state.selection.$anchor.node(1),
-      })?.pos
-      if (!isValidPosition(pos))
-        return false
-
-      tr = tr.setSelection(NodeSelection.create(state.doc, pos))
-      view.dispatch(tr)
-      state = view.state
-    }
-
-    const selection = state.selection
-
-    let chain = editor.chain().focus()
-
-    // Handle NodeSelection
-    if (selection instanceof NodeSelection) {
-      const firstChild = selection.node.firstChild?.firstChild
-      const lastChild = selection.node.lastChild?.lastChild
-
-      const from = firstChild
-        ? selection.from + firstChild.nodeSize
-        : selection.from + 1
-
-      const to = lastChild
-        ? selection.to - lastChild.nodeSize
-        : selection.to - 1
-
-      const resolvedFrom = state.doc.resolve(from)
-      const resolvedTo = state.doc.resolve(to)
-
-      chain = chain
-        .setTextSelection(TextSelection.between(resolvedFrom, resolvedTo))
-        .clearNodes()
-    }
+    const chain = editor.chain().focus()
 
     const toggle = editor.isActive('codeBlock')
       ? chain.setNode('paragraph')
@@ -141,11 +97,10 @@ export function toggleCodeBlock(editor: Editor | null): boolean {
 
     toggle.run()
 
-    editor.chain().focus().selectTextblockEnd().run()
-
     return true
   }
-  catch {
+  catch (e) {
+    console.error('toggleCodeBlock: error', e)
     return false
   }
 }

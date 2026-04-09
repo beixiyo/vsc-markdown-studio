@@ -43,12 +43,12 @@
     "@jl-org/eslint-plugins": "^1.0.0",
     "@jl-org/js-to-style": "^1.0.0",
     "@jl-org/ts-tool": "^0.0.8",
-    "@tailwindcss/vite": "^4.2.1",
+    "@tailwindcss/vite": "^4.2.2",
     "@tsconfig/node22": "^22.0.2",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "agentation": "^3.0.2",
     "autoprefixer": "^10.4.21",
     "babel-plugin-react-compiler": "^1.0.0",
@@ -63,7 +63,7 @@
     "tailwindcss": "^4.2.1",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^20.2.0",
-    "vite": "^7.2.4",
+    "vite": "^8.0.7",
     "vite-plugin-dts": "^4.5.4"
   }
 }

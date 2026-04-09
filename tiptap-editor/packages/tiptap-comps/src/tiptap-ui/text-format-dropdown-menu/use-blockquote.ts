@@ -1,7 +1,6 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import { NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { useCallback } from 'react'
 
 // --- Hooks ---
@@ -9,12 +8,9 @@ import { useTiptapEditor, useTiptapEditorT } from 'tiptap-api/react'
 
 // --- UI Utils ---
 import {
-  findNodePosition,
   isNodeInSchema,
   isNodeTypeSelected,
-  isValidPosition,
   selectionWithinConvertibleTypes,
-  unwrapNodeSelectionToText,
 } from 'tiptap-utils'
 // --- Icons ---
 import { BlockquoteIcon } from '../../icons'
@@ -100,41 +96,18 @@ export function toggleBlockquote(editor: Editor | null): boolean {
     return false
 
   try {
-    const view = editor.view
-    let state = view.state
-    let tr = state.tr
-
-    // No selection, find the the cursor position
-    if (state.selection.empty || state.selection instanceof TextSelection) {
-      const pos = findNodePosition({
-        editor,
-        node: state.selection.$anchor.node(1),
-      })?.pos
-      if (!isValidPosition(pos))
-        return false
-
-      tr = tr.setSelection(NodeSelection.create(state.doc, pos))
-      view.dispatch(tr)
-      state = view.state
-    }
-
-    const selection = state.selection
-
-    let chain = editor.chain().focus()
-
-    chain = unwrapNodeSelectionToText(selection, state.doc, chain)
+    const chain = editor.chain().focus()
 
     const toggle = editor.isActive('blockquote')
-      ? chain.lift('blockquote')
-      : chain.wrapIn('blockquote')
+      ? chain.toggleBlockquote()
+      : chain.setBlockquote()
 
     toggle.run()
 
-    editor.chain().focus().selectTextblockEnd().run()
-
     return true
   }
-  catch {
+  catch (e) {
+    console.error('toggleBlockquote: error', e)
     return false
   }
 }

@@ -151,7 +151,6 @@ export function toggleHeading(
 
     const chain = editor.chain().focus()
 
-    // 修复：不要去把 TextSelection 乱转换，Tiptap 能够原生处理
     const toggle = isActive
       ? chain.setNode('paragraph')
       : chain.setNode('heading', { level: toggleLevel })

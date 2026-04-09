@@ -33,24 +33,28 @@
     "dist"
   ],
   "dependencies": {
-    "tiptap-api": "workspace:*",
-    "tiptap-utils": "workspace:*",
-    "tiptap-comps": "workspace:*",
     "comps": "workspace:*",
-    "utils": "workspace:*",
     "hooks": "workspace:*",
-    "styles": "workspace:*"
+    "styles": "workspace:*",
+    "tiptap-api": "workspace:*",
+    "tiptap-comps": "workspace:*",
+    "tiptap-utils": "workspace:*",
+    "utils": "workspace:*"
   },
   "peerDependencies": {
-    "@tiptap/react": "^3.13.0",
     "@tiptap/core": "^3.13.0",
     "@tiptap/pm": "^3.13.0",
+    "@tiptap/react": "^3.13.0",
+    "i18n": "workspace:*",
     "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "i18n": "workspace:*"
+    "react-dom": "^19.2.1"
   },
   "scripts": {
     "build": "vite build",
     "lint": "eslint ./src --fix --quiet"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.7"
   }
 }

@@ -45,29 +45,30 @@
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
     "@tiptap/starter-kit": "^3.13.0",
+    "comps": "workspace:*",
+    "hooks": "workspace:*",
+    "i18n": "workspace:*",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hotkeys-hook": "^5.2.1",
+    "styles": "workspace:*",
     "tailwind-merge": "^3.3.1",
-    "i18n": "workspace:*",
     "tiptap-ai": "workspace:*",
     "tiptap-api": "workspace:*",
     "tiptap-comment": "workspace:*",
     "tiptap-comps": "workspace:*",
-    "comps": "workspace:*",
-    "tiptap-utils": "workspace:*",
-    "styles": "workspace:*",
     "tiptap-editor-core": "workspace:*",
     "tiptap-hover": "workspace:*",
     "tiptap-mermaid": "workspace:*",
     "tiptap-nodes": "workspace:*",
-    "utils": "workspace:*",
     "tiptap-trigger": "workspace:*",
-    "hooks": "workspace:*",
+    "tiptap-utils": "workspace:*",
+    "utils": "workspace:*",
     "yjs": "^13.6.27"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.1.1",
-    "depcheck": "^1.4.7"
+    "@vitejs/plugin-react": "^6.0.1",
+    "depcheck": "^1.4.7",
+    "vite": "^8.0.7"
   }
 }

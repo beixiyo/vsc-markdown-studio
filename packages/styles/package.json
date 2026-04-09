@@ -17,5 +17,9 @@
   "files": [
     "css",
     "scss"
-  ]
+  ],
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.7"
+  }
 }

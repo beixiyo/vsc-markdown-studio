@@ -36,8 +36,12 @@
     "lint": "eslint ./src --fix --quiet"
   },
   "dependencies": {
-    "xss": "^1.0.15",
+    "config": "workspace:*",
     "marked": "^15.0.7",
-    "config": "workspace:*"
+    "xss": "^1.0.15"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.7"
   }
 }
