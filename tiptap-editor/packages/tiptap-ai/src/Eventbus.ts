@@ -75,11 +75,14 @@ export class EventBus<T extends BaseKey | EventMap = BaseKey> {
     const fnSet = this.eventMap.get(eventName as BaseKey)
 
     /**
-     * 没有事件接受，先存起来
+     * 没有事件接受，先存起来（限制缓冲区大小，防止内存泄漏）
      */
     if (!fnSet && this.opts.triggerBefore) {
       const params = this.beforeTriggerMap.get(eventName as BaseKey)
       if (params) {
+        if (params.length >= this.opts.maxBufferSize) {
+          params.shift()
+        }
         params.push(param)
       }
       else {
@@ -154,7 +157,7 @@ export class EventBus<T extends BaseKey | EventMap = BaseKey> {
 }
 
 function mergeOpts(opts: EventBusOpts = {}) {
-  const defaultOpts: Required<EventBusOpts> = { triggerBefore: false }
+  const defaultOpts: Required<EventBusOpts> = { triggerBefore: false, maxBufferSize: 100 }
   return Object.assign(defaultOpts, opts)
 }
 
@@ -165,6 +168,11 @@ export type EventBusOpts = {
    * @default false
    */
   triggerBefore?: boolean
+  /**
+   * triggerBefore 缓冲区最大容量，超出时丢弃最早的事件
+   * @default 100
+   */
+  maxBufferSize?: number
 }
 
 /** 定义事件映射类型，用于严格模式 */

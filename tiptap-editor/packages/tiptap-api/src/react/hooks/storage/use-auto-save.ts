@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/react'
-import { useCallback, useEffect, useState } from 'react'
+import { useLatestCallback } from 'hooks'
+import { useEffect, useState } from 'react'
 import { getEditorContent, setEditorContent } from '../../../operate'
 import { useTiptapEditor } from '../use-tiptap-editor'
 import { useStorageSave, type UseStorageSaveOptions } from './use-storage-save'
@@ -30,22 +31,20 @@ export function useAutoSave(options: UseStorageSaveOptions & { editor?: Editor }
   }, [loadFromStorage, editor])
 
   // 2. 保存逻辑封装
-  const debouncedSave = useCallback(
+  const debouncedSave = useLatestCallback(
     (editor: Editor) => {
       const currentContent = getEditorContent(editor) || ''
       setContent(currentContent)
       _debouncedSave(editor)
     },
-    [_debouncedSave],
   )
 
-  const immediateSave = useCallback(
+  const immediateSave = useLatestCallback(
     (editor: Editor) => {
       const currentContent = getEditorContent(editor) || ''
       setContent(currentContent)
       _immediateSave(editor)
     },
-    [_immediateSave],
   )
 
   return {

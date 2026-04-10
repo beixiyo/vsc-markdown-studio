@@ -44,7 +44,7 @@ export function useMermaidRenderer({
       setError(null)
 
       if (renderContainerRef.current) {
-        renderContainerRef.current.innerHTML = ''
+        renderContainerRef.current.replaceChildren()
       }
 
       try {
@@ -52,7 +52,18 @@ export function useMermaidRenderer({
         const svg = await renderMermaidSVGAsync(code, getMermaidThemeColors(isDarkMode))
 
         if (renderContainerRef.current && !cancelled) {
-          renderContainerRef.current.innerHTML = svg
+          /** 通过 DOMParser 安全插入 SVG，避免潜在 XSS */
+          const doc = new DOMParser().parseFromString(svg, 'image/svg+xml')
+          const svgEl = doc.documentElement
+
+          if (svgEl.nodeName === 'svg') {
+            renderContainerRef.current.replaceChildren(
+              document.importNode(svgEl, true),
+            )
+          }
+          else {
+            renderContainerRef.current.textContent = ''
+          }
           setError(null)
         }
       }
@@ -77,7 +88,7 @@ export function useMermaidRenderer({
       cancelled = true
       /** 清理时清空渲染容器，避免 React 清理时找不到节点 */
       if (renderContainerRef.current) {
-        renderContainerRef.current.innerHTML = ''
+        renderContainerRef.current.replaceChildren()
       }
     }
   }, [code, isEditing, isDarkMode, retryKey])

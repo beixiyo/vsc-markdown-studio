@@ -1,51 +1,7 @@
 import type { Editor } from '@tiptap/react'
-import { useEffect, useState } from 'react'
+import { useLatestCallback, useLatestRef } from 'hooks'
+import { useEffect, useRef, useState } from 'react'
 import { getEditorElement } from 'tiptap-utils'
-
-/**
- * 菜单导航方向
- * - "horizontal": 水平导航（使用左右方向键）
- * - "vertical": 垂直导航（使用上下方向键）
- * - "both": 双向导航（同时支持水平和垂直）
- */
-type Orientation = 'horizontal' | 'vertical' | 'both'
-
-interface MenuNavigationOptions<T> {
-  /**
-   * Tiptap 编辑器实例，如果与 Tiptap 编辑器一起使用。
-   */
-  editor?: Editor | null
-  /**
-   * 用于处理键盘事件的容器元素引用。
-   */
-  containerRef?: React.RefObject<HTMLElement | null>
-  /**
-   * 影响所选项目的搜索查询。
-   */
-  query?: string
-  /**
-   * 要导航的项目数组。
-   */
-  items: T[]
-  /**
-   * 选择项目时触发的回调函数。
-   */
-  onSelect?: (item: T) => void
-  /**
-   * 菜单应关闭时触发的回调函数。
-   */
-  onClose?: () => void
-  /**
-   * 菜单的导航方向。
-   * @default "vertical"
-   */
-  orientation?: Orientation
-  /**
-   * 是否在菜单打开时自动选择第一项。
-   * @default true
-   */
-  autoSelectFirstItem?: boolean
-}
 
 /**
  * 为下拉菜单、命令面板和自动完成组件实现键盘导航的自定义 Hook
@@ -111,23 +67,40 @@ export function useMenuNavigation<T>({
       : -1,
   )
 
+  const selectedIndexRef = useRef(selectedIndex)
+  selectedIndexRef.current = selectedIndex
+
+  const itemsRef = useLatestRef(items)
+
+  const handleSelect = useLatestCallback((index: number) => {
+    const currentItems = itemsRef.current
+    if (index !== -1 && currentItems[index]) {
+      onSelect?.(currentItems[index])
+    }
+  })
+
+  const handleClose = useLatestCallback(() => {
+    onClose?.()
+  })
+
   useEffect(() => {
     const handleKeyboardNavigation = (event: KeyboardEvent) => {
-      if (!items.length)
+      const currentItems = itemsRef.current
+      if (!currentItems.length)
         return false
 
       const moveNext = () =>
         setSelectedIndex((currentIndex) => {
           if (currentIndex === -1)
             return 0
-          return (currentIndex + 1) % items.length
+          return (currentIndex + 1) % currentItems.length
         })
 
       const movePrev = () =>
         setSelectedIndex((currentIndex) => {
           if (currentIndex === -1)
-            return items.length - 1
-          return (currentIndex - 1 + items.length) % items.length
+            return currentItems.length - 1
+          return (currentIndex - 1 + currentItems.length) % currentItems.length
         })
 
       switch (event.key) {
@@ -182,7 +155,7 @@ export function useMenuNavigation<T>({
 
         case 'End': {
           event.preventDefault()
-          setSelectedIndex(items.length - 1)
+          setSelectedIndex(currentItems.length - 1)
           return true
         }
 
@@ -190,15 +163,13 @@ export function useMenuNavigation<T>({
           if (event.isComposing)
             return false
           event.preventDefault()
-          if (selectedIndex !== -1 && items[selectedIndex]) {
-            onSelect?.(items[selectedIndex])
-          }
+          handleSelect(selectedIndexRef.current)
           return true
         }
 
         case 'Escape': {
           event.preventDefault()
-          onClose?.()
+          handleClose()
           return true
         }
 
@@ -229,15 +200,7 @@ export function useMenuNavigation<T>({
     }
 
     return undefined
-  }, [
-    editor,
-    containerRef,
-    items,
-    selectedIndex,
-    onSelect,
-    onClose,
-    orientation,
-  ])
+  }, [editor, containerRef, orientation])
 
   useEffect(() => {
     if (query) {
@@ -253,4 +216,49 @@ export function useMenuNavigation<T>({
       : undefined,
     setSelectedIndex,
   }
+}
+
+/**
+ * 菜单导航方向
+ * - "horizontal": 水平导航（使用左右方向键）
+ * - "vertical": 垂直导航（使用上下方向键）
+ * - "both": 双向导航（同时支持水平和垂直）
+ */
+type Orientation = 'horizontal' | 'vertical' | 'both'
+
+interface MenuNavigationOptions<T> {
+  /**
+   * Tiptap 编辑器实例，如果与 Tiptap 编辑器一起使用。
+   */
+  editor?: Editor | null
+  /**
+   * 用于处理键盘事件的容器元素引用。
+   */
+  containerRef?: React.RefObject<HTMLElement | null>
+  /**
+   * 影响所选项目的搜索查询。
+   */
+  query?: string
+  /**
+   * 要导航的项目数组。
+   */
+  items: T[]
+  /**
+   * 选择项目时触发的回调函数。
+   */
+  onSelect?: (item: T) => void
+  /**
+   * 菜单应关闭时触发的回调函数。
+   */
+  onClose?: () => void
+  /**
+   * 菜单的导航方向。
+   * @default "vertical"
+   */
+  orientation?: Orientation
+  /**
+   * 是否在菜单打开时自动选择第一项。
+   * @default true
+   */
+  autoSelectFirstItem?: boolean
 }

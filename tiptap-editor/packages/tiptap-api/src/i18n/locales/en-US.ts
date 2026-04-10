@@ -147,7 +147,7 @@ export const enUS: Translations = {
     heading2: 'Type Heading 2…',
     heading3: 'Type Heading 3…',
     heading: 'Type Heading…',
-    blockquote: 'Type blockquote…',
+    blockquote: '',
     codeBlock: 'Type code…',
     default: 'Type content, or type / to see commands…',
   },

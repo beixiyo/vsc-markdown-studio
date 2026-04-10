@@ -147,7 +147,7 @@ export const zhCN: Translations = {
     heading2: '输入标题 2…',
     heading3: '输入标题 3…',
     heading: '输入标题…',
-    blockquote: '输入引用内容…',
+    blockquote: '',
     codeBlock: '输入代码…',
     default: '输入内容，或输入 / 查看命令…',
   },

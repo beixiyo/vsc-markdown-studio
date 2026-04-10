@@ -51,7 +51,7 @@ export const Editor = memo<EditorProps>(({
     },
     extensions: [
       /** AI 预览装饰扩展 */
-      AI,
+      AI.configure(),
       /** Slash / Suggestion 扩展 */
       SuggestionTrigger.configure(),
       /** Mermaid 图表节点扩展 */
@@ -70,7 +70,7 @@ export const Editor = memo<EditorProps>(({
         onError: error => console.error('Upload failed:', error),
       }),
       /** 评论系统扩展（包含 Mark 和 Plugin） */
-      CommentMark,
+      CommentMark.configure(),
       /** Speaker 自定义节点：解析 [speaker:X]，附带 data-speaker-* 属性 */
       SpeakerNode.configure({
         className: 'font-semibold cursor-pointer',

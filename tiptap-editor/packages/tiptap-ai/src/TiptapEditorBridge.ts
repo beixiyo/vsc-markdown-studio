@@ -183,9 +183,13 @@ export function createTiptapEditorBridge(editor: Editor, options?: { onConflict?
         replaceTo = currentRange.to
       }
 
-      /** 如果是第一次渲染预览，记录原始文本 */
+      /**
+       * 仅在首次渲染预览时，从原始选区捕获文本
+       * 使用 initialFrom/initialTo（而非 replaceFrom/replaceTo），
+       * 确保记录的是用户原始选区的文本，不受后续流式替换影响
+       */
       if (!isPreviewing) {
-        originalText = editor.state.doc.textBetween(replaceFrom, replaceTo)
+        originalText = editor.state.doc.textBetween(initialFrom, initialTo)
         isPreviewing = true
       }
 

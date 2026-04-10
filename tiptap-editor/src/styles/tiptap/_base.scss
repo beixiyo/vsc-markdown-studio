@@ -71,12 +71,17 @@
   }
   
   /* 占位符样式 */
+  .is-empty[data-placeholder] {
+    position: relative;
+  }
+
   .is-empty[data-placeholder]::before {
     content: attr(data-placeholder);
     position: absolute;
     color: rgb(var(--text) / 0.4);
     pointer-events: none;
     opacity: 0.5;
+    white-space: nowrap;
   }
 
   /* 代码块使用组件内 placeholder，隐藏扩展在外层加的占位符 */

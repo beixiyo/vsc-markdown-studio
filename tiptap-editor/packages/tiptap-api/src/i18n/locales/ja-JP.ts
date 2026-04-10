@@ -147,7 +147,7 @@ export const ja: Translations = {
     heading2: '見出し 2 を入力…',
     heading3: '見出し 3 を入力…',
     heading: '見出しを入力…',
-    blockquote: '引用を入力…',
+    blockquote: '',
     codeBlock: 'コードを入力…',
     default: '内容を入力、/ でコマンドを表示…',
   },

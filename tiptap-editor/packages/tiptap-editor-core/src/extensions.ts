@@ -80,6 +80,7 @@ export function createExtensions() {
         line: 'rounded-sm box-decoration-clone bg-systemOrange/5',
       },
     }),
+
     /** Placeholder 扩展：为空节点显示占位符 */
     Placeholder.configure({
       placeholder: ({ node }) => {

@@ -122,7 +122,7 @@ addNodeView() {
    ```
 
 **在项目中的修改位置**：
-*   **基础坐标转换与触发**：位于 `packages/tiptap-api/src/react/hooks/use-hover-detection.ts` 和 `packages/tiptap-hover/src/`
+*   **基础坐标转换与触发**：位于 `packages/tiptap-hover/src/react/use-hover-detection.ts` 和 `packages/tiptap-hover/src/`
 *   **上下文数据组装**：建议在 `packages/tiptap-ai/` 增加专门的上下文提取工具类（如 `ContextExtractor.ts`），利用 Tiptap AST 组装 Markdown 上下文传递给大模型
 
 ---
@@ -138,7 +138,7 @@ addNodeView() {
    👉 去 `tiptap-comps` 建立组件，通过 `use-tiptap-editor` hook 获取实例来调用 command
 
 3. **功能涉及纯鼠标悬浮、选中、文本临时框选？**
-   👉 去 `tiptap-hover` (鼠标经过高亮) 或 `tiptap-comps/src/selection-toolbar-content` (选中文本)。涉及获取坐标的 Hook 位于 `tiptap-api/src/react/hooks/`
+   👉 去 `tiptap-hover` (鼠标经过高亮) 或 `tiptap-comps/src/tiptap-ui/select-toolbar` (选中文本)。涉及获取坐标的 Hook 位于 `tiptap-api/src/react/hooks/`
 
 4. **功能是和 LLM 对话、流式写入、读取上下文？**
    👉 去 `tiptap-ai` 中实现业务逻辑。在这里组装 prompt，调用 LLM，通过 `EditorIntegration.ts` 翻译成 Tiptap Command 操作 `tiptap-editor-core`

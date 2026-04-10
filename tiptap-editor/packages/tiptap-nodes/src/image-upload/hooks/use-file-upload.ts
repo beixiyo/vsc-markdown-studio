@@ -1,11 +1,25 @@
 import type { FileItem, UploadOptions } from '../types'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 /**
  * Custom hook for managing multiple file uploads with progress tracking and cancellation
  */
 export function useFileUpload(options: UploadOptions) {
   const [fileItems, setFileItems] = useState<FileItem[]>([])
+  const fileItemsRef = useRef(fileItems)
+  fileItemsRef.current = fileItems
+
+  /** 组件卸载时清理所有 Object URL 和中止进行中的上传 */
+  useEffect(() => {
+    return () => {
+      fileItemsRef.current.forEach((item) => {
+        item.abortController?.abort()
+        if (item.url) {
+          URL.revokeObjectURL(item.url)
+        }
+      })
+    }
+  }, [])
 
   const uploadFile = async (file: File): Promise<string | null> => {
     if (file.size > options.maxSize) {

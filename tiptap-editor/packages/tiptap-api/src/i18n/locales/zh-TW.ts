@@ -147,7 +147,7 @@ export const zhTW: Translations = {
     heading2: '輸入標題 2…',
     heading3: '輸入標題 3…',
     heading: '輸入標題…',
-    blockquote: '輸入引用內容…',
+    blockquote: '',
     codeBlock: '輸入程式碼…',
     default: '輸入內容，或輸入 / 查看命令…',
   },
