@@ -25,7 +25,10 @@
       "hooks": ["../hooks/src"],
       "i18n": ["../i18n/src"],
       "tiptap-editor-core": ["../../tiptap-editor/packages/tiptap-editor-core/src"],
-      "tiptap-nodes/*": ["../../tiptap-editor/packages/tiptap-nodes/src/*"]
+      "tiptap-nodes/*": ["../../tiptap-editor/packages/tiptap-nodes/src/*"],
+      "tiptap-api": ["../../tiptap-editor/packages/tiptap-api/src/index.ts"],
+      "tiptap-api/react": ["../../tiptap-editor/packages/tiptap-api/src/react/index.ts"],
+      "i18n/react": ["../i18n/react/index.ts"]
     }
   },
   "include": ["src"]
