@@ -29,18 +29,8 @@
     "hooks": "workspace:*",
     "i18n": "workspace:*",
     "notify": "workspace:*",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "styles": "workspace:*",
     "tiptap-editor-core": "workspace:*",
     "tiptap-nodes": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
-    "jsdom": "^25.0.1",
-    "typescript": "~5.9.3",
-    "vite": "^8.0.7",
-    "vitest": "^2.1.9"
   }
 }

@@ -1,0 +1,8 @@
+/** Tiptap 编辑器排版样式（直接复用 tiptap-editor 仓库内的 SCSS 模块） */
+@use '../../../../tiptap-editor/src/styles/tiptap/tiptap';
+
+/** 全局变量、tailwind、reset、scrollbar、common class */
+@import 'styles/index.css';
+
+/** Tiptap 节点扩展所需 CSS（image-upload / speaker / code-block） */
+@import 'tiptap-nodes/index.css';
