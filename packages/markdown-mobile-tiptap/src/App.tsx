@@ -1,77 +1,46 @@
-import { useEditor } from '@tiptap/react'
-import { Image } from '@tiptap/extension-image'
-import { TaskItem, TaskList } from '@tiptap/extension-list'
-import Placeholder from '@tiptap/extension-placeholder'
-import { Markdown } from '@tiptap/markdown'
-import { StarterKit } from '@tiptap/starter-kit'
-import { useRef } from 'react'
+import { EditorContent } from '@tiptap/react'
 import { notifyNative } from 'notify'
-import { TiptapEditor } from 'tiptap-editor-core'
-import { SpeakerNode } from 'tiptap-nodes/speaker'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import { useDefaultEditor } from 'tiptap-editor-core'
+import { type SpeakerAttributes, SpeakerNode } from 'tiptap-nodes/speaker'
+import { useNotifyChange } from './hooks/useNotify'
 import { useSetupMDBridge } from './hooks/useSetupMDBridge'
-import { useNotify } from './hooks/useNotify'
-import { useTheme } from 'hooks'
 
-const extensions = [
-  StarterKit.configure({
-    link: {
-      openOnClick: false,
-      enableClickSelection: true,
-    },
-  }),
-  Markdown.configure({
-    indentation: { style: 'space', size: 2 },
-    markedOptions: { gfm: true, breaks: true, pedantic: false },
-  }),
-  Image,
-  TaskList,
-  TaskItem.configure({ nested: true }),
-  SpeakerNode.configure({
-    className: 'font-semibold cursor-pointer',
-    speakerMap: {},
-    onClick: (attrs) => {
-      notifyNative('speakerTapped', { ...attrs })
-    },
-  }),
-  Placeholder.configure({
-    placeholder: 'Start writing...',
-    emptyEditorClass: 'is-editor-empty',
-    emptyNodeClass: 'is-empty',
-  }),
-]
+type SpeakerMap = Record<string, { name: string, id?: string, label?: string }>
 
 export default function App() {
-  const [theme] = useTheme()
   const editorElRef = useRef<HTMLDivElement>(null)
+  const [speakerMap, setSpeakerMap] = useState<SpeakerMap>({})
 
-  const editor = useEditor({
-    extensions,
-    content: '',
-    editable: true,
-    editorProps: {
-      attributes: {
-        'autocomplete': 'off',
-        'autocorrect': 'off',
-        'autocapitalize': 'off',
-        'aria-label': 'Main content area',
-        'class': 'markdown-body',
+  const extensions = useMemo(() => [
+    SpeakerNode.configure({
+      speakerMap,
+      onClick: (attrs: SpeakerAttributes) => {
+        notifyNative('speakerTapped', {
+          label: attrs.label,
+          originalLabel: attrs.originalLabel,
+          id: attrs.id,
+          name: attrs.name,
+          speakerName: attrs.name
+            ? `@${attrs.name}`
+            : undefined,
+        })
       },
-    },
-  })
+    }),
+  ], [speakerMap])
 
-  useSetupMDBridge(editor)
-  useNotify(editor, editorElRef)
+  const editor = useDefaultEditor({ extensions })
+
+  const handleSetSpeakerMap = useCallback((map: SpeakerMap) => {
+    setSpeakerMap(map)
+  }, [])
+
+  useSetupMDBridge(editor, handleSetSpeakerMap)
+  useNotifyChange(editor, editorElRef)
 
   return (
-    <div ref={editorElRef} className={theme === 'dark' ? 'dark' : ''}>
-      {editor
-        ? (
-            <TiptapEditor
-              editor={editor}
-              className="markdown-body min-h-full"
-            />
-            )
-        : null}
+    <div ref={ editorElRef } className="markdown-body">
+      <EditorContent editor={ editor } />
     </div>
   )
 }

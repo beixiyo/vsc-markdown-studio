@@ -1,25 +1,27 @@
 {
   "name": "markdown-mobile-tiptap",
   "version": "0.0.1",
-  "private": false,
+  "private": true,
   "type": "module",
-  "description": "Tiptap-based Markdown editor for mobile Webview (MDBridge-compatible)",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "description": "Tiptap-based Markdown editor for mobile WebView",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@tiptap/core": "^3.13.0",
+    "@tiptap/extension-highlight": "^3.13.0",
     "@tiptap/extension-image": "^3.13.0",
     "@tiptap/extension-list": "^3.13.0",
     "@tiptap/extension-placeholder": "^3.13.0",
+    "@tiptap/extension-subscript": "^3.13.0",
+    "@tiptap/extension-superscript": "^3.13.0",
+    "@tiptap/extension-text-align": "^3.13.0",
+    "@tiptap/extension-typography": "^3.13.0",
+    "@tiptap/extensions": "^3.13.0",
     "@tiptap/markdown": "^3.13.0",
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
@@ -27,18 +29,18 @@
     "hooks": "workspace:*",
     "i18n": "workspace:*",
     "notify": "workspace:*",
-    "styles": "workspace:*",
-    "tiptap-api": "workspace:*",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "tiptap-editor-core": "workspace:*",
     "tiptap-nodes": "workspace:*"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.1.1",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
-  },
-  "peerDependencies": {
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^25.0.1",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.7",
+    "vitest": "^2.1.9"
   }
 }

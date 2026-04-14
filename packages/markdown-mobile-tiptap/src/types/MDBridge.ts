@@ -1,46 +1,24 @@
-import type { MarkdownOperate } from 'tiptap-api'
+import type { Editor } from '@tiptap/core'
+import type { SpeakerAttributes } from 'tiptap-nodes/speaker'
+import type { TiptapOperate } from '../operate'
 
 /**
- * 说话人类型（与 markdown-mobile MDBridge 契约一致）
+ * 暴露给 Native WebView 的桥接接口
+ * 基于 tiptap 封装，与老版 BlockNote 版本在"block id 语义"的 API 上**不兼容**
  */
-export type SpeakerType = {
-  id?: string
-  name: string
-  label?: string
-}
+export type MDBridge = TiptapOperate & {
+  /** 原始 editor 实例（调试用，Native 不应依赖） */
+  readonly _editor: Editor
 
-/**
- * 渐变样式类型（与 markdown-mobile MDBridge 契约一致；
- * 具体枚举见 MISSING_IMPLEMENTATIONS.md，待 tiptap 渐变扩展实现）
- */
-export type GradientStyleType = string
-
-/**
- * 暴露给 webview 的编辑器桥接接口
- * 与 packages/markdown-mobile 的 MDBridge 接口兼容，基于 tiptap-api createMarkdownOperate 扩展
- */
-export type MDBridge = MarkdownOperate & {
-  // ======================
-  // * Image operations
-  // ======================
-
-  setImagesWithURL: (imageUrls: string[]) => Promise<void>
-  setFooterImagesWithURL: (imageUrls: string[]) => Promise<void>
+  /** 在文档顶部插入图片（替换已有"头部连续图片块"） */
   setHeaderImagesWithURL: (imageUrls: string[]) => Promise<void>
+  /** 在文档底部插入图片（替换已有"尾部连续图片块"） */
+  setFooterImagesWithURL: (imageUrls: string[]) => Promise<void>
+  /** 在光标位置追加图片 */
+  setImagesWithURL: (imageUrls: string[]) => Promise<void>
 
-  // ======================
-  // * Speaker operations
-  // ======================
-
-  setSpeakers: (speakers: SpeakerType[]) => Promise<void>
-  setContentWithSpeakers: (data: { content: string, speakers: SpeakerType[] }) => Promise<void>
-
-  // ======================
-  // * Commands (扩展 MarkdownOperate 的 command)
-  // ======================
-
-  command: MarkdownOperate['command'] & {
-    setGradient: (type: GradientStyleType) => void
-    unsetGradient: () => void
-  }
+  /** 设置说话人映射（重新渲染已有 speaker 节点） */
+  setSpeakers: (speakers: SpeakerAttributes[]) => Promise<void>
+  /** 同时设置 markdown 内容与说话人映射 */
+  setContentWithSpeakers: (data: { content: string, speakers: SpeakerAttributes[] }) => Promise<void>
 }

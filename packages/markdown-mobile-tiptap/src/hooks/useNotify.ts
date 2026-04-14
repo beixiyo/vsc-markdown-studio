@@ -1,114 +1,65 @@
 import type { Editor } from '@tiptap/core'
-import { getEditorMarkdown } from 'tiptap-api'
+import { debounce } from '@jl-org/tool'
 import { notifyNative } from 'notify'
 import { type RefObject, useEffect, useRef } from 'react'
-
-function getBlockTypeString(editor: Editor | null): string {
-  if (!editor?.state.selection)
-    return 'paragraph'
-  const { $from } = editor.state.selection
-  const parent = $from.parent
-  const name = parent.type.name
-  if (name === 'heading') {
-    const level = parent.attrs.level ?? 1
-    return `h${level}`
-  }
-  if (name === 'paragraph')
-    return 'paragraph'
-  if (name === 'blockquote')
-    return 'blockquote'
-  if (name === 'codeBlock')
-    return 'codeBlock'
-  if (name === 'listItem') {
-    const grandparent = $from.node(-1)
-    if (grandparent?.type.name === 'orderedList')
-      return 'ordered_list'
-    return 'unordered_list'
-  }
-  if (name === 'taskItem')
-    return 'check_list'
-  return name || 'paragraph'
-}
-
-function useNotifyFn(editor: Editor | null) {
-  const notifyBlockTypeChanged = () => {
-    if (!editor)
-      return
-    const typeString = getBlockTypeString(editor)
-    notifyNative('blockTypeChanged', typeString)
-  }
-
-  const notifyContentChanged = () => {
-    if (!editor)
-      return
-    const markdown = getEditorMarkdown(editor) ?? ''
-    notifyNative('contentChanged', markdown)
-  }
-
-  const notifyLabelClicked = (data: { blockId: string, label: string }) => {
-    notifyNative('labelClicked', data)
-  }
-
-  return {
-    notifyBlockTypeChanged,
-    notifyContentChanged,
-    notifyLabelClicked,
-  }
-}
+import { resolveBlockTypeString } from '../operate/create'
 
 /**
- * 与 packages/markdown-mobile useNotifyChnage 契约一致：
- * contentChanged、blockTypeChanged、heightChanged、speakerTapped、labelClicked
+ * 订阅编辑器变化并广播给 Native
+ * - `contentChanged`：防抖发送 markdown
+ * - `blockTypeChanged`：选区所在块类型变化
+ * - `heightChanged`：容器高度变化
  */
-export function useNotify(
+export function useNotifyChange(
   editor: Editor | null,
   editorElRef: RefObject<HTMLDivElement | null>,
 ) {
-  const { notifyBlockTypeChanged, notifyContentChanged } = useNotifyFn(editor)
-  const lastHeightRef = useRef<number>(0)
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    if (!editor)
+      return
+
+    const sendChange = debounce(() => {
+      const storage = (editor.storage as any)?.markdown
+      const markdown: string = storage?.getMarkdown?.() ?? editor.getHTML()
+      const cleaned = markdown.replace(/!\[[^\]]*\]\(https?:\/\/\S{1,999}\)/g, '')
+      notifyNative('contentChanged', cleaned)
+      notifyNative('blockTypeChanged', resolveBlockTypeString(editor))
+    })
+
+    editor.on('update', sendChange)
+    return () => {
+      editor.off('update', sendChange)
+    }
+  }, [editor])
 
   useEffect(() => {
     if (!editor)
       return
 
-    const sendChange = () => {
-      if (debounceRef.current)
-        clearTimeout(debounceRef.current)
-      debounceRef.current = setTimeout(() => {
-        notifyContentChanged()
-        notifyBlockTypeChanged()
-        debounceRef.current = null
-      }, 150)
+    const onSelection = () => {
+      notifyNative('blockTypeChanged', resolveBlockTypeString(editor))
     }
-
-    const onUpdate = () => sendChange()
-    const onSelectionUpdate = () => notifyBlockTypeChanged()
-
-    editor.on('update', onUpdate)
-    editor.on('selectionUpdate', onSelectionUpdate)
-
+    editor.on('selectionUpdate', onSelection)
     return () => {
-      editor.off('update', onUpdate)
-      editor.off('selectionUpdate', onSelectionUpdate)
-      if (debounceRef.current)
-        clearTimeout(debounceRef.current)
+      editor.off('selectionUpdate', onSelection)
     }
-  }, [editor, notifyBlockTypeChanged, notifyContentChanged])
+  }, [editor])
 
+  /** 高度变化 */
+  const lastHeightRef = useRef<number>(0)
   useEffect(() => {
-    if (!editorElRef.current)
+    const el = editorElRef.current
+    if (!el)
       return
 
     const ob = new ResizeObserver(() => {
-      const height = editorElRef.current?.clientHeight ?? 0
-      if (height !== lastHeightRef.current) {
-        notifyNative('heightChanged', height)
-        lastHeightRef.current = height
+      const h = el.clientHeight ?? 0
+      if (h !== lastHeightRef.current) {
+        notifyNative('heightChanged', h)
+        lastHeightRef.current = h
       }
     })
-    ob.observe(editorElRef.current)
-
+    ob.observe(el)
     return () => ob.disconnect()
   }, [editorElRef])
 }
