@@ -96,6 +96,21 @@ describe('createTiptapOperate', () => {
     cleanup()
   })
 
+  it('setGradient / unsetGradient via Highlight', () => {
+    const { editor, cleanup } = makeEditor('<p>hello</p>')
+    editor.commands.setTextSelection({ from: 1, to: 6 })
+    const op = createTiptapOperate(editor)
+    op.command.setGradient('mysticPurpleBlue')
+    const html = op.getHTML()
+    expect(html).toContain('data-color="mysticPurpleBlue"')
+    /** 内置渐变：inline style 已经带上 background-clip */
+    expect(html).toContain('background-clip: text')
+    expect(html).toContain('#667eea')
+    op.command.unsetGradient()
+    expect(op.getHTML()).not.toContain('data-color=')
+    cleanup()
+  })
+
   it('resolveBlockTypeString recognises task list', () => {
     const { editor, cleanup } = makeEditor('<ul data-type="taskList"><li data-type="taskItem" data-checked="false"><label><input type="checkbox" /></label><div><p>a</p></div></li></ul>')
     editor.commands.setTextSelection(3)

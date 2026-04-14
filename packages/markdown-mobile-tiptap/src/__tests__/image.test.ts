@@ -59,7 +59,7 @@ describe('image operations', () => {
     expect(json[0].type).toBe('image')
     /** 第二个应该是 "hi" 段落，不再是空段落 */
     expect(json[1].type).toBe('paragraph')
-    expect(json[1].content?.[0]?.text).toBe('hi')
+    expect((json[1].content?.[0] as any)?.text).toBe('hi')
     cleanup()
   })
 

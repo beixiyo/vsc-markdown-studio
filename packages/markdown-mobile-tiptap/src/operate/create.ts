@@ -1,4 +1,5 @@
 import type { Editor } from '@tiptap/core'
+import type { GradientStyleType } from 'tiptap-nodes/gradient-highlight'
 
 /** 已知的内联 mark 名称集合，用于 getActiveStyles 聚合 */
 const INLINE_MARKS = ['bold', 'italic', 'underline', 'strike', 'code', 'highlight', 'subscript', 'superscript', 'link'] as const
@@ -176,6 +177,18 @@ export function createTiptapOperate(editor: Editor) {
       toggleBold: () => { editor.chain().focus().toggleMark('bold').run() },
       toggleItalic: () => { editor.chain().focus().toggleMark('italic').run() },
       toggleUnderline: () => { editor.chain().focus().toggleMark('underline').run() },
+
+      /**
+       * 设置渐变：借道 @tiptap/extension-highlight
+       * 写入 `mark[data-color="<type>"]`，再由 CSS 渲染渐变文字
+       */
+      setGradient: (type: GradientStyleType) => {
+        editor.chain().focus().setMark('highlight', { color: type }).run()
+      },
+      /** 移除渐变（实际移除 highlight 标记） */
+      unsetGradient: () => {
+        editor.chain().focus().unsetMark('highlight').run()
+      },
     },
   }
 }

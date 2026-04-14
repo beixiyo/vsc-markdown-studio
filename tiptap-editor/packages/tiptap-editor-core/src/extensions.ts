@@ -1,4 +1,3 @@
-import { Highlight } from '@tiptap/extension-highlight'
 import { Image } from '@tiptap/extension-image'
 import { TaskItem, TaskList } from '@tiptap/extension-list'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -12,6 +11,7 @@ import { StarterKit } from '@tiptap/starter-kit'
 import { getI18n } from 'i18n'
 import { HoverContextHighlight } from 'tiptap-hover'
 import { CodeBlock } from 'tiptap-nodes/code-block'
+import { GradientHighlight } from 'tiptap-nodes/gradient-highlight'
 
 export function createExtensions() {
   const i18n = getI18n()
@@ -57,8 +57,8 @@ export function createExtensions() {
     /** 任务项扩展：支持嵌套任务 */
     TaskItem.configure({ nested: true }),
 
-    /** 高亮扩展：支持多种颜色高亮 */
-    Highlight.configure({ multicolor: true }),
+    /** 高亮扩展：支持多种颜色高亮 + 内置渐变 key */
+    GradientHighlight,
 
     /** 图片节点扩展 */
     Image,

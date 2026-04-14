@@ -79,7 +79,7 @@ Native 侧将 `window.MDBridge` 视为编辑器的**远程控制器**。WebView 
 | `getTextCursorPosition()` / `setTextCursorPosition(blockId, ...)` | Tiptap 用 ProseMirror 位置（数字），无 blockId。改为 `getCursor() => { pos, node, typeName }` 与 `setCursor(pos)` |
 | `getSelection() / setSelection(startId, endId)` | 同上，改为基于位置 |
 | `canNestBlock / nestBlock / canUnnestBlock / unnestBlock` | 仅在 **列表项** 语义下成立（`sinkListItem / liftListItem`）。其它块不支持 |
-| 渐变样式 (`setGradient / unsetGradient`) | BlockNote style spec 与 Tiptap mark 模型不同。可实现为自定义 Mark（带 `data-gradient` attribute + CSS class），但 API 签名需重定义 |
+| 渐变样式 (`setGradient / unsetGradient`) | **直接复用** `@tiptap/extension-highlight`（`multicolor: true` 已在 `tiptap-editor-core` 默认开启）。把渐变 key 当作 `color` 值传入：`editor.chain().setHighlight({ color: 'mysticPurpleBlue' }).run()` / `unsetHighlight()`，再用 `mark[data-color="mysticPurpleBlue"]` 的 CSS 画出渐变背景或文字 |
 | `moveBlocksUp / moveBlocksDown` | Tiptap 无内置命令。需自定义命令通过交换 doc 节点实现，成本较高 |
 
 ### ⛔ 搁置（API 差异过大，需后续决定）
@@ -89,7 +89,6 @@ Native 侧将 `window.MDBridge` 视为编辑器的**远程控制器**。WebView 
 | BlockNote 风格的 block tree 增删改（稳定 blockId） | Tiptap 需引入额外 `UniqueID` 扩展 + 大量包装代码；等使用方（Native 侧）明确是否需要 |
 | `setContentWithSpeakers(data)` | 需确认 Native 是否仍需要**合并调用**；现阶段 `setMarkdown + setSpeakers` 可组合替代 |
 | `setSpeakers(speakers[])` 的"对已有文档重新解析"语义 | Tiptap 已有 speaker 节点解析 markdown 的能力，但"把已有文本中的 `[speaker:X]` 原地替换"在 Tiptap 下更自然的做法是"整篇重新 set"，与旧实现等价，但仍需和 Native 侧对齐 |
-| `gradient` 样式的精细兼容 | 需要 Native UI 与菜单配合；视产品需求决定是否移植 |
 | BlockNote 自定义 checklist（`custom-blocknote/checklist`） | 老版 App 未直接启用，暂不迁移 |
 | `blocksToMarkdownLossy` 对"多个连续空段落保留为多空行"的行为 | Tiptap `@tiptap/markdown` 默认会合并空行，若需保留多空行需自定义序列化器 |
 | `MDBridge.getDocument()` 的结构化返回 | Native 侧是否依赖 Block 结构？未确认，改用 JSON + 额外辅助函数 |

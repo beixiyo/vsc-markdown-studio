@@ -3,6 +3,40 @@
   "content": [
     {
       "type": "heading",
+      "attrs": { "textAlign": null, "level": 2 },
+      "content": [{ "type": "text", "text": "渐变高亮演示 (GradientHighlight)" }]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "mysticPurpleBlue" } }], "text": "神秘紫蓝" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "skyBlue" } }], "text": "天空蓝" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "gorgeousPurpleRed" } }], "text": "瑰丽紫红" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "warmSunshine" } }], "text": "温暖阳光" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "naturalGreen" } }], "text": "自然绿意" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "mysticNight" } }], "text": "神秘暗夜" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "colorfulCandy" } }], "text": "多彩糖果" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "starryNight" } }], "text": "星空夜幕" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "metallic" } }], "text": "金属质感" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "snowyGlacier" } }], "text": "雪山冰川" },
+        { "type": "text", "text": " · " },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "tropicalSummer" } }], "text": "热带夏日" },
+        { "type": "text", "text": "  |  对比普通黄色高亮：" },
+        { "type": "text", "marks": [{ "type": "highlight", "attrs": { "color": "#ffe066" } }], "text": "普通 highlight" }
+      ]
+    },
+    {
+      "type": "heading",
       "attrs": {
         "textAlign": null,
         "level": 1

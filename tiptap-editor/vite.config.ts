@@ -1,11 +1,11 @@
 import path, { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { codeInspectorPlugin } from 'code-inspector-plugin'
+import AutoImport from 'unplugin-auto-import/vite'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
-import AutoImport from 'unplugin-auto-import/vite'
-import tailwindcss from '@tailwindcss/vite'
 
 const filename = fileURLToPath(new URL(import.meta.url).href)
 const __dirname = dirname(filename)
@@ -73,6 +73,7 @@ export default defineConfig(({ command }) => {
         'tiptap-nodes/speaker': path.resolve(__dirname, './packages/tiptap-nodes/src/speaker/index.ts'),
         'tiptap-nodes/code-block': path.resolve(__dirname, './packages/tiptap-nodes/src/code-block/index.ts'),
         'tiptap-nodes/image-upload': path.resolve(__dirname, './packages/tiptap-nodes/src/image-upload/index.tsx'),
+        'tiptap-nodes/gradient-highlight': path.resolve(__dirname, './packages/tiptap-nodes/src/gradient-highlight/index.ts'),
         'tiptap-nodes': path.resolve(__dirname, './packages/tiptap-nodes/src/index.ts'),
 
         'tiptap-utils': path.resolve(__dirname, './packages/tiptap-utils/src/index.ts'),
@@ -98,7 +99,7 @@ export default defineConfig(({ command }) => {
     },
     server: {
       host: '0.0.0.0',
-      port: 5367
+      port: 5367,
     },
   }
 })

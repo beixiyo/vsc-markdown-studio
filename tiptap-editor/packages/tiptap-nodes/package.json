@@ -27,6 +27,11 @@
       "types": "./dist/image-upload/index.d.ts",
       "import": "./dist/image-upload/index.js",
       "require": "./dist/image-upload/index.cjs"
+    },
+    "./gradient-highlight": {
+      "types": "./dist/gradient-highlight/index.d.ts",
+      "import": "./dist/gradient-highlight/index.js",
+      "require": "./dist/gradient-highlight/index.cjs"
     }
   },
   "files": [
@@ -48,6 +53,7 @@
   },
   "peerDependencies": {
     "@tiptap/core": "^3.13.0",
+    "@tiptap/extension-highlight": "^3.13.0",
     "@tiptap/markdown": "^3.13.0",
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
