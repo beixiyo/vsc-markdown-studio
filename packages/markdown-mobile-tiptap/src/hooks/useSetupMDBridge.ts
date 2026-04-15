@@ -6,7 +6,7 @@ import { notifyNative } from 'notify'
 import { useEffect } from 'react'
 import { preprocessSpeakerTags } from 'tiptap-nodes/speaker'
 import { createTiptapOperate } from '../operate/create'
-import { appendAtCursor, insertAtBottom, insertAtTop } from '../operate/image'
+import { getImageAttrsById, removeImageById, setImage, updateImageById } from '../operate/image'
 import { speakersToMap } from '../speaker'
 
 type SpeakerMap = Record<string, { name: string, id?: string, label?: string }>
@@ -77,15 +77,10 @@ export function useSetupMDBridge(
     const bridge: MDBridge = {
       ...base,
       _editor: editor,
-      setImagesWithURL: urls => appendAtCursor(editor, Array.isArray(urls)
-        ? urls
-        : []),
-      setHeaderImagesWithURL: urls => insertAtTop(editor, Array.isArray(urls)
-        ? urls
-        : []),
-      setFooterImagesWithURL: urls => insertAtBottom(editor, Array.isArray(urls)
-        ? urls
-        : []),
+      setImage: payload => setImage(editor, payload),
+      updateImage: ({ id, attrs }) => updateImageById(editor, id, attrs),
+      removeImage: ({ id }) => removeImageById(editor, id),
+      getImageAttrs: id => getImageAttrsById(editor, id),
 
       /** 写入容器 paddingBottom；非有限数视为 0 */
       setBottomMargin: (px: number) => {

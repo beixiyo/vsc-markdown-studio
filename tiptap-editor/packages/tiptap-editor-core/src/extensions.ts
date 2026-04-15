@@ -11,9 +11,17 @@ import { getI18n } from 'i18n'
 import { HoverContextHighlight } from 'tiptap-hover'
 import { CodeBlock } from 'tiptap-nodes/code-block'
 import { GradientHighlight } from 'tiptap-nodes/gradient-highlight'
-import { ImageNode } from 'tiptap-nodes/image'
+import { ImageNode, type ImageOptions } from 'tiptap-nodes/image'
 
-export function createExtensions() {
+/**
+ * 可被调用方覆盖的节点 / 扩展配置
+ */
+export interface CreateExtensionsOptions {
+  /** 图片节点的 options（事件回调、HTMLAttributes 等） */
+  image?: Partial<ImageOptions>
+}
+
+export function createExtensions(options: CreateExtensionsOptions = {}) {
   const i18n = getI18n()
 
   return [
@@ -61,7 +69,7 @@ export function createExtensions() {
     GradientHighlight,
 
     /** 自定义图片节点：支持 inline/block、丰富的渲染属性和事件回调 */
-    ImageNode,
+    ImageNode.configure(options.image),
     /** 排版扩展：自动转换标点符号（如 -- 转换为 —） */
     Typography,
     /** 上标扩展 */

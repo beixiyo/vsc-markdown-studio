@@ -16,6 +16,17 @@
         margin-top: 1.25rem;
       }
 
+      /**
+       * 块级图片所在段落：压掉段落 margin，间距完全由图片自身的 `margin` attr 决定
+       * 避免「段落 margin + 图片 margin」叠加导致图组间距过大
+       *
+       * 不用 `:only-child`——PM 为 inline atom 注入 ProseMirror-separator 会破坏 only-child 判定
+       * 改用 `[data-display="block"]`，由 NodeView 写在 <img> 上（inline 图片不带此属性，不会误伤）
+       */
+      &:has(> img[data-image-node][data-display='block']) {
+        margin-top: 0;
+      }
+
       /* 段落后紧跟列表，间距 6px */
       + ul,
       + ol {

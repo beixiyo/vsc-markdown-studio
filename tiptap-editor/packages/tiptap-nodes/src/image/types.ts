@@ -6,6 +6,14 @@ import type { Editor } from '@tiptap/react'
  * 除 src 外均可选，未设置时走默认样式
  */
 export interface ImageAttrs {
+  /**
+   * 稳定标识，用于跨事件 / 跨调用定位同一张图
+   *
+   * - 插入时由调用方传入；未传则编辑器自动生成 UUID
+   * - 只存在于 ProseMirror 状态，**不序列化到 HTML**（复制粘贴天然重置）
+   * - 事件 payload 里只回传该 id，不再带 src，避免 base64 搬运炸桥接
+   */
+  id?: string | null
   /** 图片地址 */
   src: string
   /** 无障碍描述 / 加载失败兜底文本 */

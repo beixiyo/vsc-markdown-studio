@@ -10,12 +10,20 @@ export type NativeEvent =
   | 'mdBridgeReady'
   | 'labelClicked'
   | 'speakerTapped'
-  | 'imagesSet'
-  | 'setImagesError'
-  | 'imagesWithURLSet'
-  | 'headerImagesWithURLSet'
-  | 'setImagesWithURLError'
-  | 'setHeaderImagesWithURLError'
+  /** setImage 成功 */
+  | 'imageInserted'
+  /** setImage 失败 */
+  | 'imageInsertError'
+  /** 用户点击图片 */
+  | 'imageTapped'
+  /** 图片加载成功 */
+  | 'imageLoaded'
+  /** 图片加载失败 */
+  | 'imageLoadError'
+  /** 图片被删除 */
+  | 'imageRemoved'
+  /** 图片属性变化（尺寸、对齐等） */
+  | 'imageAttrsChanged'
 
 /** iOS WKWebView 注入对象 */
 export interface Webkit {

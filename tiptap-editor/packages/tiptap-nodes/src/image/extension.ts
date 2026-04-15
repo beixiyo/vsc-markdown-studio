@@ -1,6 +1,22 @@
 import type { ImageAttrs, ImageOptions } from './types'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { mergeAttributes, Node } from '@tiptap/react'
+import { nanoid } from 'nanoid'
 import { createImageNodeView } from './image-node-view'
+
+/**
+ * 生成图片节点的稳定 id
+ *
+ * 用 `nanoid` 而非 `crypto.randomUUID`：后者在**非 secure context**（如 WebView 的 http 场景）
+ * 不可用，会报 `crypto.randomUUID is not a function`。nanoid 自带 fallback，全环境可用。
+ *
+ * 前缀 `img_` 方便肉眼 / 日志排查来源。
+ */
+export function generateImageId(): string {
+  return `img_${nanoid(12)}`
+}
+
+const IMAGE_ID_PLUGIN_KEY = new PluginKey('imageAutoId')
 
 declare module '@tiptap/react' {
   interface Commands<ReturnType> {
@@ -76,6 +92,16 @@ export const ImageNode = Node.create<ImageOptions>({
 
   addAttributes() {
     return {
+      /**
+       * 稳定 id —— 只活在 ProseMirror 状态里
+       * `rendered: false` + `parseHTML: null` 确保不序列化到 DOM / 复制粘贴的 HTML
+       * 未填充的节点会由下方 `addProseMirrorPlugins` 兜底补 id
+       */
+      id: {
+        default: null,
+        rendered: false,
+        parseHTML: () => null,
+      },
       src: {
         default: '',
         parseHTML: el => (el as HTMLElement).getAttribute('src') ?? '',
@@ -309,6 +335,35 @@ export const ImageNode = Node.create<ImageOptions>({
             return commands.updateAttributes(this.name, attrs)
           },
     }
+  },
+
+  /**
+   * 兜底补 id：任何 image 节点进入文档时若 `id` 为空，就用生成的 UUID 填上
+   *
+   * 覆盖：首次插入、复制粘贴（因 `rendered:false` 粘贴解析出的 id 为 null）、外部 setContent
+   * 无需专门的粘贴钩子 —— attr 本身不序列化到 HTML，重置天然发生
+   */
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: IMAGE_ID_PLUGIN_KEY,
+        appendTransaction: (transactions, _oldState, newState) => {
+          if (!transactions.some(tr => tr.docChanged))
+            return null
+          const tr = newState.tr
+          let modified = false
+          newState.doc.descendants((node, pos) => {
+            if (node.type.name === 'image' && !node.attrs.id) {
+              tr.setNodeMarkup(pos, undefined, { ...node.attrs, id: generateImageId() })
+              modified = true
+            }
+          })
+          return modified
+            ? tr
+            : null
+        },
+      }),
+    ]
   },
 })
 

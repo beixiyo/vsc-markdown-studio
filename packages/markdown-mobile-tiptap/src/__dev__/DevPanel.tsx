@@ -178,9 +178,60 @@ export default function DevPanel() {
               </Section>
 
               <Section title="Images">
-                <Btn label="setHeaderImagesWithURL" onClick={ () => safeCall('header', () => bridge().setHeaderImagesWithURL(IMG_URLS)) } />
-                <Btn label="setFooterImagesWithURL" onClick={ () => safeCall('footer', () => bridge().setFooterImagesWithURL(IMG_URLS)) } />
-                <Btn label="setImagesWithURL (at cursor)" onClick={ () => safeCall('cursor', () => bridge().setImagesWithURL([IMG_URLS[0]])) } />
+                <Btn
+                  label="top · block (id=top-a,top-b)"
+                  onClick={ () => safeCall('top/block', () => bridge().setImage({
+                    at: 'top',
+                    preset: 'block',
+                    images: [
+                      { src: IMG_URLS[0], id: 'top-a' },
+                      { src: IMG_URLS[1], id: 'top-b' },
+                    ],
+                  })) }
+                />
+                <Btn
+                  label="bottom · block"
+                  onClick={ () => safeCall('bottom/block', () => bridge().setImage({
+                    at: 'bottom',
+                    preset: 'block',
+                    images: IMG_URLS.map(src => ({ src })),
+                  })) }
+                />
+                <Btn
+                  label="cursor · block"
+                  onClick={ () => safeCall('cursor/block', () => bridge().setImage({
+                    at: 'cursor',
+                    preset: 'block',
+                    images: [{ src: IMG_URLS[0] }],
+                  })) }
+                />
+                <Btn
+                  label="cursor · inline (1em)"
+                  onClick={ () => safeCall('cursor/inline', () => bridge().setImage({
+                    at: 'cursor',
+                    preset: 'inline',
+                    images: [{ src: IMG_URLS[0] }],
+                  })) }
+                />
+                <Btn
+                  label="cursor · custom (aspect 16/9)"
+                  onClick={ () => safeCall('cursor/custom', () => bridge().setImage({
+                    at: 'cursor',
+                    images: [{ src: IMG_URLS[0], id: 'hero', width: '100%', aspectRatio: '16/9', borderRadius: '12px' }],
+                  })) }
+                />
+                <Btn
+                  label="updateImage(top-a → 200px)"
+                  onClick={ () => safeCall('update', () => bridge().updateImage({ id: 'top-a', attrs: { width: 200 } })) }
+                />
+                <Btn
+                  label="removeImage(top-b)"
+                  onClick={ () => safeCall('remove', () => bridge().removeImage({ id: 'top-b' })) }
+                />
+                <Btn
+                  label="getImageAttrs(top-a)"
+                  onClick={ () => show('getImageAttrs(top-a)', bridge().getImageAttrs('top-a')) }
+                />
               </Section>
 
               <Section title="Cursor / Selection">

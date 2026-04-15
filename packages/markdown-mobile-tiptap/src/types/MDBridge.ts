@@ -1,5 +1,7 @@
 import type { Editor } from '@tiptap/core'
+import type { ImageAttrs } from 'tiptap-nodes/image'
 import type { TiptapOperate } from '../operate'
+import type { SetImagePayload } from '../operate/image'
 import type { SpeakerType } from './Speaker'
 
 /**
@@ -16,12 +18,30 @@ export type MDBridge = TiptapOperate & {
    */
   setBottomMargin: (px: number) => void
 
-  /** 在文档顶部插入图片（替换已有"头部连续图片块"） */
-  setHeaderImagesWithURL: (imageUrls: string[]) => Promise<void>
-  /** 在文档底部插入图片（替换已有"尾部连续图片块"） */
-  setFooterImagesWithURL: (imageUrls: string[]) => Promise<void>
-  /** 在光标位置追加图片 */
-  setImagesWithURL: (imageUrls: string[]) => Promise<void>
+  /**
+   * 插入图片
+   *
+   * 使用见 [tiptap-editor/packages/tiptap-nodes/src/image/README.md](../../../tiptap-editor/packages/tiptap-nodes/src/image/README.md)
+   */
+  setImage: (payload: SetImagePayload) => Promise<void>
+
+  /**
+   * 按 id 更新图片属性（局部合并）
+   * @returns 命中返回 true，未找到返回 false
+   */
+  updateImage: (payload: { id: string, attrs: Partial<ImageAttrs> }) => Promise<boolean>
+
+  /**
+   * 按 id 删除图片
+   * @returns 命中返回 true，未找到返回 false
+   */
+  removeImage: (payload: { id: string }) => Promise<boolean>
+
+  /**
+   * 按 id 同步读取图片完整 attrs（按需拉全量，事件不再携带 attrs）
+   * @returns 命中返回完整属性对象，未找到返回 null
+   */
+  getImageAttrs: (id: string) => ImageAttrs | null
 
   /**
    * 设置说话人列表

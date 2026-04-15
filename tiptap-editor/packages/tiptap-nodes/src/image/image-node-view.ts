@@ -31,6 +31,8 @@ function applyAttrs(img: HTMLImageElement, attrs: ImageAttrs, baseClass: string 
 
   const s = img.style
   s.display = displayMode
+  /** 供外层 CSS 精准匹配 block 图片（如段落 margin 消除），NodeView 直连 DOM，不走 renderHTML 路径 */
+  img.setAttribute('data-display', displayMode)
   s.width = toCssLength(attrs.width)
   s.height = toCssLength(attrs.height)
   s.aspectRatio = attrs.aspectRatio ?? ''
@@ -114,7 +116,7 @@ type Payload<E extends Event = Event> = {
 export function createImageNodeView(options: ImageOptions) {
   return ({ node, editor, getPos }: NodeViewRendererProps): NodeView => {
     const img = document.createElement('img')
-    /** 标记位：让 _images.scss 的默认 img 规则跳过本节点 */
+    /** 标记位：供 Native / 外部脚本通过 querySelector 定位本节点 */
     img.setAttribute('data-image-node', '')
     let current = node.attrs as ImageAttrs
     let loaded = false
