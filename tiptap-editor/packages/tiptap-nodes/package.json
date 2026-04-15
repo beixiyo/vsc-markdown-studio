@@ -28,6 +28,11 @@
       "import": "./dist/image-upload/index.js",
       "require": "./dist/image-upload/index.cjs"
     },
+    "./image": {
+      "types": "./dist/image/index.d.ts",
+      "import": "./dist/image/index.js",
+      "require": "./dist/image/index.cjs"
+    },
     "./gradient-highlight": {
       "types": "./dist/gradient-highlight/index.d.ts",
       "import": "./dist/gradient-highlight/index.js",

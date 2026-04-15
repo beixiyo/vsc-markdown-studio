@@ -9,6 +9,7 @@ import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, us
 import { BlockActionMenu, EditorLinkHover, MarkButton, SelectToolbar } from 'tiptap-comps'
 import { HoverTooltip } from 'tiptap-hover/react'
 import { SuggestionMenu } from 'tiptap-trigger/react'
+import { ImageTestDropdownMenu } from '@/components/my-ui/image-test-dropdown-menu'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
@@ -127,6 +128,7 @@ sequenceDiagram
             >
               Mermaid
             </Button>
+            <ImageTestDropdownMenu editor={ editor } portal={ isMobile } />
             <SelectionTestButton />
             <ScrollTestButton />
           </Toolbar.Group>

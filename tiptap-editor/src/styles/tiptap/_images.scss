@@ -4,7 +4,12 @@
    ============================================ */
 
 .tiptap.ProseMirror {
-  img {
+  /**
+   * 默认 img 规则：仅作用于"非自定义 image 节点"的原生 img（如 markdown 渲染、emoji）
+   * 自定义 image 节点通过 attrs 控制所有样式，避免被默认规则覆盖
+   * PM 为 inline atom 注入的 ProseMirror-separator 也必须排除，否则 2rem 边距会撑高行
+   */
+  img:not([data-image-node]):not(.ProseMirror-separator) {
     border-style: none;
     max-width: 100%;
     height: auto;

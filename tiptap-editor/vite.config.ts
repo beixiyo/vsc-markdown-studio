@@ -73,6 +73,7 @@ export default defineConfig(({ command }) => {
         'tiptap-nodes/speaker': path.resolve(__dirname, './packages/tiptap-nodes/src/speaker/index.ts'),
         'tiptap-nodes/code-block': path.resolve(__dirname, './packages/tiptap-nodes/src/code-block/index.ts'),
         'tiptap-nodes/image-upload': path.resolve(__dirname, './packages/tiptap-nodes/src/image-upload/index.tsx'),
+        'tiptap-nodes/image': path.resolve(__dirname, './packages/tiptap-nodes/src/image/index.ts'),
         'tiptap-nodes/gradient-highlight': path.resolve(__dirname, './packages/tiptap-nodes/src/gradient-highlight/index.ts'),
         'tiptap-nodes': path.resolve(__dirname, './packages/tiptap-nodes/src/index.ts'),
 

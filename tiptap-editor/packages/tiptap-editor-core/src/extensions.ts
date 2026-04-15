@@ -1,4 +1,3 @@
-import { Image } from '@tiptap/extension-image'
 import { TaskItem, TaskList } from '@tiptap/extension-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Subscript } from '@tiptap/extension-subscript'
@@ -12,6 +11,7 @@ import { getI18n } from 'i18n'
 import { HoverContextHighlight } from 'tiptap-hover'
 import { CodeBlock } from 'tiptap-nodes/code-block'
 import { GradientHighlight } from 'tiptap-nodes/gradient-highlight'
+import { ImageNode } from 'tiptap-nodes/image'
 
 export function createExtensions() {
   const i18n = getI18n()
@@ -60,8 +60,8 @@ export function createExtensions() {
     /** 高亮扩展：支持多种颜色高亮 + 内置渐变 key */
     GradientHighlight,
 
-    /** 图片节点扩展 */
-    Image,
+    /** 自定义图片节点：支持 inline/block、丰富的渲染属性和事件回调 */
+    ImageNode,
     /** 排版扩展：自动转换标点符号（如 -- 转换为 —） */
     Typography,
     /** 上标扩展 */
