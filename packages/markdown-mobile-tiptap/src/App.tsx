@@ -1,46 +1,40 @@
 import { EditorContent } from '@tiptap/react'
 import { notifyNative } from 'notify'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { useDefaultEditor } from 'tiptap-editor-core'
 import { type SpeakerAttributes, SpeakerNode } from 'tiptap-nodes/speaker'
+import DevPanel from './__dev__/DevPanel'
 import { useNotifyChange } from './hooks/useNotify'
 import { useSetupMDBridge } from './hooks/useSetupMDBridge'
-
-type SpeakerMap = Record<string, { name: string, id?: string, label?: string }>
+import { speakerAttrsToNativePayload } from './speaker'
 
 export default function App() {
   const editorElRef = useRef<HTMLDivElement>(null)
-  const [speakerMap, setSpeakerMap] = useState<SpeakerMap>({})
 
+  /**
+   * SpeakerNode 的 `speakerMap` 在 editor 构造后就固化了；
+   * 传空对象作为稳定引用，后续由 `useSetupMDBridge` 原地 mutate
+   */
   const extensions = useMemo(() => [
     SpeakerNode.configure({
-      speakerMap,
+      speakerMap: {},
       onClick: (attrs: SpeakerAttributes) => {
-        notifyNative('speakerTapped', {
-          label: attrs.label,
-          originalLabel: attrs.originalLabel,
-          id: attrs.id,
-          name: attrs.name,
-          speakerName: attrs.name
-            ? `@${attrs.name}`
-            : undefined,
-        })
+        notifyNative('speakerTapped', speakerAttrsToNativePayload(attrs))
       },
     }),
-  ], [speakerMap])
+  ], [])
 
   const editor = useDefaultEditor({ extensions })
 
-  const handleSetSpeakerMap = useCallback((map: SpeakerMap) => {
-    setSpeakerMap(map)
-  }, [])
-
-  useSetupMDBridge(editor, handleSetSpeakerMap)
+  useSetupMDBridge(editor, editorElRef)
   useNotifyChange(editor, editorElRef)
 
   return (
-    <div ref={ editorElRef } className="markdown-body">
-      <EditorContent editor={ editor } />
-    </div>
+    <>
+      <div ref={ editorElRef } className="markdown-body">
+        <EditorContent editor={ editor } />
+      </div>
+      { import.meta.env.DEV && <DevPanel /> }
+    </>
   )
 }

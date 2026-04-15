@@ -239,13 +239,24 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
       }
       i18n.on('language:change', onLanguageChange)
 
+      let currentAttrs = node.attrs
       return {
         dom,
         update: (updatedNode) => {
           if (updatedNode.type !== node.type) {
             return false
           }
-          if (updatedNode.attrs.originalLabel !== node.attrs.originalLabel) {
+          const prev = currentAttrs
+          const next = updatedNode.attrs
+          /** 任一显示相关字段变更都要刷新文本 */
+          if (
+            prev.originalLabel !== next.originalLabel
+            || prev.name !== next.name
+            || prev.label !== next.label
+          ) {
+            currentAttrs = next
+            /** resolveDisplayText 读 node.attrs；把新 attrs 同步给闭包捕获的 node */
+            ;(node as any).attrs = next
             updateText()
           }
           return true

@@ -96,6 +96,65 @@ describe('createTiptapOperate', () => {
     cleanup()
   })
 
+  it('toggleStyles applies multiple marks at once', () => {
+    const { editor, cleanup } = makeEditor('<p>hello</p>')
+    editor.commands.setTextSelection({ from: 1, to: 6 })
+    const op = createTiptapOperate(editor)
+    op.toggleStyles({ bold: true, italic: true })
+    const active = op.getActiveStyles()
+    expect(active.bold).toBe(true)
+    expect(active.italic).toBe(true)
+    cleanup()
+  })
+
+  it('removeStyles removes specified marks only', () => {
+    const { editor, cleanup } = makeEditor('<p>hello</p>')
+    editor.commands.setTextSelection({ from: 1, to: 6 })
+    const op = createTiptapOperate(editor)
+    op.toggleStyles({ bold: true, italic: true })
+    op.removeStyles({ bold: true })
+    const active = op.getActiveStyles()
+    expect(active.bold).toBeUndefined()
+    expect(active.italic).toBe(true)
+    cleanup()
+  })
+
+  it('toggleStyles routes gradient → highlight with color attr', () => {
+    const { editor, cleanup } = makeEditor('<p>hello</p>')
+    editor.commands.setTextSelection({ from: 1, to: 6 })
+    const op = createTiptapOperate(editor)
+    op.toggleStyles({ gradient: 'mysticPurpleBlue' })
+    expect(op.getHTML()).toContain('data-color="mysticPurpleBlue"')
+    expect(op.getActiveStyles().gradient).toBe('mysticPurpleBlue')
+    cleanup()
+  })
+
+  it('getTextCursorPosition returns block info', () => {
+    const { editor, cleanup } = makeEditor('<h2>hi</h2>')
+    editor.commands.setTextSelection(2)
+    const op = createTiptapOperate(editor)
+    const cur = op.getTextCursorPosition()
+    expect(cur.nodeType).toBe('heading')
+    expect(cur.level).toBe(2)
+    expect(cur.blockType).toBe('h2')
+    expect(cur.from).toBe(cur.to)
+    cleanup()
+  })
+
+  it('onUpdate fires on content change and unsubscribes', () => {
+    const { editor, cleanup } = makeEditor('<p>a</p>')
+    const op = createTiptapOperate(editor)
+    let calls = 0
+    const off = op.onUpdate(() => { calls++ })
+    editor.commands.insertContent('b')
+    expect(calls).toBeGreaterThan(0)
+    const after = calls
+    off()
+    editor.commands.insertContent('c')
+    expect(calls).toBe(after)
+    cleanup()
+  })
+
   it('setGradient / unsetGradient via Highlight', () => {
     const { editor, cleanup } = makeEditor('<p>hello</p>')
     editor.commands.setTextSelection({ from: 1, to: 6 })

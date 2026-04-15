@@ -1,5 +1,61 @@
 import type { Editor } from '@tiptap/core'
 import type { GradientStyleType } from 'tiptap-nodes/gradient-highlight'
+import { isGradientType } from 'tiptap-nodes/gradient-highlight'
+
+/** BlockNote 风格的 style key → Tiptap mark 名映射（只处理真正能落到 mark 的 key） */
+const STYLE_KEY_TO_MARK: Record<string, string> = {
+  bold: 'bold',
+  italic: 'italic',
+  underline: 'underline',
+  strike: 'strike',
+  strikethrough: 'strike',
+  code: 'code',
+  highlight: 'highlight',
+  subscript: 'subscript',
+  superscript: 'superscript',
+  /** 渐变也借道 highlight mark，实现见 GradientHighlight */
+  gradient: 'highlight',
+}
+
+/** 光标位置返回类型 */
+export type TextCursorPosition = {
+  /** ProseMirror 文档位置 */
+  pos: number
+  /** 选区起点 */
+  from: number
+  /** 选区终点（若为光标则 === from） */
+  to: number
+  /** 当前所在块的节点类型名（paragraph / heading / bulletList ...） */
+  nodeType: string
+  /** Native 约定的块类型字符串（h1 / paragraph / unordered_list ...） */
+  blockType: string
+  /** 标题级别，仅 heading 块有值 */
+  level?: number
+}
+
+/**
+ * 将 BlockNote 风格的 `{ key: value }` 展开为一组 `(markName, attrs)` 对
+ * - `{ bold: true }` → `('bold', undefined)`
+ * - `{ gradient: 'mysticPurpleBlue' }` → `('highlight', { color: 'mysticPurpleBlue' })`
+ */
+function expandStyles(styles: Record<string, any>): Array<[string, Record<string, any> | undefined]> {
+  const result: Array<[string, Record<string, any> | undefined]> = []
+  for (const [key, value] of Object.entries(styles || {})) {
+    const mark = STYLE_KEY_TO_MARK[key]
+    if (!mark)
+      continue
+    if (key === 'gradient' && typeof value === 'string' && isGradientType(value)) {
+      result.push([mark, { color: value }])
+    }
+    else if (key === 'highlight' && typeof value === 'string' && value) {
+      result.push([mark, { color: value }])
+    }
+    else {
+      result.push([mark, undefined])
+    }
+  }
+  return result
+}
 
 /** 已知的内联 mark 名称集合，用于 getActiveStyles 聚合 */
 const INLINE_MARKS = ['bold', 'italic', 'underline', 'strike', 'code', 'highlight', 'subscript', 'superscript', 'link'] as const
@@ -54,7 +110,7 @@ export function createTiptapOperate(editor: Editor) {
     getJSON: () => editor.getJSON(),
     getHTML: () => editor.getHTML(),
     setHTML: (html: string) => {
-      editor.commands.setContent(html)
+      editor.commands.setContent(html, { contentType: 'html' })
     },
     getMarkdown: (): string => {
       const storage = (editor.storage as any)?.markdown
@@ -65,7 +121,7 @@ export function createTiptapOperate(editor: Editor) {
       return editor.getHTML()
     },
     setMarkdown: (markdown: string) => {
-      editor.commands.setContent(markdown)
+      editor.commands.setContent(markdown, { contentType: 'markdown' })
     },
 
     // ======================
@@ -84,13 +140,81 @@ export function createTiptapOperate(editor: Editor) {
     // ======================
     /** 样式 */
     // ======================
-    getActiveStyles: (): Record<string, boolean> => {
-      const active: Record<string, boolean> = {}
+    getActiveStyles: (): Record<string, boolean | string> => {
+      const active: Record<string, boolean | string> = {}
       for (const name of INLINE_MARKS) {
         if (editor.isActive(name))
           active[name] = true
       }
+      /** 把 highlight 的 color 展开：普通色仍记 highlight，渐变 key 额外记 gradient */
+      if (active.highlight) {
+        const { color } = editor.getAttributes('highlight') ?? {}
+        if (typeof color === 'string' && isGradientType(color)) {
+          active.gradient = color
+          delete active.highlight
+        }
+      }
       return active
+    },
+
+    /**
+     * 批量切换 mark
+     * @param styles 形如 `{ bold: true, italic: true }` 或 `{ gradient: 'mysticPurpleBlue' }`
+     */
+    toggleStyles: (styles: Record<string, any>) => {
+      const chain = editor.chain().focus()
+      for (const [mark, attrs] of expandStyles(styles)) {
+        chain.toggleMark(mark, attrs)
+      }
+      chain.run()
+    },
+    /**
+     * 批量移除 mark
+     */
+    removeStyles: (styles: Record<string, any>) => {
+      const chain = editor.chain().focus()
+      for (const [mark] of expandStyles(styles)) {
+        chain.unsetMark(mark)
+      }
+      chain.run()
+    },
+    /**
+     * 批量应用 mark（已激活则保持激活）
+     */
+    addStyles: (styles: Record<string, any>) => {
+      const chain = editor.chain().focus()
+      for (const [mark, attrs] of expandStyles(styles)) {
+        chain.setMark(mark, attrs)
+      }
+      chain.run()
+    },
+
+    /**
+     * 获取文本光标位置 + 所在块信息
+     * Tiptap 以 ProseMirror 位置（数字）为主，没有稳定 blockId
+     */
+    getTextCursorPosition: (): TextCursorPosition => {
+      const { from, to, $from } = editor.state.selection
+      const parent = $from.parent
+      return {
+        pos: from,
+        from,
+        to,
+        nodeType: parent.type.name,
+        blockType: resolveBlockTypeString(editor),
+        level: parent.type.name === 'heading'
+          ? (parent.attrs?.level as number | undefined)
+          : undefined,
+      }
+    },
+
+    /**
+     * 订阅内容更新
+     * @returns 退订函数
+     */
+    onUpdate: (cb: () => void) => {
+      editor.on('update', cb)
+      return () => editor.off('update', cb)
     },
 
     // ======================
