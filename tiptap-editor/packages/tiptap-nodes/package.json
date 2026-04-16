@@ -44,7 +44,9 @@
   ],
   "scripts": {
     "build": "vite build",
-    "lint": "eslint ./src --fix --quiet"
+    "lint": "eslint ./src --fix --quiet",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@tiptap/extension-code-block-lowlight": "^3.13.0",

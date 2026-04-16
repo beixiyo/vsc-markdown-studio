@@ -27,7 +27,9 @@
   ],
   "scripts": {
     "build": "vite build",
-    "lint": "eslint ./src --fix --quiet"
+    "lint": "eslint ./src --fix --quiet",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "peerDependencies": {
     "@tiptap/pm": "^3.13.0",

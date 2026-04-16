@@ -43,7 +43,9 @@
   },
   "scripts": {
     "build": "vite build",
-    "lint": "eslint ./src --fix --quiet"
+    "lint": "eslint ./src --fix --quiet",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "hooks": "workspace:^",

@@ -14,6 +14,7 @@
     "build:hooks": "nx run hooks:build",
     "build:utils": "nx run utils:build",
     "build:config": "nx run config:build",
+    "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
     "lint:comp": "nx run comps:lint",
     "lint:markdown-studio": "nx run markdown-studio:lint",
