@@ -48,6 +48,12 @@ export const zhTW: Translations = {
     blockquote: '引用',
     codeBlock: '程式碼區塊',
   },
+  table: {
+    addRow: '新增列',
+    deleteRow: '刪除列',
+    addColumn: '新增欄',
+    deleteColumn: '刪除欄',
+  },
   image: {
     addImage: '新增圖片',
     uploadClick: '點擊上傳',

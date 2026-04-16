@@ -48,6 +48,12 @@ export const zhCN: Translations = {
     blockquote: '引用',
     codeBlock: '代码块',
   },
+  table: {
+    addRow: '添加行',
+    deleteRow: '删除行',
+    addColumn: '添加列',
+    deleteColumn: '删除列',
+  },
   image: {
     addImage: '添加图片',
     uploadClick: '点击上传',

@@ -36,6 +36,7 @@
     "@tiptap/extension-placeholder": "^3.13.0",
     "@tiptap/extension-subscript": "^3.13.0",
     "@tiptap/extension-superscript": "^3.13.0",
+    "@tiptap/extension-table": "^3.22.3",
     "@tiptap/extension-text-align": "^3.13.0",
     "@tiptap/extension-typography": "^3.13.0",
     "@tiptap/extensions": "^3.13.0",
@@ -48,6 +49,7 @@
     "react-dom": "^19.2.1"
   },
   "devDependencies": {
+    "@tiptap/extension-table": "^3.22.3",
     "@vitejs/plugin-react": "^6.0.1",
     "vite": "^8.0.7"
   }

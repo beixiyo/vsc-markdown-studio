@@ -2,6 +2,7 @@ import { TaskItem, TaskList } from '@tiptap/extension-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Subscript } from '@tiptap/extension-subscript'
 import { Superscript } from '@tiptap/extension-superscript'
+import { TableKit } from '@tiptap/extension-table'
 import { TextAlign } from '@tiptap/extension-text-align'
 import { Typography } from '@tiptap/extension-typography'
 import { Selection } from '@tiptap/extensions'
@@ -70,6 +71,14 @@ export function createExtensions(options: CreateExtensionsOptions = {}) {
 
     /** 自定义图片节点：支持 inline/block、丰富的渲染属性和事件回调 */
     ImageNode.configure(options.image),
+
+    /** 表格扩展：支持表格创建、行列操作、单元格合并等 */
+    TableKit.configure({
+      table: {
+        /** 允许列宽拖拽调整 */
+        resizable: true,
+      },
+    }),
     /** 排版扩展：自动转换标点符号（如 -- 转换为 —） */
     Typography,
     /** 上标扩展 */

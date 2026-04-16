@@ -7,50 +7,87 @@
   table {
     border-spacing: 0;
     border-collapse: collapse;
-    display: block;
-    width: max-content;
+    display: table;
+    width: 100%;
     max-width: 100%;
     overflow: auto;
     font-variant: tabular-nums;
     margin: 1.5rem 0;
-    
+    table-layout: auto;
+
     /* 表头 */
     th {
       font-weight: bold;
       text-align: left;
+      background-color: rgb(var(--background2));
     }
-    
+
     /* 单元格 */
     th,
     td {
       padding: 6px 13px;
       border: 1px solid rgb(var(--border));
-      
+      position: relative;
+      min-width: 80px;
+      vertical-align: top;
+
       /* 单元格内最后元素无下边距 */
       > *:last-child {
         margin-bottom: 0;
       }
-      
+
       /* 单元格内段落 */
       p {
         margin: 0;
       }
-      
+
       /* 单元格内图片 */
       img {
         background-color: transparent;
       }
     }
-    
+
     /* 表格行 */
     tr {
       background-color: rgb(var(--background));
       border-top: 1px solid rgb(var(--border));
-      
+
       /* 斑马纹 - 偶数行浅底 */
       &:nth-child(2n) {
-        background-color: rgb(var(--background2));
+        background-color: rgb(var(--background2) / 0.5);
       }
     }
+
+    /* ---- 交互式编辑增强 ---- */
+
+    /* 选中单元格高亮 */
+    .selectedCell {
+      background-color: rgb(var(--brand) / 0.08);
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border: 2px solid rgb(var(--brand) / 0.4);
+      }
+    }
+
+    /* 列宽拖拽手柄 */
+    .column-resize-handle {
+      position: absolute;
+      right: -2px;
+      top: 0;
+      bottom: -2px;
+      width: 4px;
+      background-color: rgb(var(--brand) / 0.5);
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+  /* 列宽拖拽中的光标样式 */
+  &.resize-cursor {
+    cursor: col-resize;
   }
 }

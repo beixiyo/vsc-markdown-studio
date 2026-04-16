@@ -13,6 +13,7 @@ import { getEditorElement, SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils
 export function useSelectToolbar({
   editor,
   enabled,
+  shouldShow,
 }: UseSelectToolbarOptions) {
   const [hasSelection, setHasSelection] = useState(false)
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
@@ -37,7 +38,10 @@ export function useSelectToolbar({
         return
       }
 
-      const has = hasSelectedText(editor) && !isSelectionOnlyLinkText(editor)
+      /** 是否展示由外部 predicate 决定，内部只保留「有选中」与「非纯链接选中」两条基础约束 */
+      const has = hasSelectedText(editor)
+        && !isSelectionOnlyLinkText(editor)
+        && (!shouldShow || shouldShow({ editor }))
 
       if (!has && isInteractingRef.current) {
         return
@@ -58,7 +62,7 @@ export function useSelectToolbar({
       setHasSelection(true)
       setSelectionRect(rect)
     }, 0)
-  }, [editor, selectionRect])
+  }, [editor, selectionRect, shouldShow])
 
   /** 选区变化时同步 Popover 开关 */
   useEffect(() => {

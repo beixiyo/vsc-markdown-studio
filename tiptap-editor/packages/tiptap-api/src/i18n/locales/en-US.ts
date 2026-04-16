@@ -48,6 +48,12 @@ export const enUS: Translations = {
     blockquote: 'Blockquote',
     codeBlock: 'Code Block',
   },
+  table: {
+    addRow: 'Add row',
+    deleteRow: 'Delete row',
+    addColumn: 'Add column',
+    deleteColumn: 'Delete column',
+  },
   image: {
     addImage: 'Add image',
     uploadClick: 'Click to upload',

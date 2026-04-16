@@ -53,6 +53,12 @@ export type TiptapEditorTranslations = {
     blockquote: string
     codeBlock: string
   }
+  table: {
+    addRow: string
+    deleteRow: string
+    addColumn: string
+    deleteColumn: string
+  }
   image: {
     addImage: string
   }
@@ -346,6 +352,19 @@ export function useSlashLabels() {
     orderedList: t('slash.orderedList'),
     blockquote: t('slash.blockquote'),
     mermaid: t('slash.mermaid'),
+  }
+}
+
+/**
+ * 获取表格相关标签
+ */
+export function useTableLabels() {
+  const t = useTiptapEditorT()
+  return {
+    addRow: t('table.addRow'),
+    deleteRow: t('table.deleteRow'),
+    addColumn: t('table.addColumn'),
+    deleteColumn: t('table.deleteColumn'),
   }
 }
 

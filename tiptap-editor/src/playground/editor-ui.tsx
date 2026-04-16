@@ -6,7 +6,7 @@ import { memo, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { BlockActionMenu, EditorLinkHover, MarkButton, SelectToolbar } from 'tiptap-comps'
+import { BlockActionMenu, EditorLinkHover, MarkButton, SelectToolbar, TableControls } from 'tiptap-comps'
 import { HoverTooltip } from 'tiptap-hover/react'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { ImageTestDropdownMenu } from '@/components/my-ui/image-test-dropdown-menu'
@@ -140,6 +140,9 @@ sequenceDiagram
 
       {/* 块级操作悬浮菜单 */ }
       <BlockActionMenu editor={ editor } enabled={ !readonly } />
+
+      {/* 表格悬浮控制（行列添加/删除按钮） */ }
+      <TableControls editor={ editor } enabled={ !readonly } />
 
       { !readonly && (
         <>

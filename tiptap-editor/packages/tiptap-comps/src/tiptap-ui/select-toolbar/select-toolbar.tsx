@@ -1,13 +1,17 @@
 'use client'
 
-import type { SelectToolbarProps, SelectToolbarRef } from './types'
+import type { SelectToolbarProps, SelectToolbarRef, SelectToolbarShouldShow } from './types'
 import { Popover } from 'comps'
 import { forwardRef, memo, useImperativeHandle } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { isNodeTypeSelected, SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { useSelectToolbar } from './hooks/use-select-toolbar'
 import { useEvent } from './hooks/useEvent'
+
+/** 默认判断：选中位于 table 祖先链上时不显示（由 TableControls 接管） */
+const defaultShouldShow: SelectToolbarShouldShow = ({ editor }) =>
+  !isNodeTypeSelected(editor, ['table'], true)
 
 const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((props, ref) => {
   const {
@@ -17,10 +21,11 @@ const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((pro
     offsetDistance = 8,
     placement = 'top-start',
     className = '',
+    shouldShow = defaultShouldShow,
   } = props
 
   const { editor } = useTiptapEditor(providedEditor)
-  const { selectionRect, isInteractingRef, popoverRef } = useSelectToolbar({ editor, enabled })
+  const { selectionRect, isInteractingRef, popoverRef } = useSelectToolbar({ editor, enabled, shouldShow })
 
   useEvent(enabled, popoverRef)
   useImperativeHandle(ref, () => ({

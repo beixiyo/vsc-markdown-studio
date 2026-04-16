@@ -10,7 +10,8 @@
     ],
     "module": "ESNext",
     "types": [
-      "vite/client"
+      "vite/client",
+      "@tiptap/extension-table"
     ],
 
     "outDir": "dist",

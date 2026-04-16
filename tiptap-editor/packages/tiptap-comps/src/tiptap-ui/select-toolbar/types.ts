@@ -3,6 +3,14 @@ import type { CascaderOption } from 'comps'
 import type { FloatingPlacement } from 'hooks'
 import type { PropsWithChildren, ReactNode } from 'react'
 
+/** `shouldShow` 判断时接收的上下文 */
+export interface SelectToolbarShouldShowContext {
+  editor: Editor
+}
+
+/** 判断当前选中是否应展示工具栏；返回 false 则抑制 */
+export type SelectToolbarShouldShow = (ctx: SelectToolbarShouldShowContext) => boolean
+
 export type SelectToolbarProps = {
   /**
    * 可选的编辑器实例，如果不提供则从上下文获取
@@ -31,6 +39,18 @@ export type SelectToolbarProps = {
    * 自定义样式类名
    */
   className?: string
+  /**
+   * 自定义判断是否展示工具栏。返回 false 抑制显示。
+   * 默认当选中位于 table 节点内部时抑制（由 TableControls 接管该区域）。
+   *
+   * 覆盖示例：
+   * ```tsx
+   * <SelectToolbar shouldShow={({ editor }) =>
+   *   !isNodeTypeSelected(editor, ['table', 'codeBlock'], true)
+   * }>...</SelectToolbar>
+   * ```
+   */
+  shouldShow?: SelectToolbarShouldShow
 }
 & React.PropsWithChildren<React.HTMLAttributes<HTMLElement>>
 
@@ -83,6 +103,8 @@ export type UseSelectToolbarOptions = {
   editor: Editor | null
   /** 是否启用 */
   enabled: boolean
+  /** 自定义展示判断 */
+  shouldShow?: SelectToolbarShouldShow
 }
 
 /**

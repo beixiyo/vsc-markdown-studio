@@ -12,6 +12,7 @@
     "types": [
       "@tiptap/starter-kit",
       "@tiptap/extension-text-align",
+      "@tiptap/extension-table",
       "vite/client"
     ],
     "paths": {

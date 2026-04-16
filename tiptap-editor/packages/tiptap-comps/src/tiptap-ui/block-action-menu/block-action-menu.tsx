@@ -1,6 +1,6 @@
 'use client'
 
-import type { BlockActionMenuProps } from './types'
+import type { BlockActionMenuProps, BlockActionShouldShow } from './types'
 import { TextSelection } from '@tiptap/pm/state'
 import { AnimateShow, SafePortal } from 'comps'
 import { getScrollParents, useFloatingPosition } from 'hooks'
@@ -10,9 +10,21 @@ import { getEditorElement } from 'tiptap-utils'
 import { DragHandleIcon } from '../../icons'
 import { useBlockDrag } from './use-block-drag'
 
-const HIDE_DELAY = 500
+/** 默认判断：光标位于 table 祖先链上时不显示（由 TableControls 接管） */
+const defaultShouldShow: BlockActionShouldShow = ({ $pos }) => {
+  for (let depth = $pos.depth; depth > 0; depth--) {
+    if ($pos.node(depth).type.name === 'table')
+      return false
+  }
+  return true
+}
 
-export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = true }) => {
+export const BlockActionMenu = memo<BlockActionMenuProps>(({
+  editor,
+  enabled = true,
+  hideDelay = 500,
+  shouldShow = defaultShouldShow,
+}) => {
   const [hoverNodePos, setHoverNodePos] = useState<number | null>(null)
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [scrollContainer, setScrollContainer] = useState<HTMLElement | null>(null)
@@ -55,8 +67,8 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     hideTimerRef.current = setTimeout(() => {
       setHoverNodePos(null)
       hideTimerRef.current = null
-    }, HIDE_DELAY)
-  }, [])
+    }, hideDelay)
+  }, [hideDelay])
 
   const showMenu = useCallback((pos: number) => {
     cancelHideTimer()
@@ -78,11 +90,11 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
 
       const editorRect = editorElement.getBoundingClientRect()
 
-      // 动态读取编辑器的 paddingLeft 作为偏移量，避免硬编码 -24
+      /** 动态读取编辑器的 paddingLeft 作为偏移量，避免硬编码 -24 */
       const computedStyle = window.getComputedStyle(editorElement)
       const paddingLeft = Number.parseFloat(computedStyle.paddingLeft) || 24
 
-      // 把高度设置为 0，配合下方的 'bottom-start'，可以使得菜单的绝对 Top 精确对齐到这里的 Y 坐标
+      /** 把高度设置为 0，配合下方的 'bottom-start'，可以使得菜单的绝对 Top 精确对齐到这里的 Y 坐标 */
       const topOffset = rect.top + 2
       return new DOMRect(editorRect.left - paddingLeft, topOffset, 0, 0)
     }
@@ -127,13 +139,17 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     const $pos = editor.state.doc.resolve(pos)
     let blockPos = -1
 
-    /** 查找最近的块级节点 */
+    /** 沿祖先链向上查找最近的块级节点 */
     for (let depth = $pos.depth; depth > 0; depth--) {
-      const node = $pos.node(depth)
-      if (node.isBlock) {
+      if ($pos.node(depth).isBlock) {
         blockPos = $pos.before(depth)
         break
       }
+    }
+
+    /** 把是否展示的最终决定权交给外部 predicate，可在此注入业务上下文（如排除特定节点） */
+    if (blockPos !== -1 && !shouldShow({ editor, pos: blockPos, $pos })) {
+      blockPos = -1
     }
 
     if (blockPos !== -1) {
@@ -142,7 +158,7 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
     else {
       hideMenu()
     }
-  }, [hoverContent, editor, enabled, hideMenu, showMenu])
+  }, [hoverContent, editor, enabled, hideMenu, showMenu, shouldShow])
 
   useEffect(() => {
     return cancelHideTimer
@@ -155,7 +171,9 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({ editor, enabled = t
   }
 
   return (
-    <SafePortal target={ scrollContainer !== document.body ? scrollContainer : undefined }>
+    <SafePortal target={ scrollContainer !== document.body
+      ? scrollContainer
+      : undefined }>
       <AnimateShow
         show={ hoverNodePos !== null }
         variants="fade"

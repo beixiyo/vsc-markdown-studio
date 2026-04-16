@@ -48,6 +48,12 @@ export const ja: Translations = {
     blockquote: '引用',
     codeBlock: 'コードブロック',
   },
+  table: {
+    addRow: '行を追加',
+    deleteRow: '行を削除',
+    addColumn: '列を追加',
+    deleteColumn: '列を削除',
+  },
   image: {
     addImage: '画像を追加',
     uploadClick: 'クリックしてアップロード',
