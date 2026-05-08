@@ -19,6 +19,12 @@ export type MDBridge = TiptapOperate & {
   setBottomMargin: (px: number) => void
 
   /**
+   * 设置文本方向（RTL / LTR / 自动检测）
+   * @param direction `'rtl'` 右到左 | `'ltr'` 左到右 | `'auto'` 按内容自动判定
+   */
+  setTextDirection: (direction: 'ltr' | 'rtl' | 'auto') => void
+
+  /**
    * 插入图片
    *
    * 使用见 [tiptap-editor/packages/tiptap-nodes/src/image/README.md](../../../tiptap-editor/packages/tiptap-nodes/src/image/README.md)

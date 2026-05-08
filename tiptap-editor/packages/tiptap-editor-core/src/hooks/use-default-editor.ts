@@ -11,6 +11,7 @@ export function useDefaultEditor(options: UseDefaultEditorOptions) {
     extensions: userExtensions,
     editorProps,
     image,
+    textDirection,
     ...restOptions
   } = options
 
@@ -45,6 +46,7 @@ export function useDefaultEditor(options: UseDefaultEditorOptions) {
     immediatelyRender: false,
     editorProps: mergedEditorProps,
     extensions,
+    textDirection,
     ...restOptions,
   })
 

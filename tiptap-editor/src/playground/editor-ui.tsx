@@ -2,7 +2,7 @@ import type { EditorUIProps } from './types'
 import { useCurrentEditor } from '@tiptap/react'
 
 import { Button, Toolbar } from 'comps'
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { AIActionPanel, AIButton } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
@@ -42,6 +42,22 @@ export const EditorUI = memo<EditorUIProps>(({
     runAllOperateTests,
     runOperateSuite,
   } = useOperateTests(editor || null, operateTestSuites)
+
+  const TEXT_DIRECTIONS = ['ltr', 'rtl', 'auto'] as const
+  type TextDirection = typeof TEXT_DIRECTIONS[number]
+  const [textDirection, setTextDirection] = useState<TextDirection>('ltr')
+
+  const cycleTextDirection = useCallback(() => {
+    const nextIndex = (TEXT_DIRECTIONS.indexOf(textDirection) + 1) % TEXT_DIRECTIONS.length
+    const next = TEXT_DIRECTIONS[nextIndex]
+    setTextDirection(next)
+    if (editor) {
+      editor.setOptions({ textDirection: next })
+    }
+    document.documentElement.setAttribute('dir', next === 'auto'
+      ? ''
+      : next)
+  }, [editor, textDirection])
 
   const aiQuickSource = useAiQuickSource(editor, aiController)
   const suggestion = useSlashSuggestion(editor, aiQuickSource, {
@@ -131,6 +147,15 @@ sequenceDiagram
             <ImageTestDropdownMenu editor={ editor } portal={ isMobile } />
             <SelectionTestButton />
             <ScrollTestButton />
+            <Button
+              size="sm"
+              onClick={ cycleTextDirection }
+              title={ `文本方向：${textDirection.toUpperCase()}（点击切换）` }
+            >
+              Dir:
+              {' '}
+              { textDirection.toUpperCase() }
+            </Button>
           </Toolbar.Group>
         </BaseEditorUI>
       ) }

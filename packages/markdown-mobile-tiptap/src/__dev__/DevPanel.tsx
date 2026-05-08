@@ -249,6 +249,12 @@ export default function DevPanel() {
                 <Btn label="redo" onClick={ () => bridge().redo() } />
               </Section>
 
+              <Section title="Text Direction">
+                <Btn label="RTL" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('rtl')) } />
+                <Btn label="LTR" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('ltr')) } />
+                <Btn label="Auto" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('auto')) } />
+              </Section>
+
               <Section title="Layout">
                 <Btn label="setBottomMargin(160)" onClick={ () => bridge().setBottomMargin(160) } />
                 <Btn label="setBottomMargin(0)" onClick={ () => bridge().setBottomMargin(0) } />

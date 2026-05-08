@@ -93,6 +93,13 @@ export function useSetupMDBridge(
         el.style.paddingBottom = `${v}px`
       },
 
+      setTextDirection: (direction: 'ltr' | 'rtl' | 'auto') => {
+        editor.setOptions({ textDirection: direction })
+        document.documentElement.setAttribute('dir', direction === 'auto'
+          ? ''
+          : direction)
+      },
+
       /**
        * 对齐老版语义：
        * 1. 重新解析当前 markdown（把纯文本 `[speaker:X]` 变成节点）
