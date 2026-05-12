@@ -1,12 +1,12 @@
 import type {
-  GetHoverContentOptions,
+  GetContentAtPosOptions,
   HoverHighlightLayer,
   HoverHighlightSpec,
 } from 'tiptap-api'
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
-import { getHoverContentFromViewCoords, getHoverHighlightSpecs } from 'tiptap-api'
+import { getContentFromViewCoords, getHoverHighlightSpecs } from 'tiptap-api'
 import { pointerExitedDocument } from './pointer-exited-document'
 
 export const hoverContextHighlightKey = new PluginKey('hoverContextHighlight')
@@ -22,7 +22,7 @@ export const HoverContextHighlight = Extension.create<HoverContextHighlightOptio
     return {
       autoSyncOnPointer: true,
       throttleMs: 100,
-      hoverContentOptions: {},
+      contentOptions: {},
       disableOnDrag: true,
       disableOnSelection: false,
       layerClassNames: {
@@ -127,10 +127,10 @@ export const HoverContextHighlight = Extension.create<HoverContextHighlightOptio
               return
             lastThrottleAt = now
 
-            const content = getHoverContentFromViewCoords(
+            const content = getContentFromViewCoords(
               editorView,
               { left: clientX, top: clientY },
-              opts.hoverContentOptions,
+              opts.contentOptions,
             )
             const specs = getHoverHighlightSpecs(content, editorView.state.doc)
             dispatchMeta(specs.length > 0
@@ -215,8 +215,8 @@ export type HoverContextHighlightOptions = {
   autoSyncOnPointer: boolean
   /** 同步高亮节流间隔（ms） */
   throttleMs: number
-  /** 传给 getHoverContentFromViewCoords 的选项 */
-  hoverContentOptions: GetHoverContentOptions
+  /** 传给 getContentFromViewCoords 的选项 */
+  contentOptions: GetContentAtPosOptions
   /** 拖拽时是否清除高亮 */
   disableOnDrag: boolean
   /** 有选区时是否清除高亮 */

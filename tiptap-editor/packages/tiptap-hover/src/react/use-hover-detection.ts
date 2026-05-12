@@ -1,8 +1,8 @@
 import type { Editor } from '@tiptap/react'
-import type { HoverContent } from 'tiptap-api'
+import type { ContentAtPos } from 'tiptap-api'
 import { useLatestCallback, useThrottleFn } from 'hooks'
 import { useEffect, useRef, useState } from 'react'
-import { getHoverContentFromCoords } from 'tiptap-api'
+import { getContentFromCoords } from 'tiptap-api'
 import { getEditorElement } from 'tiptap-utils'
 
 import { pointerExitedDocument } from '../pointer-exited-document'
@@ -15,7 +15,7 @@ export type UseHoverDetectionConfig = {
   /** 节流延迟（毫秒），默认 100ms */
   throttleDelay?: number
   /** hover 内容变化时的回调 */
-  onHoverChange?: (content: HoverContent | null) => void
+  onHoverChange?: (content: ContentAtPos | null) => void
   /** 是否在拖拽时禁用 hover 检测 */
   disableOnDrag?: boolean
   /** 是否在选择文本时禁用 hover 检测 */
@@ -24,7 +24,7 @@ export type UseHoverDetectionConfig = {
 
 export type UseHoverDetectionReturn = {
   /** 当前 hover 的内容信息 */
-  hoverContent: HoverContent | null
+  posContent: ContentAtPos | null
   /** 是否正在拖拽 */
   isDragging: boolean
   /** 手动触发 hover 检测（用于测试） */
@@ -46,12 +46,12 @@ export function useHoverDetection(
     disableOnSelection = false,
   } = config
 
-  const [hoverContent, setHoverContent] = useState<HoverContent | null>(null)
+  const [posContent, setPosContent] = useState<ContentAtPos | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const editorElementRef = useRef<HTMLElement | null>(null)
 
-  const handleHoverContent = useLatestCallback((content: HoverContent | null) => {
-    setHoverContent(content)
+  const handleContent = useLatestCallback((content: ContentAtPos | null) => {
+    setPosContent(content)
     onHoverChange?.(content)
   })
 
@@ -91,16 +91,16 @@ export function useHoverDetection(
           && event.clientY <= rect.bottom
 
       if (!isInsideEditor) {
-        handleHoverContent(null)
+        handleContent(null)
         return
       }
 
-      const content = getHoverContentFromCoords(editor, {
+      const content = getContentFromCoords(editor, {
         left: event.clientX,
         top: event.clientY,
       })
 
-      handleHoverContent(content)
+      handleContent(content)
     },
     {
       delay: throttleDelay,
@@ -111,13 +111,13 @@ export function useHoverDetection(
     if (!enabled) {
       return
     }
-    handleHoverContent(null)
+    handleContent(null)
   })
 
   const handleDragStart = useLatestCallback(() => {
     setIsDragging(true)
     if (disableOnDrag) {
-      handleHoverContent(null)
+      handleContent(null)
     }
   })
 
@@ -130,8 +130,8 @@ export function useHoverDetection(
       if (!enabled || !editor) {
         return
       }
-      const content = getHoverContentFromCoords(editor, coords)
-      handleHoverContent(content)
+      const content = getContentFromCoords(editor, coords)
+      handleContent(content)
     },
   )
 
@@ -151,7 +151,7 @@ export function useHoverDetection(
     const handleDocumentMouseOut = (event: MouseEvent) => {
       if (!pointerExitedDocument(event))
         return
-      handleHoverContent(null)
+      handleContent(null)
     }
 
     currentEditorElement.addEventListener('mousemove', handleMouseMove)
@@ -177,7 +177,7 @@ export function useHoverDetection(
   ])
 
   return {
-    hoverContent,
+    posContent,
     isDragging,
     triggerHover,
   }

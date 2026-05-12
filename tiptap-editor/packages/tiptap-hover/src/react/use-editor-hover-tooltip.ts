@@ -2,8 +2,8 @@ import type { EditorHoverTooltipProps } from './types'
 import { useLatestCallback, useThrottleFn } from 'hooks'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
-  getHoverContentFromCoords,
-  type HoverContent,
+  type ContentAtPos,
+  getContentFromCoords,
 } from 'tiptap-api'
 import { getEditorElement } from 'tiptap-utils'
 import { pointerExitedDocument } from '../pointer-exited-document'
@@ -19,11 +19,11 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
   } = props
 
   const [mousePosition, setMousePosition] = useState<{ x: number, y: number } | null>(null)
-  const [hoverContent, setHoverContent] = useState<HoverContent | null>(null)
+  const [posContent, setPosContent] = useState<ContentAtPos | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const editorElementRef = useRef<HTMLElement | null>(null)
 
-  const handleHoverContentUpdate = useThrottleFn(
+  const handleContentUpdate = useThrottleFn(
     (coords: { x: number, y: number }) => {
       if (
         coords == null
@@ -34,26 +34,26 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
       }
 
       if (!enabled || !editor || !editor.view) {
-        setHoverContent(null)
+        setPosContent(null)
         return
       }
 
       if (isDragging && disableOnDrag) {
-        setHoverContent(null)
+        setPosContent(null)
         return
       }
 
       if (disableOnSelection && editor.state.selection.from !== editor.state.selection.to) {
-        setHoverContent(null)
+        setPosContent(null)
         return
       }
 
-      const content = getHoverContentFromCoords(editor, {
+      const content = getContentFromCoords(editor, {
         left: coords.x,
         top: coords.y,
-      })
+      }, { includeSection: true })
 
-      setHoverContent(content)
+      setPosContent(content)
     },
     {
       delay: throttleDelay,
@@ -63,7 +63,7 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
   const handleMouseMove = useLatestCallback((event: MouseEvent) => {
     if (!enabled || !editor?.view) {
       setMousePosition(null)
-      setHoverContent(null)
+      setPosContent(null)
       return
     }
 
@@ -80,27 +80,27 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
 
     if (!isInsideEditor) {
       setMousePosition(null)
-      setHoverContent(null)
+      setPosContent(null)
       return
     }
 
     const newPosition = { x: event.clientX, y: event.clientY }
     setMousePosition(newPosition)
-    handleHoverContentUpdate(newPosition)
+    handleContentUpdate(newPosition)
   })
 
   const handleMouseLeave = useLatestCallback(() => {
     if (!enabled)
       return
     setMousePosition(null)
-    setHoverContent(null)
+    setPosContent(null)
   })
 
   const handleDragStart = useLatestCallback(() => {
     setIsDragging(true)
     if (disableOnDrag) {
       setMousePosition(null)
-      setHoverContent(null)
+      setPosContent(null)
     }
   })
 
@@ -111,7 +111,7 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
   useEffect(() => {
     if (!enabled || !editor?.view) {
       setMousePosition(null)
-      setHoverContent(null)
+      setPosContent(null)
       return
     }
 
@@ -125,7 +125,7 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
       if (!pointerExitedDocument(event))
         return
       setMousePosition(null)
-      setHoverContent(null)
+      setPosContent(null)
     }
 
     editorElement.addEventListener('mousemove', handleMouseMove)
@@ -141,35 +141,35 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
       document.removeEventListener('dragstart', handleDragStart)
       document.removeEventListener('dragend', handleDragEnd)
       setMousePosition(null)
-      setHoverContent(null)
+      setPosContent(null)
     }
   }, [enabled, editor, handleMouseMove, handleMouseLeave, handleDragStart, handleDragEnd])
 
   const formattedContent = useMemo(() => {
-    if (!hoverContent)
+    if (!posContent)
       return ''
 
     if (formatContent)
-      return formatContent(hoverContent)
+      return formatContent(posContent)
 
     const parts: string[] = []
-    if (hoverContent.blockType)
-      parts.push(`块: ${hoverContent.blockType}`)
+    if (posContent.blockType)
+      parts.push(`块: ${posContent.blockType}`)
 
-    if (hoverContent.marks?.length > 0) {
-      const markNames = hoverContent.marks.map(m => m.type).join(', ')
+    if (posContent.marks?.length > 0) {
+      const markNames = posContent.marks.map(m => m.type).join(', ')
       parts.push(`标记: ${markNames}`)
     }
 
-    if (hoverContent.lineInBlockText?.trim()) {
-      const line = hoverContent.lineInBlockText.trim()
+    if (posContent.lineInBlockText?.trim()) {
+      const line = posContent.lineInBlockText.trim()
       const truncated = line.length > 120
         ? `${line.slice(0, 120)}...`
         : line
       parts.push(`行: ${truncated}`)
     }
-    else if (hoverContent.textContent) {
-      const text = hoverContent.textContent.trim()
+    else if (posContent.textContent) {
+      const text = posContent.textContent.trim()
       if (text) {
         const truncated = text.length > 50
           ? `${text.slice(0, 50)}...`
@@ -178,19 +178,40 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
       }
     }
 
-    if (hoverContent.contextText?.trim()) {
-      const ctx = hoverContent.contextText.trim()
+    if (posContent.contextText?.trim()) {
+      const ctx = posContent.contextText.trim()
       const truncated = ctx.length > 100
         ? `${ctx.slice(0, 100)}...`
         : ctx
       parts.push(`上下文: ${truncated}`)
     }
 
-    if (hoverContent.pos !== undefined)
-      parts.push(`位置: ${hoverContent.pos}`)
+    if (posContent.pos !== undefined)
+      parts.push(`位置: ${posContent.pos}`)
+
+    if (posContent.sectionHeading) {
+      parts.push(`段落: [H${posContent.sectionHeading.level}] ${posContent.sectionHeading.text}`)
+    }
+    else if (posContent.sectionText) {
+      parts.push(`段落: （文档开头，无标题）`)
+    }
+
+    if (posContent.sectionRange) {
+      const headingLabel = posContent.sectionHeading
+        ? `[H${posContent.sectionHeading.level}] ${posContent.sectionHeading.text}`
+        : '(none)'
+      const body = posContent.sectionMarkdown || posContent.sectionText
+
+      console.log(
+        `[HoverSection] pos=${posContent.pos}`,
+        `heading=${headingLabel}`,
+        `range=[${posContent.sectionRange.from},${posContent.sectionRange.to}]`,
+        `\n---\n${body}\n---`,
+      )
+    }
 
     return parts.join(' | ')
-  }, [hoverContent, formatContent])
+  }, [posContent, formatContent])
 
   return {
     formattedContent,

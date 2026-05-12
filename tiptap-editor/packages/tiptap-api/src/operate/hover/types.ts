@@ -5,7 +5,7 @@
 /**
  * Hover 位置信息
  */
-export interface HoverPosition {
+export interface PosFromCoords {
   /** 文档位置 */
   pos: number
   /** 是否在有效位置 */
@@ -13,9 +13,9 @@ export interface HoverPosition {
 }
 
 /**
- * getHoverContent / getHoverContentFromCoords 的可选配置
+ * getContentAtPos / getContentFromCoords 的可选配置
  */
-export interface GetHoverContentOptions {
+export interface GetContentAtPosOptions {
   /**
    * 是否填充当前块全文 `blockText` 以及 `blockFrom` / `blockTo`（用于块级高亮等）
    * 默认关闭：hover 以逻辑行为主，避免整块文本与模型边界带来的「断裂」观感
@@ -33,6 +33,11 @@ export interface GetHoverContentOptions {
    * @default 0
    */
   contextRadius?: number
+  /**
+   * 是否填充所属 section（从最近上方标题到下一个同级/更高级标题）
+   * @default false
+   */
+  includeSection?: boolean
 }
 
 /**
@@ -40,12 +45,12 @@ export interface GetHoverContentOptions {
  *
  * **能力边界**：
  * - `textContent`：当前解析位置下的**单个文本叶子**或邻近叶子，故往往只有几个字符。
- * - `blockText` / `blockFrom` / `blockTo`：仅当 `GetHoverContentOptions.includeBlock === true` 时填充。
+ * - `blockText` / `blockFrom` / `blockTo`：仅当 `GetContentAtPosOptions.includeBlock === true` 时填充。
  * - `lineInBlockText`：块内按 **hardBreak / 叶子换行** 切分的逻辑行；**不是** CSS 折行后的屏幕行（默认 hover 主信息）。
  * - `contextText`：文档中连续字符窗口；跨块时含块分隔符换行。
  * - **视觉行**（自动换行）：需用 `caretRangeFromPoint` 等与 DOM 布局结合，本模块不实现。
  */
-export interface HoverContent {
+export interface ContentAtPos {
   /** 文档位置 */
   pos: number
   /** 文本节点内容（如果存在）——通常为当前叶子的全文，长度较短 */
@@ -74,6 +79,18 @@ export interface HoverContent {
    */
   lineInBlockFrom?: number
   lineInBlockTo?: number
+  /** 所属 section 的标题信息，仅当 includeSection 为 true 时填充 */
+  sectionHeading?: {
+    level: number
+    text: string
+    position: number
+  } | null
+  /** section 的纯文本 */
+  sectionText?: string
+  /** section 的 Markdown 格式文本 */
+  sectionMarkdown?: string
+  /** section 在文档中的位置范围 */
+  sectionRange?: { from: number, to: number }
   /** 所有应用的 marks */
   marks: Array<{
     type: string
@@ -86,7 +103,7 @@ export interface HoverContent {
 }
 
 /**
- * 编辑器内 hover 高亮分层：与 {@link HoverContent} 中块范围、上下文范围对应
+ * 编辑器内 hover 高亮分层：与 {@link ContentAtPos} 中块范围、上下文范围对应
  */
 export type HoverHighlightLayer = 'block' | 'context' | 'line'
 

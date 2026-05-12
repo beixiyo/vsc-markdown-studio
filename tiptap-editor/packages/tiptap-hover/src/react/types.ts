@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { FloatingPlacement } from 'hooks'
 import type { HTMLAttributes, ReactNode } from 'react'
-import type { HoverContent } from 'tiptap-api'
+import type { ContentAtPos } from 'tiptap-api'
 
 type HoverTooltipDomProps = Omit<HTMLAttributes<HTMLDivElement>, 'content' | 'ref'>
 
@@ -22,7 +22,7 @@ export type HoverTooltipEditorModeProps = HoverTooltipShared & {
   throttleDelay?: number
   disableOnDrag?: boolean
   disableOnSelection?: boolean
-  formatContent?: (content: HoverContent | null) => string | ReactNode
+  formatContent?: (content: ContentAtPos | null) => string | ReactNode
   content?: never
   mousePosition?: never
 }

@@ -20,6 +20,7 @@ export default defineConfig({
         'image-upload': fileURLToPath(new URL('./src/image-upload/index.tsx', import.meta.url)),
         'image': fileURLToPath(new URL('./src/image/index.ts', import.meta.url)),
         'code-block': fileURLToPath(new URL('./src/code-block/index.ts', import.meta.url)),
+        'gradient-highlight': fileURLToPath(new URL('./src/gradient-highlight/index.ts', import.meta.url)),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => {

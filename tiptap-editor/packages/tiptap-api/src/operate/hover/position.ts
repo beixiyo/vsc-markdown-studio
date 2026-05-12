@@ -1,15 +1,15 @@
 import type { EditorView } from '@tiptap/pm/view'
 import type { Editor } from '@tiptap/react'
 
-import type { HoverPosition } from './types'
+import type { PosFromCoords } from './types'
 
 /**
  * 从鼠标坐标获取文档位置（ProseMirror EditorView，供扩展内使用）
  */
-export function getHoverPositionFromView(
+export function getPosFromViewCoords(
   view: EditorView | null,
   coords: { left: number, top: number },
-): HoverPosition | null {
+): PosFromCoords | null {
   if (!view) {
     return null
   }
@@ -38,12 +38,12 @@ export function getHoverPositionFromView(
  * @param coords 鼠标坐标 { left: clientX, top: clientY }
  * @returns 位置信息，如果无法获取则返回 null
  */
-export function getHoverPosition(
+export function getPosFromCoords(
   editor: Editor | null,
   coords: { left: number, top: number },
-): HoverPosition | null {
+): PosFromCoords | null {
   if (!editor?.view) {
     return null
   }
-  return getHoverPositionFromView(editor.view, coords)
+  return getPosFromViewCoords(editor.view, coords)
 }

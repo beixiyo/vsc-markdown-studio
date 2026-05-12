@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import { NodeSelection } from '@tiptap/pm/state'
+import { getContentAtPos } from './hover/content'
 
 /**
  * 获取当前选中文本
@@ -202,4 +203,49 @@ export function getSelectionRect(
     console.error('获取选区位置失败:', error)
     return null
   }
+}
+
+/**
+ * 获取选区所在的「段落区间」——基于 {@link getContentAtPos}，额外附带选中文本
+ *
+ * - 有选中文本：返回选中文本 + 所属 section 上下文
+ * - 无选中文本（光标）：返回光标所在 section 的全部内容
+ */
+export function getSelectionSection(editor: Editor | null): SelectionSection | null {
+  if (!editor)
+    return null
+
+  const content = getContentAtPos(editor, editor.state.selection.from, { includeSection: true })
+  if (!content || content.sectionRange == null)
+    return null
+
+  const { selection } = editor.state
+  const selectedText = selection.empty
+    ? ''
+    : editor.state.doc.textBetween(selection.from, selection.to, '\n')
+
+  return {
+    selectedText,
+    sectionText: content.sectionText ?? '',
+    sectionMarkdown: content.sectionMarkdown ?? '',
+    sectionRange: content.sectionRange,
+    heading: content.sectionHeading ?? null,
+  }
+}
+
+export type SelectionSection = {
+  /** 用户选中的文本，光标无选区时为空字符串 */
+  selectedText: string
+  /** 整个 section 的纯文本（从标题到下一个同级标题之前） */
+  sectionText: string
+  /** 整个 section 的 Markdown 格式文本，保留标题/加粗/链接等格式；markdown 扩展不可用时为空字符串 */
+  sectionMarkdown: string
+  /** section 在文档中的位置范围 */
+  sectionRange: { from: number, to: number }
+  /** 所属标题信息，文档开头无标题时为 null */
+  heading: {
+    level: number
+    text: string
+    position: number
+  } | null
 }

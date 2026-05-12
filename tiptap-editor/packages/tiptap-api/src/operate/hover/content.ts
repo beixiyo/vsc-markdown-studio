@@ -2,25 +2,26 @@ import type { EditorState } from '@tiptap/pm/state'
 import type { EditorView } from '@tiptap/pm/view'
 import type { Editor } from '@tiptap/react'
 
-import type { GetHoverContentOptions, HoverContent } from './types'
+import type { ContentAtPos, GetContentAtPosOptions } from './types'
 import {
   docPosAtFlatOffset,
   findInnermostBlockDepth,
   leafTextWithHardBreaks,
 } from './internal'
-import { getHoverPosition, getHoverPositionFromView } from './position'
+import { getPosFromCoords, getPosFromViewCoords } from './position'
 
 /**
  * 从文档位置提取内容信息（仅依赖 EditorState，供扩展 / PM 插件使用）
  */
-export function getHoverContentAtPos(
+export function resolveContentAtPos(
   state: EditorState,
   pos: number,
-  options: GetHoverContentOptions = {},
-): HoverContent | null {
+  options: GetContentAtPosOptions = {},
+): ContentAtPos | null {
   const {
     includeBlock = false,
     includeLineInBlock = true,
+    includeSection = false,
     contextRadius = 0,
   } = options
 
@@ -161,6 +162,48 @@ export function getHoverContentAtPos(
       }
     }
 
+    let sectionHeading: ContentAtPos['sectionHeading']
+    let sectionText: string | undefined
+    let sectionRange: { from: number, to: number } | undefined
+
+    if (includeSection) {
+      let headingPos = -1
+      let headingLevel = 0
+      let headingText = ''
+
+      doc.descendants((node, nodePos) => {
+        if (node.type.name === 'heading' && nodePos < pos) {
+          headingPos = nodePos
+          headingLevel = node.attrs.level ?? 1
+          headingText = node.textContent
+        }
+      })
+
+      const sFrom = headingPos === -1
+        ? 0
+        : headingPos
+      let sTo = doc.content.size
+
+      if (headingPos !== -1) {
+        doc.descendants((node, nodePos) => {
+          if (
+            node.type.name === 'heading'
+            && nodePos > headingPos
+            && (node.attrs.level ?? 1) <= headingLevel
+            && sTo === doc.content.size
+          ) {
+            sTo = nodePos
+          }
+        })
+      }
+
+      sectionHeading = headingPos === -1
+        ? null
+        : { level: headingLevel, text: headingText, position: headingPos }
+      sectionText = doc.textBetween(sFrom, sTo, '\n')
+      sectionRange = { from: sFrom, to: sTo }
+    }
+
     return {
       pos,
       textContent,
@@ -176,6 +219,9 @@ export function getHoverContentAtPos(
       contextText,
       contextFrom,
       contextTo,
+      sectionHeading,
+      sectionText,
+      sectionRange,
       marks,
       isText,
       parentType,
@@ -194,49 +240,73 @@ export function getHoverContentAtPos(
  * @param options 扩展字段开关与上下文长度
  * @returns 内容信息，如果位置无效则返回 null
  */
-export function getHoverContent(
+export function getContentAtPos(
   editor: Editor | null,
   pos: number,
-  options: GetHoverContentOptions = {},
-): HoverContent | null {
+  options: GetContentAtPosOptions = {},
+): ContentAtPos | null {
   if (!editor?.state) {
     return null
   }
-  return getHoverContentAtPos(editor.state, pos, options)
+  const result = resolveContentAtPos(editor.state, pos, options)
+  return fillSectionMarkdown(result, editor, options)
 }
 
 /**
  * 从 EditorView 的视口坐标获取 hover 内容（扩展内指针同步用）
  */
-export function getHoverContentFromViewCoords(
+export function getContentFromViewCoords(
   view: EditorView,
   coords: { left: number, top: number },
-  options?: GetHoverContentOptions,
-): HoverContent | null {
-  const position = getHoverPositionFromView(view, coords)
+  options?: GetContentAtPosOptions,
+): ContentAtPos | null {
+  const position = getPosFromViewCoords(view, coords)
   if (!position) {
     return null
   }
-  return getHoverContentAtPos(view.state, position.pos, options)
+  return resolveContentAtPos(view.state, position.pos, options)
 }
 
 /**
  * 从鼠标坐标直接获取 hover 内容信息
- * 这是一个便捷函数，结合了 getHoverPosition 和 getHoverContent
+ * 这是一个便捷函数，结合了 getPosFromCoords 和 getContentAtPos
  * @param editor Tiptap 编辑器实例
  * @param coords 鼠标坐标 { left: clientX, top: clientY }
- * @param options 与 getHoverContent 相同
+ * @param options 与 getContentAtPos 相同
  * @returns 内容信息，如果无法获取则返回 null
  */
-export function getHoverContentFromCoords(
+export function getContentFromCoords(
   editor: Editor | null,
   coords: { left: number, top: number },
-  options?: GetHoverContentOptions,
-): HoverContent | null {
-  const position = getHoverPosition(editor, coords)
+  options?: GetContentAtPosOptions,
+): ContentAtPos | null {
+  const position = getPosFromCoords(editor, coords)
   if (!position || !editor?.state) {
     return null
   }
 
-  return getHoverContentAtPos(editor.state, position.pos, options)
+  const result = resolveContentAtPos(editor.state, position.pos, options)
+  return fillSectionMarkdown(result, editor, options)
+}
+
+function fillSectionMarkdown(
+  result: ContentAtPos | null,
+  editor: Editor | null,
+  options?: GetContentAtPosOptions,
+): ContentAtPos | null {
+  if (!result || !editor || !options?.includeSection || !result.sectionRange)
+    return result
+
+  try {
+    const manager = editor.storage.markdown?.manager
+    if (manager) {
+      const sliceJson = editor.state.doc.cut(result.sectionRange.from, result.sectionRange.to).toJSON()
+      result.sectionMarkdown = manager.serialize(sliceJson)
+    }
+  }
+  catch {
+    // markdown manager 不可用时留空
+  }
+
+  return result
 }

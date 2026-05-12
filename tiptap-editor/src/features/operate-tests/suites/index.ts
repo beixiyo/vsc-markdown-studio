@@ -1,5 +1,5 @@
 import type { OperateTestSuite } from '../types'
-import { getHoverContent, scrollToRange, scrollToRangeSelection, scrollToText, selectAndScrollToText } from 'tiptap-api'
+import { getContentAtPos, getSelectionSection, scrollToRange, scrollToRangeSelection, scrollToText, selectAndScrollToText } from 'tiptap-api'
 
 const contentBackup: { markdown: string | null } = {
   markdown: null,
@@ -191,6 +191,109 @@ export const defaultOperateSuites: OperateTestSuite[] = [
           if (!selected) {
             throw new Error('getSelectedText 返回空字符串')
           }
+          contentBackup.markdown = original
+        },
+        cleanup: ({ operate }) => {
+          if (contentBackup.markdown !== null) {
+            operate.setMarkdown(contentBackup.markdown)
+          }
+        },
+      },
+      {
+        id: 'selection-section-with-heading',
+        title: 'getSelectionSection 含标题',
+        description: '验证选中文本时能返回所属 section 的标题和范围',
+        run: ({ operate, editor }, logger) => {
+          const original = operate.getMarkdown()
+          operate.setMarkdown('# 第一节\n\n段落内容 AAA\n\n# 第二节\n\n段落内容 BBB')
+
+          let aaaPos = -1
+          editor?.state.doc.descendants((node, pos) => {
+            if (node.isText && node.text?.includes('AAA')) {
+              aaaPos = pos + node.text.indexOf('AAA')
+            }
+          })
+          if (aaaPos < 0) {
+            throw new Error('未找到 AAA 文本')
+          }
+
+          operate.setSelection(aaaPos, aaaPos + 3)
+
+          const section = getSelectionSection(editor)
+          if (!section) {
+            throw new Error('getSelectionSection 返回 null')
+          }
+          if (section.selectedText !== 'AAA') {
+            throw new Error(`selectedText 预期 "AAA"，实际 "${section.selectedText}"`)
+          }
+          if (!section.heading || section.heading.text !== '第一节') {
+            throw new Error(`heading.text 预期 "第一节"，实际 "${section.heading?.text}"`)
+          }
+          if (section.heading.level !== 1) {
+            throw new Error(`heading.level 预期 1，实际 ${section.heading?.level}`)
+          }
+          if (section.sectionText.includes('BBB')) {
+            throw new Error('sectionText 不应包含第二节内容')
+          }
+          logger(`section heading="${section.heading.text}" range=[${section.sectionRange.from},${section.sectionRange.to}]`)
+          contentBackup.markdown = original
+        },
+        cleanup: ({ operate }) => {
+          if (contentBackup.markdown !== null) {
+            operate.setMarkdown(contentBackup.markdown)
+          }
+        },
+      },
+      {
+        id: 'selection-section-no-heading',
+        title: 'getSelectionSection 无标题',
+        description: '验证文档开头无标题时 heading 为 null，section 从文档起始算起',
+        run: ({ operate, editor }, logger) => {
+          const original = operate.getMarkdown()
+          operate.setMarkdown('没有标题的段落\n\n第二段文字')
+
+          operate.setSelection(1, 4)
+
+          const section = getSelectionSection(editor)
+          if (!section) {
+            throw new Error('getSelectionSection 返回 null')
+          }
+          if (section.heading !== null) {
+            throw new Error(`heading 应为 null，实际 "${section.heading?.text}"`)
+          }
+          if (section.sectionRange.from !== 0) {
+            throw new Error(`sectionRange.from 应为 0，实际 ${section.sectionRange.from}`)
+          }
+          logger(`无标题 section range=[${section.sectionRange.from},${section.sectionRange.to}]`)
+          contentBackup.markdown = original
+        },
+        cleanup: ({ operate }) => {
+          if (contentBackup.markdown !== null) {
+            operate.setMarkdown(contentBackup.markdown)
+          }
+        },
+      },
+      {
+        id: 'selection-section-cursor-only',
+        title: 'getSelectionSection 光标无选区',
+        description: '验证无选中文本时 selectedText 为空，sectionText 包含当前 section 全部内容',
+        run: ({ operate, editor }, logger) => {
+          const original = operate.getMarkdown()
+          operate.setMarkdown('# 标题\n\n段落内容')
+
+          operate.setTextCursorPosition(10)
+
+          const section = getSelectionSection(editor)
+          if (!section) {
+            throw new Error('getSelectionSection 返回 null')
+          }
+          if (section.selectedText !== '') {
+            throw new Error(`selectedText 应为空，实际 "${section.selectedText}"`)
+          }
+          if (!section.sectionText.includes('段落内容')) {
+            throw new Error('sectionText 应包含 "段落内容"')
+          }
+          logger(`光标模式 sectionText="${section.sectionText.slice(0, 30)}..."`)
           contentBackup.markdown = original
         },
         cleanup: ({ operate }) => {
@@ -448,21 +551,21 @@ export const defaultOperateSuites: OperateTestSuite[] = [
       {
         id: 'hover-get-content',
         title: '读取 Hover 内容',
-        description: '验证 getHoverContent 在有效位置返回内容',
+        description: '验证 getContentAtPos 在有效位置返回内容',
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
           operate.setMarkdown('Hover 内容测试')
           const docSize = editor?.state.doc.content.size ?? 0
           const pos = Math.min(1, docSize)
-          const content = getHoverContent(editor, pos)
+          const content = getContentAtPos(editor, pos)
           if (!content || content.pos !== pos) {
-            throw new Error('getHoverContent 未返回有效内容')
+            throw new Error('getContentAtPos 未返回有效内容')
           }
           if (content.textContent && !content.textContent.includes('Hover')) {
-            throw new Error('getHoverContent 返回的文本不包含预期关键字')
+            throw new Error('getContentAtPos 返回的文本不包含预期关键字')
           }
           if (!content.lineInBlockText?.includes('Hover')) {
-            throw new Error('getHoverContent 未返回包含关键字的 lineInBlockText')
+            throw new Error('getContentAtPos 未返回包含关键字的 lineInBlockText')
           }
           if (original !== null) {
             operate.setMarkdown(original)

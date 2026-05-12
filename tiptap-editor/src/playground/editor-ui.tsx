@@ -12,6 +12,7 @@ import { SuggestionMenu } from 'tiptap-trigger/react'
 import { ImageTestDropdownMenu } from '@/components/my-ui/image-test-dropdown-menu'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
+import { SectionTestButton } from '@/components/my-ui/section-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
 
 import { operateTestSuites } from '@/features/operate-tests'
@@ -146,6 +147,7 @@ sequenceDiagram
             </Button>
             <ImageTestDropdownMenu editor={ editor } portal={ isMobile } />
             <SelectionTestButton />
+            <SectionTestButton />
             <ScrollTestButton />
             <Button
               size="sm"
@@ -161,7 +163,7 @@ sequenceDiagram
       ) }
 
       {/* 测试 HoverTooltip */ }
-      <HoverTooltip editor={ editor } enabled={ false } />
+      <HoverTooltip editor={ editor } enabled />
 
       {/* 块级操作悬浮菜单 */ }
       <BlockActionMenu editor={ editor } enabled={ !readonly } />

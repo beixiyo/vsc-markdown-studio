@@ -1,16 +1,16 @@
 import type { Node as PMNode } from '@tiptap/pm/model'
 
-import type { HoverContent, HoverHighlightSpec } from './types'
+import type { ContentAtPos, HoverHighlightSpec } from './types'
 
 /**
- * 根据 HoverContent 生成 ProseMirror inline decoration 用的范围列表。
+ * 根据 ContentAtPos 生成 ProseMirror inline decoration 用的范围列表。
  * - `block`：仅当 `includeBlock` 填充了 `blockFrom`/`blockTo` 时才有
  * - `context`：`contextRadius > 0` 时有
  * - `line`：逻辑行范围（默认 hover 高亮主层）
  * 若块与上下文范围完全相同则只保留一层 context。
  */
 export function getHoverHighlightSpecs(
-  content: HoverContent | null,
+  content: ContentAtPos | null,
   doc: PMNode,
 ): HoverHighlightSpec[] {
   if (!content)
