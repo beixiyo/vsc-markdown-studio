@@ -1,3 +1,4 @@
+import type { ConversationHistory } from './ConversationHistory'
 import type {
   AIAdapterContext,
   AIAdapters,
@@ -56,6 +57,9 @@ export class AIOrchestrator {
 
   private latestPreview: NormalizedResponse = {}
 
+  private conversationHistory: ConversationHistory | null = null
+  private lastUserPrompt = ''
+
   constructor(config: AIConfig) {
     this.updateConfig(config)
   }
@@ -64,7 +68,7 @@ export class AIOrchestrator {
    * 重新加载配置，允许覆盖 schema 和行为
    */
   updateConfig(config: AIConfig) {
-    const { responseSchema, adapters, mode, timeoutMs, retry, uiBehavior } = config
+    const { responseSchema, adapters, mode, timeoutMs, retry, uiBehavior, enableHistory, maxHistoryRounds } = config
     this.config.adapters = adapters
     this.config.mode = mode ?? 'preview'
     this.config.timeoutMs = typeof timeoutMs === 'number'
@@ -72,6 +76,7 @@ export class AIOrchestrator {
       : -1
     this.config.retry = retry
     this.config.uiBehavior = uiBehavior
+    this.config.enableHistory = enableHistory ?? false
     this.schema = {
       ...this.schema,
       ...responseSchema,
@@ -84,13 +89,18 @@ export class AIOrchestrator {
   async sendSelection(payload: SelectionPayload, mode: AIRequestMode) {
     const adapter = this.pickAdapter(mode)
     if (!adapter) {
-      this.bus.emit('error', { message: '缺少对应模式的适配器' })
+      this.bus.emit('error', { message: `No adapter registered for mode: ${mode}` })
       return
     }
 
     this.abortRunning('new request')
     this.abortController = new AbortController()
     this.latestPreview = {}
+
+    if (this.config.enableHistory && this.conversationHistory) {
+      this.lastUserPrompt = payload.meta?.prompt ?? payload.text ?? ''
+      payload = { ...payload, history: this.conversationHistory.getMessages() }
+    }
 
     this.bus.emit('start', { payload, mode })
 
@@ -126,14 +136,20 @@ export class AIOrchestrator {
    * 接受预览，交由调用方写入正文
    */
   acceptPreview() {
+    if (this.config.enableHistory && this.conversationHistory) {
+      const assistantContent = this.latestPreview.text || this.latestPreview.delta || ''
+      this.conversationHistory.addRound(this.lastUserPrompt, assistantContent)
+    }
     this.bus.emit('accept', { preview: this.latestPreview })
   }
 
-  /**
-   * 拒绝预览，调用方负责清理装订层
-   */
   rejectPreview() {
     this.bus.emit('reject', { preview: this.latestPreview })
+  }
+
+  /** 绑定对话历史实例，enableHistory 为 true 时生效 */
+  bindHistory(history: ConversationHistory) {
+    this.conversationHistory = history
   }
 
   on = this.bus.on.bind(this.bus)
@@ -237,7 +253,7 @@ export class AIOrchestrator {
       return await Promise.race([
         runner(),
         new Promise<T>((_, reject) => {
-          setTimeout(() => reject(new Error('AI 调用超时')), this.config.timeoutMs)
+          setTimeout(() => reject(new Error('AI request timed out')), this.config.timeoutMs)
         }),
       ])
     }
@@ -256,6 +272,6 @@ export class AIOrchestrator {
     if (typeof err === 'object' && err && 'message' in err)
       return { message: String((err as Record<string, any>).message) }
 
-    return { message: '未知错误' }
+    return { message: 'Unknown error' }
   }
 }

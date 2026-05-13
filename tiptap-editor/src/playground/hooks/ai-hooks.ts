@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import {
   AIOrchestrator,
   bindEditor,
+  ConversationHistory,
   createPreviewController,
   createTiptapEditorBridge,
 } from 'tiptap-ai'
@@ -19,10 +20,6 @@ export function useAiSetup() {
       new AIOrchestrator({
         adapters: {
           async *streamingAdapter(payload, ctx) {
-            if (payload.context) {
-              console.log('[AI Context]', payload.context)
-            }
-
             const isInsert = payload.operationMode === 'insert'
 
             if (isInsert) {
@@ -48,10 +45,6 @@ export function useAiSetup() {
           },
 
           batchAdapter: async (payload, ctx) => {
-            if (payload.context) {
-              console.log('[AI Context]', payload.context)
-            }
-
             if (ctx.abortSignal?.aborted)
               return { text: '' }
 
@@ -65,14 +58,22 @@ export function useAiSetup() {
         },
         mode: 'preview',
         timeoutMs: 10000,
+        enableHistory: true,
       }),
   )
+
+  const [aiHistory] = useState(() => new ConversationHistory({ maxRounds: 10 }))
+
+  useState(() => {
+    aiOrchestrator.bindHistory(aiHistory)
+  })
 
   const [aiController] = useState(() => createPreviewController(aiOrchestrator))
 
   return {
     aiOrchestrator,
     aiController,
+    aiHistory,
   }
 }
 
@@ -83,13 +84,13 @@ export function useBindAi(editor: Editor | null, aiController: AiController | nu
 
     const bridge = createTiptapEditorBridge(editor, {
       onConflict: () => {
-        console.warn('AI 预览区域被外部编辑修改，取消预览。')
+        console.warn('AI preview conflict: external edit overlaps preview range')
         aiController.reject()
       },
     })
     const integration = bindEditor(aiController, bridge, aiOrchestrator, {
       onError: (error) => {
-        console.error('AI 错误:', error.message)
+        console.error('AI error:', error.message)
       },
     })
 

@@ -1,6 +1,8 @@
 import './index.css'
 
 export { AIOrchestrator } from './AIOrchestrator'
+export { ConversationHistory } from './ConversationHistory'
+export type { ConversationHistoryOptions, ConversationRound } from './ConversationHistory'
 export { bindEditor } from './EditorIntegration'
 export type { EditorBridge, EventCallbacks } from './EditorIntegration'
 export {
@@ -20,6 +22,7 @@ export type {
   AIOperationMode,
   AIResponseFormat,
   ContentContext,
+  ConversationMessage,
   NormalizedResponse,
   SelectionPayload,
 } from './types'

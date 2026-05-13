@@ -23,6 +23,14 @@ export type ContentContext = {
 }
 
 /**
+ * 多轮对话中的单条消息
+ */
+export type ConversationMessage = {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+/**
  * 选区载荷，向适配器透传文本与位置信息
  */
 export type SelectionPayload = {
@@ -38,6 +46,8 @@ export type SelectionPayload = {
   operationMode?: AIOperationMode
   /** 编辑器上下文 */
   context?: ContentContext
+  /** 多轮对话历史（enableHistory 开启时由 orchestrator 自动注入） */
+  history?: ConversationMessage[]
 }
 
 /**
@@ -198,4 +208,9 @@ export type AIConfig = {
   responseSchema?: ResponseSchema
   /** UI 行为配置 */
   uiBehavior?: UIBehaviorConfig
+  /**
+   * 启用多轮对话历史，accept 后自动追加消息，reject 则丢弃
+   * @default false
+   */
+  enableHistory?: boolean
 }

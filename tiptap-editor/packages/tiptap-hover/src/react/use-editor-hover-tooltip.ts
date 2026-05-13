@@ -201,13 +201,6 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
         ? `[H${posContent.sectionHeading.level}] ${posContent.sectionHeading.text}`
         : '(none)'
       const body = posContent.sectionMarkdown || posContent.sectionText
-
-      console.log(
-        `[HoverSection] pos=${posContent.pos}`,
-        `heading=${headingLabel}`,
-        `range=[${posContent.sectionRange.from},${posContent.sectionRange.to}]`,
-        `\n---\n${body}\n---`,
-      )
     }
 
     return parts.join(' | ')
