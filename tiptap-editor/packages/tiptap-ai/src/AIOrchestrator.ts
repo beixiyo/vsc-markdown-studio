@@ -49,6 +49,7 @@ export class AIOrchestrator {
     deltaKey: 'delta',
     metaKey: 'meta',
     errorKey: 'error',
+    formatKey: 'format',
   }
 
   private abortController?: AbortController
@@ -210,6 +211,7 @@ export class AIOrchestrator {
       text: box[this.schema.textKey],
       meta: box[this.schema.metaKey],
       error: box[this.schema.errorKey],
+      format: box[this.schema.formatKey],
     }
   }
 
@@ -223,6 +225,7 @@ export class AIOrchestrator {
       text: incoming.text ?? origin.text,
       meta: incoming.meta ?? origin.meta,
       error: incoming.error ?? origin.error,
+      format: incoming.format ?? origin.format,
     }
   }
 

@@ -26,7 +26,6 @@ export const AIActionPanel = memo<AIActionPanelProps>(
   ({ controller, editor, className, onClose }) => {
     const t = useT()
     const [status, setStatus] = useState<PreviewStatus>('idle')
-    const [previewText, setPreviewText] = useState<string>('')
 
     useEffect(() => {
       if (!controller)
@@ -34,12 +33,6 @@ export const AIActionPanel = memo<AIActionPanelProps>(
 
       const unsubscribe = controller.subscribe((state) => {
         setStatus(state.status)
-        if (state.preview?.text) {
-          setPreviewText(state.preview.text)
-        }
-        else {
-          setPreviewText('')
-        }
       })
 
       return unsubscribe
@@ -89,11 +82,9 @@ export const AIActionPanel = memo<AIActionPanelProps>(
 
         { status === 'preview' && (
           <>
-            { previewText && (
-              <div className="flex-1 max-w-56 overflow-hidden text-ellipsis whitespace-nowrap text-sm text-text2">
-                { previewText }
-              </div>
-            ) }
+            <span className="text-sm text-text2">
+              { t(AI_LABELS.PREVIEW) }
+            </span>
             <div className="flex items-center gap-1">
               <Button
                 type="button"

@@ -1,4 +1,4 @@
-import type { BatchAdapter, StreamingAdapter } from '../types'
+import type { AIResponseFormat, BatchAdapter, StreamingAdapter } from '../types'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -37,14 +37,40 @@ export function createMockStreamingAdapter(options: {
 export function createMockBatchAdapter(options: {
   text: string
   delayMs?: number
+  format?: AIResponseFormat
 }): BatchAdapter {
-  const { text, delayMs = 0 } = options
+  const { text, delayMs = 0, format } = options
 
   return async (_payload, ctx) => {
     if (ctx.abortSignal?.aborted)
       return { text: '' }
     if (delayMs > 0)
       await sleep(delayMs)
-    return { text }
+    return { text, ...(format
+      ? { format }
+      : {}) }
+  }
+}
+
+/**
+ * 构造一个流式适配器，模拟光标处插入
+ */
+export function createMockInsertAdapter(options: {
+  deltas: string[]
+  delayMs?: number
+  format?: AIResponseFormat
+}): StreamingAdapter {
+  const { deltas, delayMs = 0, format } = options
+
+  return async function* (_payload, ctx) {
+    for (const delta of deltas) {
+      if (ctx.abortSignal?.aborted)
+        return
+      if (delayMs > 0)
+        await sleep(delayMs)
+      yield { delta, ...(format
+        ? { format }
+        : {}) }
+    }
   }
 }

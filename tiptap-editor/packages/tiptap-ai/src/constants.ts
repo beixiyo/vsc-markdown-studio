@@ -8,6 +8,11 @@ export const AI_CLASSES = {
   ERROR: 'bg-red-500/15 border-b-2 border-red-500/50 rounded-sm',
 }
 
+export const AI_META = {
+  INTERNAL: 'ai-internal',
+  SKIP_HISTORY: 'addToHistory',
+} as const
+
 export const AI_LABELS = {
   IDLE: 'ai.idle',
   PROCESSING: 'ai.processing',

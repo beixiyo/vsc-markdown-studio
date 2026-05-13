@@ -1,16 +1,16 @@
 import type { Editor } from '@tiptap/core'
 import type { PreviewController } from '../../PreviewController'
-import type { AIRequestMode } from '../../types'
+import type { AIRequestMode, ContentContext } from '../../types'
 import { useT } from 'i18n/react'
 import { useCallback, useEffect, useState } from 'react'
 import { AI_LABELS } from '../../constants'
-import { getTiptapSelectionPayload } from '../../TiptapEditorBridge'
+import { getTiptapCursorPayload, getTiptapSelectionPayload } from '../../TiptapEditorBridge'
 
 /**
  * AI 功能 Hook，用于管理 AI 按钮的状态 and 操作
  */
 export function useAI(config: UseAIConfig): UseAIReturn {
-  const { editor, controller, mode = 'stream' } = config
+  const { editor, controller, mode = 'stream', allowInsert = false, getContext } = config
   const t = useT()
 
   const [isProcessing, setIsProcessing] = useState(false)
@@ -20,12 +20,11 @@ export function useAI(config: UseAIConfig): UseAIReturn {
     if (!editor || editor.isDestroyed)
       return false
     const { selection } = editor.state
-    return !selection.empty
-  }, [editor])
+    return allowInsert || !selection.empty
+  }, [editor, allowInsert])
 
   const [canTriggerState, setCanTriggerState] = useState(() => computeCanTrigger())
 
-  /** 订阅控制器状态变化 */
   useEffect(() => {
     if (!controller)
       return
@@ -38,7 +37,6 @@ export function useAI(config: UseAIConfig): UseAIReturn {
     return unsubscribe
   }, [controller])
 
-  /** 检查是否可以触发 AI（需要选中文本） */
   useEffect(() => {
     if (!editor)
       return
@@ -57,29 +55,31 @@ export function useAI(config: UseAIConfig): UseAIReturn {
     }
   }, [editor, computeCanTrigger])
 
-  /** 触发 AI 处理 */
   const handleTrigger = useCallback(
     (prompt?: string) => {
       if (!editor || !controller || !computeCanTrigger())
         return
 
       const payload = getTiptapSelectionPayload(editor)
+        ?? (allowInsert
+          ? getTiptapCursorPayload(editor)
+          : undefined)
       if (!payload)
         return
 
-      /** 如果有 prompt，添加到 meta 中 */
       if (prompt) {
-        payload.meta = {
-          ...payload.meta,
-          prompt,
-        }
+        payload.meta = { ...payload.meta, prompt }
+      }
+
+      if (getContext) {
+        payload.context = getContext(editor)
       }
 
       controller.sendSelection(payload, mode).catch((err) => {
         console.error('AI 处理失败:', err)
       })
     },
-    [editor, controller, mode, computeCanTrigger],
+    [editor, controller, mode, computeCanTrigger, allowInsert, getContext],
   )
 
   /** 接受预览 */
@@ -122,6 +122,10 @@ export type UseAIConfig = {
   editor: Editor | null
   controller: PreviewController | null
   mode?: AIRequestMode
+  /** 允许无选区时以插入模式触发 @default false */
+  allowInsert?: boolean
+  /** 获取编辑器上下文，传给 adapter */
+  getContext?: (editor: Editor) => ContentContext
 }
 
 /**

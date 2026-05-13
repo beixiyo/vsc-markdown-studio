@@ -3,7 +3,7 @@ import { useCurrentEditor } from '@tiptap/react'
 
 import { Button, Toolbar } from 'comps'
 import { memo, useCallback, useState } from 'react'
-import { AIActionPanel, AIButton } from 'tiptap-ai/react'
+import { AIActionPanel, AIButton, useAI } from 'tiptap-ai/react'
 import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
 import { BlockActionMenu, EditorLinkHover, MarkButton, SelectToolbar, TableControls } from 'tiptap-comps'
@@ -18,7 +18,7 @@ import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
 import { operateTestSuites } from '@/features/operate-tests'
 import { useOperateTests } from '../features/operate-tests/use-operate-tests'
 import { BaseEditorUI } from './base-editor-ui'
-import { useAiQuickSource, useAiSetup, useBindAi, useSlashSuggestion } from './hooks'
+import { useAiQuickSource, useAiSetup, useBindAi, useGetContext, useSlashSuggestion } from './hooks'
 
 /**
  * 演示用编辑器 UI：使用通用的 BaseEditorUI，通过 children 传递额外的插件功能
@@ -74,6 +74,19 @@ export const EditorUI = memo<EditorUIProps>(({
 
   /** 绑定 AI 集成 */
   useBindAi(editor, aiController, aiOrchestrator)
+
+  const getContext = useGetContext()
+
+  const {
+    canTrigger: canInsert,
+    handleTrigger: handleInsertTrigger,
+  } = useAI({
+    editor,
+    controller: aiController,
+    mode: 'stream',
+    allowInsert: true,
+    getContext,
+  })
 
   const {
     inlineComment,
@@ -157,6 +170,14 @@ sequenceDiagram
               Dir:
               {' '}
               { textDirection.toUpperCase() }
+            </Button>
+            <Button
+              size="sm"
+              onClick={ () => handleInsertTrigger('在光标处插入') }
+              disabled={ !canInsert }
+              title="AI 光标插入：在当前光标位置插入 AI 生成内容（无需选中文本）"
+            >
+              AI Insert
             </Button>
           </Toolbar.Group>
         </BaseEditorUI>

@@ -4,10 +4,29 @@
 export type AIRequestMode = 'stream' | 'batch'
 
 /**
+ * 操作模式：替换选区内容 or 在光标处插入
+ */
+export type AIOperationMode = 'replace' | 'insert'
+
+/**
+ * 编辑器上下文，传递给 adapter 以便 LLM 获得更丰富的语境
+ */
+export type ContentContext = {
+  /** 所属 section 的 markdown 文本 */
+  sectionMarkdown?: string
+  /** 所属 section 的标题信息 */
+  sectionHeading?: { level: number, text: string } | null
+  /** 当前 block 的节点类型 */
+  blockType?: string
+  /** 全文内容（由调用方决定是否填充） */
+  fullDocument?: string
+}
+
+/**
  * 选区载荷，向适配器透传文本与位置信息
  */
 export type SelectionPayload = {
-  /** 选中文本 */
+  /** 选中文本（insert 模式下为空字符串） */
   text: string
   /** 位置信息，留给上层决定格式 */
   range?: Record<string, any>
@@ -15,6 +34,10 @@ export type SelectionPayload = {
   version?: string
   /** 透传的额外信息 */
   meta?: Record<string, any>
+  /** 操作模式 @default 'replace' */
+  operationMode?: AIOperationMode
+  /** 编辑器上下文 */
+  context?: ContentContext
 }
 
 /**
@@ -53,7 +76,15 @@ export type ResponseSchema = {
    * @default 'error'
    */
   errorKey?: string
+  /**
+   * 内容格式字段名
+   * @default 'format'
+   */
+  formatKey?: string
 }
+
+/** AI 响应内容的格式 */
+export type AIResponseFormat = 'text' | 'markdown' | 'html'
 
 /**
  * 经过 schema 归一化后的响应数据
@@ -67,6 +98,8 @@ export type NormalizedResponse = {
   meta?: Record<string, any>
   /** 标准化错误 */
   error?: AIError
+  /** 内容格式 @default 'text' */
+  format?: AIResponseFormat
 }
 
 /**
