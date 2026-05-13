@@ -190,13 +190,14 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({
           onDragStart={ onDragStart }
           onDragEnd={ onDragEnd }
           onClick={ () => {
-            /** 选中该块的文本内容 */
             if (hoverNodePos === null)
               return
             const node = editor.state.doc.nodeAt(hoverNodePos)
 
-            if (node) {
-              const selection = TextSelection.create(editor.state.doc, hoverNodePos, hoverNodePos + node.nodeSize)
+            if (node && node.isTextblock) {
+              const from = hoverNodePos + 1
+              const to = hoverNodePos + node.nodeSize - 1
+              const selection = TextSelection.create(editor.state.doc, from, to)
               editor.view.dispatch(editor.state.tr.setSelection(selection))
               editor.view.focus()
             }
