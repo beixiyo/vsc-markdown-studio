@@ -92,9 +92,9 @@ export function createExtensions(options: CreateExtensionsOptions = {}) {
     /** Hover 探测用的临时背景高亮（不改变文档）；分层样式为 Tailwind 类名 */
     HoverContextHighlight.configure({
       layerClassNames: {
-        block: 'rounded-sm box-decoration-clone bg-brand/5',
-        context: 'rounded-sm box-decoration-clone bg-brand/5',
-        line: 'rounded-sm box-decoration-clone bg-systemOrange/5',
+        block: 'rounded-sm box-decoration-clone bg-brand/10',
+        context: 'rounded-sm box-decoration-clone bg-brand/10',
+        line: 'rounded-sm box-decoration-clone bg-systemOrange/10',
       },
     }),
 

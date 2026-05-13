@@ -90,12 +90,14 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({
 
       const editorRect = editorElement.getBoundingClientRect()
 
-      /** 动态读取编辑器的 paddingLeft 作为偏移量，避免硬编码 -24 */
-      const computedStyle = window.getComputedStyle(editorElement)
-      const paddingLeft = Number.parseFloat(computedStyle.paddingLeft) || 24
+      const editorStyle = window.getComputedStyle(editorElement)
+      const paddingLeft = Number.parseFloat(editorStyle.paddingLeft) || 24
 
-      /** 把高度设置为 0，配合下方的 'bottom-start'，可以使得菜单的绝对 Top 精确对齐到这里的 Y 坐标 */
-      const topOffset = rect.top + 2
+      const ICON_HEIGHT = 24
+      const domStyle = window.getComputedStyle(dom)
+      const lineHeight = Number.parseFloat(domStyle.lineHeight) || ICON_HEIGHT
+      const paddingTop = Number.parseFloat(domStyle.paddingTop) || 0
+      const topOffset = rect.top + paddingTop + (lineHeight - ICON_HEIGHT) / 2
       return new DOMRect(editorRect.left - paddingLeft, topOffset, 0, 0)
     }
     catch (e) {
@@ -118,7 +120,7 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({
     },
   )
 
-  const { hoverContent } = useHoverDetection({
+  const { posContent } = useHoverDetection({
     editor,
     enabled,
     throttleDelay: 50, // 减小延迟以提高鼠标追随性
@@ -130,12 +132,12 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({
       return
     }
 
-    if (!hoverContent) {
+    if (!posContent) {
       hideMenu()
       return
     }
 
-    const { pos } = hoverContent
+    const { pos } = posContent
     const $pos = editor.state.doc.resolve(pos)
     let blockPos = -1
 
@@ -158,7 +160,7 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({
     else {
       hideMenu()
     }
-  }, [hoverContent, editor, enabled, hideMenu, showMenu, shouldShow])
+  }, [posContent, editor, enabled, hideMenu, showMenu, shouldShow])
 
   useEffect(() => {
     return cancelHideTimer
