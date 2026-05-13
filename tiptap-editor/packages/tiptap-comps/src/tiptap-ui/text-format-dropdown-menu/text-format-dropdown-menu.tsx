@@ -39,6 +39,7 @@ export const TextFormatDropdownMenu = forwardRef<
       hideWhenUnavailable = false,
       portal: _portal,
       onOpenChange,
+      triggerMode,
       ...buttonProps
     },
     ref,
@@ -183,6 +184,7 @@ export const TextFormatDropdownMenu = forwardRef<
         optionClassName={ TIPTAP_UI_STYLES.cascaderOption }
         optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
         trigger={ trigger }
+        triggerMode={ triggerMode }
         dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
       />
     )
@@ -205,4 +207,9 @@ export interface TextFormatDropdownMenuProps
   portal?: boolean
   /** 下拉打开/关闭回调 */
   onOpenChange?: (isOpen: boolean) => void
+  /**
+   * 触发方式
+   * @default 'click'
+   */
+  triggerMode?: 'click' | 'hover'
 }

@@ -28,6 +28,7 @@ export const TextAlignDropdownMenu = forwardRef<
     hideWhenUnavailable = false,
     onOpenChange,
     portal: _portal,
+    triggerMode,
     ...buttonProps
   },
   ref,
@@ -96,6 +97,7 @@ export const TextAlignDropdownMenu = forwardRef<
       optionClassName={ TIPTAP_UI_STYLES.cascaderOption }
       optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
       trigger={ trigger }
+      triggerMode={ triggerMode }
       dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
     />
   )
@@ -115,4 +117,9 @@ export interface TextAlignDropdownMenuProps
   onOpenChange?: (isOpen: boolean) => void
   /** 是否用 portal 渲染下拉，默认 false */
   portal?: boolean
+  /**
+   * 触发方式
+   * @default 'click'
+   */
+  triggerMode?: 'click' | 'hover'
 }

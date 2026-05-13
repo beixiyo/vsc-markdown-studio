@@ -59,6 +59,8 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>((props, ref) => {
     editable = false,
     placeholder,
     editableInputClassName,
+    triggerMode = 'click',
+    hoverCloseDelay,
   } = props
   const isControlled = controlledOpen !== undefined
   const triggerRef = useRef<HTMLDivElement>(null)
@@ -79,7 +81,15 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>((props, ref) => {
     onChange,
   })
 
-  const { isOpen, setOpen, handleTriggerClick } = useCascaderOpen(
+  const {
+    isOpen,
+    setOpen,
+    handleTriggerClick,
+    handleTriggerMouseEnter,
+    handleTriggerMouseLeave,
+    handleDropdownMouseEnter,
+    handleDropdownMouseLeave: handleDropdownMouseLeaveHover,
+  } = useCascaderOpen(
     triggerRef,
     dropdownRef,
     {
@@ -91,6 +101,8 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>((props, ref) => {
       disabled,
       onTriggerClick,
       clickOutsideIgnoreSelector,
+      triggerMode,
+      hoverCloseDelay,
     },
     ref,
   )
@@ -201,8 +213,8 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>((props, ref) => {
   }, [isOpen, resetOnOpen, searchable, editable])
 
   const handleDropdownMouseLeave = () => {
-    /** 鼠标移出整体下拉面板时，仅清空各级高亮，不关闭/重置子级 */
     setHighlightedIndices(prev => prev.map(() => -1))
+    handleDropdownMouseLeaveHover()
   }
 
   const dropdownContent = isOpen && (
@@ -221,6 +233,7 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>((props, ref) => {
           bordered && 'border border-border',
           dropdownClassName,
         ) }
+        onMouseEnter={ handleDropdownMouseEnter }
         onMouseLeave={ handleDropdownMouseLeave }
         onMouseDown={ editable
           ? (e: React.MouseEvent) => e.preventDefault() // 防止 input blur 早于 option click
@@ -344,7 +357,12 @@ const InnerCascader = forwardRef<CascaderRef, CascaderProps>((props, ref) => {
           )
         : trigger
           ? (
-              <div { ...triggerProps } onClick={ handleTriggerClick }>
+              <div
+                { ...triggerProps }
+                onClick={ handleTriggerClick }
+                onMouseEnter={ handleTriggerMouseEnter }
+                onMouseLeave={ handleTriggerMouseLeave }
+              >
                 { trigger }
               </div>
             )

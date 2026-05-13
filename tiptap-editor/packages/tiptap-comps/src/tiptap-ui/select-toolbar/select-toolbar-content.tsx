@@ -71,6 +71,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
       return (
         <Cascader
           trigger={ moreButton }
+          triggerMode="hover"
           options={ moreContent as CascaderOption[] }
           placement="bottom-start"
           dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true', [MORE_CONTENT_KEEP_OPEN_ATTR]: 'true' } as any }
@@ -85,7 +86,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
 
     return (
       <Popover
-        trigger="click"
+        trigger="hover"
         position="bottom"
         content={
           <div
@@ -124,6 +125,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
               listTypes={ ['bulletList', 'orderedList', 'taskList'] }
               portal={ isMobile }
               hideWhenUnavailable
+              triggerMode="hover"
             />
           </Toolbar.Group>
           { (showMarks || highlight || link || codeBlock || showScripts || textAlign || image || moreContent) && <Toolbar.Separator /> }
@@ -177,6 +179,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
               types={ ['left', 'center', 'right', 'justify'] }
               portal={ isMobile }
               hideWhenUnavailable
+              triggerMode="hover"
             />
           </Toolbar.Group>
           { (image || moreContent) && <Toolbar.Separator /> }
