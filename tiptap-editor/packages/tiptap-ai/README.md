@@ -38,9 +38,7 @@ const orchestrator = new AIOrchestrator({
 
 // 2. 创建 controller + bridge
 const controller = createPreviewController(orchestrator)
-const bridge = createTiptapEditorBridge(editor, {
-  parseContent: (content, format) => markdownToHtml(content), // 可选
-})
+const bridge = createTiptapEditorBridge(editor)
 
 // 3. 绑定
 const integration = bindEditor(controller, bridge, orchestrator)
