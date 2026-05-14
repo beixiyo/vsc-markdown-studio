@@ -74,7 +74,7 @@ export default function App() {
     }),
   ], [])
 
-  const editor = useDefaultEditor({ extensions, image: imageOptions })
+  const editor = useDefaultEditor({ extensions, image: imageOptions, placeholder: false })
 
   useSetupMDBridge(editor, editorElRef)
   useNotifyChange(editor, editorElRef)

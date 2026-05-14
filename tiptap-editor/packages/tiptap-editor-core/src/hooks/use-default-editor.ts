@@ -11,6 +11,7 @@ export function useDefaultEditor(options: UseDefaultEditorOptions) {
     extensions: userExtensions,
     editorProps,
     image,
+    placeholder,
     textDirection,
     ...restOptions
   } = options
@@ -18,10 +19,10 @@ export function useDefaultEditor(options: UseDefaultEditorOptions) {
   const stableExts = useStable(userExtensions)
   const stableImage = useStable(image)
   const extensions = useMemo(() => [
-    ...createExtensions({ image }),
+    ...createExtensions({ image, placeholder }),
     ...(userExtensions || []),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [stableExts, stableImage])
+  ], [stableExts, stableImage, placeholder])
 
   const {
     attributes,

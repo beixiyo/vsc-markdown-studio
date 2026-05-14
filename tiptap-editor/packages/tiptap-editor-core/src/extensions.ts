@@ -20,6 +20,8 @@ import { ImageNode, type ImageOptions } from 'tiptap-nodes/image'
 export interface CreateExtensionsOptions {
   /** 图片节点的 options（事件回调、HTMLAttributes 等） */
   image?: Partial<ImageOptions>
+  /** 设为 false 可跳过 Placeholder 扩展 */
+  placeholder?: false
 }
 
 export function createExtensions(options: CreateExtensionsOptions = {}) {
@@ -98,31 +100,35 @@ export function createExtensions(options: CreateExtensionsOptions = {}) {
       },
     }),
 
-    /** Placeholder 扩展：为空节点显示占位符 */
-    Placeholder.configure({
-      placeholder: ({ node }) => {
-        /** 根据节点类型返回不同的占位符文本 */
-        if (node.type.name === 'heading') {
-          const level = node.attrs.level
-          return level === 1
-            ? i18n.t('placeholder.heading1')
-            : level === 2
-              ? i18n.t('placeholder.heading2')
-              : level === 3
-                ? i18n.t('placeholder.heading3')
-                : i18n.t('placeholder.heading')
-        }
-        if (node.type.name === 'blockquote') {
-          return i18n.t('placeholder.blockquote')
-        }
-        if (node.type.name === 'codeBlock') {
-          return i18n.t('placeholder.codeBlock')
-        }
-        /** 默认占位符（段落等） */
-        return i18n.t('placeholder.default')
-      },
-      emptyEditorClass: 'is-editor-empty',
-      emptyNodeClass: 'is-empty',
-    }),
+    ...(options.placeholder !== false
+      ? [
+          /** Placeholder 扩展：为空节点显示占位符 */
+          Placeholder.configure({
+            placeholder: ({ node }) => {
+              /** 根据节点类型返回不同的占位符文本 */
+              if (node.type.name === 'heading') {
+                const level = node.attrs.level
+                return level === 1
+                  ? i18n.t('placeholder.heading1')
+                  : level === 2
+                    ? i18n.t('placeholder.heading2')
+                    : level === 3
+                      ? i18n.t('placeholder.heading3')
+                      : i18n.t('placeholder.heading')
+              }
+              if (node.type.name === 'blockquote') {
+                return i18n.t('placeholder.blockquote')
+              }
+              if (node.type.name === 'codeBlock') {
+                return i18n.t('placeholder.codeBlock')
+              }
+              /** 默认占位符（段落等） */
+              return i18n.t('placeholder.default')
+            },
+            emptyEditorClass: 'is-editor-empty',
+            emptyNodeClass: 'is-empty',
+          }),
+        ]
+      : []),
   ]
 }
