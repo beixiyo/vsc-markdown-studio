@@ -1,3 +1,6 @@
+import type { PlaceholderOptions } from '@tiptap/extension-placeholder'
+import type { HoverContextHighlightOptions } from 'tiptap-hover'
+import type { ImageOptions } from 'tiptap-nodes/image'
 import { TaskItem, TaskList } from '@tiptap/extension-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Subscript } from '@tiptap/extension-subscript'
@@ -12,19 +15,29 @@ import { getI18n } from 'i18n'
 import { HoverContextHighlight } from 'tiptap-hover'
 import { CodeBlock } from 'tiptap-nodes/code-block'
 import { GradientHighlight } from 'tiptap-nodes/gradient-highlight'
-import { ImageNode, type ImageOptions } from 'tiptap-nodes/image'
+import { ImageNode } from 'tiptap-nodes/image'
+
+/** `false` 禁用该扩展，对象则作为 `.configure()` 的参数覆盖默认值 */
+export type ExtensionToggle<T = Record<string, unknown>> = false | Partial<T>
 
 /**
  * 可被调用方覆盖的节点 / 扩展配置
+ *
+ * 可选扩展传 `false` 禁用，传对象则覆盖默认配置；不传则使用内置默认值
  */
 export interface CreateExtensionsOptions {
   /** 图片节点的 options（事件回调、HTMLAttributes 等） */
   image?: Partial<ImageOptions>
-  /** 设为 false 可跳过 Placeholder 扩展 */
-  placeholder?: false
+  /** 选择扩展：增强选择功能 */
+  selection?: ExtensionToggle
+  /** Hover 探测用的临时背景高亮（不改变文档） */
+  hover?: ExtensionToggle<HoverContextHighlightOptions>
+  /** Placeholder 扩展：为空节点显示占位符 */
+  placeholder?: ExtensionToggle<PlaceholderOptions>
 }
 
 export function createExtensions(options: CreateExtensionsOptions = {}) {
+  const { selection, hover, placeholder } = options
   const i18n = getI18n()
 
   return [
@@ -89,46 +102,50 @@ export function createExtensions(options: CreateExtensionsOptions = {}) {
     Subscript,
 
     /** 选择扩展：增强选择功能 */
-    Selection,
+    ...(selection !== false
+      ? [Selection]
+      : []),
 
     /** Hover 探测用的临时背景高亮（不改变文档）；分层样式为 Tailwind 类名 */
-    HoverContextHighlight.configure({
-      layerClassNames: {
-        block: 'rounded-sm box-decoration-clone bg-brand/10',
-        context: 'rounded-sm box-decoration-clone bg-brand/10',
-        line: 'rounded-sm box-decoration-clone bg-systemOrange/10',
-      },
-    }),
+    ...(hover !== false
+      ? [HoverContextHighlight.configure({
+          layerClassNames: {
+            block: 'rounded-sm box-decoration-clone bg-brand/10',
+            context: 'rounded-sm box-decoration-clone bg-brand/10',
+            line: 'rounded-sm box-decoration-clone bg-systemOrange/10',
+          },
+          ...hover,
+        })]
+      : []),
 
-    ...(options.placeholder !== false
-      ? [
-          /** Placeholder 扩展：为空节点显示占位符 */
-          Placeholder.configure({
-            placeholder: ({ node }) => {
-              /** 根据节点类型返回不同的占位符文本 */
-              if (node.type.name === 'heading') {
-                const level = node.attrs.level
-                return level === 1
-                  ? i18n.t('placeholder.heading1')
-                  : level === 2
-                    ? i18n.t('placeholder.heading2')
-                    : level === 3
-                      ? i18n.t('placeholder.heading3')
-                      : i18n.t('placeholder.heading')
-              }
-              if (node.type.name === 'blockquote') {
-                return i18n.t('placeholder.blockquote')
-              }
-              if (node.type.name === 'codeBlock') {
-                return i18n.t('placeholder.codeBlock')
-              }
-              /** 默认占位符（段落等） */
-              return i18n.t('placeholder.default')
-            },
-            emptyEditorClass: 'is-editor-empty',
-            emptyNodeClass: 'is-empty',
-          }),
-        ]
+    /** Placeholder 扩展：为空节点显示占位符 */
+    ...(placeholder !== false
+      ? [Placeholder.configure({
+          placeholder: ({ node }) => {
+            /** 根据节点类型返回不同的占位符文本 */
+            if (node.type.name === 'heading') {
+              const level = node.attrs.level
+              return level === 1
+                ? i18n.t('placeholder.heading1')
+                : level === 2
+                  ? i18n.t('placeholder.heading2')
+                  : level === 3
+                    ? i18n.t('placeholder.heading3')
+                    : i18n.t('placeholder.heading')
+            }
+            if (node.type.name === 'blockquote') {
+              return i18n.t('placeholder.blockquote')
+            }
+            if (node.type.name === 'codeBlock') {
+              return i18n.t('placeholder.codeBlock')
+            }
+            /** 默认占位符（段落等） */
+            return i18n.t('placeholder.default')
+          },
+          emptyEditorClass: 'is-editor-empty',
+          emptyNodeClass: 'is-empty',
+          ...placeholder,
+        })]
       : []),
   ]
 }

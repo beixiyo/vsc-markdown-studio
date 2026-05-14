@@ -1,7 +1,9 @@
-import { useEditor, type UseEditorOptions } from '@tiptap/react'
+import type { UseEditorOptions } from '@tiptap/react'
+import type { CreateExtensionsOptions } from '../extensions'
+import { useEditor } from '@tiptap/react'
 import { useStable } from 'hooks'
 import { useMemo } from 'react'
-import { createExtensions, type CreateExtensionsOptions } from '../extensions'
+import { createExtensions } from '../extensions'
 import { createHandleClick } from '../utils'
 
 export type UseDefaultEditorOptions = UseEditorOptions & CreateExtensionsOptions
@@ -11,6 +13,8 @@ export function useDefaultEditor(options: UseDefaultEditorOptions) {
     extensions: userExtensions,
     editorProps,
     image,
+    selection,
+    hover,
     placeholder,
     textDirection,
     ...restOptions
@@ -19,10 +23,10 @@ export function useDefaultEditor(options: UseDefaultEditorOptions) {
   const stableExts = useStable(userExtensions)
   const stableImage = useStable(image)
   const extensions = useMemo(() => [
-    ...createExtensions({ image, placeholder }),
+    ...createExtensions({ image, selection, hover, placeholder }),
     ...(userExtensions || []),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [stableExts, stableImage, placeholder])
+  ], [stableExts, stableImage, selection, hover, placeholder])
 
   const {
     attributes,
