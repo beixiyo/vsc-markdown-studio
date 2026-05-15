@@ -4,6 +4,24 @@ import type { TiptapOperate } from '../operate'
 import type { SetImagePayload } from '../operate/image'
 import type { SpeakerType } from './Speaker'
 
+/** 可覆盖的 CSS 排版属性 */
+export type TypographyCSSProperties = {
+  fontSize?: string
+  lineHeight?: string
+  fontWeight?: string
+  letterSpacing?: string
+  fontFamily?: string
+}
+
+/** 排版配置：按元素类型分别设置样式 */
+export type TypographyConfig = Partial<Record<
+  | 'heading1' | 'heading2' | 'heading3'
+  | 'heading4' | 'heading5' | 'heading6'
+  | 'paragraph' | 'code' | 'inlineCode'
+  | 'blockquote' | 'list',
+  TypographyCSSProperties
+>>
+
 /**
  * 暴露给 Native WebView 的桥接接口
  */
@@ -59,6 +77,22 @@ export type MDBridge = TiptapOperate & {
    * `content` 为 Markdown 字符串；`speakers` 与 `setSpeakers` 一致
    */
   setContentWithSpeakers: (data: { content: string, speakers: SpeakerType[] }) => Promise<void>
+
+  /**
+   * 动态调整排版样式（字号、行高、字重等）
+   *
+   * 只传需要覆盖的字段，未传的保持默认值。
+   * 传空对象 `{}` 可重置为默认排版。
+   *
+   * @example
+   * ```ts
+   * MDBridge.setTypography({
+   *   heading1: { fontSize: '20px', fontWeight: '700' },
+   *   paragraph: { fontSize: '18px', lineHeight: '2' },
+   * })
+   * ```
+   */
+  setTypography: (config: TypographyConfig) => void
 }
 
 export type { SpeakerTappedPayload, SpeakerType } from './Speaker'

@@ -220,9 +220,6 @@ importers:
       '@tiptap/extension-list':
         specifier: ^3.13.0
         version: 3.23.2(@tiptap/core@3.23.2(@tiptap/pm@3.23.2))(@tiptap/pm@3.23.2)
-      '@tiptap/extension-placeholder':
-        specifier: ^3.13.0
-        version: 3.23.2(@tiptap/extensions@3.23.2(@tiptap/core@3.23.2(@tiptap/pm@3.23.2))(@tiptap/pm@3.23.2))
       '@tiptap/extension-subscript':
         specifier: ^3.13.0
         version: 3.23.2(@tiptap/core@3.23.2(@tiptap/pm@3.23.2))(@tiptap/pm@3.23.2)

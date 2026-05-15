@@ -6,35 +6,52 @@ import { devFixture } from './fixture'
  * 生产构建由 `import.meta.env.DEV` 分支裁掉
  */
 
-const SAMPLE_MARKDOWN = `# 标题一
+const SAMPLE_MARKDOWN = `# 一级标题 Heading 1
 
-这是 **加粗**，*斜体*，~~删除线~~，\`行内 code\`，==高亮==。
+## 二级标题 Heading 2
 
-## 标题二
+### 三级标题 Heading 3
 
-- 无序 A
-- 无序 B
-  - 嵌套
+#### 四级标题 Heading 4
 
-1. 有序 1
-2. 有序 2
+这是一段普通正文，测试段落的字体大小和行高。包含 **加粗**、*斜体*、~~删除线~~、\`行内 code\`。
+
+第二段正文。English text mixed with 中文，测试混排效果。The quick brown fox jumps over the lazy dog.
+
+- 无序列表 A
+- 无序列表 B
+  - 嵌套项
+    - 深层嵌套
+
+1. 有序列表第一项
+2. 有序列表第二项
+   1. 嵌套有序
 
 - [ ] 任务未完成
 - [x] 任务已完成
 
-> 引用文本
+> 引用文本：好的设计是尽可能少的设计。
+>
+> 第二行引用，包含 **加粗** 和 \`代码\`。
 
-\`\`\`ts
+\`\`\`typescript
 const x: number = 42
+const greet = (name: string) => \`Hello, \${name}!\`
+console.log(greet('World'))
 \`\`\`
 
-| A | B |
-|---|---|
-| 1 | 2 |
+| 属性 | 旧版 | 新版 | 差值 |
+|------|------|------|------|
+| 段落 | 16.5px | 14px | -2.5px |
+| H1 | 18px | 17px | -1px |
 
-[链接](https://example.com) 和图片 ![alt](https://picsum.photos/80)
+[链接](https://example.com) 和图片 ![alt](https://picsum.photos/seed/sample/400/200)
 
-[speaker:0] 开场 · [speaker:1] 回应
+---
+
+[speaker:0] 这是说话人甲的发言内容，测试说话人标记的样式。
+
+[speaker:1] 这是说话人乙的回应，确认说话人切换正常显示。
 `
 
 const SAMPLE_SPEAKERS = [
@@ -258,6 +275,37 @@ export default function DevPanel() {
               <Section title="Layout">
                 <Btn label="setBottomMargin(160)" onClick={ () => bridge().setBottomMargin(160) } />
                 <Btn label="setBottomMargin(0)" onClick={ () => bridge().setBottomMargin(0) } />
+              </Section>
+
+              <Section title="Typography">
+                <Btn
+                  label="大号（老年模式）"
+                  onClick={ () => safeCall('setTypography/large', () => bridge().setTypography({
+                    heading1: { fontSize: '22px', fontWeight: '700' },
+                    heading2: { fontSize: '20px', fontWeight: '700' },
+                    heading3: { fontSize: '19px' },
+                    paragraph: { fontSize: '18px', lineHeight: '2' },
+                    list: { fontSize: '18px' },
+                    code: { fontSize: '14px' },
+                    inlineCode: { fontSize: '16px' },
+                    blockquote: { fontSize: '18px' },
+                  })) }
+                />
+                <Btn
+                  label="小号"
+                  onClick={ () => safeCall('setTypography/small', () => bridge().setTypography({
+                    heading1: { fontSize: '16px' },
+                    heading2: { fontSize: '15px' },
+                    heading3: { fontSize: '14px' },
+                    paragraph: { fontSize: '13px', lineHeight: '1.6' },
+                    list: { fontSize: '13px' },
+                    code: { fontSize: '11px' },
+                  })) }
+                />
+                <Btn
+                  label="重置默认"
+                  onClick={ () => safeCall('setTypography/reset', () => bridge().setTypography({})) }
+                />
               </Section>
 
               <div style={ { padding: 8, borderTop: '1px solid #333' } }>

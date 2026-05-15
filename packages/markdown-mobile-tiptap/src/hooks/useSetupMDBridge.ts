@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import type { RefObject } from 'react'
-import type { MDBridge } from '../types/MDBridge'
+import type { MDBridge, TypographyConfig } from '../types/MDBridge'
 import type { SpeakerType } from '../types/Speaker'
 import { notifyNative } from 'notify'
 import { useEffect } from 'react'
@@ -10,6 +10,50 @@ import { getImageAttrsById, removeImageById, setImage, updateImageById } from '.
 import { speakersToMap } from '../speaker'
 
 type SpeakerMap = Record<string, { name: string, id?: string, label?: string }>
+
+const TYPOGRAPHY_SELECTOR: Record<string, string> = {
+  heading1: '.tiptap.ProseMirror h1',
+  heading2: '.tiptap.ProseMirror h2',
+  heading3: '.tiptap.ProseMirror h3',
+  heading4: '.tiptap.ProseMirror h4',
+  heading5: '.tiptap.ProseMirror h5',
+  heading6: '.tiptap.ProseMirror h6',
+  paragraph: '.tiptap.ProseMirror p',
+  code: '.tiptap.ProseMirror pre',
+  inlineCode: '.tiptap.ProseMirror code',
+  blockquote: '.tiptap.ProseMirror blockquote',
+  list: '.tiptap.ProseMirror li',
+}
+
+const TYPOGRAPHY_STYLE_ID = 'md-typography-override'
+
+function camelToKebab(s: string): string {
+  return s.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`)
+}
+
+function applyTypography(config: TypographyConfig) {
+  let el = document.getElementById(TYPOGRAPHY_STYLE_ID) as HTMLStyleElement | null
+  if (!el) {
+    el = document.createElement('style')
+    el.id = TYPOGRAPHY_STYLE_ID
+    document.head.appendChild(el)
+  }
+
+  const rules: string[] = []
+  for (const [key, styles] of Object.entries(config)) {
+    const selector = TYPOGRAPHY_SELECTOR[key]
+    if (!selector || !styles)
+      continue
+    const props = Object.entries(styles)
+      .filter(([, v]) => v != null)
+      .map(([prop, val]) => `${camelToKebab(prop)}: ${val} !important`)
+      .join('; ')
+    if (props)
+      rules.push(`${selector} { ${props} }`)
+  }
+
+  el.textContent = rules.join('\n')
+}
 
 /**
  * 遍历文档，把 `map` 里的名称直接写进每个 speaker 节点的 attrs
@@ -120,6 +164,8 @@ export function useSetupMDBridge(
           : [])
         setMarkdownWithSpeakers(editor, content || '', map)
       },
+
+      setTypography: (config: TypographyConfig) => applyTypography(config),
     }
 
     window.MDBridge = bridge
