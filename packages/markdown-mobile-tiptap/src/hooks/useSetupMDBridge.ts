@@ -153,8 +153,9 @@ export function useSetupMDBridge(
         const map = speakersToMap(Array.isArray(speakers)
           ? speakers
           : [])
-        const storage = (editor.storage as any)?.markdown
-        const md: string = storage?.getMarkdown?.() ?? ''
+        const md: string = typeof editor.getMarkdown === 'function'
+          ? editor.getMarkdown()
+          : ''
         setMarkdownWithSpeakers(editor, md, map)
       },
 

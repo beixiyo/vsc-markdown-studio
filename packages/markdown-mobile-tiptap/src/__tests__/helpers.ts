@@ -1,5 +1,6 @@
 import { Editor } from '@tiptap/core'
 import { TaskItem, TaskList } from '@tiptap/extension-list'
+import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
 import { GradientHighlight } from 'tiptap-nodes/gradient-highlight'
 import { ImageNode } from 'tiptap-nodes/image'
@@ -14,6 +15,10 @@ export function makeEditor(content: any = '') {
     content,
     extensions: [
       StarterKit,
+      Markdown.configure({
+        indentation: { style: 'space', size: 2 },
+        markedOptions: { gfm: true, breaks: true, pedantic: false },
+      }),
       ImageNode,
       TaskList,
       TaskItem.configure({ nested: true }),

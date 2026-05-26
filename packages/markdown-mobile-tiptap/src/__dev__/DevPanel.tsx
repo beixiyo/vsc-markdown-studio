@@ -117,10 +117,12 @@ export default function DevPanel() {
   }, [])
 
   const bridge = () => window.MDBridge
-  const show = (label: string, v: any) =>
+  const show = (label: string, v: any) => {
+    console.log('[DevPanel]', label, '→', v)
     setOutput(`${label}:\n${typeof v === 'string'
       ? v
       : JSON.stringify(v, null, 2)}`)
+  }
 
   return (
     <div
