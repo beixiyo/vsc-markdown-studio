@@ -2,6 +2,7 @@ import type { Editor } from '@tiptap/core'
 import { debounce } from '@jl-org/tool'
 import { notifyNative } from 'notify'
 import { type RefObject, useEffect, useRef } from 'react'
+import { getEditorMarkdown } from 'tiptap-api'
 import { resolveBlockTypeString } from '../operate/create'
 
 /**
@@ -19,8 +20,7 @@ export function useNotifyChange(
       return
 
     const sendChange = debounce(() => {
-      const storage = (editor.storage as any)?.markdown
-      const markdown: string = storage?.getMarkdown?.() ?? editor.getHTML()
+      const markdown = getEditorMarkdown(editor) ?? ''
       const cleaned = markdown.replace(/!\[[^\]]*\]\(https?:\/\/\S{1,999}\)/g, '')
       notifyNative('contentChanged', cleaned)
       notifyNative('blockTypeChanged', resolveBlockTypeString(editor))

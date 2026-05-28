@@ -1,6 +1,7 @@
 import type { Editor, JSONContent } from '@tiptap/core'
 import type { ImageAttrs } from 'tiptap-nodes/image'
 import { notifyNative } from 'notify'
+import { getEditorJson, setEditorContent } from 'tiptap-api'
 import { generateImageId } from 'tiptap-nodes/image'
 
 /**
@@ -98,8 +99,8 @@ function isImageOnlyParagraph(node: JSONContent | undefined | null): boolean {
 }
 
 function insertAtTop(editor: Editor, nodes: JSONContent[]) {
-  const doc = editor.getJSON()
-  const children = Array.isArray(doc.content)
+  const doc = getEditorJson(editor)
+  const children = Array.isArray(doc?.content)
     ? doc.content.slice()
     : []
 
@@ -117,12 +118,12 @@ function insertAtTop(editor: Editor, nodes: JSONContent[]) {
   if (newChildren.length === 0)
     newChildren.push(emptyParagraph())
 
-  editor.commands.setContent({ type: 'doc', content: newChildren })
+  setEditorContent(editor, { type: 'doc', content: newChildren })
 }
 
 function insertAtBottom(editor: Editor, nodes: JSONContent[]) {
-  const doc = editor.getJSON()
-  let children = Array.isArray(doc.content)
+  const doc = getEditorJson(editor)
+  let children = Array.isArray(doc?.content)
     ? doc.content.slice()
     : []
 
@@ -143,7 +144,7 @@ function insertAtBottom(editor: Editor, nodes: JSONContent[]) {
   if (newChildren.length === 0)
     newChildren.push(emptyParagraph())
 
-  editor.commands.setContent({ type: 'doc', content: newChildren })
+  setEditorContent(editor, { type: 'doc', content: newChildren })
 }
 
 function insertAtCursor(editor: Editor, nodes: JSONContent[]) {

@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import type { GradientStyleType } from 'tiptap-nodes/gradient-highlight'
-import { createMarkdownOperate } from 'tiptap-api'
+import { createMarkdownOperate, getEditorHTML, getEditorJson, setEditorHTML, setEditorMarkdown } from 'tiptap-api'
 import { isGradientType } from 'tiptap-nodes/gradient-highlight'
 
 /** BlockNote 风格的 style key → Tiptap mark 名映射（只处理真正能落到 mark 的 key） */
@@ -112,15 +112,11 @@ export function createTiptapOperate(editor: Editor) {
     ...base,
 
     // ====== 内容：覆盖返回类型（mobile 不返回 null） ======
-    getJSON: () => editor.getJSON(),
-    getHTML: () => editor.getHTML(),
-    getMarkdown: (): string => base.getMarkdown() ?? editor.getHTML(),
-    setHTML: (html: string) => {
-      editor.commands.setContent(html, { contentType: 'html' })
-    },
-    setMarkdown: (markdown: string) => {
-      editor.commands.setContent(markdown, { contentType: 'markdown' })
-    },
+    getJSON: () => getEditorJson(editor) ?? { type: 'doc', content: [] },
+    getHTML: (): string => getEditorHTML(editor) ?? '',
+    getMarkdown: (): string => base.getMarkdown() ?? '',
+    setHTML: (html: string) => { setEditorHTML(editor, html) },
+    setMarkdown: (markdown: string) => { setEditorMarkdown(editor, markdown) },
 
     // ====== 样式（Mobile 独有） ======
     getActiveStyles: (): Record<string, boolean | string> => {

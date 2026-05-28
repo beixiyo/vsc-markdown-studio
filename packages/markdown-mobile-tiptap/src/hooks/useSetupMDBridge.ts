@@ -4,6 +4,7 @@ import type { MDBridge, TypographyConfig } from '../types/MDBridge'
 import type { SpeakerType } from '../types/Speaker'
 import { notifyNative } from 'notify'
 import { useEffect } from 'react'
+import { getEditorJson, getEditorMarkdown, setEditorContent, setEditorMarkdown } from 'tiptap-api'
 import { preprocessSpeakerTags } from 'tiptap-nodes/speaker'
 import { createTiptapOperate } from '../operate/create'
 import { getImageAttrsById, removeImageById, setImage, updateImageById } from '../operate/image'
@@ -95,12 +96,12 @@ function injectSpeakerNamesInJSON(node: any, map: SpeakerMap): any {
  * （tiptap v3 的 NodeView `update()` 在 atom 节点仅 attrs 改变时不会重绘 DOM）
  */
 function setMarkdownWithSpeakers(editor: Editor, markdown: string, map: SpeakerMap) {
-  editor.commands.setContent(preprocessSpeakerTags(markdown), { contentType: 'markdown' })
+  setEditorMarkdown(editor, preprocessSpeakerTags(markdown))
   if (Object.keys(map).length === 0)
     return
-  const json = editor.getJSON()
+  const json = getEditorJson(editor)
   const patched = injectSpeakerNamesInJSON(json, map)
-  editor.commands.setContent(patched)
+  setEditorContent(editor, patched)
 }
 
 /**
@@ -153,9 +154,7 @@ export function useSetupMDBridge(
         const map = speakersToMap(Array.isArray(speakers)
           ? speakers
           : [])
-        const md: string = typeof editor.getMarkdown === 'function'
-          ? editor.getMarkdown()
-          : ''
+        const md = getEditorMarkdown(editor) ?? ''
         setMarkdownWithSpeakers(editor, md, map)
       },
 
