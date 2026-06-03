@@ -99,7 +99,7 @@ export default function App() {
   return (
     <TiptapI18nProvider
       defaultLanguage={ LANGUAGES.EN_US }
-      storage={ { enabled: true, key: 'tiptap-editor-language' } }
+      persistence={ { enabled: true, key: 'tiptap-editor-language' } }
     >
       <DevAgentation />
       <AppContent />

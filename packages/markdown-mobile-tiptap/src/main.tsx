@@ -6,7 +6,7 @@ import './styles/index.scss'
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <TiptapI18nProvider
     defaultLanguage={ LANGUAGES.ZH_CN }
-    storage={ { enabled: true, key: 'markdown-mobile-tiptap-language' } }
+    persistence={ { enabled: true, key: 'markdown-mobile-tiptap-language' } }
   >
     <App />
   </TiptapI18nProvider>,
