@@ -2,7 +2,7 @@
 
 import type { InputHistory } from '../types'
 import { useShortCutKey } from 'hooks'
-import { useT } from 'i18n/react'
+import { useT } from 'i18n-react'
 import { BookOpen, Clock, History, RotateCcw, Search, Trash2, X, Zap } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
@@ -178,7 +178,7 @@ export const HistoryPanel = memo<HistoryPanelProps>((
       scale: 1,
       transition: {
         duration: 0.2,
-        ease: 'easeOut',
+        ease: 'easeOut' as const,
         staggerChildren: 0.05,
       },
     },
@@ -189,7 +189,7 @@ export const HistoryPanel = memo<HistoryPanelProps>((
       scale: 0.95,
       transition: {
         duration: 0.15,
-        ease: 'easeIn',
+        ease: 'easeIn' as const,
       },
     },
   }
@@ -213,7 +213,7 @@ export const HistoryPanel = memo<HistoryPanelProps>((
         data-panel="history"
         tabIndex={ 0 }
         className={ cn(
-          'fixed top-20 left-1/2 w-[600px] max-w-[90vw] z-50',
+          'fixed top-20 left-1/2 w-[600px] max-w-[90vw] z-dropdown',
           'bg-background2/95 dark:bg-background/95 border border-border',
           'rounded-2xl shadow-sm overflow-hidden backdrop-blur-md',
           'max-h-[500px] flex flex-col',

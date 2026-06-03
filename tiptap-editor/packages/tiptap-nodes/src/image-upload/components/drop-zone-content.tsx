@@ -1,4 +1,4 @@
-import { useT } from 'i18n/react'
+import { useT } from 'i18n-react'
 import React from 'react'
 import { CloudUploadIcon, FileCornerIcon, FileIcon } from 'tiptap-comps/icons'
 

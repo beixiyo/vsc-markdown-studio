@@ -2,7 +2,7 @@
 
 import type { PromptCategory, PromptCategoryConfig, PromptTemplate } from '../types'
 import { useShortCutKey } from 'hooks'
-import { useT } from 'i18n/react'
+import { useT } from 'i18n-react'
 import { Clock, Hash, Search, Sparkles, Star, X, Zap } from 'lucide-react'
 import { motion } from 'motion/react'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -235,7 +235,7 @@ export const PromptPanel = memo<PromptPanelProps>((
       scale: 1,
       transition: {
         duration: 0.2,
-        ease: 'easeOut',
+        ease: 'easeOut' as const,
         staggerChildren: 0.05,
       },
     },
@@ -246,7 +246,7 @@ export const PromptPanel = memo<PromptPanelProps>((
       scale: 0.95,
       transition: {
         duration: 0.15,
-        ease: 'easeIn',
+        ease: 'easeIn' as const,
       },
     },
   }
@@ -269,7 +269,7 @@ export const PromptPanel = memo<PromptPanelProps>((
       data-panel="prompt"
       tabIndex={ 0 }
       className={ cn(
-        'fixed top-20 left-1/2 w-[600px] max-w-[90vw] z-50',
+        'fixed top-20 left-1/2 w-[600px] max-w-[90vw] z-dropdown',
         'bg-background2/95 dark:bg-background/95 border border-border',
         'rounded-2xl shadow-sm overflow-hidden backdrop-blur-md',
         'max-h-[500px] flex flex-col',

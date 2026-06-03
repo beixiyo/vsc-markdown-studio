@@ -1,5 +1,5 @@
 import { Button, Popover, type PopoverRef, Textarea } from 'comps'
-import { useT } from 'i18n/react'
+import { useT } from 'i18n-react'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { SparklesIcon } from 'tiptap-comps/icons'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'

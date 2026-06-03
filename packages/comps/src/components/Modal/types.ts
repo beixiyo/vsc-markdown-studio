@@ -6,7 +6,7 @@ export interface ModalRef {
   hide: () => void
 }
 
-export type ModalVariant = SemanticVariant
+export type ModalVariant = SemanticVariant | 'error'
 
 export type TitleAlign = 'left' | 'center' | 'right'
 
@@ -14,6 +14,8 @@ export interface ModalProps {
   className?: string
   style?: CSSProperties
   variant?: ModalVariant
+
+  maskClassName?: string
 
   headerClassName?: string
   headerStyle?: CSSProperties

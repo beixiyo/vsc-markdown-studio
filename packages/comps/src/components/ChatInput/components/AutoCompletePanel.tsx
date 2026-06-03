@@ -3,7 +3,7 @@
 import type { CursorPosition } from 'utils'
 import type { AutoCompleteSuggestion } from '../types'
 import { useFloatingPosition, useShortCutKey } from 'hooks'
-import { useT } from 'i18n/react'
+import { useT } from 'i18n-react'
 import { Hash, History, Lightbulb } from 'lucide-react'
 import { motion } from 'motion/react'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
@@ -193,7 +193,7 @@ export const AutoCompletePanel = memo<AutoCompletePanelProps>((
       ref={ panelRef }
       data-panel="autocomplete"
       className={ cn(
-        'fixed z-50',
+        'fixed z-dropdown',
         'overflow-hidden rounded-xl backdrop-blur-md',
         'border border-border',
         'bg-background2/95 dark:bg-background/95',

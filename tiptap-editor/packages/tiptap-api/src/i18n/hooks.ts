@@ -3,7 +3,8 @@
  * 提供便捷的翻译函数，用于获取 tiptap-editor 相关的翻译文本
  */
 
-import { useT } from 'i18n/react'
+import type { TypedTFunction } from 'i18n'
+import { useT } from 'i18n-react'
 
 /**
  * Tiptap Editor 翻译资源类型
@@ -162,7 +163,7 @@ export type TiptapEditorTranslations = {
  * 使用 Tiptap Editor 翻译的 Hook
  * 返回类型安全的翻译函数
  */
-export function useTiptapEditorT() {
+export function useTiptapEditorT(): TypedTFunction<TiptapEditorTranslations> {
   return useT<TiptapEditorTranslations>()
 }
 

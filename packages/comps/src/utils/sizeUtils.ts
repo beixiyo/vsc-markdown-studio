@@ -21,9 +21,9 @@ export function getSizeStyles(
   size: Size,
   config: SizeStyleConfig,
 ): {
-    className?: string
-    style?: React.CSSProperties
-  } {
+  className?: string
+  style?: React.CSSProperties
+} {
   if (typeof size === 'number') {
     return {
       style: config.getInlineStyle?.(size) || {},

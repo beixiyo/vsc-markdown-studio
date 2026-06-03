@@ -33,6 +33,7 @@ function InnerTable<TData extends object>(props: TableProps<TData>, ref: React.R
     columns,
     enableVirtualization = false,
     enableRowSelection = false,
+    selectOnRowClick = false,
     enableEditing = false,
     enableRowNumber = false,
     onSelectionChange,
@@ -170,7 +171,7 @@ function InnerTable<TData extends object>(props: TableProps<TData>, ref: React.R
 
     if (enableVirtualization) {
       return (
-        <div className="sticky top-0 left-0 right-0 z-50 size-full">
+        <div className="sticky top-0 left-0 right-0 z-sticky size-full">
           { loadingContent }
         </div>
       )
@@ -214,6 +215,7 @@ function InnerTable<TData extends object>(props: TableProps<TData>, ref: React.R
                   table={ table }
                   container={ container }
                   enableRowSelection={ enableRowSelection }
+                  selectOnRowClick={ selectOnRowClick }
                   enableRowNumber={ enableRowNumber }
                   enableEditing={ enableEditing }
                   onEditStart={ onEditStart }
@@ -234,6 +236,7 @@ function InnerTable<TData extends object>(props: TableProps<TData>, ref: React.R
                 <TableBody
                   rows={ table.getRowModel().rows }
                   enableRowSelection={ enableRowSelection }
+                  selectOnRowClick={ selectOnRowClick }
                   enableRowNumber={ enableRowNumber }
                   enableEditing={ enableEditing }
                   onEditStart={ onEditStart }
@@ -244,9 +247,7 @@ function InnerTable<TData extends object>(props: TableProps<TData>, ref: React.R
                   defaultCellAlign={ defaultCellAlign }
                   rowSelectionColumnWidth={ rowSelectionColumnWidth }
                   rowNumberColumnWidth={ rowNumberColumnWidth }
-                  onCheckboxChange={ () => {
-                  // force render
-                  } }
+                  rowSelection={ rowSelection }
                 />
               )
         }

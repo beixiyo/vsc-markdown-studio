@@ -4,10 +4,11 @@
  * 封装 i18n 功能，使 tiptap-editor 相关包无需直接依赖 i18n
  */
 
-import type { I18nProviderProps } from 'i18n/react'
+import type { LanguageToLocaleMap } from 'i18n'
+import type { I18nProviderProps } from 'i18n-react'
 import { deepMerge } from '@jl-org/tool'
 import { getI18n } from 'i18n'
-import { I18nProvider } from 'i18n/react'
+import { I18nProvider } from 'i18n-react'
 import React, { useMemo } from 'react'
 import { tiptapEditorResources } from './resources'
 
@@ -42,12 +43,12 @@ export {
   useResources,
   useStorage,
   useT,
-} from 'i18n/react'
+} from 'i18n-react'
 
 export type {
   I18nContextValue,
   I18nProviderProps,
-} from 'i18n/react'
+} from 'i18n-react'
 
 /**
  * Tiptap Editor 特定的 I18nProvider
@@ -56,6 +57,13 @@ export type {
  */
 export interface TiptapI18nProviderProps extends Omit<I18nProviderProps, 'children'> {
   children?: React.ReactNode
+  /**
+   * 自定义语言 → locale 的 fallback 映射，会同步到全局单例。
+   *
+   * 新版 i18n 已把 fallback 配置拆到 `fallback` prop，但本 Provider 仍保留
+   * `languageToLocale` 作为便捷入口，直接作用于全局单例（兼容旧用法）
+   */
+  languageToLocale?: LanguageToLocaleMap
 }
 
 export function TiptapI18nProvider({
@@ -83,7 +91,11 @@ export function TiptapI18nProvider({
   }, [resources, props.defaultLanguage, languageToLocale])
 
   return (
-    <I18nProvider { ...props } instance={ globalI18n }>
+    /**
+     * instance 做一次类型断言：globalI18n 与 I18nProvider 期望的 I18n 是同一个运行时类，
+     * 仅因 i18n-react 生成的 .d.ts 用相对源码路径引用 i18n，导致 TS 视为两个类型身份
+     */
+    <I18nProvider { ...props } instance={ globalI18n as unknown as I18nProviderProps['instance'] }>
       { children }
     </I18nProvider>
   )

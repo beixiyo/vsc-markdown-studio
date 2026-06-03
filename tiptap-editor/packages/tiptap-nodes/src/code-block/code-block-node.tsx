@@ -1,7 +1,7 @@
 import type { NodeViewProps } from '@tiptap/react'
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
 import { Button, Cascader } from 'comps'
-import { useT } from 'i18n/react'
+import { useT } from 'i18n-react'
 import React, { useMemo } from 'react'
 import { CODE_LANGUAGES, type CodeLanguage } from './constants'
 
