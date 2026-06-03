@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { PreviewController } from '../../PreviewController'
 import type { AIRequestMode, ContentContext } from '../../types'
-import { useT } from 'i18n-react'
+import { useT } from 'i18n/react'
 import { useCallback, useEffect, useState } from 'react'
 import { AI_LABELS } from '../../constants'
 import { getTiptapCursorPayload, getTiptapSelectionPayload } from '../../TiptapEditorBridge'

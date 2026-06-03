@@ -148,9 +148,6 @@ importers:
       i18n:
         specifier: workspace:*
         version: link:../i18n
-      i18n-react:
-        specifier: workspace:*
-        version: link:../i18n-react
       motion:
         specifier: ^12.27.0
         version: 12.40.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -193,16 +190,11 @@ importers:
         specifier: ^8.0.7
         version: 8.0.16(@types/node@24.12.4)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
 
-  packages/i18n: {}
-
-  packages/i18n-react:
+  packages/i18n:
     dependencies:
       hooks:
         specifier: workspace:*
         version: link:../hooks
-      i18n:
-        specifier: workspace:*
-        version: link:../i18n
       react:
         specifier: ^19.2.4
         version: 19.2.7
@@ -458,9 +450,6 @@ importers:
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n
-      i18n-react:
-        specifier: workspace:*
-        version: link:../../../packages/i18n-react
       react:
         specifier: ^19.2.4
         version: 19.2.7
@@ -510,9 +499,6 @@ importers:
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n
-      i18n-react:
-        specifier: workspace:*
-        version: link:../../../packages/i18n-react
       react:
         specifier: ^19.2.4
         version: 19.2.7
@@ -550,9 +536,6 @@ importers:
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n
-      i18n-react:
-        specifier: workspace:*
-        version: link:../../../packages/i18n-react
       react:
         specifier: ^19.2.4
         version: 19.2.7
@@ -825,9 +808,6 @@ importers:
       i18n:
         specifier: workspace:*
         version: link:../../../packages/i18n
-      i18n-react:
-        specifier: workspace:*
-        version: link:../../../packages/i18n-react
       lowlight:
         specifier: ^3.3.0
         version: 3.3.0

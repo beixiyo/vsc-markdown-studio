@@ -1,6 +1,6 @@
 import type React from 'react'
 import { Button, Textarea } from 'comps'
-import { useT } from 'i18n-react'
+import { useT } from 'i18n/react'
 import { forwardRef, memo, useCallback, useImperativeHandle, useRef } from 'react'
 import { CornerDownLeftIcon } from 'tiptap-comps/icons'
 import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
