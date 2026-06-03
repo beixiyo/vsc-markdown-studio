@@ -218,10 +218,12 @@ export const MermaidNode = Node.create<MermaidOptions>({
 
   /**
    * 将 Mermaid 节点渲染为 Markdown
+   * 注意：不要在结尾补 `\n\n`。块之间的空行由序列化器统一插入，
+   * 这里再补会产生多余空行 → 重解析为空段落 → 每轮往返多一个 `&nbsp;`（无上限累加）。
    */
   renderMarkdown: (node) => {
     const code = node.attrs?.code || ''
-    return `\`\`\`mermaid\n${code}\n\`\`\`\n\n`
+    return `\`\`\`mermaid\n${code}\n\`\`\``
   },
 })
 

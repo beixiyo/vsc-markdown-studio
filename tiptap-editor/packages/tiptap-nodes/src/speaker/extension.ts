@@ -389,14 +389,21 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
     return {
       type: 'speaker',
       attrs: {
-        originalLabel: token.value || '',
+        /** trim 兜底：保证 originalLabel 作为 speakerMap / i18n key 的纯净性 */
+        originalLabel: (token.value || '').trim(),
       },
     }
   },
 
+  /**
+   * 序列化为 Markdown
+   * 注意：不要在 token 两侧补空格。补空格会导致 parse → serialize 往返不幂等
+   * （每轮每侧 +1 空格），累加到 4 个前导空格后会被 Markdown 解析器当作缩进代码块，
+   * 在禁用 codeBlock 的配置下整段内容会被静默丢弃。
+   */
   renderMarkdown: (node) => {
     const label = node?.attrs?.originalLabel || ''
-    return ` [speaker:${label}] `
+    return `[speaker:${label}]`
   },
 
   addProseMirrorPlugins() {

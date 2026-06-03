@@ -100,6 +100,22 @@ export const Editor = memo<EditorProps>(({
     editor.setEditable(!readonly)
   }, [editor, readonly])
 
+  /**
+   * DEV 调试：把 editor 实例暴露到 window.__editor
+   * 便于在控制台手动跑 markdown 往返（getMarkdown → setMarkdown）验证序列化幂等性
+   */
+  useEffect(() => {
+    if (!import.meta.env.DEV || !editor) {
+      return
+    }
+    ;(window as any).__editor = editor
+    return () => {
+      if ((window as any).__editor === editor) {
+        delete (window as any).__editor
+      }
+    }
+  }, [editor])
+
   return (
     <TiptapEditor
       editor={ editor }
