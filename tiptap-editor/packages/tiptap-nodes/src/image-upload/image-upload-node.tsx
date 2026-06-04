@@ -11,7 +11,7 @@ import { ImageUploadPreview } from './components/image-upload-preview'
 import { useFileUpload } from './hooks/use-file-upload'
 
 export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
-  const t = useT()
+  const t = useT('tiptap')
   const { accept, limit, maxSize } = props.node.attrs
   const inputRef = useRef<HTMLInputElement>(null)
   const extension = props.extension

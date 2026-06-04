@@ -49,7 +49,7 @@ function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerO
   const i18n = getI18n()
   if (i18n && originalLabel) {
     /** 强制刷新资源确保最新资源被加载 */
-    return i18n.t('speaker.speaker', {
+    return i18n.t('tiptap.speaker.speaker', {
       number: displayLabel,
       defaultValue: `Speaker ${displayLabel}`,
     })

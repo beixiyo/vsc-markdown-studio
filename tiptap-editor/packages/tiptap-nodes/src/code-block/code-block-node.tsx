@@ -6,7 +6,7 @@ import React, { useMemo } from 'react'
 import { CODE_LANGUAGES, type CodeLanguage } from './constants'
 
 export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
-  const t = useT()
+  const t = useT('tiptap')
   const language: string = props.node.attrs.language || 'plaintext'
   const isEmpty = props.node.content.size === 0
 
@@ -22,7 +22,9 @@ export const CodeBlockNode: React.FC<NodeViewProps> = (props) => {
   }
 
   const handleSelectLanguage = (value: string | string[]) => {
-    const lang = Array.isArray(value) ? value[value.length - 1] : value
+    const lang = Array.isArray(value)
+      ? value[value.length - 1]
+      : value
     setLanguage(lang)
   }
 

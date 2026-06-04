@@ -11,7 +11,7 @@ export const DropZoneContent: React.FC<DropZoneContentProps> = ({
   maxSize,
   limit,
 }) => {
-  const t = useT()
+  const t = useT('tiptap')
   const maxSizeMB = maxSize / 1024 / 1024
 
   return (

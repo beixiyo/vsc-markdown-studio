@@ -34,7 +34,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
     children,
     className,
   }) => {
-    const t = useT()
+    const t = useT('tiptap')
     const [prompt, setPrompt] = useState('')
     const popoverRef = useRef<PopoverRef>(null)
     const textareaRef = useRef<HTMLTextAreaElement>(null)

@@ -11,7 +11,7 @@ import { getTiptapCursorPayload, getTiptapSelectionPayload } from '../../TiptapE
  */
 export function useAI(config: UseAIConfig): UseAIReturn {
   const { editor, controller, mode = 'stream', allowInsert = false, getContext } = config
-  const t = useT()
+  const t = useT('tiptap')
 
   const [isProcessing, setIsProcessing] = useState(false)
   const [isPreview, setIsPreview] = useState(false)

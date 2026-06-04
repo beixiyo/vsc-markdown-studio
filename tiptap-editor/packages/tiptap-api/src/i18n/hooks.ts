@@ -164,7 +164,12 @@ export type TiptapEditorTranslations = {
  * 返回类型安全的翻译函数
  */
 export function useTiptapEditorT(): TypedTFunction<TiptapEditorTranslations> {
-  return useT<TiptapEditorTranslations>()
+  /**
+   * 自动注入包级命名空间前缀 `tiptap`，使各 label hook 仍写 `t('comment.xxx')`，
+   * 运行时解析为 `tiptap.comment.xxx`，与其它包资源隔离。
+   * 运行时是 base 的前缀包装函数，这里按类型安全签名对外暴露。
+   */
+  return useT('tiptap') as unknown as TypedTFunction<TiptapEditorTranslations>
 }
 
 /**

@@ -24,7 +24,7 @@ export type AIActionPanelProps = {
  */
 export const AIActionPanel = memo<AIActionPanelProps>(
   ({ controller, editor, className, onClose }) => {
-    const t = useT()
+    const t = useT('tiptap')
     const [status, setStatus] = useState<PreviewStatus>('idle')
 
     useEffect(() => {

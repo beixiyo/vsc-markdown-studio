@@ -7,7 +7,7 @@ import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 
 const InnerCommentMain = forwardRef<CommentMainRef, CommentMainProps>((props, ref) => {
-  const t = useT()
+  const t = useT('tiptap')
   const {
     content,
     setContent,

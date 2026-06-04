@@ -126,21 +126,21 @@ export function createExtensions(options: CreateExtensionsOptions = {}) {
             if (node.type.name === 'heading') {
               const level = node.attrs.level
               return level === 1
-                ? i18n.t('placeholder.heading1')
+                ? i18n.t('tiptap.placeholder.heading1')
                 : level === 2
-                  ? i18n.t('placeholder.heading2')
+                  ? i18n.t('tiptap.placeholder.heading2')
                   : level === 3
-                    ? i18n.t('placeholder.heading3')
-                    : i18n.t('placeholder.heading')
+                    ? i18n.t('tiptap.placeholder.heading3')
+                    : i18n.t('tiptap.placeholder.heading')
             }
             if (node.type.name === 'blockquote') {
-              return i18n.t('placeholder.blockquote')
+              return i18n.t('tiptap.placeholder.blockquote')
             }
             if (node.type.name === 'codeBlock') {
-              return i18n.t('placeholder.codeBlock')
+              return i18n.t('tiptap.placeholder.codeBlock')
             }
             /** 默认占位符（段落等） */
-            return i18n.t('placeholder.default')
+            return i18n.t('tiptap.placeholder.default')
           },
           emptyEditorClass: 'is-editor-empty',
           emptyNodeClass: 'is-empty',

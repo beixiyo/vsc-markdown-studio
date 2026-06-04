@@ -76,7 +76,7 @@ export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlash
     {
       id: 'heading-1',
       title: 'Heading 1',
-      subtitle: i18n.t('slash.heading1'),
+      subtitle: i18n.t('tiptap.slash.heading1'),
       aliases: ['h1', 'title'],
       icon: createElement(HeadingOneIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -86,7 +86,7 @@ export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlash
     {
       id: 'heading-2',
       title: 'Heading 2',
-      subtitle: i18n.t('slash.heading2'),
+      subtitle: i18n.t('tiptap.slash.heading2'),
       aliases: ['h2', 'subtitle'],
       icon: createElement(HeadingTwoIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -96,7 +96,7 @@ export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlash
     {
       id: 'paragraph',
       title: 'Paragraph',
-      subtitle: i18n.t('slash.paragraph'),
+      subtitle: i18n.t('tiptap.slash.paragraph'),
       aliases: ['p', 'text'],
       icon: createElement(AlignLeftIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -106,7 +106,7 @@ export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlash
     {
       id: 'bullet-list',
       title: 'Bullet List',
-      subtitle: i18n.t('slash.bulletList'),
+      subtitle: i18n.t('tiptap.slash.bulletList'),
       aliases: ['ul', 'list'],
       icon: createElement(ListIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -116,7 +116,7 @@ export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlash
     {
       id: 'ordered-list',
       title: 'Numbered List',
-      subtitle: i18n.t('slash.orderedList'),
+      subtitle: i18n.t('tiptap.slash.orderedList'),
       aliases: ['ol', 'list'],
       icon: createElement(ListOrderedIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -126,7 +126,7 @@ export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlash
     {
       id: 'blockquote',
       title: 'Blockquote',
-      subtitle: i18n.t('slash.blockquote'),
+      subtitle: i18n.t('tiptap.slash.blockquote'),
       aliases: ['quote'],
       icon: createElement(BlockquoteIcon, { className: 'h-5 w-5' }),
       onSelect: () => {
@@ -136,7 +136,7 @@ export function createBasicSlashItems(editor: Editor, options?: CreateBasicSlash
     {
       id: 'mermaid',
       title: 'Mermaid',
-      subtitle: i18n.t('slash.mermaid'),
+      subtitle: i18n.t('tiptap.slash.mermaid'),
       aliases: ['graph', 'diagram', 'flow'],
       icon: createElement(SparklesIcon, { className: 'h-5 w-5 text-purple-500' }),
       onSelect: (ed: Editor) => {
