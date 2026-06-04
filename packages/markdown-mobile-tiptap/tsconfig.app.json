@@ -28,7 +28,7 @@
       "tiptap-nodes/*": ["../../tiptap-editor/packages/tiptap-nodes/src/*"],
       "tiptap-api": ["../../tiptap-editor/packages/tiptap-api/src/index.ts"],
       "tiptap-api/react": ["../../tiptap-editor/packages/tiptap-api/src/react/index.ts"],
-      "i18n/react": ["../i18n/react/index.ts"]
+      "i18n/react": ["../i18n/src/react/index.ts"]
     }
   },
   "include": ["src"]
