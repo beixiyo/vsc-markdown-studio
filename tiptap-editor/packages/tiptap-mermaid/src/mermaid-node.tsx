@@ -11,7 +11,7 @@ import { useMermaidEditor } from './hooks/use-mermaid-editor'
 import { useMermaidRenderer } from './hooks/use-mermaid-renderer'
 import { useMermaidTransform } from './hooks/use-mermaid-transform'
 
-export const MermaidNodeComponent = memo<NodeViewProps>(({ node, selected, updateAttributes, editor }) => {
+export const MermaidNodeComponent = memo<NodeViewProps>(({ node, updateAttributes, editor }) => {
   const labels = useMermaidLabels()
   const code = node.attrs.code || ''
   const x = node.attrs.x ?? 0

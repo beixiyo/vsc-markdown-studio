@@ -43,9 +43,9 @@
     "utils": "workspace:*"
   },
   "peerDependencies": {
-    "@tiptap/core": "^3.13.0",
-    "@tiptap/pm": "^3.13.0",
-    "@tiptap/react": "^3.13.0",
+    "@tiptap/core": "3.13.0",
+    "@tiptap/pm": "3.13.0",
+    "@tiptap/react": "3.13.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
   },

@@ -42,9 +42,9 @@
     "utils": "workspace:*"
   },
   "peerDependencies": {
-    "@tiptap/extension-text-align": "^3.13.0",
-    "@tiptap/react": "^3.13.0",
-    "@tiptap/starter-kit": "^3.13.0",
+    "@tiptap/extension-text-align": "3.13.0",
+    "@tiptap/react": "3.13.0",
+    "@tiptap/starter-kit": "3.13.0",
     "i18n": "workspace:*",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
@@ -54,6 +54,7 @@
     "lint": "eslint ./src --fix --quiet"
   },
   "devDependencies": {
+    "@tiptap/markdown": "3.13.0",
     "@vitejs/plugin-react": "^6.0.1",
     "vite": "^8.0.7"
   }

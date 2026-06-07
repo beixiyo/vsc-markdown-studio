@@ -68,7 +68,7 @@ export class AIOrchestrator {
    * 重新加载配置，允许覆盖 schema 和行为
    */
   updateConfig(config: AIConfig) {
-    const { responseSchema, adapters, mode, timeoutMs, retry, uiBehavior, enableHistory, maxHistoryRounds } = config
+    const { responseSchema, adapters, mode, timeoutMs, retry, uiBehavior, enableHistory } = config
     this.config.adapters = adapters
     this.config.mode = mode ?? 'preview'
     this.config.timeoutMs = typeof timeoutMs === 'number'

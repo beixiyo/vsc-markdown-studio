@@ -44,7 +44,7 @@ export function useAiSetup() {
             }
           },
 
-          batchAdapter: async (payload, ctx) => {
+          batchAdapter: async (_payload, ctx) => {
             if (ctx.abortSignal?.aborted)
               return { text: '' }
 

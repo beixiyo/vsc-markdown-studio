@@ -196,13 +196,6 @@ export function useEditorHoverTooltip(props: EditorHoverTooltipProps) {
       parts.push(`段落: （文档开头，无标题）`)
     }
 
-    if (posContent.sectionRange) {
-      const headingLabel = posContent.sectionHeading
-        ? `[H${posContent.sectionHeading.level}] ${posContent.sectionHeading.text}`
-        : '(none)'
-      const body = posContent.sectionMarkdown || posContent.sectionText
-    }
-
     return parts.join(' | ')
   }, [posContent, formatContent])
 
