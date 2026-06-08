@@ -28,14 +28,24 @@ function buildDataAttributes(attrs: Partial<SpeakerAttributes>) {
 
 function resolveDisplayText(attrs: Partial<SpeakerAttributes>, options: SpeakerOptions): string {
   const key = attrs.originalLabel ?? ''
+
+  /**
+   * 优先级：节点自身 attrs.name > options.speakerMap > i18n 兜底
+   *
+   * attrs.name 必须优先于 speakerMap：
+   * - attrs 是节点级、最新的来源，编辑说话人时通过 setNodeMarkup 写入，能被 ProseMirror 可靠追踪并触发 NodeView 重绘
+   * - options.speakerMap 是扩展级配置，运行时无法稳定更新（Tiptap 中 `extension.options` 为 getter，外部赋值不生效），
+   *   若让它优先，会用旧映射覆盖刚改过的 attrs.name，导致芯片显示旧名称
+   * - speakerMap 仅作为「初始加载、attrs 尚未写入名称」时的兜底（如从 markdown 解析出的 [speaker:1] 仅含 originalLabel）
+   */
+  if (attrs.name) {
+    return attrs.name
+  }
   const mapped = key
     ? options.speakerMap?.[key]
     : undefined
   if (mapped?.name) {
     return mapped.name
-  }
-  if (attrs.name) {
-    return attrs.name
   }
 
   /**
@@ -206,6 +216,35 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
         dom.textContent = resolveDisplayText(node.attrs, this.options)
       }
 
+      /**
+       * 同步 data-speaker-* 属性到 DOM
+       * NodeView.update 默认只改 textContent；若不同步这些属性，
+       * 再次点击芯片时 onClick 会从 DOM 读到过期的 name/id，导致编辑器初始值错误
+       */
+      const syncDataAttrs = () => {
+        const mappedNow = node.attrs.originalLabel
+          ? this.options.speakerMap?.[node.attrs.originalLabel]
+          : undefined
+        /** attrs 优先、speakerMap 兜底，与 resolveDisplayText 一致，保证 DOM 上的 name/id 不被旧映射覆盖 */
+        const merged = {
+          ...node.attrs,
+          name: node.attrs.name ?? mappedNow?.name,
+          id: node.attrs.id ?? mappedNow?.id,
+          label: node.attrs.label ?? mappedNow?.label,
+          originalLabel: node.attrs.originalLabel,
+        }
+        const dataAttrs = buildDataAttributes(merged)
+        ;(['data-speaker-name', 'data-speaker-id', 'data-speaker-label'] as const).forEach((key) => {
+          const value = dataAttrs[key]
+          if (value != null) {
+            dom.setAttribute(key, String(value))
+          }
+          else {
+            dom.removeAttribute(key)
+          }
+        })
+      }
+
       /** 合并属性 */
       const mapped = node.attrs.originalLabel
         ? this.options.speakerMap?.[node.attrs.originalLabel]
@@ -258,6 +297,7 @@ export const SpeakerNode = Node.create<SpeakerOptions>({
             /** resolveDisplayText 读 node.attrs；把新 attrs 同步给闭包捕获的 node */
             ;(node as any).attrs = next
             updateText()
+            syncDataAttrs()
           }
           return true
         },

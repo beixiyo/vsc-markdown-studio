@@ -66,7 +66,7 @@
 - **变化**: 图标数量从 37 个增加到 43 个
 - **新增图标**: `check-icon.tsx`, `edit-icon.tsx`, `locate-icon.tsx`, `sparkles-icon.tsx`, `text-format-icon.tsx`, `x-icon.tsx`
 
-### 2. UI Components (UI组件)
+### 2. UI Components (UI 组件)
 - **位置**: `tiptap-editor/packages/tiptap-comps/src/tiptap-ui/`
 - **新增组件**:
   - `outline-button/` - 大纲按钮组件
@@ -136,3 +136,75 @@
 #### `tiptap-trigger/`
 - 触发器包
 - 包含：建议插件、扩展等
+
+---
+
+## 插件开发踩坑（自定义节点 / NodeView）
+
+> 以下是开发自定义节点（如 `Speaker`）时验证过的真实坑点，动手前务必读完。每条都用 playwright 在 playground（`window.__editor`）实测过
+
+### 1. ⚠️ `extension.options` 是 getter，运行时改不进去
+
+Tiptap 里 `editor.extensionManager.extensions.find(...).options` 是 **getter**，每次访问返回的是新对象：
+
+```js
+ext.options === ext.options          // ❌ false
+ext.options.speakerMap = newMap      // 写到临时对象，下一行就丢
+read(ext.options.speakerMap)         // 读回来还是 configure() 时传入的旧值
+```
+
+→ **不要试图在运行时改 `ext.options` 来驱动重渲染**。`configure({...})` 传入的配置近似「初始化常量」，要动态变的数据**不要放 options**
+
+### 2. ✅ 可变的显示数据放「节点 attrs」，用 `setNodeMarkup` 改
+
+只有节点 `attrs` 是 ProseMirror 能可靠追踪、并触发 `NodeView.update()` 的来源：
+
+```js
+// 改一个说话人的显示名
+editor.view.dispatch(
+  editor.state.tr.setNodeMarkup(pos, undefined, { ...node.attrs, name: newName })
+)
+// → PM 必定调用该节点 NodeView 的 update(newNode) → 你在 update 里刷新 DOM
+```
+
+options 只配「初始化兜底」（如从 markdown 解析出的节点还没写入名称时的默认显示）
+
+### 3. ⚠️ 多来源取值要想清优先级，且**优先用节点级来源**
+
+`Speaker` 踩过的真 bug：显示函数原本 `options.speakerMap[key].name` 优先于 `attrs.name`：
+
+```js
+// ❌ 错误优先级
+function resolveDisplayText(attrs, options) {
+  if (options.speakerMap[key]?.name) return options.speakerMap[key].name  // 旧 map 先命中
+  if (attrs.name) return attrs.name                                       // 永远到不了
+}
+```
+
+因为 options 改不进（见坑 1），`setNodeMarkup` 写入的新 `attrs.name` 被旧 map 名遮蔽，芯片永远显示旧名
+
+```js
+// ✅ 正确：节点级 attrs 优先，扩展级 options 兜底
+function resolveDisplayText(attrs, options) {
+  if (attrs.name) return attrs.name                                       // 最新、可追踪
+  if (options.speakerMap[key]?.name) return options.speakerMap[key].name  // 仅初始加载兜底
+}
+```
+
+> ⚠️ **测试要覆盖「来源里本来就有值」的真实数据形态**。当初只测了 map 里没条目的 label，恰好落到 attrs 兜底、假性通过，差点误判成「NodeView 不重绘」
+
+### 4. ⚠️ `NodeView.update()` 只会执行你手写的更新，不会自动同步 DOM
+
+`update()` 里你改了 `dom.textContent`，但节点的 `data-*` 属性**不会自动跟着变**：
+
+```js
+update(newNode) {
+  node.attrs = newNode.attrs
+  dom.textContent = resolveDisplayText(...)   // 只改了文字
+  // ❌ data-speaker-name/id 还停在旧值
+  // → 下次点击，onClick 从 DOM 读到的就是过期值（编辑器初始值错）
+}
+```
+
+凡是 onClick / 解析逻辑会从 DOM 读的属性，都要在 `update()` 里一并同步（`dom.setAttribute` / `removeAttribute`）
+
