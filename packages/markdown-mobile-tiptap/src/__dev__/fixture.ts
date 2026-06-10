@@ -7,7 +7,23 @@ export const devFixture = {
     { name: '张明', label: 0, originalLabel: 0 },
     { name: '李芳', label: 1, originalLabel: 1 },
   ],
-  content: `# 一级标题 Heading 1
+  content: `## ctx-ref 引用标记
+
+***这个结论需要重点关注。***<!--ctx-ref:mark:mark_123-->
+
+***这个补充意见被采纳进了总结。***<!--ctx-ref:note:1-->
+
+<!--summary-added-images:start-->
+
+### Related images
+
+- 这张图补充了会议中的白板内容。<!--ctx-ref:image:101-->
+
+<!--summary-added-images:end-->
+
+---
+
+# 一级标题 Heading 1
 
 ## 二级标题 Heading 2
 

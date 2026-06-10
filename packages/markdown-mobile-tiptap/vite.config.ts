@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
         'tiptap-nodes/gradient-highlight': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/gradient-highlight/index.ts', import.meta.url)),
         'tiptap-nodes/speaker': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/speaker/index.ts', import.meta.url)),
         'tiptap-nodes/code-block': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/code-block/index.ts', import.meta.url)),
+        'tiptap-nodes/ctx-ref': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/ctx-ref/index.ts', import.meta.url)),
       },
     },
     esbuild: {

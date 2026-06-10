@@ -17,6 +17,7 @@ export default defineConfig({
       entry: {
         'index': fileURLToPath(new URL('./src/index.ts', import.meta.url)),
         'speaker': fileURLToPath(new URL('./src/speaker/index.ts', import.meta.url)),
+        'ctx-ref': fileURLToPath(new URL('./src/ctx-ref/index.ts', import.meta.url)),
         'image-upload': fileURLToPath(new URL('./src/image-upload/index.tsx', import.meta.url)),
         'image': fileURLToPath(new URL('./src/image/index.ts', import.meta.url)),
         'code-block': fileURLToPath(new URL('./src/code-block/index.ts', import.meta.url)),

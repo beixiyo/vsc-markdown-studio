@@ -23,6 +23,11 @@
       "import": "./dist/speaker/index.js",
       "require": "./dist/speaker/index.cjs"
     },
+    "./ctx-ref": {
+      "types": "./dist/ctx-ref/index.d.ts",
+      "import": "./dist/ctx-ref/index.js",
+      "require": "./dist/ctx-ref/index.cjs"
+    },
     "./image-upload": {
       "types": "./dist/image-upload/index.d.ts",
       "import": "./dist/image-upload/index.js",
@@ -49,7 +54,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@tiptap/extension-code-block-lowlight": "3.13.0",
+    "@tiptap/extension-code-block-lowlight": "3.26.0",
     "comps": "workspace:*",
     "highlight.js": "^11.11.1",
     "lowlight": "^3.3.0",
@@ -60,11 +65,11 @@
     "utils": "workspace:*"
   },
   "peerDependencies": {
-    "@tiptap/core": "3.13.0",
-    "@tiptap/extension-highlight": "3.13.0",
-    "@tiptap/markdown": "3.13.0",
-    "@tiptap/pm": "3.13.0",
-    "@tiptap/react": "3.13.0",
+    "@tiptap/core": "3.26.0",
+    "@tiptap/extension-highlight": "3.26.0",
+    "@tiptap/markdown": "3.26.0",
+    "@tiptap/pm": "3.26.0",
+    "@tiptap/react": "3.26.0",
     "i18n": "workspace:*",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"

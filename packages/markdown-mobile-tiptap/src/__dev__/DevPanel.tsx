@@ -59,6 +59,35 @@ const SAMPLE_SPEAKERS = [
   { name: '说话人乙', originalLabel: 1, label: 1 },
 ]
 
+/** 追加到文末的 ctx-ref 增量示例（模拟算法侧新采纳一条 Note，不动现有内容） */
+const CTX_REF_APPEND = `***性能优化方案被采纳进了总结。***<!--ctx-ref:note:2-->`
+
+let directReplaceCount = 0
+
+const SENTINEL_START = '<!--summary-added-images:start-->'
+const SENTINEL_END = '<!--summary-added-images:end-->'
+
+/** 定位哨兵对，返回两哨兵之间的全部块（README §4.2 同款逻辑） */
+function locateAddedImagesRegion() {
+  const { blocks } = window.MDBridge.aiEdit.readBlocks()
+  const startIdx = blocks.findIndex(b => b.type === 'summaryBoundary' && b.markdown === SENTINEL_START)
+  const endIdx = startIdx === -1
+    ? -1
+    : blocks.findIndex((b, i) => i > startIdx && b.type === 'summaryBoundary' && b.markdown === SENTINEL_END)
+  if (startIdx === -1 || endIdx === -1)
+    return null
+  return { blocks, startIdx, endIdx, inner: blocks.slice(startIdx + 1, endIdx) }
+}
+
+/** fixture「ctx-ref 引用标记」一节自带的 marker，验证存活用 */
+const CTX_REF_MARKERS = [
+  '<!--ctx-ref:mark:mark_123-->',
+  '<!--ctx-ref:note:1-->',
+  '<!--ctx-ref:image:101-->',
+  '<!--summary-added-images:start-->',
+  '<!--summary-added-images:end-->',
+]
+
 const IMG_URLS = [
   'https://picsum.photos/seed/a/200/120',
   'https://picsum.photos/seed/b/200/120',
@@ -171,6 +200,89 @@ export default function DevPanel() {
                 <Btn label="getMarkdown" onClick={ () => show('getMarkdown', bridge().getMarkdown()) } />
                 <Btn label="getHTML" onClick={ () => show('getHTML', bridge().getHTML()) } />
                 <Btn label="getJSON" onClick={ () => show('getJSON', bridge().getJSON()) } />
+              </Section>
+
+              <Section title="ctx-ref marker（页面默认内容里已有「## ctx-ref 引用标记」一节）">
+                <Btn
+                  label="① 追加新 Note 到文末（不动现有内容）"
+                  onClick={ () => safeCall('aiEdit.append(ctxRef)', () => bridge().aiEdit.applyOperations({
+                    operations: [{
+                      target: 'doc',
+                      op: 'append',
+                      content: { format: 'markdown', value: CTX_REF_APPEND },
+                    }],
+                  })) }
+                />
+                <Btn
+                  label="② 直接替换图片区块（非流式）"
+                  onClick={ () => {
+                    /** 哨兵对定位 → 替换区间内全部块（第一块替换、其余删除），一次性生效 */
+                    const region = locateAddedImagesRegion()
+                    if (!region || region.inner.length === 0) {
+                      show('直接替换', '未找到完整的 summary-added-images 哨兵区块')
+                      return
+                    }
+
+                    directReplaceCount += 1
+                    const { results } = bridge().aiEdit.applyOperations({
+                      operations: [
+                        {
+                          target: region.inner[0].hash,
+                          op: 'replace',
+                          content: { format: 'markdown', value: `### Related images（直接替换第 ${directReplaceCount} 次）\n\n- 第 ${directReplaceCount} 版图片说明` },
+                        },
+                        ...region.inner.slice(1).map(b => ({ target: b.hash, op: 'delete' as const })),
+                      ],
+                    })
+                    show('直接替换', results.every(r => r.success)
+                      ? `成功（第 ${directReplaceCount} 次），区间 ${region.inner.length} 个块已整体替换\n连点本按钮可验证同一区块的多轮替换；可 undo 撤销`
+                      : `部分失败：${JSON.stringify(results)}`)
+                  } }
+                />
+                <Btn
+                  label="③ 假流式更新图片区块（哨兵定位）"
+                  onClick={ () => {
+                    const region = locateAddedImagesRegion()
+                    if (!region || region.inner.length === 0) {
+                      show('假流式', '未找到完整的 summary-added-images 哨兵区块')
+                      return
+                    }
+
+                    /** 流式只能对单个目标：先把区间内多余的块删掉，再对第一块流式替换 */
+                    if (region.inner.length > 1) {
+                      bridge().aiEdit.applyOperations({
+                        operations: region.inner.slice(1).map(b => ({ target: b.hash, op: 'delete' as const })),
+                      })
+                    }
+                    const { streamId } = bridge().aiEdit.beginStream({ target: region.inner[0].hash, op: 'replace' })
+                    const updated = `### Related images（图片任务已更新）`
+                    let pos = 0
+                    const timer = setInterval(() => {
+                      if (pos >= updated.length) {
+                        clearInterval(timer)
+                        bridge().aiEdit.endStream(streamId)
+                        bridge().aiEdit.accept()
+                        show('假流式', '完成：哨兵区块首块已流式替换，区块外内容未动（可 undo 撤销）')
+                        return
+                      }
+                      bridge().aiEdit.pushChunk(streamId, updated.slice(pos, pos + 4))
+                      pos += 4
+                    }, 80)
+                  } }
+                />
+                <Btn
+                  label="④ 验证 marker 存活"
+                  onClick={ () => {
+                    const md = bridge().getMarkdown()
+                    const checks = CTX_REF_MARKERS.map(m => `${md.includes(m)
+                      ? '✓'
+                      : '✗'} ${m}`)
+                    checks.push(md.includes('******')
+                      ? '✗ 出现悬空 *** 脏数据'
+                      : '✓ 无悬空 *** 脏数据')
+                    show('marker 存活检查', checks.join('\n'))
+                  } }
+                />
               </Section>
 
               <Section title="Block commands">

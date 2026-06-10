@@ -5,8 +5,11 @@
  * hash 是 web 端生成的不透明令牌，外部（移动端 / 算法侧）只透传引用，不参与计算
  */
 
-/** 内容格式：markdown 为默认；需要表达 Markdown 写不出的样式（如渐变高亮）时用 html */
-export type RegionContentFormat = 'markdown' | 'html'
+/**
+ * 内容格式：markdown 为默认；
+ * 需要表达 Markdown 写不出的样式（如渐变高亮）时用 html 或 json（ProseMirror JSON，无损首选）
+ */
+export type RegionContentFormat = 'markdown' | 'html' | 'json'
 
 /**
  * 操作内容载荷
@@ -14,8 +17,11 @@ export type RegionContentFormat = 'markdown' | 'html'
 export type RegionContent = {
   /** 内容格式 @default 'markdown' */
   format: RegionContentFormat
-  /** 内容字符串，可包含多个块 */
-  value: string
+  /**
+   * markdown / html 为内容字符串，可包含多个块；
+   * json 为 ProseMirror JSON —— 单节点、节点数组或整个 doc 均可，也接受 JSON 字符串
+   */
+  value: string | Record<string, any> | Record<string, any>[]
 }
 
 /** 操作类型 */

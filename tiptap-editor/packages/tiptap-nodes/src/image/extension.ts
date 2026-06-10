@@ -315,6 +315,35 @@ export const ImageNode = Node.create<ImageOptions>({
     return ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
   },
 
+  /**
+   * Markdown 双向转换：`![alt](src "title")` ⇄ image 节点
+   *
+   * marked 原生产出 `image` token，无需自定义 tokenizer。
+   * 布局类富属性（width / display 等）Markdown 表达不了，序列化时丢弃——
+   * 需要无损传输时走 HTML / JSON 通道（readBlocks 的 lossy 检测会自动附带 html）
+   */
+  markdownTokenName: 'image',
+
+  parseMarkdown: (token) => {
+    return {
+      type: 'image',
+      attrs: {
+        src: token.href || '',
+        alt: token.text || null,
+        title: token.title || null,
+      },
+    }
+  },
+
+  renderMarkdown: (node) => {
+    const src = node.attrs?.src || ''
+    const alt = node.attrs?.alt || ''
+    const title = node.attrs?.title
+    return title
+      ? `![${alt}](${src} "${title}")`
+      : `![${alt}](${src})`
+  },
+
   addNodeView() {
     return createImageNodeView(this.options)
   },

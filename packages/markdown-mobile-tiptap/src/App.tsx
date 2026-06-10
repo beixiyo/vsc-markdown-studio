@@ -4,6 +4,7 @@ import { notifyNative } from 'notify'
 import { useMemo, useRef } from 'react'
 import { RegionEdit } from 'tiptap-ai'
 import { useDefaultEditor } from 'tiptap-editor-core'
+import { CtxRefNode, SummaryBoundaryNode } from 'tiptap-nodes/ctx-ref'
 import { type SpeakerAttributes, SpeakerNode } from 'tiptap-nodes/speaker'
 import DevPanel from './__dev__/DevPanel'
 import { useNotifyChange } from './hooks/useNotify'
@@ -75,6 +76,9 @@ export default function App() {
         notifyNative('speakerTapped', speakerAttrsToNativePayload(attrs))
       },
     }),
+    /** 算法侧 V2 ctx-ref marker：comment 保活数据锚点，渲染与交互由业务插件承接 */
+    CtxRefNode,
+    SummaryBoundaryNode,
   ], [])
 
   const editor = useDefaultEditor({ extensions, image: imageOptions, placeholder: false })

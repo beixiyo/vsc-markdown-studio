@@ -46,15 +46,20 @@ export function serializeBlockHtml(editor: Editor, node: PMNode): string {
  */
 export function parseContentToNodes(editor: Editor, content: RegionContent): PMNode[] {
   const format = content.format ?? 'markdown'
-  let docNode: PMNode
 
+  /** json 通道：直接按 schema 校验构造节点，无损（不经过 markdown / html 中间表示） */
+  if (format === 'json') {
+    return parseJsonToNodes(editor, content.value)
+  }
+
+  let docNode: PMNode
   if (format === 'html') {
     const container = document.createElement('div')
-    container.innerHTML = content.value
+    container.innerHTML = String(content.value)
     docNode = PMDOMParser.fromSchema(editor.schema).parse(container)
   }
   else {
-    const json = getMarkdownManager(editor).parse(content.value)
+    const json = getMarkdownManager(editor).parse(String(content.value))
     docNode = editor.schema.nodeFromJSON(json)
   }
 
@@ -63,6 +68,32 @@ export function parseContentToNodes(editor: Editor, content: RegionContent): PMN
 
   if (!nodes.length) {
     throw new Error('[region-edit] content 解析结果为空')
+  }
+  return nodes
+}
+
+/**
+ * ProseMirror JSON → 顶层节点数组
+ *
+ * 接受三种形态：单节点对象、节点数组、整个 doc（取其 content）；字符串视为 JSON 串先解析。
+ * 行内节点（如纯 text）不在顶层块词表内，nodeFromJSON 之后由 ProseMirror 在
+ * replaceWith 时做 schema 校验，非法结构会抛错而不是污染文档
+ */
+function parseJsonToNodes(editor: Editor, value: RegionContent['value']): PMNode[] {
+  const raw = typeof value === 'string'
+    ? JSON.parse(value)
+    : value
+
+  const list = Array.isArray(raw)
+    ? raw
+    : raw?.type === 'doc'
+      ? raw.content ?? []
+      : [raw]
+
+  const nodes = (list as Record<string, any>[]).map(item => editor.schema.nodeFromJSON(item))
+
+  if (!nodes.length) {
+    throw new Error('[region-edit] json content 解析结果为空')
   }
   return nodes
 }
