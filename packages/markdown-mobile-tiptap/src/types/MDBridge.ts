@@ -1,4 +1,13 @@
 import type { Editor } from '@tiptap/core'
+import type {
+  ApplyPayload,
+  ApplyResult,
+  BeginStreamPayload,
+  BeginStreamResult,
+  ReadBlocksOptions,
+  ReadBlocksResult,
+  RegionEditState,
+} from 'tiptap-ai'
 import type { ImageAttrs } from 'tiptap-nodes/image'
 import type { TiptapOperate } from '../operate'
 import type { SetImagePayload } from '../operate/image'
@@ -93,6 +102,33 @@ export type MDBridge = TiptapOperate & {
    * ```
    */
   setTypography: (config: TypographyConfig) => void
+
+  /**
+   * AI 区域编辑（hash 锚点协议）
+   *
+   * 协议文档：tiptap-editor/docs/ai-region-edit-protocol.md
+   * 流程：readBlocks 取锚点 → applyOperations 批量应用 / 流式三件套 → accept / reject
+   *
+   * web → 原生事件：`aiEditStateChanged`（idle / streaming / preview）、`aiEditConflict`
+   */
+  aiEdit: {
+    /** 读取文档顶层块列表（hash 锚点 + Markdown，必要时附无损 HTML） */
+    readBlocks: (options?: ReadBlocksOptions) => ReadBlocksResult
+    /** 批量应用操作；options.preview 为 true 时进入预览态等待 accept/reject */
+    applyOperations: (payload: ApplyPayload) => ApplyResult
+    /** 开始流式编辑，返回 streamId；目标块进入处理中装饰 */
+    beginStream: (payload: BeginStreamPayload) => BeginStreamResult
+    /** 推送流式增量（web 端自动合批渲染，原生侧仍建议 ≥ 32ms 合批调用） */
+    pushChunk: (streamId: string, delta: string) => void
+    /** 结束流，进入预览态 */
+    endStream: (streamId: string) => void
+    /** 采纳当前预览（写入 undo 历史） */
+    accept: () => void
+    /** 放弃当前预览，还原原内容 */
+    reject: () => void
+    /** 当前状态 */
+    getState: () => RegionEditState
+  }
 }
 
 export type { SpeakerTappedPayload, SpeakerType } from './Speaker'

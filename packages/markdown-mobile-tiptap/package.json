@@ -29,6 +29,7 @@
     "i18n": "workspace:*",
     "notify": "workspace:*",
     "styles": "workspace:*",
+    "tiptap-ai": "workspace:*",
     "tiptap-api": "workspace:*",
     "tiptap-editor-core": "workspace:*",
     "tiptap-nodes": "workspace:*"

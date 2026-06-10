@@ -8,10 +8,11 @@
  *    - I18nStateContext：随语言/资源变化的 { language, t }（仅消费翻译的组件才重渲染）
  */
 
+import type { I18nOptions, Language, PersistenceAdapter, Resources } from '../index'
 import type { I18nApiContextValue, I18nProviderProps, I18nStateContextValue } from './types'
 import { useConst, useLatestCallback, useStable } from 'hooks'
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { I18n, type I18nOptions, type Language, type PersistenceAdapter, type Resources } from '../index'
+import { I18n } from '../index'
 
 /**
  * API Context：稳定的方法集合 + 实例
@@ -60,8 +61,8 @@ export function I18nProvider(props: I18nProviderProps) {
    * 实例只读取一次
    *
    * 用 useConst 固化：仅在首次挂载时读取一次 props 构建 options，
-   * 后续 props 对象 identity 变化【不会】触发重新读取（修复旧 thrash bug）。
-   * 受控语言、运行时改资源等场景由后续 effect / 方法处理，无需重建实例。
+   * 后续 props 对象 identity 变化【不会】触发重新读取（修复旧 thrash bug）
+   * 受控语言、运行时改资源等场景由后续 effect / 方法处理，无需重建实例
    */
   const { i18n } = useConst<{ i18n: I18n }>(() => {
     /** 传入外部实例：直接使用，由调用方自行管理 */
@@ -92,13 +93,13 @@ export function I18nProvider(props: I18nProviderProps) {
 
     /**
      * 始终复用全局单例（不再因传了 props 就 createI18n 另起炉灶，避免 comps / tiptap
-     * 等多消费方各持独立实例、语言切换不互通的问题）。
+     * 等多消费方各持独立实例、语言切换不互通的问题）
      *
      * getInstance 仅在单例【尚未创建】时吃 options——所以「首个挂载的 Provider」
      * 会用自己的完整配置（resources / persistence / defaultLanguage / detection /
-     * fallback）同步初始化单例：无首屏闪 key、persistence key 得以保留。
+     * fallback）同步初始化单例：无首屏闪 key、persistence key 得以保留
      * 后续 Provider 拿到同一单例，options 被忽略，其资源 / fallback 改由下方挂载
-     * 副作用补偿注入（见 applyInitialResources / applyLanguageToLocale）。
+     * 副作用补偿注入（见 applyInitialResources / applyLanguageToLocale）
      */
     return { i18n: I18n.getInstance(options) }
   })

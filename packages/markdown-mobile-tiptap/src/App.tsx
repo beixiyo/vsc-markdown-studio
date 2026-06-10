@@ -2,6 +2,7 @@ import type { ImageOptions } from 'tiptap-nodes/image'
 import { EditorContent } from '@tiptap/react'
 import { notifyNative } from 'notify'
 import { useMemo, useRef } from 'react'
+import { RegionEdit } from 'tiptap-ai'
 import { useDefaultEditor } from 'tiptap-editor-core'
 import { type SpeakerAttributes, SpeakerNode } from 'tiptap-nodes/speaker'
 import DevPanel from './__dev__/DevPanel'
@@ -66,6 +67,8 @@ export default function App() {
    * 传空对象作为稳定引用，后续由 `useSetupMDBridge` 原地 mutate
    */
   const extensions = useMemo(() => [
+    /** AI 区域编辑（hash 锚点协议）预览装饰 */
+    RegionEdit.configure(),
     SpeakerNode.configure({
       speakerMap: {},
       onClick: (attrs: SpeakerAttributes) => {

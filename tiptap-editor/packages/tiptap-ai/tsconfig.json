@@ -11,6 +11,7 @@
     "composite": false,
     "types": [
       "@tiptap/starter-kit",
+      "@tiptap/markdown",
       "vite/client"
     ],
     "rootDir": "./src"

@@ -24,6 +24,10 @@ export type NativeEvent =
   | 'imageRemoved'
   /** 图片属性变化（尺寸、对齐等） */
   | 'imageAttrsChanged'
+  /** AI 区域编辑状态变化（idle / streaming / preview） */
+  | 'aiEditStateChanged'
+  /** AI 区域编辑冲突：用户编辑了预览/流式区域，会话已终止 */
+  | 'aiEditConflict'
 
 /** iOS WKWebView 注入对象 */
 export interface Webkit {

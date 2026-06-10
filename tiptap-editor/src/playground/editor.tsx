@@ -3,7 +3,7 @@
 import type { EditorProps } from './types'
 import { isStr } from '@jl-org/tool'
 import { memo, useEffect, useRef, useState } from 'react'
-import { AI } from 'tiptap-ai'
+import { AI, RegionEdit } from 'tiptap-ai'
 
 import { useAutoSave, useIsBreakpoint, useWindowSize } from 'tiptap-api/react'
 import { CommentMark, CommentStore } from 'tiptap-comment'
@@ -52,6 +52,8 @@ export const Editor = memo<EditorProps>(({
     extensions: [
       /** AI 预览装饰扩展 */
       AI.configure(),
+      /** 区域编辑（hash 锚点协议）装饰扩展 */
+      RegionEdit.configure(),
       /** Slash / Suggestion 扩展 */
       SuggestionTrigger.configure(),
       /** Mermaid 图表节点扩展 */

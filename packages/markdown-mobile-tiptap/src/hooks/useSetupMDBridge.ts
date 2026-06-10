@@ -4,6 +4,7 @@ import type { MDBridge, TypographyConfig } from '../types/MDBridge'
 import type { SpeakerType } from '../types/Speaker'
 import { notifyNative } from 'notify'
 import { useEffect } from 'react'
+import { createRegionEdit } from 'tiptap-ai'
 import { getEditorJson, getEditorMarkdown, setEditorContent, setEditorMarkdown } from 'tiptap-api'
 import { preprocessSpeakerTags } from 'tiptap-nodes/speaker'
 import { createTiptapOperate } from '../operate/create'
@@ -119,6 +120,12 @@ export function useSetupMDBridge(
 
     const base = createTiptapOperate(editor)
 
+    /** AI 区域编辑控制器：状态与冲突经 notify 上报原生 */
+    const regionEdit = createRegionEdit(editor, {
+      onStateChange: state => notifyNative('aiEditStateChanged', { state }),
+      onConflict: info => notifyNative('aiEditConflict', info),
+    })
+
     const bridge: MDBridge = {
       ...base,
       _editor: editor,
@@ -166,9 +173,24 @@ export function useSetupMDBridge(
       },
 
       setTypography: (config: TypographyConfig) => applyTypography(config),
+
+      aiEdit: {
+        readBlocks: options => regionEdit.readBlocks(options),
+        applyOperations: payload => regionEdit.applyOperations(payload),
+        beginStream: payload => regionEdit.beginStream(payload),
+        pushChunk: (streamId, delta) => regionEdit.pushChunk(streamId, delta),
+        endStream: streamId => regionEdit.endStream(streamId),
+        accept: () => regionEdit.accept(),
+        reject: () => regionEdit.reject(),
+        getState: () => regionEdit.getState(),
+      },
     }
 
     window.MDBridge = bridge
     notifyNative('mdBridgeReady')
+
+    return () => {
+      regionEdit.destroy()
+    }
   }, [editor, editorElRef])
 }

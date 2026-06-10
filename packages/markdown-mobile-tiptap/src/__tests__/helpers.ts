@@ -6,7 +6,7 @@ import { GradientHighlight } from 'tiptap-nodes/gradient-highlight'
 import { ImageNode } from 'tiptap-nodes/image'
 
 /** 创建一个最小化的、可在 jsdom 中运行的 Tiptap 编辑器 */
-export function makeEditor(content: any = '') {
+export function makeEditor(content: any = '', extraExtensions: any[] = []) {
   const el = document.createElement('div')
   document.body.appendChild(el)
 
@@ -23,6 +23,7 @@ export function makeEditor(content: any = '') {
       TaskList,
       TaskItem.configure({ nested: true }),
       GradientHighlight,
+      ...extraExtensions,
     ],
   })
   return {

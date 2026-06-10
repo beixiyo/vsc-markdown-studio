@@ -11,6 +11,7 @@ import { HoverTooltip } from 'tiptap-hover/react'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { ImageTestDropdownMenu } from '@/components/my-ui/image-test-dropdown-menu'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
+import { RegionEditPanel } from '@/components/my-ui/region-edit-panel'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
 import { SectionTestButton } from '@/components/my-ui/section-test-button'
 import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
@@ -278,6 +279,9 @@ sequenceDiagram
 
           {/* AI 操作面板 */ }
           <AIActionPanel editor={ editor } controller={ aiController } className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" />
+
+          {/* 区域编辑（hash 锚点协议）测试面板 */ }
+          <RegionEditPanel editor={ editor } />
         </>
       ) }
 
