@@ -23,6 +23,22 @@ sequenceDiagram
 ```
 ````
 
+## 序列化支持
+
+| 格式 | 支持 | 说明 |
+|------|------|------|
+| JSON | ✅ 无损 | 所有 attrs 可序列化 |
+| HTML | ✅ 无损 | `<div data-mermaid="true" data-mermaid-code="..." />` |
+| Markdown | ✅ 无损 | ` ```mermaid ` 围栏，自定义 tokenizer 双向转换 |
+
+## Attrs
+
+| 属性 | 说明 |
+|------|------|
+| `code` | Mermaid 源代码 |
+| `id` | 节点唯一标识 |
+| `x` `y` `scale` | 画布平移 / 缩放状态 |
+
 ## 依赖
 
 `tiptap-api` `tiptap-comps` `tiptap-utils` `beautiful-mermaid`

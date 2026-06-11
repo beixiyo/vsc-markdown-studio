@@ -37,6 +37,16 @@ import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync } f
 | `useCommentSync` | 评论状态同步（undo/redo 感知） |
 | `useComments` | 评论列表响应式 hook |
 
+## 序列化支持
+
+| 格式 | 支持 | 说明 |
+|------|------|------|
+| JSON | ✅ 无损 | mark + `commentId` attr |
+| HTML | ✅ 无损 | `<span data-comment-id="...">` |
+| Markdown | ❌ mark 丢失 | 文本保留，评论标记不输出——**设计如此**，见下 |
+
+评论内容与元数据存在独立 `CommentStore`，文档里只有 mark 锚点；markdown 不适合承载评论，需要带评论导出时用 `exportDocumentWithComments`（JSON 文档 + 评论数据组合导出）
+
 ## 依赖
 
 `tiptap-api` `tiptap-comps` `tiptap-utils`

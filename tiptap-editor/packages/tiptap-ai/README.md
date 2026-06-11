@@ -131,8 +131,8 @@ type RegionContent = {
 
 | 通道 | 适用 | 说明 |
 |------|------|------|
-| `markdown` | 文字、标题、列表、`[speaker:N]`、ctx-ref 注释、`![alt](src)` 图片 | 图片仅保留 src / alt / title |
-| `html` | `<mark data-color>` 渐变高亮、`<img>` | 任何实现 parseHTML 的自定义节点都可写入 |
+| `markdown` | 文字、标题、列表、`[speaker:N]`、ctx-ref 注释、图片、高亮 | 图片富属性走 `<img ... />`、带色高亮走 `<mark data-color>` 内联 HTML，均无损往返 |
+| `html` | 任何实现 parseHTML 的自定义节点 | markdown 已能覆盖图片 / 高亮后，主要用于剩余 lossy 内容（如下划线） |
 | `json` | **无损首选**：ProseMirror JSON 直达节点 | 单节点 / 节点数组 / 整个 doc / JSON 字符串均接受；width 等富属性完整保留；非法结构被 schema 校验拒绝 |
 
 ### 流式三件套
