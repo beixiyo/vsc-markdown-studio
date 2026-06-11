@@ -10,6 +10,7 @@ import { BlockActionMenu, EditorLinkHover, MarkButton, SelectToolbar, TableContr
 import { HoverTooltip } from 'tiptap-hover/react'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { ImageTestDropdownMenu } from '@/components/my-ui/image-test-dropdown-menu'
+import { MarkdownIOPanel } from '@/components/my-ui/markdown-io-panel'
 import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
 import { RegionEditPanel } from '@/components/my-ui/region-edit-panel'
 import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
@@ -282,6 +283,9 @@ sequenceDiagram
 
           {/* 区域编辑（hash 锚点协议）测试面板 */ }
           <RegionEditPanel editor={ editor } />
+
+          {/* Markdown 导入导出测试面板（图片富属性序列化） */ }
+          <MarkdownIOPanel editor={ editor } />
         </>
       ) }
 

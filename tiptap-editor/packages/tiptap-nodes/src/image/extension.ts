@@ -70,6 +70,71 @@ function parseNumberAttr(el: HTMLElement, key: string): number | null {
 }
 
 /**
+ * Markdown 富属性映射表：节点 attr → `<img>` 上的 HTML 属性名
+ *
+ * 顺序即输出顺序，固定顺序保证 markdown 多轮往返逐字符幂等。
+ * width/height 输出标准 HTML 属性（GitHub / VS Code 预览可识别尺寸），
+ * 其余走 data-*，与 addAttributes 的 renderHTML 保持同名，解析侧免费复用
+ */
+const MARKDOWN_RICH_ATTRS: [attrKey: string, htmlName: string][] = [
+  ['width', 'width'],
+  ['height', 'height'],
+  ['aspectRatio', 'data-aspect-ratio'],
+  ['display', 'data-display'],
+  ['align', 'data-align'],
+  ['verticalAlign', 'data-vertical-align'],
+  ['float', 'data-float'],
+  ['margin', 'data-margin'],
+  ['padding', 'data-padding'],
+  ['objectFit', 'data-object-fit'],
+  ['borderRadius', 'data-border-radius'],
+  ['border', 'data-border'],
+  ['boxShadow', 'data-box-shadow'],
+  ['opacity', 'data-opacity'],
+  ['filter', 'data-filter'],
+  ['rotate', 'data-rotate'],
+  ['className', 'class'],
+  ['style', 'data-style-json'],
+  ['loading', 'loading'],
+  ['decoding', 'decoding'],
+  ['placeholder', 'data-placeholder'],
+  ['fallbackSrc', 'data-fallback-src'],
+  ['thumbnailSrc', 'data-thumbnail-src'],
+  ['crossOrigin', 'crossorigin'],
+  ['referrerPolicy', 'referrerpolicy'],
+]
+
+/** 与 addAttributes 的 default 一致的值不输出，避免每张图都降级为 HTML */
+const MARKDOWN_ATTR_DEFAULTS: Record<string, unknown> = {
+  display: 'inline-block',
+  loading: 'lazy',
+  decoding: 'async',
+}
+
+/** HTML 属性值转义（& 必须最先替换） */
+function escapeHtmlAttr(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+}
+
+/**
+ * 收集需要进入 Markdown 的富属性（[htmlName, value] 有序对）
+ * 返回空数组表示纯净图片，可用标准 `![]()` 语法
+ */
+function collectMarkdownRichAttrs(attrs: Record<string, any>): [string, string][] {
+  const out: [string, string][] = []
+  for (const [key, htmlName] of MARKDOWN_RICH_ATTRS) {
+    const value = attrs[key]
+    if (value == null || value === '' || MARKDOWN_ATTR_DEFAULTS[key] === value)
+      continue
+    out.push([htmlName, dataAttr(value)!])
+  }
+  return out
+}
+
+/**
  * 自定义图片节点
  *
  * Schema 层固定为 `inline`，视觉上的 block 模式通过 `display` attr + CSS 模拟
@@ -316,11 +381,13 @@ export const ImageNode = Node.create<ImageOptions>({
   },
 
   /**
-   * Markdown 双向转换：`![alt](src "title")` ⇄ image 节点
+   * Markdown 双向转换
    *
-   * marked 原生产出 `image` token，无需自定义 tokenizer。
-   * 布局类富属性（width / display 等）Markdown 表达不了，序列化时丢弃——
-   * 需要无损传输时走 HTML / JSON 通道（readBlocks 的 lossy 检测会自动附带 html）
+   * - 纯净图片（仅 src/alt/title）：标准 `![alt](src "title")`，marked 原生
+   *   `image` token 解析，无需自定义 tokenizer
+   * - 含富属性（尺寸 / 对齐 / 样式等）：降级为自闭合 `<img ... />`，导入侧由
+   *   @tiptap/markdown 的 HTML token 解析路径（parseHTMLToken → 本扩展
+   *   parseHTML）自动还原；自闭合写法可避开成对标签的前向扫描
    */
   markdownTokenName: 'image',
 
@@ -336,12 +403,27 @@ export const ImageNode = Node.create<ImageOptions>({
   },
 
   renderMarkdown: (node) => {
-    const src = node.attrs?.src || ''
-    const alt = node.attrs?.alt || ''
-    const title = node.attrs?.title
-    return title
-      ? `![${alt}](${src} "${title}")`
-      : `![${alt}](${src})`
+    const attrs = node.attrs ?? {}
+    const src = attrs.src || ''
+    const alt = attrs.alt || ''
+    const title = attrs.title
+
+    const rich = collectMarkdownRichAttrs(attrs)
+    if (!rich.length) {
+      return title
+        ? `![${alt}](${src} "${title}")`
+        : `![${alt}](${src})`
+    }
+
+    const parts = [`src="${escapeHtmlAttr(src)}"`]
+    if (alt)
+      parts.push(`alt="${escapeHtmlAttr(alt)}"`)
+    if (title)
+      parts.push(`title="${escapeHtmlAttr(title)}"`)
+    for (const [name, value] of rich)
+      parts.push(`${name}="${escapeHtmlAttr(value)}"`)
+
+    return `<img ${parts.join(' ')} />`
   },
 
   addNodeView() {

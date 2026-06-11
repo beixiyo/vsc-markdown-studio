@@ -16,6 +16,22 @@ export default defineConfig(() => {
     plugins: [
       codeInspectorPlugin({
         bundler: 'vite',
+        /**
+         * @link https://inspector.fe-dev.cn/en/more/question.html#using-in-wsl-or-dev-containers
+         *
+         * VSCode / Cursor:
+         * ```bash
+         * # 只有 WSL 才需要设置
+         * echo "CODE_EDITOR=$(which code)" > .env.local
+         * ```
+         *
+         * Neovim（open-nvim）：
+         * ```bash
+         * echo "CODE_EDITOR=$(realpath ~/.local/bin/open-nvim)" > .env.local
+         * ```
+         */
+        editor: `${process.env.HOME}/.local/bin/open-nvim` as any,
+        pathFormat: ['{file}', '{line}', '{column}'],
         hideConsole: true,
       }),
       react(),
