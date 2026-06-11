@@ -59,7 +59,7 @@ describe('readBlocks', () => {
     dispose()
   })
 
-  it('含渐变高亮的块标记 lossy 并附带 html', () => {
+  it('渐变高亮块不再 lossy，markdown 直接携带 <mark data-color>', () => {
     const { editor, regionEdit, dispose } = setup()
     editor.commands.insertContentAt(
       editor.state.doc.content.size,
@@ -67,9 +67,25 @@ describe('readBlocks', () => {
     )
 
     const { blocks } = regionEdit.readBlocks()
+    const target = blocks.find(b => b.markdown.includes('渐变高亮'))
+    expect(target).toBeDefined()
+    expect(target!.markdown).toContain('<mark data-color="skyBlue">渐变高亮</mark>')
+    expect(target!.lossy).toBeFalsy()
+
+    dispose()
+  })
+
+  it('markdown 表达不了的块（下划线）标记 lossy 并附带 html', () => {
+    const { editor, regionEdit, dispose } = setup()
+    editor.commands.insertContentAt(
+      editor.state.doc.content.size,
+      '<p>前<u>下划线</u>后</p>',
+    )
+
+    const { blocks } = regionEdit.readBlocks()
     const lossyBlock = blocks.find(b => b.lossy)
     expect(lossyBlock).toBeDefined()
-    expect(lossyBlock!.html).toContain('data-color="skyBlue"')
+    expect(lossyBlock!.html).toContain('<u>下划线</u>')
 
     dispose()
   })

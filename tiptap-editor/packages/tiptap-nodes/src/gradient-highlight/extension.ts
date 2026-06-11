@@ -1,4 +1,5 @@
 import TiptapHighlight from '@tiptap/extension-highlight'
+import { escapeHtmlAttr } from '../markdown-utils'
 import { gradientStylesMap, type GradientStyleType, isGradientType } from './constants'
 
 /**
@@ -47,5 +48,22 @@ export const GradientHighlight = TiptapHighlight.extend({
         },
       },
     }
+  },
+
+  /**
+   * Markdown 序列化
+   *
+   * - 无 color：保持官方 `==text==` 语法（tokenizer / parseMarkdown 均继承自
+   *   @tiptap/extension-highlight，无需重写）
+   * - 有 color：降级为 `<mark data-color="...">`，markdown 表达不了颜色；
+   *   导入侧由 @tiptap/markdown 的成对内联 HTML 解析路径（合并 token →
+   *   本扩展 parseHTML）自动还原 color，外部 GFM 渲染器降级显示默认黄底
+   */
+  renderMarkdown: (node, helpers) => {
+    const color = node.attrs?.color as string | null
+    const children = helpers.renderChildren(node)
+    return color
+      ? `<mark data-color="${escapeHtmlAttr(color)}">${children}</mark>`
+      : `==${children}==`
   },
 }).configure({ multicolor: true })

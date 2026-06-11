@@ -30,6 +30,15 @@ export const MD_PRESETS = [
 - 列表项
 - ![小图](https://picsum.photos/48)`,
   },
+  {
+    key: 'highlight',
+    label: '高亮',
+    value: `# 高亮序列化
+
+前文 ==无色高亮== 中段 <mark data-color="skyBlue">天空蓝渐变</mark> 与 <mark data-color="#fef08a">黄色高亮</mark> 后文
+
+无色保持 \`==\` 语法，带色降级为 \`<mark data-color>\`，渐变 key 导入后应渲染为文字渐变`,
+  },
 ] as const
 
 export interface PanelNotice {

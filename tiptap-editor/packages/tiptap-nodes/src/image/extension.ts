@@ -2,6 +2,7 @@ import type { ImageAttrs, ImageOptions } from './types'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { mergeAttributes, Node } from '@tiptap/react'
 import { nanoid } from 'nanoid'
+import { escapeHtmlAttr } from '../markdown-utils'
 import { createImageNodeView } from './image-node-view'
 
 /**
@@ -109,14 +110,6 @@ const MARKDOWN_ATTR_DEFAULTS: Record<string, unknown> = {
   display: 'inline-block',
   loading: 'lazy',
   decoding: 'async',
-}
-
-/** HTML 属性值转义（& 必须最先替换） */
-function escapeHtmlAttr(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
 }
 
 /**
