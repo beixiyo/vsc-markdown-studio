@@ -2,52 +2,22 @@
 
 import type { Editor } from '@tiptap/react'
 import { Button, Textarea } from 'comps'
-import { useLatestCallback } from 'hooks'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { cn } from 'utils'
 import { MD_PRESETS, useMarkdownIOPanel } from './use-markdown-io-panel'
 
 /**
- * Markdown 导入导出测试面板
+ * Markdown 导入导出测试面板内容
  *
  * 验证图片节点的 markdown 序列化策略：
  * 富属性图片 ⇄ `<img ... />`，纯净图片 ⇄ `![alt](src)`，含 6 轮往返幂等检测
+ * 自身不带容器壳，由测试面板（TestPanel）等宿主提供布局
  */
 export const MarkdownIOPanel = memo<MarkdownIOPanelProps>(({ editor, className }) => {
-  const [open, setOpen] = useState(false)
   const panel = useMarkdownIOPanel(editor)
 
-  const toggleOpen = useLatestCallback(() => setOpen(prev => !prev))
-
-  if (!open) {
-    return (
-      <Button
-        size="sm"
-        onClick={ toggleOpen }
-        className={ cn('fixed bottom-16 right-4 z-50', className) }
-        tooltip="Markdown 导入导出测试（图片富属性）"
-        aria-label="打开 Markdown 测试面板"
-      >
-        MD I/O
-      </Button>
-    )
-  }
-
   return (
-    <aside
-      className={ cn(
-        'fixed top-16 bottom-4 right-4 z-50 w-96 flex flex-col gap-3 p-4',
-        'bg-background border border-border rounded-xl shadow-lg overflow-hidden',
-        className,
-      ) }
-    >
-      <header className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-text">Markdown 导入导出</h3>
-        <Button size="sm" variant="ghost" onClick={ toggleOpen } aria-label="收起面板">
-          ✕
-        </Button>
-      </header>
-
+    <div className={ cn('flex flex-col gap-3', className) }>
       {/* 预置样例 */ }
       <div className="flex gap-2">
         { MD_PRESETS.map(preset => (
@@ -63,7 +33,7 @@ export const MarkdownIOPanel = memo<MarkdownIOPanelProps>(({ editor, className }
       </div>
 
       <Textarea
-        className="h-48 flex-1 font-mono text-xs"
+        className="h-48 font-mono text-xs"
         placeholder="输入 markdown，支持 <img ... /> 富属性图片"
         value={ panel.mdText }
         onChange={ panel.setMdText }
@@ -93,7 +63,7 @@ export const MarkdownIOPanel = memo<MarkdownIOPanelProps>(({ editor, className }
           往返检测
         </Button>
       </div>
-    </aside>
+    </div>
   )
 })
 

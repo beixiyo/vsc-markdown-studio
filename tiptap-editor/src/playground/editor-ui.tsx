@@ -1,29 +1,23 @@
 import type { EditorUIProps } from './types'
 import { useCurrentEditor } from '@tiptap/react'
 
-import { Button, Toolbar } from 'comps'
-import { memo, useCallback, useState } from 'react'
+import { Toolbar } from 'comps'
+import { useLatestCallback } from 'hooks'
+import { memo, useState } from 'react'
 import { AIActionPanel, AIButton, useAI } from 'tiptap-ai/react'
-import { unSelect } from 'tiptap-api'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
 import { BlockActionMenu, EditorLinkHover, MarkButton, SelectToolbar, TableControls } from 'tiptap-comps'
 import { HoverTooltip } from 'tiptap-hover/react'
 import { SuggestionMenu } from 'tiptap-trigger/react'
-import { ImageTestDropdownMenu } from '@/components/my-ui/image-test-dropdown-menu'
-import { MarkdownIOPanel } from '@/components/my-ui/markdown-io-panel'
-import { OperateTestDropdownMenu } from '@/components/my-ui/operate-test-dropdown-menu'
-import { RegionEditPanel } from '@/components/my-ui/region-edit-panel'
-import { ScrollTestButton } from '@/components/my-ui/scroll-test-button'
-import { SectionTestButton } from '@/components/my-ui/section-test-button'
-import { SelectionTestButton } from '@/components/my-ui/selection-test-button'
+import { TestPanel } from '@/components/my-ui/test-panel'
 
 import { operateTestSuites } from '@/features/operate-tests'
-import { useOperateTests } from '../features/operate-tests/use-operate-tests'
 import { BaseEditorUI } from './base-editor-ui'
 import { useAiQuickSource, useAiSetup, useBindAi, useGetContext, useSlashSuggestion } from './hooks'
 
 /**
  * 演示用编辑器 UI：使用通用的 BaseEditorUI，通过 children 传递额外的插件功能
+ * 测试功能统一收纳在右侧 TestPanel 抽屉中，顶部工具栏只保留标准能力
  */
 export const EditorUI = memo<EditorUIProps>(({
   isMobile,
@@ -39,28 +33,6 @@ export const EditorUI = memo<EditorUIProps>(({
   const { aiOrchestrator, aiController } = useAiSetup()
   const [commentSidebarOpen, setCommentSidebarOpen] = useState(false)
   const [activeCommentId, setActiveCommentId] = useState<string | null>(null)
-
-  const {
-    operateRunning,
-    runAllOperateTests,
-    runOperateSuite,
-  } = useOperateTests(editor || null, operateTestSuites)
-
-  const TEXT_DIRECTIONS = ['ltr', 'rtl', 'auto'] as const
-  type TextDirection = typeof TEXT_DIRECTIONS[number]
-  const [textDirection, setTextDirection] = useState<TextDirection>('ltr')
-
-  const cycleTextDirection = useCallback(() => {
-    const nextIndex = (TEXT_DIRECTIONS.indexOf(textDirection) + 1) % TEXT_DIRECTIONS.length
-    const next = TEXT_DIRECTIONS[nextIndex]
-    setTextDirection(next)
-    if (editor) {
-      editor.setOptions({ textDirection: next })
-    }
-    document.documentElement.setAttribute('dir', next === 'auto'
-      ? ''
-      : next)
-  }, [editor, textDirection])
 
   const aiQuickSource = useAiQuickSource(editor, aiController)
   const suggestion = useSlashSuggestion(editor, aiQuickSource, {
@@ -88,6 +60,10 @@ export const EditorUI = memo<EditorUIProps>(({
     mode: 'stream',
     allowInsert: true,
     getContext,
+  })
+
+  const handleAiInsert = useLatestCallback(() => {
+    handleInsertTrigger('在光标处插入')
   })
 
   const {
@@ -130,57 +106,6 @@ export const EditorUI = memo<EditorUIProps>(({
                 activeCommentId={ activeCommentId ?? undefined }
               />
             ) }
-          </Toolbar.Group>
-          <Toolbar.Group>
-            <OperateTestDropdownMenu
-              suites={ operateTestSuites }
-              portal={ isMobile }
-              onRunAll={ runAllOperateTests }
-              onRunSuite={ runOperateSuite }
-              running={ operateRunning }
-              disabled={ !editor }
-            />
-            <Button
-              size="sm"
-              onClick={ () => {
-                if (editor) {
-                  const markdown = `\`\`\`mermaid
-sequenceDiagram
-    Alice->>Bob: Hello Bob!
-    Bob-->>Alice: Hello Alice!
-    Alice->>Bob: How are you?
-    Bob-->>Alice: I'm fine, thanks!
-\`\`\``
-                  editor.commands.setContent(markdown, { contentType: 'markdown' })
-                  unSelect(editor)
-                }
-              } }
-              disabled={ !editor }
-              title="插入 Mermaid 时序图"
-            >
-              Mermaid
-            </Button>
-            <ImageTestDropdownMenu editor={ editor } portal={ isMobile } />
-            <SelectionTestButton />
-            <SectionTestButton />
-            <ScrollTestButton />
-            <Button
-              size="sm"
-              onClick={ cycleTextDirection }
-              title={ `文本方向：${textDirection.toUpperCase()}（点击切换）` }
-            >
-              Dir:
-              {' '}
-              { textDirection.toUpperCase() }
-            </Button>
-            <Button
-              size="sm"
-              onClick={ () => handleInsertTrigger('在光标处插入') }
-              disabled={ !canInsert }
-              title="AI 光标插入：在当前光标位置插入 AI 生成内容（无需选中文本）"
-            >
-              AI Insert
-            </Button>
           </Toolbar.Group>
         </BaseEditorUI>
       ) }
@@ -281,11 +206,13 @@ sequenceDiagram
           {/* AI 操作面板 */ }
           <AIActionPanel editor={ editor } controller={ aiController } className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" />
 
-          {/* 区域编辑（hash 锚点协议）测试面板 */ }
-          <RegionEditPanel editor={ editor } />
-
-          {/* Markdown 导入导出测试面板（图片富属性序列化） */ }
-          <MarkdownIOPanel editor={ editor } />
+          {/* 测试面板：右侧抽屉，收纳全部测试功能 */ }
+          <TestPanel
+            editor={ editor }
+            suites={ operateTestSuites }
+            onAiInsert={ handleAiInsert }
+            canAiInsert={ canInsert }
+          />
         </>
       ) }
 

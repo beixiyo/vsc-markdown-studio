@@ -1,18 +1,13 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import {
-  Button,
-  Card,
-  Popover,
-  type PopoverRef,
-} from 'comps'
-import { useRef } from 'react'
+import { Button } from 'comps'
+import { memo } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { ChevronDownIcon } from 'tiptap-comps/icons'
+import { TestSection } from './test-section'
 
 /**
- * 图片节点渲染测试：通过下拉菜单插入不同属性组合的图片，观察渲染效果
+ * 图片节点渲染测试：插入不同属性组合的图片，观察渲染效果
  * 事件（click/dblclick/contextmenu/load/error）直接打到 console
  */
 
@@ -73,19 +68,8 @@ const UPDATE_ACTIONS: { label: string, patch: Record<string, any> | ((e: Editor)
   { label: '清样式', patch: { rotate: null, opacity: null, filter: null, boxShadow: null, border: null, borderRadius: null } },
 ]
 
-type ImageTestDropdownMenuProps = {
-  editor?: Editor | null
-  portal?: boolean
-  disabled?: boolean
-}
-
-export function ImageTestDropdownMenu({
-  editor: providedEditor,
-  portal: _portal = false,
-  disabled = false,
-}: ImageTestDropdownMenuProps) {
+export const ImageTestSection = memo<ImageTestSectionProps>(({ editor: providedEditor }) => {
   const { editor } = useTiptapEditor(providedEditor)
-  const popoverRef = useRef<PopoverRef>(null)
 
   const insert = (preset: Preset) => {
     if (!editor)
@@ -105,78 +89,49 @@ export function ImageTestDropdownMenu({
   }
 
   return (
-    <Popover
-      ref={ popoverRef }
-      trigger="click"
-      position="bottom"
-      content={
-        <Card className="p-2 max-w-[480px]" shadow="md" padding="none">
-          <div className="space-y-3">
-            <Section title="Inline 插入">
-              { INLINE_PRESETS.map(p => (
-                <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
-              )) }
-            </Section>
+    <div className="flex flex-col gap-4">
+      <TestSection title="Inline 插入">
+        { INLINE_PRESETS.map(p => (
+          <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
+        )) }
+      </TestSection>
 
-            <Section title="Block 插入">
-              { BLOCK_PRESETS.map(p => (
-                <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
-              )) }
-            </Section>
+      <TestSection title="Block 插入">
+        { BLOCK_PRESETS.map(p => (
+          <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
+        )) }
+      </TestSection>
 
-            <Section title="样式变体">
-              { STYLE_PRESETS.map(p => (
-                <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
-              )) }
-            </Section>
+      <TestSection title="样式变体">
+        { STYLE_PRESETS.map(p => (
+          <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
+        )) }
+      </TestSection>
 
-            <Section title="加载态">
-              { LOADING_PRESETS.map(p => (
-                <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
-              )) }
-            </Section>
+      <TestSection title="加载态">
+        { LOADING_PRESETS.map(p => (
+          <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
+        )) }
+      </TestSection>
 
-            <Section title="更新选中图片">
-              { UPDATE_ACTIONS.map(a => (
-                <TinyBtn key={ a.label } onClick={ () => update(a) }>{ a.label }</TinyBtn>
-              )) }
-              <TinyBtn onClick={ () => {
-                if (!editor)
-                  return
-                console.log('[ImageTest] getAttributes(image)', editor.getAttributes('image'))
-              } }
-              >
-                打印属性
-              </TinyBtn>
-            </Section>
-          </div>
-        </Card>
-      }
-    >
-      <Button
-        type="button"
-        variant="ghost"
-        tabIndex={ -1 }
-        disabled={ disabled || !editor }
-        aria-label="Image tests"
-        tooltip="Image tests"
-        size="sm"
-      >
-        <span className="tiptap-button-label">图片测试</span>
-        <ChevronDownIcon className="size-4 text-icon" />
-      </Button>
-    </Popover>
-  )
-}
-
-function Section({ title, children }: { title: string, children: React.ReactNode }) {
-  return (
-    <div>
-      <div className="text-xs text-tiptap-muted px-1 mb-1">{ title }</div>
-      <div className="flex flex-wrap gap-1">{ children }</div>
+      <TestSection title="更新选中图片">
+        { UPDATE_ACTIONS.map(a => (
+          <TinyBtn key={ a.label } onClick={ () => update(a) }>{ a.label }</TinyBtn>
+        )) }
+        <TinyBtn onClick={ () => {
+          if (!editor)
+            return
+          console.log('[ImageTest] getAttributes(image)', editor.getAttributes('image'))
+        } }
+        >
+          打印属性
+        </TinyBtn>
+      </TestSection>
     </div>
   )
-}
+})
+
+ImageTestSection.displayName = 'ImageTestSection'
 
 function TinyBtn({ children, onClick }: { children: React.ReactNode, onClick: () => void }) {
   return (
@@ -190,4 +145,9 @@ function TinyBtn({ children, onClick }: { children: React.ReactNode, onClick: ()
       { children }
     </Button>
   )
+}
+
+export type ImageTestSectionProps = {
+  /** 可选的编辑器实例，不提供则从上下文获取 */
+  editor?: Editor | null
 }

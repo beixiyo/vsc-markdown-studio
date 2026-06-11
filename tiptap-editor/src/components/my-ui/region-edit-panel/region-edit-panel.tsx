@@ -3,8 +3,7 @@
 import type { Editor } from '@tiptap/react'
 import type { RegionEditState } from 'tiptap-ai'
 import { Button, Textarea } from 'comps'
-import { useLatestCallback } from 'hooks'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { cn } from 'utils'
 import { useRegionEditPanel } from './use-region-edit-panel'
 
@@ -15,49 +14,20 @@ const STATE_STYLES: Record<RegionEditState, string> = {
 }
 
 /**
- * 区域编辑（hash 锚点协议）测试面板
+ * 区域编辑（hash 锚点协议）测试面板内容
  *
  * 模拟移动端经 MDBridge 的调用路径：readBlocks → applyOperations / 流式三件套 → accept / reject
+ * 自身不带容器壳，由测试面板（TestPanel）等宿主提供布局
  */
 export const RegionEditPanel = memo<RegionEditPanelProps>(({ editor, className }) => {
-  const [open, setOpen] = useState(false)
   const panel = useRegionEditPanel(editor)
 
-  const toggleOpen = useLatestCallback(() => setOpen(prev => !prev))
-
-  if (!open) {
-    return (
-      <Button
-        size="sm"
-        onClick={ toggleOpen }
-        className={ cn('fixed bottom-4 right-4 z-50', className) }
-        tooltip="区域编辑协议测试（hash 锚点）"
-        aria-label="打开区域编辑面板"
-      >
-        Region AI
-      </Button>
-    )
-  }
-
   return (
-    <aside
-      className={ cn(
-        'fixed top-16 bottom-4 right-4 z-50 w-96 flex flex-col gap-3 p-4',
-        'bg-background border border-border rounded-xl shadow-lg overflow-hidden',
-        className,
-      ) }
-    >
+    <div className={ cn('flex flex-col gap-3', className) }>
       <header className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-text">区域编辑协议</h3>
-
-        <div className="flex items-center gap-2">
-          <span className={ cn('px-2 py-0.5 text-xs rounded-full', STATE_STYLES[panel.state]) }>
-            { panel.state }
-          </span>
-          <Button size="sm" variant="ghost" onClick={ toggleOpen } aria-label="收起面板">
-            ✕
-          </Button>
-        </div>
+        <span className={ cn('px-2 py-0.5 text-xs rounded-full', STATE_STYLES[panel.state]) }>
+          { panel.state }
+        </span>
       </header>
 
       { panel.notice && (
@@ -75,7 +45,7 @@ export const RegionEditPanel = memo<RegionEditPanelProps>(({ editor, className }
       </div>
 
       {/* 块列表：点选目标 */ }
-      <ul className="flex-1 min-h-42 overflow-auto flex flex-col gap-1">
+      <ul className="max-h-56 overflow-auto flex flex-col gap-1">
         { panel.blocks.map(block => (
           <li key={ block.hash }>
             <button
@@ -158,7 +128,7 @@ export const RegionEditPanel = memo<RegionEditPanelProps>(({ editor, className }
           { JSON.stringify(panel.results, null, 2) }
         </pre>
       ) }
-    </aside>
+    </div>
   )
 })
 
