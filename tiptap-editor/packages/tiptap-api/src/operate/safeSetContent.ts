@@ -67,6 +67,20 @@ export function safeSetContent(
  * 如果位置超出文档范围，会自动调整到有效范围内
  */
 function restoreCursorPosition(editor: Editor, from: number, to: number) {
+  /**
+   * 编辑器未聚焦时不要恢复选区
+   *
+   * 典型场景：程序化设内容 / 首屏加载（如移动端 setContentWithSpeakers 连设两次内容）
+   * 此时并无真实用户光标，"恢复"的只是上一次设内容后 ProseMirror 残留的位置（常在文档中段）
+   * 而一旦写入选区，ProseMirror 会把它同步到 DOM —— 在 iOS WKWebView 里会触发原生
+   * scroll-to-caret（叠加 contentInset），导致正文被自动滚到中间
+   *
+   * 只有用户正在编辑器内编辑（已聚焦）时才需要保留光标，故以 hasFocus 为闸
+   */
+  if (!editor.view.hasFocus()) {
+    return
+  }
+
   try {
     const docSize = editor.state.doc.content.size
 
