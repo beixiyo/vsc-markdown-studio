@@ -11,7 +11,7 @@ Tiptap 编辑器的 AI 集成层，两大模块：
 
 | 文档 | 内容 |
 |------|------|
-| `tiptap-editor/packages/tiptap-ai/ai-region-edit-protocol.md` | 协议设计：为什么用 hash、粒度、冲突语义 |
+| `tiptap-editor/docs/ai-region-edit-protocol.md` | 协议设计：为什么用 hash、粒度、冲突语义 |
 | `tiptap-editor/packages/tiptap-nodes/src/ctx-ref/README.md` | ctx-ref 注释节点 + 移动端调用示例 |
 | `tiptap-editor/packages/tiptap-ai/src/region-edit/types.ts` | 区域编辑全部类型源文件（含 JSDoc） |
 

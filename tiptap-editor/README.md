@@ -65,4 +65,4 @@ pnpm dev
 
 ## 架构指南
 
-详见 [IMPLEMENT.md](./IMPLEMENT.md)
+详见 [IMPLEMENT](./docs/IMPLEMENT.md)
