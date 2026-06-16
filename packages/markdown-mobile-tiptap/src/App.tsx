@@ -1,10 +1,11 @@
+import type { CtxRefOptions } from 'tiptap-nodes/ctx-ref'
 import type { ImageOptions } from 'tiptap-nodes/image'
 import { EditorContent } from '@tiptap/react'
 import { notifyNative } from 'notify'
 import { useMemo, useRef } from 'react'
 import { RegionEdit } from 'tiptap-ai'
 import { useDefaultEditor } from 'tiptap-editor-core'
-import { CtxRefNode, SummaryBoundaryNode } from 'tiptap-nodes/ctx-ref'
+import { CtxRefNode } from 'tiptap-nodes/ctx-ref'
 import { type SpeakerAttributes, SpeakerNode } from 'tiptap-nodes/speaker'
 import DevPanel from './__dev__/DevPanel'
 import { useNotifyChange } from './hooks/useNotify'
@@ -60,6 +61,28 @@ const imageOptions: Partial<ImageOptions> = {
   },
 }
 
+/**
+ * ctx-ref 角标图标定制（业务侧）
+ *
+ * 通用插件只给裸图标；外层灰底圆角等设计系统装饰放在调用方这里完成，
+ * 用 `ctx.defaultIcon()` 取内置图标（含 streaming 动效态）再包一层
+ */
+const ctxRefIcons: CtxRefOptions['icons'] = {
+  note: (ctx) => {
+    const icon = ctx.defaultIcon()
+    if (!icon)
+      return null
+
+    /** 去掉内置图标自带的外边距，改由包装层统一控制 */
+    icon.style.margin = '0'
+
+    const wrap = document.createElement('span')
+    wrap.className = 'inline-flex items-center justify-center p-1 ml-[3px] rounded-[7px] bg-background4 align-middle cursor-pointer'
+    wrap.appendChild(icon)
+    return wrap
+  },
+}
+
 export default function App() {
   const editorElRef = useRef<HTMLDivElement>(null)
 
@@ -76,9 +99,14 @@ export default function App() {
         notifyNative('speakerTapped', speakerAttrsToNativePayload(attrs))
       },
     }),
-    /** 算法侧 V2 ctx-ref marker：comment 保活数据锚点，渲染与交互由业务插件承接 */
-    CtxRefNode,
-    SummaryBoundaryNode,
+    /** ctx-ref marker：comment 保活数据锚点 + 内置角标图标（note 在调用方套灰底） */
+    CtxRefNode.configure({
+      icons: ctxRefIcons,
+      onClick: ({ refType, refId, sentence }) => {
+        /** mark / note / 图片 三类点击都通知 Native，由 Native 按 refType 决定拉什么 */
+        notifyNative('ctxRefTapped', { refType, refId, sentence })
+      },
+    }),
   ], [])
 
   const editor = useDefaultEditor({ extensions, image: imageOptions, placeholder: false })

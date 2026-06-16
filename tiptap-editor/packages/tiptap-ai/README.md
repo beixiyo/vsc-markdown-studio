@@ -64,7 +64,7 @@ type ReadBlocksResult = {
 
 type RegionBlock = {
   hash: string       // 块锚点
-  type: string       // 节点类型名：paragraph / heading / bulletList / summaryBoundary ...
+  type: string       // 节点类型名：paragraph / heading / bulletList / blockquote ...
   markdown: string   // 块的 Markdown 文本
   lossy?: boolean    // true = 含 Markdown 无法表达的内容（如渐变高亮）
   html?: string      // lossy 时附带的无损 HTML
@@ -186,7 +186,7 @@ type RegionErrorCode =
 
 ## 4. 测试与示例
 
-- 协议行为：`packages/markdown-mobile-tiptap/src/__tests__/ai-edit.test.ts`（14 项）
+- 协议行为：`packages/markdown-mobile-tiptap/src/__tests__/ai-edit.test.ts`（15 项）
 - 能力边界（自定义节点写入 / 老文档自举 / 精确落点 / 多轮替换 / 三通道）：`packages/markdown-mobile-tiptap/src/__tests__/region-edit-capability.test.ts`
 - 肉眼演示：mobile dev 页 DevPanel「ctx-ref marker」区（直接替换 / 假流式按钮）
 
@@ -239,10 +239,10 @@ type AIOperationMode = 'replace' | 'insert'
 // 选区载荷（传给 adapter）
 type SelectionPayload = {
   text: string
-  range?: { from: number, to: number }
+  range?: Record<string, any>      // 位置信息，格式留给上层决定
   operationMode?: AIOperationMode  // 'replace' | 'insert'
   context?: ContentContext         // section/block 上下文
-  meta?: { prompt?: string }       // 用户 prompt
+  meta?: Record<string, any>       // 自由扩展（useAI 会塞入用户 prompt 等）
 }
 
 // AI 响应

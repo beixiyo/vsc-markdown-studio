@@ -20,8 +20,17 @@
   }
 }
 
-/** 全局变量、tailwind、reset、scrollbar、common class */
-@import 'styles/index.css';
+/**
+ * 全局变量、reset、scrollbar、common class
+ *
+ * 注意：不走 styles/index.css（它含 @import 'tailwindcss'，tailwind 根在 styles 包内、
+ * 扫不到本应用源码）。tailwind 由本应用的 src/tailwind.css 作为唯一根（带 @source 扫描本包），
+ * 故这里只引 styles 的非 tailwind 基础样式，避免 tailwind 重复生成
+ */
+@import 'styles/css/autoVariables.css';
+@import 'styles/css/commonClass.css';
+@import 'styles/css/reset.css';
+@import 'styles/css/scrollBar.css';
 
 /** Tiptap 节点扩展所需 CSS（image-upload / speaker / code-block） */
 @import 'tiptap-nodes/index.css';

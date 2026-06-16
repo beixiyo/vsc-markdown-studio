@@ -1,9 +1,8 @@
 /**
  * ctx-ref marker 兼容层测试
  *
- * 背景：算法侧 V2 在 summary Markdown 中输出 `<!--ctx-ref:{type}:{id}-->` 与
- * `<!--summary-added-images:start|end-->` HTML comment marker。ProseMirror 默认
- * 丢弃 comment 节点，本模块把 marker 升格为真实节点以保证编辑 roundtrip 存活。
+ * 背景：Markdown 中以 `<!--ctx-ref:{type}:{id}-->` HTML comment marker 形式出现。
+ * ProseMirror 默认丢弃 comment 节点，本模块把 marker 升格为真实节点以保证编辑 roundtrip 存活。
  *
  * 用真实 @tiptap/markdown 走 parse / serialize 纯函数路径，断言：
  * 1. marker 逐字符存活  2. 多轮往返幂等  3. 渲染为可挂载图标的 DOM  4. 点击回调与紧邻句提取
@@ -12,28 +11,22 @@ import { Editor } from '@tiptap/core'
 import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
-import { CtxRefNode, SummaryBoundaryNode } from '../extension'
+import { CtxRefNode } from '../extension'
 
 const SUMMARY_MD = [
   '***这个结论需要关注。***<!--ctx-ref:mark:mark_123-->',
   '',
   '***这个补充被采纳进总结。***<!--ctx-ref:note:1-->',
   '',
-  '<!--summary-added-images:start-->',
-  '',
   '## Related images',
   '',
   '- 这张图补充了会议中的白板内容。<!--ctx-ref:image:101-->',
-  '',
-  '<!--summary-added-images:end-->',
 ].join('\n')
 
 const ALL_MARKERS = [
   '<!--ctx-ref:mark:mark_123-->',
   '<!--ctx-ref:note:1-->',
   '<!--ctx-ref:image:101-->',
-  '<!--summary-added-images:start-->',
-  '<!--summary-added-images:end-->',
 ]
 
 let editor: Editor
@@ -47,7 +40,6 @@ beforeAll(() => {
       StarterKit.configure({ codeBlock: false }),
       Markdown.configure({ markedOptions: { gfm: true, breaks: true } }),
       CtxRefNode,
-      SummaryBoundaryNode,
     ],
   })
 })
@@ -94,7 +86,6 @@ describe('编辑器内渲染', () => {
     expect(html).toContain('data-ctx-ref="note"')
     expect(html).toContain('data-ctx-id="1"')
     expect(html).toContain('tiptap-ctx-ref--image')
-    expect(html).toContain('data-summary-boundary="start"')
     /** marker 前紧邻的加粗斜体句完整保留 */
     expect(html).toContain('<strong><em>这个补充被采纳进总结。</em></strong>')
   })
@@ -116,7 +107,6 @@ describe('点击交互', () => {
         StarterKit.configure({ codeBlock: false }),
         Markdown.configure(),
         CtxRefNode.configure({ onClick }),
-        SummaryBoundaryNode,
       ],
     })
     clickEditor.commands.setContent(SUMMARY_MD, { contentType: 'markdown' })
@@ -131,12 +121,175 @@ describe('点击交互', () => {
       sentence: '这个补充被采纳进总结。',
     })
 
-    /** mark 旗子无交互 */
+    clickEditor.destroy()
+  })
+
+  it('mark 旗子同样触发回调，载荷带 refType=mark 与紧邻句', () => {
+    const onClick = vi.fn()
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+    const clickEditor = new Editor({
+      element: el,
+      extensions: [
+        StarterKit.configure({ codeBlock: false }),
+        Markdown.configure(),
+        CtxRefNode.configure({ onClick }),
+      ],
+    })
+    clickEditor.commands.setContent(SUMMARY_MD, { contentType: 'markdown' })
+
     const mark = clickEditor.view.dom.querySelector('[data-ctx-ref="mark"]') as HTMLElement
     mark.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+
     expect(onClick).toHaveBeenCalledOnce()
+    expect(onClick.mock.calls[0][0]).toEqual({
+      refType: 'mark',
+      refId: 'mark_123',
+      sentence: '这个结论需要关注。',
+    })
 
     clickEditor.destroy()
+  })
+})
+
+describe('图标渲染（NodeView）', () => {
+  it('默认渲染内置图标；自定义工厂可覆盖；传 false 则不渲染', () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+    const iconEditor = new Editor({
+      element: el,
+      extensions: [
+        StarterKit.configure({ codeBlock: false }),
+        Markdown.configure(),
+        CtxRefNode.configure({
+          icons: {
+            /** mark 自定义覆盖 */
+            mark: ({ refId }) => {
+              const span = document.createElement('span')
+              span.className = 'flag-icon'
+              span.dataset.for = refId
+              return span
+            },
+            /** note 关闭渲染 */
+            note: false,
+            /** image 不配置 → 用内置默认图标 */
+          },
+        }),
+      ],
+    })
+    iconEditor.commands.setContent(SUMMARY_MD, { contentType: 'markdown' })
+
+    /** 自定义覆盖：渲染传入的工厂结果 */
+    const markAnchor = iconEditor.view.dom.querySelector('[data-ctx-ref="mark"]') as HTMLElement
+    expect(markAnchor.querySelector('.flag-icon')?.getAttribute('data-for')).toBe('mark_123')
+
+    /** false：不渲染任何子节点 */
+    const noteAnchor = iconEditor.view.dom.querySelector('[data-ctx-ref="note"]') as HTMLElement
+    expect(noteAnchor.childElementCount).toBe(0)
+
+    /** 未配置：内置默认图标（含 svg） */
+    const imageAnchor = iconEditor.view.dom.querySelector('[data-ctx-ref="image"]') as HTMLElement
+    expect(imageAnchor.querySelector('svg')).not.toBeNull()
+
+    iconEditor.destroy()
+  })
+
+  it('ctx.defaultIcon() 可取内置图标做二次加工（包一层 DOM + 加 class）', () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+    const ed = new Editor({
+      element: el,
+      extensions: [
+        StarterKit.configure({ codeBlock: false }),
+        Markdown.configure(),
+        CtxRefNode.configure({
+          icons: {
+            note: (ctx) => {
+              const wrap = document.createElement('span')
+              wrap.className = 'my-badge'
+              const icon = ctx.defaultIcon()
+              if (icon)
+                wrap.appendChild(icon)
+              return wrap
+            },
+          },
+        }),
+      ],
+    })
+    ed.commands.setContent(SUMMARY_MD, { contentType: 'markdown' })
+
+    const noteAnchor = ed.view.dom.querySelector('[data-ctx-ref="note"]') as HTMLElement
+    const wrap = noteAnchor.querySelector('.my-badge') as HTMLElement
+    expect(wrap).not.toBeNull()
+    /** 包装内仍是内置图标（svg） */
+    expect(wrap.querySelector('svg')).not.toBeNull()
+
+    ed.destroy()
+  })
+
+  it('完全不配置 icons 时，三种 refType 都渲染内置图标', () => {
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+    const ed = new Editor({
+      element: el,
+      extensions: [
+        StarterKit.configure({ codeBlock: false }),
+        Markdown.configure(),
+        CtxRefNode,
+      ],
+    })
+    ed.commands.setContent(SUMMARY_MD, { contentType: 'markdown' })
+
+    for (const type of ['mark', 'note', 'image']) {
+      const anchor = ed.view.dom.querySelector(`[data-ctx-ref="${type}"]`) as HTMLElement
+      expect(anchor.querySelector('svg'), `${type} 应渲染内置图标`).not.toBeNull()
+    }
+
+    ed.destroy()
+  })
+
+  it('setCtxRefStreaming 切换流式态：标记 data-streaming 并以 streaming=true 重渲图标，且不写入 markdown', () => {
+    const seen: boolean[] = []
+    const el = document.createElement('div')
+    document.body.appendChild(el)
+    const streamEditor = new Editor({
+      element: el,
+      extensions: [
+        StarterKit.configure({ codeBlock: false }),
+        Markdown.configure(),
+        CtxRefNode.configure({
+          icons: {
+            note: ({ streaming }) => {
+              seen.push(streaming)
+              const span = document.createElement('span')
+              span.className = streaming
+                ? 'note-streaming'
+                : 'note-static'
+              return span
+            },
+          },
+        }),
+      ],
+    })
+    streamEditor.commands.setContent(SUMMARY_MD, { contentType: 'markdown' })
+
+    const anchor = () => streamEditor.view.dom.querySelector('[data-ctx-ref="note"]') as HTMLElement
+    expect(anchor().querySelector('.note-static')).not.toBeNull()
+    expect(anchor().hasAttribute('data-streaming')).toBe(false)
+
+    const ok = streamEditor.commands.setCtxRefStreaming('1', true)
+    expect(ok).toBe(true)
+    expect(anchor().hasAttribute('data-streaming')).toBe(true)
+    expect(anchor().querySelector('.note-streaming')).not.toBeNull()
+    expect(seen).toContain(true)
+
+    /** 流式是临时 UI 态，绝不写进 markdown */
+    expect(streamEditor.getMarkdown()).toContain('<!--ctx-ref:note:1-->')
+
+    /** 无匹配 refId 时返回 false */
+    expect(streamEditor.commands.setCtxRefStreaming('nope', true)).toBe(false)
+
+    streamEditor.destroy()
   })
 })
 
@@ -149,7 +302,6 @@ describe('三种表示互转（markdown / JSON / HTML）', () => {
     const flat = JSON.stringify(json)
     expect(flat).toContain('"type":"ctxRef"')
     expect(flat).toContain('"refType":"note"')
-    expect(flat).toContain('"type":"summaryBoundary"')
     expect(flat).not.toContain('<!--')
 
     /** ② JSON → 编辑器 → markdown：注释原样还原 */

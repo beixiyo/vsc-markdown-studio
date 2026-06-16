@@ -11,7 +11,7 @@
 | `./image-upload` | `ImageUploadNode` 上传占位节点 | [README](./src/image-upload/README.md) |
 | `./gradient-highlight` | `GradientHighlight` 多色渐变高亮 mark | [README](./src/gradient-highlight/README.md) |
 | `./speaker` | `SpeakerNode` 说话人标注节点 | [README](./src/speaker/README.md) |
-| `./ctx-ref` | `CtxRefNode` / `SummaryBoundaryNode` 上下文引用标记 | [README](./src/ctx-ref/README.md) |
+| `./ctx-ref` | `CtxRefNode` 上下文引用标记 | [README](./src/ctx-ref/README.md) |
 
 ## 序列化支持矩阵
 
@@ -23,7 +23,6 @@
 | GradientHighlight | ✅ | ✅ | ✅ | `==text==`，带色降级 `<mark data-color>` |
 | SpeakerNode | ✅ | ✅ | ✅ | `[speaker:label]` |
 | CtxRefNode | ✅ | ✅ | ✅ | `<!--ctx-ref:type:id-->` 注释 |
-| SummaryBoundaryNode | ✅ | ✅ | ✅ | `<!--summary-added-images:start/end-->` 注释 |
 
 image / gradient-highlight / speaker / ctx-ref 的 markdown 通道有多轮往返幂等测试（各扩展 `__tests__/markdown-roundtrip.test.ts`）
 

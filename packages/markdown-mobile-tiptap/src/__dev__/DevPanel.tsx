@@ -59,33 +59,14 @@ const SAMPLE_SPEAKERS = [
   { name: '说话人乙', originalLabel: 1, label: 1 },
 ]
 
-/** 追加到文末的 ctx-ref 增量示例（模拟算法侧新采纳一条 Note，不动现有内容） */
+/** 追加到文末的 ctx-ref 增量示例（模拟新采纳一条 Note，不动现有内容） */
 const CTX_REF_APPEND = `***性能优化方案被采纳进了总结。***<!--ctx-ref:note:2-->`
-
-let directReplaceCount = 0
-
-const SENTINEL_START = '<!--summary-added-images:start-->'
-const SENTINEL_END = '<!--summary-added-images:end-->'
-
-/** 定位哨兵对，返回两哨兵之间的全部块（README §4.2 同款逻辑） */
-function locateAddedImagesRegion() {
-  const { blocks } = window.MDBridge.aiEdit.readBlocks()
-  const startIdx = blocks.findIndex(b => b.type === 'summaryBoundary' && b.markdown === SENTINEL_START)
-  const endIdx = startIdx === -1
-    ? -1
-    : blocks.findIndex((b, i) => i > startIdx && b.type === 'summaryBoundary' && b.markdown === SENTINEL_END)
-  if (startIdx === -1 || endIdx === -1)
-    return null
-  return { blocks, startIdx, endIdx, inner: blocks.slice(startIdx + 1, endIdx) }
-}
 
 /** fixture「ctx-ref 引用标记」一节自带的 marker，验证存活用 */
 const CTX_REF_MARKERS = [
   '<!--ctx-ref:mark:mark_123-->',
   '<!--ctx-ref:note:1-->',
   '<!--ctx-ref:image:101-->',
-  '<!--summary-added-images:start-->',
-  '<!--summary-added-images:end-->',
 ]
 
 const IMG_URLS = [
@@ -214,64 +195,27 @@ export default function DevPanel() {
                   })) }
                 />
                 <Btn
-                  label="② 直接替换图片区块（非流式）"
+                  label="② 假流式追加图片章节到文末（V2 会后图片）"
                   onClick={ () => {
-                    /** 哨兵对定位 → 替换区间内全部块（第一块替换、其余删除），一次性生效 */
-                    const region = locateAddedImagesRegion()
-                    if (!region || region.inner.length === 0) {
-                      show('直接替换', '未找到完整的 summary-added-images 哨兵区块')
-                      return
-                    }
-
-                    directReplaceCount += 1
-                    const { results } = bridge().aiEdit.applyOperations({
-                      operations: [
-                        {
-                          target: region.inner[0].hash,
-                          op: 'replace',
-                          content: { format: 'markdown', value: `### Related images（直接替换第 ${directReplaceCount} 次）\n\n- 第 ${directReplaceCount} 版图片说明` },
-                        },
-                        ...region.inner.slice(1).map(b => ({ target: b.hash, op: 'delete' as const })),
-                      ],
-                    })
-                    show('直接替换', results.every(r => r.success)
-                      ? `成功（第 ${directReplaceCount} 次），区间 ${region.inner.length} 个块已整体替换\n连点本按钮可验证同一区块的多轮替换；可 undo 撤销`
-                      : `部分失败：${JSON.stringify(results)}`)
-                  } }
-                />
-                <Btn
-                  label="③ 假流式更新图片区块（哨兵定位）"
-                  onClick={ () => {
-                    const region = locateAddedImagesRegion()
-                    if (!region || region.inner.length === 0) {
-                      show('假流式', '未找到完整的 summary-added-images 哨兵区块')
-                      return
-                    }
-
-                    /** 流式只能对单个目标：先把区间内多余的块删掉，再对第一块流式替换 */
-                    if (region.inner.length > 1) {
-                      bridge().aiEdit.applyOperations({
-                        operations: region.inner.slice(1).map(b => ({ target: b.hash, op: 'delete' as const })),
-                      })
-                    }
-                    const { streamId } = bridge().aiEdit.beginStream({ target: region.inner[0].hash, op: 'replace' })
-                    const updated = `### Related images（图片任务已更新）`
+                    /** V2 会后图片：固定追加到文末 + 假流式，无需哨兵定位 */
+                    const { streamId } = bridge().aiEdit.beginStream({ target: 'doc', op: 'append' })
+                    const content = '## Related images\n\n- 这张图补充了会议中的白板内容。<!--ctx-ref:image:202-->'
                     let pos = 0
                     const timer = setInterval(() => {
-                      if (pos >= updated.length) {
+                      if (pos >= content.length) {
                         clearInterval(timer)
                         bridge().aiEdit.endStream(streamId)
                         bridge().aiEdit.accept()
-                        show('假流式', '完成：哨兵区块首块已流式替换，区块外内容未动（可 undo 撤销）')
+                        show('假流式追加', '完成：图片章节已假流式追加到文末（可 undo 撤销）')
                         return
                       }
-                      bridge().aiEdit.pushChunk(streamId, updated.slice(pos, pos + 4))
-                      pos += 4
-                    }, 80)
+                      bridge().aiEdit.pushChunk(streamId, content.slice(pos, pos + 6))
+                      pos += 6
+                    }, 60)
                   } }
                 />
                 <Btn
-                  label="④ 验证 marker 存活"
+                  label="③ 验证 marker 存活"
                   onClick={ () => {
                     const md = bridge().getMarkdown()
                     const checks = CTX_REF_MARKERS.map(m => `${md.includes(m)
@@ -281,6 +225,64 @@ export default function DevPanel() {
                       ? '✗ 出现悬空 *** 脏数据'
                       : '✓ 无悬空 *** 脏数据')
                     show('marker 存活检查', checks.join('\n'))
+                  } }
+                />
+                <Btn
+                  label="④ readBlocks→find→流式 insertAfter（遍历+定位+流式插入）"
+                  onClick={ () => {
+                    /** ① 遍历：每块带稳定 hash */
+                    const { blocks } = bridge().aiEdit.readBlocks()
+                    /** ② 自己找节点：定位含「ctx-ref 引用标记」的标题块 */
+                    const target = blocks.find(b => b.markdown.includes('ctx-ref 引用标记'))
+                    if (!target) {
+                      show('遍历插入', '未找到锚点块（含「ctx-ref 引用标记」的标题）')
+                      return
+                    }
+                    /** ③ 对该块流式 insertAfter */
+                    const { streamId } = bridge().aiEdit.beginStream({ target: target.hash, op: 'insertAfter' })
+                    const content = '***新插入的一句。***<!--ctx-ref:note:9-->'
+                    let pos = 0
+                    const timer = setInterval(() => {
+                      if (pos >= content.length) {
+                        clearInterval(timer)
+                        bridge().aiEdit.endStream(streamId)
+                        bridge().aiEdit.accept()
+                        show('遍历插入', `完成：在「${target.type}」块后流式插入新句 + note 角标（可 undo）`)
+                        return
+                      }
+                      bridge().aiEdit.pushChunk(streamId, content.slice(pos, pos + 5))
+                      pos += 5
+                    }, 60)
+                  } }
+                />
+              </Section>
+
+              <Section title="ctx-ref 图标 / 流式（图标内置默认渲染；按钮切 streaming 态）">
+                <Btn
+                  label="▶ note:1 流式 ON"
+                  onClick={ () => safeCall('streaming note:1 on', () => bridge()._editor?.commands.setCtxRefStreaming('1', true)) }
+                />
+                <Btn
+                  label="■ note:1 流式 OFF"
+                  onClick={ () => safeCall('streaming note:1 off', () => bridge()._editor?.commands.setCtxRefStreaming('1', false)) }
+                />
+                <Btn
+                  label="▶ image:101 流式 ON"
+                  onClick={ () => safeCall('streaming image:101 on', () => bridge()._editor?.commands.setCtxRefStreaming({ refId: '101', refType: 'image' }, true)) }
+                />
+                <Btn
+                  label="■ image:101 流式 OFF"
+                  onClick={ () => safeCall('streaming image:101 off', () => bridge()._editor?.commands.setCtxRefStreaming({ refId: '101', refType: 'image' }, false)) }
+                />
+                <Btn
+                  label="↻ note:1 流式 2s 自动回切"
+                  onClick={ () => {
+                    const ed = bridge()._editor
+                    if (!ed)
+                      return
+                    ed.commands.setCtxRefStreaming('1', true)
+                    setTimeout(() => ed.commands.setCtxRefStreaming('1', false), 2000)
+                    show('streaming', 'note:1 进入流式，2s 后自动切回静态图标')
                   } }
                 />
               </Section>

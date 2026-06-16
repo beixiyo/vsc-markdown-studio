@@ -10,13 +10,13 @@
  */
 
 import { createRegionEdit, RegionEdit } from 'tiptap-ai'
-import { CtxRefNode, SummaryBoundaryNode } from 'tiptap-nodes/ctx-ref'
+import { CtxRefNode } from 'tiptap-nodes/ctx-ref'
 import { SpeakerNode } from 'tiptap-nodes/speaker'
 import { describe, expect, it } from 'vitest'
 import { makeEditor } from './helpers'
 
 function setup(markdown = '# 原有文档\n\n这是一篇完全没有任何注释标记的旧文档') {
-  const ctx = makeEditor('', [CtxRefNode, SummaryBoundaryNode, SpeakerNode, RegionEdit])
+  const ctx = makeEditor('', [CtxRefNode, SpeakerNode, RegionEdit])
   ctx.editor.commands.setContent(markdown, { contentType: 'markdown' })
   const regionEdit = createRegionEdit(ctx.editor)
   return {
@@ -222,80 +222,27 @@ describe('3. 精确指定插入位置', () => {
   })
 })
 
-describe('4. 老文档自举：无任何 marker 的旧文档接入新功能', () => {
-  it('第一次插入自带哨兵 → 文档升级 → 第二次更新可哨兵定位', () => {
-    /** 老代码生成的文档：没有任何 ctx-ref / 哨兵 */
-    const { editor, regionEdit, dispose } = setup('# 旧会议总结\n\n这是老版本生成的内容')
-
-    /** 第一次：图片任务产出的内容【自带】哨兵与 marker，追加到文末 */
-    const { results } = regionEdit.applyOperations({
-      operations: [{
-        target: 'doc',
-        op: 'append',
-        content: {
-          format: 'markdown',
-          value: [
-            '<!--summary-added-images:start-->',
-            '',
-            '## Related images',
-            '',
-            '- 这张图补充了白板内容。<!--ctx-ref:image:101-->',
-            '',
-            '<!--summary-added-images:end-->',
-          ].join('\n'),
-        },
-      }],
-    })
-    expect(results[0].success).toBe(true)
-
-    /** 文档已升级：哨兵成为真实节点，可定位 */
-    const { blocks } = regionEdit.readBlocks()
-    const startIdx = blocks.findIndex(b => b.type === 'summaryBoundary' && b.markdown.includes('start'))
-    expect(startIdx).toBeGreaterThan(-1)
-
-    /** 第二次：按哨兵定位更新区块内容 */
-    const { results: r2 } = regionEdit.applyOperations({
-      operations: [{
-        target: blocks[startIdx + 1].hash,
-        op: 'replace',
-        content: { format: 'markdown', value: '## Related images（第二轮更新）' },
-      }],
-    })
-    expect(r2[0].success).toBe(true)
-
-    const md = editor.getMarkdown()
-    expect(md).toContain('# 旧会议总结')
-    expect(md).toContain('## Related images（第二轮更新）')
-    expect(md).toContain('<!--ctx-ref:image:101-->')
-    expect(md).toContain('<!--summary-added-images:end-->')
-
-    dispose()
-  })
-})
-
 describe('5. 同一区域可多轮替换（非一次性）', () => {
-  it('哨兵定位 + 重新读块：连续三轮更新同一区块', () => {
+  it('重新读块定位（按标题）：连续三轮更新同一区块', () => {
     const { editor, regionEdit, dispose } = setup([
       '# 总结',
       '',
-      '<!--summary-added-images:start-->',
+      '## 固定锚点标题',
       '',
-      '## Related images（第 0 版）',
-      '',
-      '<!--summary-added-images:end-->',
+      '区块内容（第 0 版）',
     ].join('\n'))
 
     for (let round = 1; round <= 3; round++) {
-      /** 每轮重新读块：哨兵是稳定节点，区块内容变了它不变 */
+      /** 每轮重新读块：锚点标题不动，定位其后的内容块替换 */
       const { blocks } = regionEdit.readBlocks()
-      const startIdx = blocks.findIndex(b => b.type === 'summaryBoundary' && b.markdown.includes('start'))
-      expect(startIdx).toBeGreaterThan(-1)
+      const anchorIdx = blocks.findIndex(b => b.markdown.includes('固定锚点标题'))
+      expect(anchorIdx).toBeGreaterThan(-1)
 
       const { results } = regionEdit.applyOperations({
         operations: [{
-          target: blocks[startIdx + 1].hash,
+          target: blocks[anchorIdx + 1].hash,
           op: 'replace',
-          content: { format: 'markdown', value: `## Related images（第 ${round} 版）` },
+          content: { format: 'markdown', value: `区块内容（第 ${round} 版）` },
         }],
       })
       expect(results[0].success).toBe(true)
@@ -304,8 +251,7 @@ describe('5. 同一区域可多轮替换（非一次性）', () => {
     const md = editor.getMarkdown()
     expect(md).toContain('第 3 版')
     expect(md).not.toContain('第 0 版')
-    expect(md).toContain('<!--summary-added-images:start-->')
-    expect(md).toContain('<!--summary-added-images:end-->')
+    expect(md).toContain('## 固定锚点标题')
 
     dispose()
   })
@@ -328,175 +274,6 @@ describe('5. 同一区域可多轮替换（非一次性）', () => {
     }
 
     expect(editor.getMarkdown()).toContain('目标段落 v3')
-
-    dispose()
-  })
-})
-
-describe('6. 哨兵区块含多个顶层块时的整体更新（upsert 语义）', () => {
-  const START = '<!--summary-added-images:start-->'
-  const END = '<!--summary-added-images:end-->'
-
-  /** README §4.2 的标准实现：定位哨兵对 → 替换区间内全部块；残缺/缺失则重建 */
-  function upsertRegion(regionEdit: any, innerValue: string, fullBlockValue: string) {
-    const { blocks } = regionEdit.readBlocks()
-    const startIdx = blocks.findIndex((b: any) => b.type === 'summaryBoundary' && b.markdown === START)
-    const endIdx = startIdx === -1
-      ? -1
-      : blocks.findIndex((b: any, i: number) => i > startIdx && b.type === 'summaryBoundary' && b.markdown === END)
-
-    if (startIdx === -1 || endIdx === -1) {
-      const orphanOps = [startIdx, endIdx]
-        .filter(i => i !== -1)
-        .map(i => ({ target: blocks[i].hash, op: 'delete' as const }))
-      return regionEdit.applyOperations({
-        operations: [
-          ...orphanOps,
-          { target: 'doc', op: 'append', content: { format: 'markdown', value: fullBlockValue } },
-        ],
-      })
-    }
-
-    const inner = blocks.slice(startIdx + 1, endIdx)
-    const operations = inner.length === 0
-      ? [{ target: blocks[startIdx].hash, op: 'insertAfter' as const, content: { format: 'markdown', value: innerValue } }]
-      : [
-          { target: inner[0].hash, op: 'replace' as const, content: { format: 'markdown', value: innerValue } },
-          ...inner.slice(1).map((b: any) => ({ target: b.hash, op: 'delete' as const })),
-        ]
-    return regionEdit.applyOperations({ operations })
-  }
-
-  const FULL_BLOCK = [START, '', '## Related images', '', '- 新图片说明', '', END].join('\n')
-
-  it('区块含标题 + 列表两个块：整体替换无旧内容残留', () => {
-    const { editor, regionEdit, dispose } = setup([
-      '# 总结',
-      '',
-      START,
-      '',
-      '## Related images',
-      '',
-      '- 旧的图片说明一',
-      '- 旧的图片说明二',
-      '',
-      END,
-      '',
-      '区块外的尾部段落',
-    ].join('\n'))
-
-    const { results } = upsertRegion(regionEdit, '## Related images（v2）\n\n- 全新说明', FULL_BLOCK)
-    expect(results.every((r: any) => r.success)).toBe(true)
-
-    const md = editor.getMarkdown()
-    expect(md).toContain('## Related images（v2）')
-    expect(md).toContain('全新说明')
-    /** 旧列表必须无残留 */
-    expect(md).not.toContain('旧的图片说明')
-    /** 哨兵与区块外内容完好 */
-    expect(md).toContain(START)
-    expect(md).toContain(END)
-    expect(md).toContain('区块外的尾部段落')
-
-    dispose()
-  })
-
-  it('哨兵残缺（只剩 start）：清掉孤哨兵并整体重建', () => {
-    const { editor, regionEdit, dispose } = setup(['# 总结', '', START, '', '残缺区块的内容'].join('\n'))
-
-    const { results } = upsertRegion(regionEdit, '不会用到', FULL_BLOCK)
-    expect(results.every((r: any) => r.success)).toBe(true)
-
-    const md = editor.getMarkdown()
-    /** 孤哨兵被清掉，重建后 start/end 各恰好一个 */
-    expect(md.split(START).length - 1).toBe(1)
-    expect(md.split(END).length - 1).toBe(1)
-    expect(md).toContain('- 新图片说明')
-
-    dispose()
-  })
-
-  it('哨兵对存在但区块为空：贴着 start 后插入', () => {
-    const { editor, regionEdit, dispose } = setup(['# 总结', '', START, '', END].join('\n'))
-
-    const { results } = upsertRegion(regionEdit, '## Related images\n\n- 填充内容', FULL_BLOCK)
-    expect(results.every((r: any) => r.success)).toBe(true)
-
-    const md = editor.getMarkdown()
-    expect(md).toContain('- 填充内容')
-    /** 内容落在两哨兵之间 */
-    expect(md.indexOf('填充内容')).toBeGreaterThan(md.indexOf(START))
-    expect(md.indexOf('填充内容')).toBeLessThan(md.indexOf(END))
-
-    dispose()
-  })
-})
-
-describe('7. 同类哨兵存在多对时仍可精确替换', () => {
-  const START = '<!--summary-added-images:start-->'
-  const END = '<!--summary-added-images:end-->'
-
-  /** 枚举文档中全部哨兵区块（按文档顺序） */
-  function listRegions(blocks: any[]) {
-    const regions: { startIdx: number, endIdx: number, inner: any[] }[] = []
-    let cursor = 0
-    while (cursor < blocks.length) {
-      const startIdx = blocks.findIndex((b, i) => i >= cursor && b.type === 'summaryBoundary' && b.markdown === START)
-      if (startIdx === -1)
-        break
-      const endIdx = blocks.findIndex((b, i) => i > startIdx && b.type === 'summaryBoundary' && b.markdown === END)
-      if (endIdx === -1)
-        break
-      regions.push({ startIdx, endIdx, inner: blocks.slice(startIdx + 1, endIdx) })
-      cursor = endIdx + 1
-    }
-    return regions
-  }
-
-  it('两对完全相同的哨兵：hash 按 #n 消歧，只替换第二个区块、第一个不动', () => {
-    const { editor, regionEdit, dispose } = setup([
-      '# 总结',
-      '',
-      START,
-      '',
-      '第一个区块的内容',
-      '',
-      END,
-      '',
-      '中间普通段落',
-      '',
-      START,
-      '',
-      '第二个区块的内容',
-      '',
-      END,
-    ].join('\n'))
-
-    const { blocks } = regionEdit.readBlocks()
-
-    /** 同内容的哨兵块 hash 带 #n 后缀，互不相同 */
-    const sentinels = blocks.filter(b => b.type === 'summaryBoundary')
-    expect(sentinels).toHaveLength(4)
-    expect(new Set(sentinels.map(b => b.hash)).size).toBe(4)
-
-    /** 枚举出两个区块，精确替换第二个 */
-    const regions = listRegions(blocks)
-    expect(regions).toHaveLength(2)
-
-    const { results } = regionEdit.applyOperations({
-      operations: [{
-        target: regions[1].inner[0].hash,
-        op: 'replace',
-        content: { format: 'markdown', value: '只有第二个被改了' },
-      }],
-    })
-    expect(results[0].success).toBe(true)
-
-    const md = editor.getMarkdown()
-    expect(md).toContain('第一个区块的内容')
-    expect(md).toContain('只有第二个被改了')
-    expect(md).not.toContain('第二个区块的内容')
-    expect(md).toContain('中间普通段落')
 
     dispose()
   })

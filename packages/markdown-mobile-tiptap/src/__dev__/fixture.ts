@@ -13,13 +13,9 @@ export const devFixture = {
 
 ***这个补充意见被采纳进了总结。***<!--ctx-ref:note:1-->
 
-<!--summary-added-images:start-->
-
 ### Related images
 
 - 这张图补充了会议中的白板内容。<!--ctx-ref:image:101-->
-
-<!--summary-added-images:end-->
 
 ---
 
