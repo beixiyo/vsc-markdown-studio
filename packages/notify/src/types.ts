@@ -9,9 +9,6 @@ export type NativeEvent =
   | 'heightChanged'
   | 'mdBridgeReady'
   | 'labelClicked'
-  | 'speakerTapped'
-  /** 用户点击 ctx-ref 角标（mark / note / 图片三类均触发，载荷带 refType） */
-  | 'ctxRefTapped'
   /** setImage 成功 */
   | 'imageInserted'
   /** setImage 失败 */

@@ -7,7 +7,7 @@
  *   导入侧由 @tiptap/markdown 的 HTML token 解析路径（parseHTMLToken →
  *   本扩展 parseHTML）自动还原，无需自定义 tokenizer
  *
- * 与 speaker 的教训一致：renderMarkdown 输出必须多轮往返逐字符幂等，
+ * renderMarkdown 输出必须多轮往返逐字符幂等，
  * 属性输出顺序固定、默认值不输出，否则每轮序列化都会产生 diff。
  */
 import { Editor } from '@tiptap/core'

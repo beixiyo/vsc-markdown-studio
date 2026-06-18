@@ -3,20 +3,13 @@ import { useCreateBlockNote } from '@blocknote/react'
 import { useRef } from 'react'
 import { BlockNoteSchema } from '@blocknote/core'
 import { GradientStyles } from 'custom-blocknote-gradient-styles'
-import { createSpeaker } from 'custom-blocknote-speaker'
 import { useSetupMDBridge } from './hooks/useSetupMDBridge'
 import { useTheme } from 'hooks'
-import { notifyNative } from 'notify'
 import { useNotifyChnage } from './hooks/useNotify'
 
 export default function App() {
   const editor = useCreateBlockNote({
     schema: BlockNoteSchema.create().extend({
-      inlineContentSpecs: {
-        speaker: createSpeaker(speaker => {
-          notifyNative('speakerTapped', speaker)
-        }),
-      },
       styleSpecs: {
         gradient: GradientStyles,
       },

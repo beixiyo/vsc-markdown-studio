@@ -2,7 +2,7 @@ import type {
   Language,
 } from 'tiptap-api/react'
 import { Button } from 'comps'
-import { useState } from 'react'
+import { lazy, useState } from 'react'
 import {
   LANGUAGES,
   TiptapI18nProvider,
@@ -76,16 +76,7 @@ function AppContent() {
       </div>
 
       { mode === 'editor'
-        ? <Editor
-          // initialMarkdown="[speaker:1] 和 [speaker:2]"
-            speakerMap={ {
-              1: { name: 'Alice', id: 'u1' },
-            } }
-            onSpeakerClick={ (attrs) => {
-              console.log('speaker click', attrs)
-            } }
-            readonly={ false }
-          />
+        ? <Editor readonly={ false } />
         : <CollaborationSplitPane /> }
     </div>
   )

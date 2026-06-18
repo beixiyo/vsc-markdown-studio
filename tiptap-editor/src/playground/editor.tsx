@@ -1,7 +1,6 @@
 'use client'
 
 import type { EditorProps } from './types'
-import { isStr } from '@jl-org/tool'
 import { memo, useEffect, useRef, useState } from 'react'
 import { AI, RegionEdit } from 'tiptap-ai'
 
@@ -10,7 +9,7 @@ import { CommentMark, CommentStore } from 'tiptap-comment'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 import { MermaidNode } from 'tiptap-mermaid'
 
-import { ImageUploadNode, preprocessSpeakerTags, SpeakerNode } from 'tiptap-nodes'
+import { ImageUploadNode } from 'tiptap-nodes'
 import { SuggestionTrigger } from 'tiptap-trigger'
 import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-utils'
 import content from './data/content.json' with { type: 'json' }
@@ -22,8 +21,6 @@ import { EditorUI } from './editor-ui'
  */
 export const Editor = memo<EditorProps>(({
   initialMarkdown,
-  speakerMap,
-  onSpeakerClick,
   readonly = false,
 }) => {
   const isMobile = useIsBreakpoint()
@@ -73,12 +70,6 @@ export const Editor = memo<EditorProps>(({
       }),
       /** 评论系统扩展（包含 Mark 和 Plugin） */
       CommentMark.configure(),
-      /** Speaker 自定义节点：解析 [speaker:X]，附带 data-speaker-* 属性 */
-      SpeakerNode.configure({
-        className: 'font-semibold cursor-pointer',
-        speakerMap: speakerMap || {},
-        onClick: onSpeakerClick,
-      }),
     ],
   })
 
@@ -87,9 +78,7 @@ export const Editor = memo<EditorProps>(({
       return
     }
     editor.commands.setContent(
-      isStr(data)
-        ? preprocessSpeakerTags(data)
-        : data,
+      data,
       { contentType },
     )
   }, [editor, data, contentType])

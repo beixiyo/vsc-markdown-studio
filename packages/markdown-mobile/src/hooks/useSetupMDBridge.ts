@@ -1,10 +1,9 @@
 /**
  * 用于将 markdown-operate 的能力通过全局 MDBridge 暴露给 webview
- * 扩展了 speaker 和 gradient-styles 的能力
+ * 扩展了 gradient-styles 的能力
  */
 import type { BlockNoteEditor } from '@blocknote/core'
 import type { GradientStyleType } from 'custom-blocknote-gradient-styles'
-import { setContentWithSpeakers as speakerSetContentWithSpeakers, setSpeakers as speakerSetSpeakers } from 'custom-blocknote-speaker'
 import { useEffect } from 'react'
 import { createMarkdownOperate } from 'markdown-operate'
 import type { MDBridge } from '../types/MDBridge'
@@ -64,9 +63,6 @@ export function useSetupMDBridge(
         const blocks = parseImagesToBlocks(urls)
         await insertAtTop(editor, blocks)
       },
-      // Speaker operations
-      setSpeakers: async speakers => speakerSetSpeakers(editor, speakers),
-      setContentWithSpeakers: async data => speakerSetContentWithSpeakers(editor, data.content || '', data.speakers),
       // Commands
       command: createCommands(editor),
     }
@@ -77,5 +73,4 @@ export function useSetupMDBridge(
     notifyNative('mdBridgeReady')
   }, [editor])
 }
-
 

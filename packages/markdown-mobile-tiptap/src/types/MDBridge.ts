@@ -11,7 +11,6 @@ import type {
 import type { ImageAttrs } from 'tiptap-nodes/image'
 import type { TiptapOperate } from '../operate'
 import type { SetImagePayload } from '../operate/image'
-import type { SpeakerType } from './Speaker'
 
 /** 可覆盖的 CSS 排版属性 */
 export type TypographyCSSProperties = {
@@ -54,7 +53,7 @@ export type MDBridge = TiptapOperate & {
   /**
    * 插入图片
    *
-   * 使用见 [tiptap-editor/packages/tiptap-nodes/src/image/README.md](../../../tiptap-editor/packages/tiptap-nodes/src/image/README.md)
+   * 调用方式与完整图片属性见 [tiptap-editor/packages/tiptap-nodes/src/image/README.md](../../../../tiptap-editor/packages/tiptap-nodes/src/image/README.md)
    */
   setImage: (payload: SetImagePayload) => Promise<void>
 
@@ -75,17 +74,6 @@ export type MDBridge = TiptapOperate & {
    * @returns 命中返回完整属性对象，未找到返回 null
    */
   getImageAttrs: (id: string) => ImageAttrs | null
-
-  /**
-   * 设置说话人列表
-   * 会重新映射已有 speaker 节点，并把当前文档里的 `[speaker:X]` 原位替换
-   */
-  setSpeakers: (speakers: SpeakerType[]) => Promise<void>
-  /**
-   * 设置内容和说话人列表（合并调用）
-   * `content` 为 Markdown 字符串；`speakers` 与 `setSpeakers` 一致
-   */
-  setContentWithSpeakers: (data: { content: string, speakers: SpeakerType[] }) => Promise<void>
 
   /**
    * 动态调整排版样式（字号、行高、字重等）
@@ -130,5 +118,3 @@ export type MDBridge = TiptapOperate & {
     getState: () => RegionEditState
   }
 }
-
-export type { SpeakerTappedPayload, SpeakerType } from './Speaker'

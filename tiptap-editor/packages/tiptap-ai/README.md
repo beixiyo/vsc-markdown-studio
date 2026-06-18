@@ -12,7 +12,6 @@ Tiptap 编辑器的 AI 集成层，两大模块：
 | 文档 | 内容 |
 |------|------|
 | `tiptap-editor/docs/ai-region-edit-protocol.md` | 协议设计：为什么用 hash、粒度、冲突语义 |
-| `tiptap-editor/packages/tiptap-nodes/src/ctx-ref/README.md` | ctx-ref 注释节点 + 移动端调用示例 |
 | `tiptap-editor/packages/tiptap-ai/src/region-edit/types.ts` | 区域编辑全部类型源文件（含 JSDoc） |
 
 ---
@@ -131,7 +130,7 @@ type RegionContent = {
 
 | 通道 | 适用 | 说明 |
 |------|------|------|
-| `markdown` | 文字、标题、列表、`[speaker:N]`、ctx-ref 注释、图片、高亮 | 图片富属性走 `<img ... />`、带色高亮走 `<mark data-color>` 内联 HTML，均无损往返 |
+| `markdown` | 文字、标题、列表、图片、高亮 | 图片富属性走 `<img ... />`、带色高亮走 `<mark data-color>` 内联 HTML，均无损往返 |
 | `html` | 任何实现 parseHTML 的自定义节点 | markdown 已能覆盖图片 / 高亮后，主要用于剩余 lossy 内容（如下划线） |
 | `json` | **无损首选**：ProseMirror JSON 直达节点 | 单节点 / 节点数组 / 整个 doc / JSON 字符串均接受；width 等富属性完整保留；非法结构被 schema 校验拒绝 |
 
@@ -188,7 +187,7 @@ type RegionErrorCode =
 
 - 协议行为：`packages/markdown-mobile-tiptap/src/__tests__/ai-edit.test.ts`（15 项）
 - 能力边界（自定义节点写入 / 老文档自举 / 精确落点 / 多轮替换 / 三通道）：`packages/markdown-mobile-tiptap/src/__tests__/region-edit-capability.test.ts`
-- 肉眼演示：mobile dev 页 DevPanel「ctx-ref marker」区（直接替换 / 假流式按钮）
+- 肉眼演示：mobile dev 页 DevPanel「AI edit」区（直接追加 / 假流式按钮）
 
 ---
 

@@ -63,7 +63,7 @@ addNodeView() {
 
 **在项目中的修改位置**：
 1.  **新增**：在 `packages/tiptap-nodes/src/` 下新建你的节点目录（比如 `packages/tiptap-nodes/src/ai-summary/`）
-2.  在这里定义 Schema 并挂载 React UI（参考已有的 `speaker` 或 `image-upload` 组件）
+2.  在这里定义 Schema 并挂载 React UI（参考已有的 `image-upload` 或 `code-block` 组件）
 3.  **注册**：在 `packages/tiptap-editor-core/src/extensions.ts` 的扩展数组中引入并注册新的 Node
 
 ### 3. 高亮文本（Highlight）

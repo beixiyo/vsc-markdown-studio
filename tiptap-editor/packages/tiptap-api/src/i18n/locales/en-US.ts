@@ -71,9 +71,6 @@ export const enUS: Translations = {
     open: 'Open in new window',
     remove: 'Remove link',
   },
-  speaker: {
-    speaker: 'Speaker {{number}}',
-  },
   comment: {
     commentPanel: 'Comment Panel',
     addComment: 'Add Comment',

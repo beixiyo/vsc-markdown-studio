@@ -1,12 +1,11 @@
 /**
- * 文件作用：创建并组装 MDBridge，对接图片、演讲者、命令、块检测等扩展能力
+ * 文件作用：创建并组装 MDBridge，对接图片、命令、块检测等扩展能力
  * 一句话概括：统一构造可供外部使用的编辑器桥对象
  * 被谁使用：`useSetupMDBridge/index.ts` 调用创建实例，随后由 `GlobalBridgeManager` 挂载到全局
  */
 import type { Block, BlockNoteEditor } from '@blocknote/core'
 import type { BlockIdManager, CallbackManager } from './types'
 import type { MDBridge } from '@/types/MDBridge'
-import { setContentWithSpeakers as speakerSetContentWithSpeakers, setSpeakers as speakerSetSpeakers } from 'custom-blocknote-speaker'
 import { createMarkdownOperate, extractBlockText, getParentHeading, groupBlockByHeading } from 'markdown-operate'
 import { getBlockAtPosition, getBlockFromElement, scrollToBlock } from './blockOperations'
 import { createCommands } from './commands'
@@ -68,12 +67,6 @@ export function createMDBridge(
       const blocks = parseImagesToBlocks(urls)
       await insertAtTop(editor, blocks, blockIdManager)
     },
-
-    // ======================
-    // * Speakers
-    // ======================
-    setSpeakers: async speakers => speakerSetSpeakers(editor, speakers),
-    setContentWithSpeakers: async data => speakerSetContentWithSpeakers(editor, data.content || '', data.speakers),
 
     scrollToBlock: (blockId: string) => scrollToBlock(editor, blockId),
 

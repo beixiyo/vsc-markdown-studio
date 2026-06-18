@@ -18,16 +18,6 @@
       "import": "./dist/code-block/index.js",
       "require": "./dist/code-block/index.cjs"
     },
-    "./speaker": {
-      "types": "./dist/speaker/index.d.ts",
-      "import": "./dist/speaker/index.js",
-      "require": "./dist/speaker/index.cjs"
-    },
-    "./ctx-ref": {
-      "types": "./dist/ctx-ref/index.d.ts",
-      "import": "./dist/ctx-ref/index.js",
-      "require": "./dist/ctx-ref/index.cjs"
-    },
     "./image-upload": {
       "types": "./dist/image-upload/index.d.ts",
       "import": "./dist/image-upload/index.js",

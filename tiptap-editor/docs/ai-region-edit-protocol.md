@@ -106,7 +106,7 @@ MDBridge.aiEdit.readBlocks(options?: ReadBlocksOptions): ReadBlocksResult
   "docVersion": 42,                  // 文档事务计数，仅用于调试与日志关联
   "blocks": [
     { "hash": "b3c9d2e1a4f08812", "type": "heading",   "markdown": "# 会议纪要" },
-    { "hash": "7a21e8c3d5b90f44", "type": "paragraph", "markdown": "[speaker:0] 我们先过一下上周的进展……" },
+    { "hash": "7a21e8c3d5b90f44", "type": "paragraph", "markdown": "我们先过一下上周的进展……" },
     { "hash": "9f3a1c2e88d0b7a6", "type": "paragraph", "markdown": "这段文字带高亮样式",
       "lossy": true,                 // ⚠️ 该块含 Markdown 无法表达的样式（如 gradient）
       "html": "<p><span data-color=\"skyBlue\">这段文字带高亮样式</span></p>" }
@@ -114,7 +114,7 @@ MDBridge.aiEdit.readBlocks(options?: ReadBlocksOptions): ReadBlocksResult
 }
 ```
 
-- `markdown` 始终返回，是算法侧的主要阅读格式（*Speaker* 以 `[speaker:N]` 占位符呈现）
+- `markdown` 始终返回，是算法侧的主要阅读格式
 - 当块包含 Markdown 表达不了的样式时，标记 `lossy: true` 并附带 `html` 字段——算法侧若要「保留原样式地改写」，应基于 `html` 生成 `format: 'html'` 的内容（见 §4）
 - `options.range` 可选，只读取选区附近的块（配合既有选区交互）
 
@@ -236,7 +236,7 @@ MDBridge.aiEdit.reject()             // 还原原内容
 
 | format | 适用场景 | 自定义节点表达 |
 |--------|----------|----------------|
-| `markdown`（默认） | 常规文本、标题、列表、代码块 | *Speaker* 用 `[speaker:N]`（已有 tokenizer 支持） |
+| `markdown`（默认） | 常规文本、标题、列表、代码块 | 使用标准 Markdown 语法 |
 | `html` | 需要 Markdown 表达不了的样式时 | *GradientHighlight* 用 `<span data-color="skyBlue">`，其余自定义节点按各自 `parseHTML` 规则 |
 
 **给算法侧的 Schema 说明（schema awareness）**：算法侧的 system prompt 中应附一份「本编辑器支持的自定义元素词表」，例如：
@@ -247,7 +247,6 @@ MDBridge.aiEdit.reject()             // 还原原内容
   GRADIENT ∈ mysticPurpleBlue | skyBlue | gorgeousPurpleRed | warmSunshine
            | naturalGreen | mysticNight | colorfulCandy | starryNight
            | metallic | snowyGlacier | tropicalSummer
-- 说话人：<speaker>N</speaker>（N 为 readBlocks 返回的 originalLabel）
 ```
 
 该词表应随自定义节点的增减同步维护（建议从 `tiptap-nodes` 的扩展定义中生成，避免手工漂移）

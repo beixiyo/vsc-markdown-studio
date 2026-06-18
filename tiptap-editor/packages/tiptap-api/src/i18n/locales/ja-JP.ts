@@ -71,9 +71,6 @@ export const ja: Translations = {
     open: '新しいウィンドウで開く',
     remove: 'リンクを削除',
   },
-  speaker: {
-    speaker: '話者 {{number}}',
-  },
   comment: {
     commentPanel: 'コメントパネル',
     addComment: 'コメントを追加',

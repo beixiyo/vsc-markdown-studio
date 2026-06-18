@@ -15,9 +15,7 @@ export default defineConfig(({ mode }) => {
         'tiptap-api': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-api/src/index.ts', import.meta.url)),
         'i18n/react': fileURLToPath(new URL('../i18n/src/react/index.ts', import.meta.url)),
         'tiptap-nodes/gradient-highlight': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/gradient-highlight/index.ts', import.meta.url)),
-        'tiptap-nodes/speaker': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/speaker/index.ts', import.meta.url)),
         'tiptap-nodes/code-block': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/code-block/index.ts', import.meta.url)),
-        'tiptap-nodes/ctx-ref': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/ctx-ref/index.ts', import.meta.url)),
       },
     },
     esbuild: {

@@ -55,7 +55,6 @@
       "tiptap-comps/icons": ["./packages/tiptap-comps/src/icons/index.ts"],
 
       "tiptap-nodes": ["./packages/tiptap-nodes/src/index.ts"],
-      "tiptap-nodes/speaker": ["./packages/tiptap-nodes/src/speaker/index.ts"],
       "tiptap-nodes/image-upload": ["./packages/tiptap-nodes/src/image-upload/index.tsx"],
       "tiptap-nodes/image": ["./packages/tiptap-nodes/src/image/index.ts"],
       "tiptap-nodes/code-block": ["./packages/tiptap-nodes/src/code-block/index.ts"],

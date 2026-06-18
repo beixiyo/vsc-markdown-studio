@@ -1,16 +1,11 @@
-import type { CtxRefOptions } from 'tiptap-nodes/ctx-ref'
 import type { ImageOptions } from 'tiptap-nodes/image'
 import { EditorContent } from '@tiptap/react'
 import { notifyNative } from 'notify'
-import { useMemo, useRef } from 'react'
+import { lazy, Suspense, useMemo, useRef } from 'react'
 import { RegionEdit } from 'tiptap-ai'
 import { useDefaultEditor } from 'tiptap-editor-core'
-import { CtxRefNode } from 'tiptap-nodes/ctx-ref'
-import { type SpeakerAttributes, SpeakerNode } from 'tiptap-nodes/speaker'
-import DevPanel from './__dev__/DevPanel'
 import { useNotifyChange } from './hooks/useNotify'
 import { useSetupMDBridge } from './hooks/useSetupMDBridge'
-import { speakerAttrsToNativePayload } from './speaker'
 
 /**
  * 图片节点的事件回调：统一打到 Native
@@ -61,52 +56,16 @@ const imageOptions: Partial<ImageOptions> = {
   },
 }
 
-/**
- * ctx-ref 角标图标定制（业务侧）
- *
- * 通用插件只给裸图标；外层灰底圆角等设计系统装饰放在调用方这里完成，
- * 用 `ctx.defaultIcon()` 取内置图标（含 streaming 动效态）再包一层
- */
-const ctxRefIcons: CtxRefOptions['icons'] = {
-  note: (ctx) => {
-    const icon = ctx.defaultIcon()
-    if (!icon)
-      return null
-
-    /** 去掉内置图标自带的外边距，改由包装层统一控制 */
-    icon.style.margin = '0'
-
-    const wrap = document.createElement('span')
-    wrap.className = 'inline-flex items-center justify-center p-1 ml-[3px] rounded-[7px] bg-background4 align-middle cursor-pointer'
-    wrap.appendChild(icon)
-    return wrap
-  },
-}
+const DevPanel = import.meta.env.DEV
+  ? lazy(() => import('./__dev__/DevPanel'))
+  : null
 
 export default function App() {
   const editorElRef = useRef<HTMLDivElement>(null)
 
-  /**
-   * SpeakerNode 的 `speakerMap` 在 editor 构造后就固化了；
-   * 传空对象作为稳定引用，后续由 `useSetupMDBridge` 原地 mutate
-   */
   const extensions = useMemo(() => [
     /** AI 区域编辑（hash 锚点协议）预览装饰 */
     RegionEdit.configure(),
-    SpeakerNode.configure({
-      speakerMap: {},
-      onClick: (attrs: SpeakerAttributes) => {
-        notifyNative('speakerTapped', speakerAttrsToNativePayload(attrs))
-      },
-    }),
-    /** ctx-ref marker：comment 保活数据锚点 + 内置角标图标（note 在调用方套灰底） */
-    CtxRefNode.configure({
-      icons: ctxRefIcons,
-      onClick: ({ refType, refId, sentence }) => {
-        /** mark / note / 图片 三类点击都通知 Native，由 Native 按 refType 决定拉什么 */
-        notifyNative('ctxRefTapped', { refType, refId, sentence })
-      },
-    }),
   ], [])
 
   const editor = useDefaultEditor({ extensions, image: imageOptions, placeholder: false })
@@ -114,12 +73,31 @@ export default function App() {
   useSetupMDBridge(editor, editorElRef)
   useNotifyChange(editor, editorElRef)
 
+  const isDev = import.meta.env.DEV
+  const editorClass = isDev
+    ? 'markdown-body min-h-dvh'
+    : 'markdown-body'
+  const editorContent = (
+    <div ref={ editorElRef } className={ editorClass }>
+      <EditorContent editor={ editor } />
+    </div>
+  )
+
+  if (!isDev)
+    return editorContent
+
   return (
     <>
-      <div ref={ editorElRef } className="markdown-body">
-        <EditorContent editor={ editor } />
-      </div>
-      { import.meta.env.DEV && <DevPanel /> }
+      <main className="min-h-dvh overflow-x-hidden bg-background lg:bg-background2 lg:pr-[420px]">
+        <div className="mx-auto min-h-dvh w-full max-w-3xl bg-background px-4 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+          { editorContent }
+        </div>
+      </main>
+      { DevPanel && (
+        <Suspense fallback={ null }>
+          <DevPanel />
+        </Suspense>
+      ) }
     </>
   )
 }

@@ -2,17 +2,6 @@ import type { Editor } from '@tiptap/core'
 import type { UseEditorOptions } from '@tiptap/react'
 import type { RefObject } from 'react'
 import type { CommentStore } from 'tiptap-comment'
-import type { SpeakerAttributes, SpeakerMapValue } from 'tiptap-nodes'
-
-/**
- * Speaker 映射表类型
- */
-export type SpeakerMap = Record<string, SpeakerMapValue>
-
-/**
- * Speaker 点击回调类型
- */
-export type SpeakerClick = (attrs: SpeakerAttributes, event: MouseEvent) => void
 
 /**
  * 简单编辑器的配置项
@@ -22,14 +11,6 @@ export type EditorProps = {
    * 以 Markdown 文本作为初始内容
    */
   initialMarkdown?: string
-  /**
-   * Speaker 映射表，键为 originalLabel
-   */
-  speakerMap?: SpeakerMap
-  /**
-   * 点击 Speaker 时触发
-   */
-  onSpeakerClick?: SpeakerClick
   /**
    * 是否只读模式，默认为 false（可编辑）
    */
@@ -42,14 +23,6 @@ export type EditorProps = {
 export type EditorContentProps = {
   ref?: RefObject<Editor | null>
   data?: string | object
-  /**
-   * Speaker 映射表，键为 originalLabel
-   */
-  speakerMap?: SpeakerMap
-  /**
-   * 点击 Speaker 时触发
-   */
-  onSpeakerClick?: SpeakerClick
   /**
    * 子元素内容（用于传入 Toolbar、SelectionToolbar 等 UI 组件）
    */

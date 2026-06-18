@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => {
 
         'markdown-operate': fileURLToPath(new URL('../../blocknote/markdown-operate/src', import.meta.url)),
         'custom-blocknote-checklist': fileURLToPath(new URL('../../blocknote/custom-blocknote/checklist/src', import.meta.url)),
-        'custom-blocknote-speaker': fileURLToPath(new URL('../../blocknote/custom-blocknote/speaker/src', import.meta.url)),
         'custom-blocknote-gradient-styles': fileURLToPath(new URL('../../blocknote/custom-blocknote/gradient-styles/src', import.meta.url)),
         'custom-blocknote-markdown-extensions': fileURLToPath(new URL('../../blocknote/custom-blocknote/markdown-extensions/src', import.meta.url)),
         'notify': fileURLToPath(new URL('../notify/src', import.meta.url)),

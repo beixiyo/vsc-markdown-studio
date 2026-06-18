@@ -90,7 +90,7 @@
 
 ### 5. Node Extensions (节点扩展)
 - **位置**: `tiptap-editor/packages/tiptap-nodes/src/`
-- **内容**: 整合了所有自定义节点扩展（如 Speaker, ImageUpload 等）
+- **内容**: 整合了通用自定义节点扩展（如 ImageUpload、Image、CodeBlock、GradientHighlight 等）
 
 ### 6. Hooks (钩子函数)
 - **位置**: `tiptap-editor/packages/tiptap-api/src/react/hooks/`
@@ -131,7 +131,7 @@
 
 #### `tiptap-nodes/`
 - 自定义节点扩展包
-- 包含：Speaker, ImageUpload 等节点实现
+- 包含：ImageUpload、Image、CodeBlock、GradientHighlight 等节点实现
 
 #### `tiptap-trigger/`
 - 触发器包
@@ -141,70 +141,68 @@
 
 ## 插件开发踩坑（自定义节点 / NodeView）
 
-> 以下是开发自定义节点（如 `Speaker`）时验证过的真实坑点，动手前务必读完。每条都用 playwright 在 playground（`window.__editor`）实测过
+> 以下是开发自定义节点时验证过的通用坑点，适用于任何依赖 NodeView、节点 attrs、Markdown token 或 DOM data 属性的扩展
 
-### 1. ⚠️ `extension.options` 是 getter，运行时改不进去
+### 1. `extension.options` 更适合做初始化配置，不适合做运行时状态
 
-Tiptap 里 `editor.extensionManager.extensions.find(...).options` 是 **getter**，每次访问返回的是新对象：
+Tiptap 里 `editor.extensionManager.extensions.find(...).options` 可能是 getter，每次访问未必返回同一个对象。不要依赖运行时改 `ext.options` 来驱动重渲染：
 
 ```js
-ext.options === ext.options          // ❌ false
-ext.options.speakerMap = newMap      // 写到临时对象，下一行就丢
-read(ext.options.speakerMap)         // 读回来还是 configure() 时传入的旧值
+ext.options === ext.options          // 可能是 false
+ext.options.runtimeMap = newMap      // 可能写到临时对象
+read(ext.options.runtimeMap)         // 下一次读取可能仍是初始化值
 ```
 
-→ **不要试图在运行时改 `ext.options` 来驱动重渲染**。`configure({...})` 传入的配置近似「初始化常量」，要动态变的数据**不要放 options**
+`configure({...})` 传入的配置应视为初始化常量。需要动态变化、可持久化、可触发 NodeView 更新的数据，应放到节点 `attrs` 或外部受控状态里
 
-### 2. ✅ 可变的显示数据放「节点 attrs」，用 `setNodeMarkup` 改
+### 2. 可变显示数据优先放节点 `attrs`
 
 只有节点 `attrs` 是 ProseMirror 能可靠追踪、并触发 `NodeView.update()` 的来源：
 
 ```js
-// 改一个说话人的显示名
 editor.view.dispatch(
-  editor.state.tr.setNodeMarkup(pos, undefined, { ...node.attrs, name: newName })
+  editor.state.tr.setNodeMarkup(pos, undefined, {
+    ...node.attrs,
+    label: nextLabel,
+  })
 )
-// → PM 必定调用该节点 NodeView 的 update(newNode) → 你在 update 里刷新 DOM
 ```
 
-options 只配「初始化兜底」（如从 markdown 解析出的节点还没写入名称时的默认显示）
+这类更新会进入 ProseMirror transaction，NodeView 能收到 `update(newNode)`，序列化和撤销栈也更容易保持一致
 
-### 3. ⚠️ 多来源取值要想清优先级，且**优先用节点级来源**
+### 3. 多来源取值要明确优先级，节点级来源应优先
 
-`Speaker` 踩过的真 bug：显示函数原本 `options.speakerMap[key].name` 优先于 `attrs.name`：
+如果同一个展示值可能来自 `attrs`、`options`、默认文案或外部 map，优先级要固定，并优先使用节点级来源：
 
 ```js
-// ❌ 错误优先级
 function resolveDisplayText(attrs, options) {
-  if (options.speakerMap[key]?.name) return options.speakerMap[key].name  // 旧 map 先命中
-  if (attrs.name) return attrs.name                                       // 永远到不了
+  if (attrs.label) return attrs.label
+  if (options.initialMap?.[attrs.key]?.label) return options.initialMap[attrs.key].label
+  return attrs.key
 }
 ```
 
-因为 options 改不进（见坑 1），`setNodeMarkup` 写入的新 `attrs.name` 被旧 map 名遮蔽，芯片永远显示旧名
+原因是 `attrs` 代表文档内最新、可追踪的数据；`options` 更适合作为初始化兜底。测试时要覆盖“初始化来源本来有值，随后 attrs 更新”的真实数据形态，避免假性通过
 
-```js
-// ✅ 正确：节点级 attrs 优先，扩展级 options 兜底
-function resolveDisplayText(attrs, options) {
-  if (attrs.name) return attrs.name                                       // 最新、可追踪
-  if (options.speakerMap[key]?.name) return options.speakerMap[key].name  // 仅初始加载兜底
-}
-```
+### 4. `NodeView.update()` 只会执行你写的更新逻辑
 
-> ⚠️ **测试要覆盖「来源里本来就有值」的真实数据形态**。当初只测了 map 里没条目的 label，恰好落到 attrs 兜底、假性通过，差点误判成「NodeView 不重绘」
-
-### 4. ⚠️ `NodeView.update()` 只会执行你手写的更新，不会自动同步 DOM
-
-`update()` 里你改了 `dom.textContent`，但节点的 `data-*` 属性**不会自动跟着变**：
+`update()` 不会自动同步 DOM。凡是后续点击、解析、复制或测试会从 DOM 读的内容，都要在 `update()` 里同步：
 
 ```js
 update(newNode) {
-  node.attrs = newNode.attrs
-  dom.textContent = resolveDisplayText(...)   // 只改了文字
-  // ❌ data-speaker-name/id 还停在旧值
-  // → 下次点击，onClick 从 DOM 读到的就是过期值（编辑器初始值错）
+  node = newNode
+  dom.textContent = resolveDisplayText(newNode.attrs, options)
+  dom.setAttribute('data-key', newNode.attrs.key)
+
+  if (newNode.attrs.label) {
+    dom.setAttribute('data-label', newNode.attrs.label)
+  }
+  else {
+    dom.removeAttribute('data-label')
+  }
+
+  return true
 }
 ```
 
-凡是 onClick / 解析逻辑会从 DOM 读的属性，都要在 `update()` 里一并同步（`dom.setAttribute` / `removeAttribute`）
-
+只改 `textContent` 不够；`data-*`、className、style、aria 属性等也要跟着当前 attrs 一起更新，否则下一次交互可能读到过期 DOM 状态

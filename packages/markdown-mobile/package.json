@@ -20,12 +20,10 @@
     "@blocknote/mantine": "workspace:*",
     "@blocknote/react": "workspace:*",
     "custom-blocknote-gradient-styles": "workspace:*",
-    "custom-blocknote-speaker": "workspace:*",
     "markdown-operate": "workspace:*",
     "notify": "workspace:*",
     "styles": "workspace:*",
     "hooks": "workspace:*"
   }
 }
-
 

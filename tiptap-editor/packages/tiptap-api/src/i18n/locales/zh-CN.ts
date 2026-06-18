@@ -71,9 +71,6 @@ export const zhCN: Translations = {
     open: '在新窗口打开',
     remove: '移除链接',
   },
-  speaker: {
-    speaker: '说话人 {{number}}',
-  },
   comment: {
     commentPanel: '评论面板',
     addComment: '添加评论',

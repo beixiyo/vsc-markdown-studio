@@ -59,16 +59,16 @@ export const defaultOperateSuites: OperateTestSuite[] = [
       {
         id: 'content-export-markdown',
         title: '导出 Markdown',
-        description: '验证包含 speaker 的 Markdown 能原样导出',
+        description: '验证 Markdown 标题和列表能原样导出',
         run: ({ operate }) => {
           const original = operate.getMarkdown()
-          const sample = '# 导出测试\n\n[speaker:1] 参与讨论'
+          const sample = '# 导出测试\n\n- 第一项\n- 第二项'
           operate.setMarkdown(sample)
           const exported = operate.getMarkdown()
           const hasTitle = exported?.includes('导出测试')
-          const hasSpeaker = exported?.includes('[speaker:1]')
-          if (!exported || !hasTitle || !hasSpeaker) {
-            throw new Error('getMarkdown 导出缺少标题或 speaker 标记')
+          const hasList = exported?.includes('- 第一项')
+          if (!exported || !hasTitle || !hasList) {
+            throw new Error('getMarkdown 导出缺少标题或列表')
           }
           contentBackup.markdown = original
         },
@@ -81,17 +81,16 @@ export const defaultOperateSuites: OperateTestSuite[] = [
       {
         id: 'content-export-html',
         title: '导出 HTML',
-        description: '验证包含 speaker 的 HTML 导出包含映射后的 data 属性',
+        description: '验证 HTML 导出包含基础段落内容',
         run: ({ operate }) => {
           const original = operate.getMarkdown()
-          const sample = '# HTML 导出\n\n[speaker:1] 出现在段落中'
+          const sample = '# HTML 导出\n\n普通段落内容'
           operate.setMarkdown(sample)
           const html = operate.getHTML()
           const hasTitle = html?.includes('HTML 导出')
-          const hasSpeakerName = html?.includes('data-speaker-name="Alice"')
-          const hasSpeakerId = html?.includes('data-speaker-id="u1"')
-          if (!html || !hasTitle || !hasSpeakerName || !hasSpeakerId) {
-            throw new Error('getHTML 未包含标题或 speaker data 属性')
+          const hasParagraph = html?.includes('普通段落内容')
+          if (!html || !hasTitle || !hasParagraph) {
+            throw new Error('getHTML 未包含标题或段落内容')
           }
           contentBackup.markdown = original
         },
@@ -104,10 +103,10 @@ export const defaultOperateSuites: OperateTestSuite[] = [
       {
         id: 'content-export-json',
         title: '导出 JSON',
-        description: '验证 JSON 导出包含 speaker 节点与原始标签',
+        description: '验证 JSON 导出包含段落节点与文本',
         run: ({ operate, editor }) => {
           const original = operate.getMarkdown()
-          const sample = 'JSON 导出测试 [speaker:1]'
+          const sample = 'JSON 导出测试'
           operate.setMarkdown(sample)
           const json = editor?.getJSON()
           const hasContent = Array.isArray(json?.content) && json.content.length > 0
@@ -115,10 +114,10 @@ export const defaultOperateSuites: OperateTestSuite[] = [
           const para = first?.type === 'paragraph'
             ? first
             : undefined
-          const speakerNode = (para?.content as any[])?.find((item: any) => item.type === 'speaker') as any
-          const hasSpeaker = speakerNode?.attrs?.originalLabel === '1'
-          if (!json || !hasContent || !hasSpeaker) {
-            throw new Error('editor.getJSON 未包含 speaker 节点或内容为空')
+          const textNode = (para?.content as any[])?.find((item: any) => item.type === 'text') as any
+          const hasText = textNode?.text === 'JSON 导出测试'
+          if (!json || !hasContent || !hasText) {
+            throw new Error('editor.getJSON 未包含预期段落文本或内容为空')
           }
           contentBackup.markdown = original
         },
@@ -569,34 +568,6 @@ export const defaultOperateSuites: OperateTestSuite[] = [
           }
           if (original !== null) {
             operate.setMarkdown(original)
-          }
-        },
-      },
-    ],
-  },
-  {
-    id: 'speaker',
-    title: '说话人节点',
-    description: '校验 speaker 节点映射与渲染属性',
-    cases: [
-      {
-        id: 'speaker-map-and-attrs',
-        title: '映射并渲染 data 属性',
-        description: '验证 speakerMap 合并后渲染的 data-speaker-* 属性包含映射值',
-        run: ({ operate }) => {
-          const original = operate.getMarkdown()
-          operate.setMarkdown('[speaker:1]')
-          const html = operate.getHTML() || ''
-          const hasName = html.includes('data-speaker-name="Alice"')
-          const hasId = html.includes('data-speaker-id="u1"')
-          if (!hasName || !hasId) {
-            throw new Error('data-speaker-* 未包含映射的 name 或 id')
-          }
-          contentBackup.markdown = original
-        },
-        cleanup: ({ operate }) => {
-          if (contentBackup.markdown !== null) {
-            operate.setMarkdown(contentBackup.markdown)
           }
         },
       },

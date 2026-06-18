@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { devFixture } from './fixture'
 
 /**
- * 开发环境专用调试面板：一键调用 MDBridge 上的每个方法以肉眼验证渲染
+ * 开发环境专用调试面板：一键调用 MDBridge 上的通用方法以肉眼验证渲染
  * 生产构建由 `import.meta.env.DEV` 分支裁掉
  */
 
@@ -12,8 +13,6 @@ const SAMPLE_MARKDOWN = `# 一级标题 Heading 1
 
 ### 三级标题 Heading 3
 
-#### 四级标题 Heading 4
-
 这是一段普通正文，测试段落的字体大小和行高。包含 **加粗**、*斜体*、~~删除线~~、\`行内 code\`。
 
 第二段正文。English text mixed with 中文，测试混排效果。The quick brown fox jumps over the lazy dog.
@@ -21,18 +20,14 @@ const SAMPLE_MARKDOWN = `# 一级标题 Heading 1
 - 无序列表 A
 - 无序列表 B
   - 嵌套项
-    - 深层嵌套
 
 1. 有序列表第一项
 2. 有序列表第二项
-   1. 嵌套有序
 
 - [ ] 任务未完成
 - [x] 任务已完成
 
 > 引用文本：好的设计是尽可能少的设计。
->
-> 第二行引用，包含 **加粗** 和 \`代码\`。
 
 \`\`\`typescript
 const x: number = 42
@@ -46,28 +41,16 @@ console.log(greet('World'))
 | H1 | 18px | 17px | -1px |
 
 [链接](https://example.com) 和图片 ![alt](https://picsum.photos/seed/sample/400/200)
-
----
-
-[speaker:0] 这是说话人甲的发言内容，测试说话人标记的样式。
-
-[speaker:1] 这是说话人乙的回应，确认说话人切换正常显示。
 `
 
-const SAMPLE_SPEAKERS = [
-  { name: '说话人甲', originalLabel: 0, label: 0 },
-  { name: '说话人乙', originalLabel: 1, label: 1 },
-]
-
-/** 追加到文末的 ctx-ref 增量示例（模拟新采纳一条 Note，不动现有内容） */
-const CTX_REF_APPEND = `***性能优化方案被采纳进了总结。***<!--ctx-ref:note:2-->`
-
-/** fixture「ctx-ref 引用标记」一节自带的 marker，验证存活用 */
-const CTX_REF_MARKERS = [
-  '<!--ctx-ref:mark:mark_123-->',
-  '<!--ctx-ref:note:1-->',
-  '<!--ctx-ref:image:101-->',
-]
+const STREAM_MARKDOWN = [
+  '## Streamed section',
+  '',
+  '这段内容通过 aiEdit 的流式接口追加到文末。',
+  '',
+  '- 支持分片写入',
+  '- 支持预览后 accept',
+].join('\n')
 
 const IMG_URLS = [
   'https://picsum.photos/seed/a/200/120',
@@ -85,33 +68,30 @@ function safeCall(name: string, fn: () => any) {
   }
 }
 
-function Section({ title, children }: { title: string, children: React.ReactNode }) {
+const Section = memo<SectionProps>(({ title, children }) => {
   return (
-    <div style={ { borderTop: '1px solid #333', padding: '6px 8px' } }>
-      <div style={ { fontSize: 11, color: '#9aa', margin: '2px 0 4px' } }>{ title }</div>
-      <div style={ { display: 'flex', flexWrap: 'wrap', gap: 4 } }>{ children }</div>
-    </div>
+    <section className="border-b border-border px-4 py-3">
+      <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-text3">{ title }</div>
+      <div className="flex flex-wrap gap-2">{ children }</div>
+    </section>
   )
-}
+})
 
-function Btn({ label, onClick }: { label: string, onClick: () => void }) {
+Section.displayName = 'Section'
+
+const Btn = memo<BtnProps>(({ label, onClick }) => {
   return (
     <button
+      className="min-h-8 rounded-md border border-border bg-background px-2.5 py-1.5 text-[12px] font-medium leading-4 text-text transition-colors hover:bg-background3 active:bg-background4"
+      type="button"
       onClick={ onClick }
-      style={ {
-        background: '#1f2937',
-        color: '#e5e7eb',
-        border: '1px solid #374151',
-        borderRadius: 4,
-        padding: '3px 8px',
-        fontSize: 12,
-        cursor: 'pointer',
-      } }
     >
       { label }
     </button>
   )
-}
+})
+
+Btn.displayName = 'Btn'
 
 export default function DevPanel() {
   const [open, setOpen] = useState(true)
@@ -121,7 +101,7 @@ export default function DevPanel() {
   useEffect(() => {
     /** 等 MDBridge 注入一帧后再调用，避免与初始化竞争 */
     const t = setTimeout(() => {
-      window.MDBridge?.setContentWithSpeakers?.(devFixture)
+      window.MDBridge?.setMarkdown?.(devFixture)
     }, 0)
     return () => clearTimeout(t)
   }, [])
@@ -135,315 +115,255 @@ export default function DevPanel() {
   }
 
   return (
-    <div
-      style={ {
-        position: 'fixed',
-        right: 8,
-        bottom: 8,
-        zIndex: 9999,
-        width: open
-          ? 340
-          : 72,
-        maxHeight: '85vh',
-        background: '#111827',
-        color: '#e5e7eb',
-        border: '1px solid #374151',
-        borderRadius: 6,
-        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-        fontSize: 12,
-        overflow: 'auto',
-        boxShadow: '0 4px 18px rgba(0,0,0,0.35)',
-      } }
+    <aside
+      className={ open
+        ? 'fixed right-0 top-0 z-[9999] flex h-dvh w-full flex-col border-l border-border bg-background text-text shadow-card sm:w-[420px]'
+        : 'fixed right-0 top-0 z-[9999] flex h-dvh w-14 flex-col items-center border-l border-border bg-background text-text shadow-card' }
     >
-      <div
-        style={ { display: 'flex', justifyContent: 'space-between', padding: '4px 8px', background: '#0b1221' } }
+      <header
+        className={ open
+          ? 'flex h-12 shrink-0 items-center justify-between border-b border-border bg-background px-4'
+          : 'flex h-12 shrink-0 items-center justify-center border-b border-border bg-background' }
       >
-        <strong>MDBridge Dev</strong>
+        { open && (
+          <div>
+            <strong className="block text-[13px] font-semibold leading-4 text-text">MDBridge Dev</strong>
+            <span className="text-[11px] leading-4 text-text3">Mobile Markdown playground</span>
+          </div>
+        ) }
         <button
+          className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background2 text-[16px] leading-none text-text2 transition-colors hover:bg-background3"
+          type="button"
           onClick={ () => setOpen(v => !v) }
-          style={ { background: 'transparent', color: '#9aa', border: 0, cursor: 'pointer' } }
         >
           { open
             ? '−'
             : '+' }
         </button>
-      </div>
+      </header>
 
       { !open
         ? null
         : (
             <>
-              <Section title="Content">
-                <Btn label="setMarkdown(sample)" onClick={ () => safeCall('setMarkdown', () => bridge().setMarkdown(SAMPLE_MARKDOWN)) } />
-                <Btn label="setContentWithSpeakers(fixture)" onClick={ () => safeCall('setContentWithSpeakers', () => bridge().setContentWithSpeakers(devFixture)) } />
-                <Btn label="setContentWithSpeakers(sample+speakers)" onClick={ () => safeCall('setContentWithSpeakers', () => bridge().setContentWithSpeakers({ content: SAMPLE_MARKDOWN, speakers: SAMPLE_SPEAKERS })) } />
-                <Btn label="setSpeakers(甲/乙)" onClick={ () => safeCall('setSpeakers', () => bridge().setSpeakers(SAMPLE_SPEAKERS)) } />
-                <Btn label="getMarkdown" onClick={ () => show('getMarkdown', bridge().getMarkdown()) } />
-                <Btn label="getHTML" onClick={ () => show('getHTML', bridge().getHTML()) } />
-                <Btn label="getJSON" onClick={ () => show('getJSON', bridge().getJSON()) } />
-              </Section>
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                <Section title="Content">
+                  <Btn label="setMarkdown(fixture)" onClick={ () => safeCall('setMarkdown', () => bridge().setMarkdown(devFixture)) } />
+                  <Btn label="setMarkdown(sample)" onClick={ () => safeCall('setMarkdown', () => bridge().setMarkdown(SAMPLE_MARKDOWN)) } />
+                  <Btn label="getMarkdown" onClick={ () => show('getMarkdown', bridge().getMarkdown()) } />
+                  <Btn label="getHTML" onClick={ () => show('getHTML', bridge().getHTML()) } />
+                  <Btn label="getJSON" onClick={ () => show('getJSON', bridge().getJSON()) } />
+                </Section>
 
-              <Section title="ctx-ref marker（页面默认内容里已有「## ctx-ref 引用标记」一节）">
-                <Btn
-                  label="① 追加新 Note 到文末（不动现有内容）"
-                  onClick={ () => safeCall('aiEdit.append(ctxRef)', () => bridge().aiEdit.applyOperations({
-                    operations: [{
-                      target: 'doc',
-                      op: 'append',
-                      content: { format: 'markdown', value: CTX_REF_APPEND },
-                    }],
-                  })) }
-                />
-                <Btn
-                  label="② 假流式追加图片章节到文末（V2 会后图片）"
-                  onClick={ () => {
-                    /** V2 会后图片：固定追加到文末 + 假流式，无需哨兵定位 */
-                    const { streamId } = bridge().aiEdit.beginStream({ target: 'doc', op: 'append' })
-                    const content = '## Related images\n\n- 这张图补充了会议中的白板内容。<!--ctx-ref:image:202-->'
-                    let pos = 0
-                    const timer = setInterval(() => {
-                      if (pos >= content.length) {
-                        clearInterval(timer)
-                        bridge().aiEdit.endStream(streamId)
-                        bridge().aiEdit.accept()
-                        show('假流式追加', '完成：图片章节已假流式追加到文末（可 undo 撤销）')
-                        return
-                      }
-                      bridge().aiEdit.pushChunk(streamId, content.slice(pos, pos + 6))
-                      pos += 6
-                    }, 60)
-                  } }
-                />
-                <Btn
-                  label="③ 验证 marker 存活"
-                  onClick={ () => {
-                    const md = bridge().getMarkdown()
-                    const checks = CTX_REF_MARKERS.map(m => `${md.includes(m)
-                      ? '✓'
-                      : '✗'} ${m}`)
-                    checks.push(md.includes('******')
-                      ? '✗ 出现悬空 *** 脏数据'
-                      : '✓ 无悬空 *** 脏数据')
-                    show('marker 存活检查', checks.join('\n'))
-                  } }
-                />
-                <Btn
-                  label="④ readBlocks→find→流式 insertAfter（遍历+定位+流式插入）"
-                  onClick={ () => {
-                    /** ① 遍历：每块带稳定 hash */
-                    const { blocks } = bridge().aiEdit.readBlocks()
-                    /** ② 自己找节点：定位含「ctx-ref 引用标记」的标题块 */
-                    const target = blocks.find(b => b.markdown.includes('ctx-ref 引用标记'))
-                    if (!target) {
-                      show('遍历插入', '未找到锚点块（含「ctx-ref 引用标记」的标题）')
-                      return
-                    }
-                    /** ③ 对该块流式 insertAfter */
-                    const { streamId } = bridge().aiEdit.beginStream({ target: target.hash, op: 'insertAfter' })
-                    const content = '***新插入的一句。***<!--ctx-ref:note:9-->'
-                    let pos = 0
-                    const timer = setInterval(() => {
-                      if (pos >= content.length) {
-                        clearInterval(timer)
-                        bridge().aiEdit.endStream(streamId)
-                        bridge().aiEdit.accept()
-                        show('遍历插入', `完成：在「${target.type}」块后流式插入新句 + note 角标（可 undo）`)
-                        return
-                      }
-                      bridge().aiEdit.pushChunk(streamId, content.slice(pos, pos + 5))
-                      pos += 5
-                    }, 60)
-                  } }
-                />
-              </Section>
+                <Section title="AI edit">
+                  <Btn
+                    label="readBlocks"
+                    onClick={ () => show('readBlocks', bridge().aiEdit.readBlocks()) }
+                  />
+                  <Btn
+                    label="append paragraph"
+                    onClick={ () => safeCall('aiEdit.append', () => bridge().aiEdit.applyOperations({
+                      operations: [{
+                        target: 'doc',
+                        op: 'append',
+                        content: { format: 'markdown', value: '这是一段通过 aiEdit 追加的普通 Markdown 内容。' },
+                      }],
+                    })) }
+                  />
+                  <Btn
+                    label="stream append"
+                    onClick={ () => {
+                      const { streamId } = bridge().aiEdit.beginStream({ target: 'doc', op: 'append' })
+                      let pos = 0
+                      const timer = setInterval(() => {
+                        if (pos >= STREAM_MARKDOWN.length) {
+                          clearInterval(timer)
+                          bridge().aiEdit.endStream(streamId)
+                          bridge().aiEdit.accept()
+                          show('stream append', 'done')
+                          return
+                        }
+                        bridge().aiEdit.pushChunk(streamId, STREAM_MARKDOWN.slice(pos, pos + 8))
+                        pos += 8
+                      }, 60)
+                    } }
+                  />
+                  <Btn label="accept" onClick={ () => safeCall('aiEdit.accept', () => bridge().aiEdit.accept()) } />
+                  <Btn label="reject" onClick={ () => safeCall('aiEdit.reject', () => bridge().aiEdit.reject()) } />
+                  <Btn label="getState" onClick={ () => show('aiEdit.getState', bridge().aiEdit.getState()) } />
+                </Section>
 
-              <Section title="ctx-ref 图标 / 流式（图标内置默认渲染；按钮切 streaming 态）">
-                <Btn
-                  label="▶ note:1 流式 ON"
-                  onClick={ () => safeCall('streaming note:1 on', () => bridge()._editor?.commands.setCtxRefStreaming('1', true)) }
-                />
-                <Btn
-                  label="■ note:1 流式 OFF"
-                  onClick={ () => safeCall('streaming note:1 off', () => bridge()._editor?.commands.setCtxRefStreaming('1', false)) }
-                />
-                <Btn
-                  label="▶ image:101 流式 ON"
-                  onClick={ () => safeCall('streaming image:101 on', () => bridge()._editor?.commands.setCtxRefStreaming({ refId: '101', refType: 'image' }, true)) }
-                />
-                <Btn
-                  label="■ image:101 流式 OFF"
-                  onClick={ () => safeCall('streaming image:101 off', () => bridge()._editor?.commands.setCtxRefStreaming({ refId: '101', refType: 'image' }, false)) }
-                />
-                <Btn
-                  label="↻ note:1 流式 2s 自动回切"
-                  onClick={ () => {
-                    const ed = bridge()._editor
-                    if (!ed)
-                      return
-                    ed.commands.setCtxRefStreaming('1', true)
-                    setTimeout(() => ed.commands.setCtxRefStreaming('1', false), 2000)
-                    show('streaming', 'note:1 进入流式，2s 后自动切回静态图标')
-                  } }
-                />
-              </Section>
+                <Section title="Block commands">
+                  <Btn label="H1" onClick={ () => bridge().command.setHeading(1) } />
+                  <Btn label="H2" onClick={ () => bridge().command.setHeading(2) } />
+                  <Btn label="H3" onClick={ () => bridge().command.setHeading(3) } />
+                  <Btn label="Paragraph" onClick={ () => bridge().command.setParagraph() } />
+                  <Btn label="List" onClick={ () => bridge().command.setUnorderedList() } />
+                  <Btn label="Numbered list" onClick={ () => bridge().command.setOrderedList() } />
+                  <Btn label="CheckList" onClick={ () => bridge().command.setCheckList() } />
+                </Section>
 
-              <Section title="Block commands">
-                <Btn label="H1" onClick={ () => bridge().command.setHeading(1) } />
-                <Btn label="H2" onClick={ () => bridge().command.setHeading(2) } />
-                <Btn label="H3" onClick={ () => bridge().command.setHeading(3) } />
-                <Btn label="Paragraph" onClick={ () => bridge().command.setParagraph() } />
-                <Btn label="• List" onClick={ () => bridge().command.setUnorderedList() } />
-                <Btn label="1. List" onClick={ () => bridge().command.setOrderedList() } />
-                <Btn label="☐ CheckList" onClick={ () => bridge().command.setCheckList() } />
-              </Section>
+                <Section title="Inline / Styles">
+                  <Btn label="Bold" onClick={ () => bridge().command.setBold() } />
+                  <Btn label="Italic" onClick={ () => bridge().command.setItalic() } />
+                  <Btn label="Underline" onClick={ () => bridge().command.setUnderline() } />
+                  <Btn label="toggle Bold" onClick={ () => bridge().toggleStyles({ bold: true }) } />
+                  <Btn label="toggle B+I" onClick={ () => bridge().toggleStyles({ bold: true, italic: true }) } />
+                  <Btn label="remove Bold" onClick={ () => bridge().removeStyles({ bold: true }) } />
+                  <Btn label="Gradient mysticPurpleBlue" onClick={ () => bridge().command.setGradient('mysticPurpleBlue') } />
+                  <Btn label="Gradient tropicalSummer" onClick={ () => bridge().command.setGradient('tropicalSummer') } />
+                  <Btn label="unset Gradient" onClick={ () => bridge().command.unsetGradient() } />
+                  <Btn label="getActiveStyles" onClick={ () => show('getActiveStyles', bridge().getActiveStyles()) } />
+                </Section>
 
-              <Section title="Inline / Styles">
-                <Btn label="Bold" onClick={ () => bridge().command.setBold() } />
-                <Btn label="Italic" onClick={ () => bridge().command.setItalic() } />
-                <Btn label="Underline" onClick={ () => bridge().command.setUnderline() } />
-                <Btn label="toggle Bold" onClick={ () => bridge().toggleStyles({ bold: true }) } />
-                <Btn label="toggle B+I" onClick={ () => bridge().toggleStyles({ bold: true, italic: true }) } />
-                <Btn label="remove Bold" onClick={ () => bridge().removeStyles({ bold: true }) } />
-                <Btn label="Gradient mysticPurpleBlue" onClick={ () => bridge().command.setGradient('mysticPurpleBlue') } />
-                <Btn label="Gradient tropicalSummer" onClick={ () => bridge().command.setGradient('tropicalSummer') } />
-                <Btn label="unset Gradient" onClick={ () => bridge().command.unsetGradient() } />
-                <Btn label="getActiveStyles" onClick={ () => show('getActiveStyles', bridge().getActiveStyles()) } />
-              </Section>
+                <Section title="Images">
+                  <Btn
+                    label="top block"
+                    onClick={ () => safeCall('top/block', () => bridge().setImage({
+                      at: 'top',
+                      preset: 'block',
+                      images: [
+                        { src: IMG_URLS[0], id: 'top-a' },
+                        { src: IMG_URLS[1], id: 'top-b' },
+                      ],
+                    })) }
+                  />
+                  <Btn
+                    label="bottom block"
+                    onClick={ () => safeCall('bottom/block', () => bridge().setImage({
+                      at: 'bottom',
+                      preset: 'block',
+                      images: IMG_URLS.map(src => ({ src })),
+                    })) }
+                  />
+                  <Btn
+                    label="cursor block"
+                    onClick={ () => safeCall('cursor/block', () => bridge().setImage({
+                      at: 'cursor',
+                      preset: 'block',
+                      images: [{ src: IMG_URLS[0] }],
+                    })) }
+                  />
+                  <Btn
+                    label="cursor inline"
+                    onClick={ () => safeCall('cursor/inline', () => bridge().setImage({
+                      at: 'cursor',
+                      preset: 'inline',
+                      images: [{ src: IMG_URLS[0] }],
+                    })) }
+                  />
+                  <Btn
+                    label="cursor custom"
+                    onClick={ () => safeCall('cursor/custom', () => bridge().setImage({
+                      at: 'cursor',
+                      images: [{ src: IMG_URLS[0], id: 'hero', width: '100%', aspectRatio: '16/9', borderRadius: '12px' }],
+                    })) }
+                  />
+                  <Btn
+                    label="updateImage(top-a)"
+                    onClick={ () => safeCall('update', () => bridge().updateImage({ id: 'top-a', attrs: { width: 200 } })) }
+                  />
+                  <Btn
+                    label="removeImage(top-b)"
+                    onClick={ () => safeCall('remove', () => bridge().removeImage({ id: 'top-b' })) }
+                  />
+                  <Btn
+                    label="getImageAttrs(top-a)"
+                    onClick={ () => show('getImageAttrs(top-a)', bridge().getImageAttrs('top-a')) }
+                  />
+                </Section>
 
-              <Section title="Images">
-                <Btn
-                  label="top · block (id=top-a,top-b)"
-                  onClick={ () => safeCall('top/block', () => bridge().setImage({
-                    at: 'top',
-                    preset: 'block',
-                    images: [
-                      { src: IMG_URLS[0], id: 'top-a' },
-                      { src: IMG_URLS[1], id: 'top-b' },
-                    ],
-                  })) }
-                />
-                <Btn
-                  label="bottom · block"
-                  onClick={ () => safeCall('bottom/block', () => bridge().setImage({
-                    at: 'bottom',
-                    preset: 'block',
-                    images: IMG_URLS.map(src => ({ src })),
-                  })) }
-                />
-                <Btn
-                  label="cursor · block"
-                  onClick={ () => safeCall('cursor/block', () => bridge().setImage({
-                    at: 'cursor',
-                    preset: 'block',
-                    images: [{ src: IMG_URLS[0] }],
-                  })) }
-                />
-                <Btn
-                  label="cursor · inline (1em)"
-                  onClick={ () => safeCall('cursor/inline', () => bridge().setImage({
-                    at: 'cursor',
-                    preset: 'inline',
-                    images: [{ src: IMG_URLS[0] }],
-                  })) }
-                />
-                <Btn
-                  label="cursor · custom (aspect 16/9)"
-                  onClick={ () => safeCall('cursor/custom', () => bridge().setImage({
-                    at: 'cursor',
-                    images: [{ src: IMG_URLS[0], id: 'hero', width: '100%', aspectRatio: '16/9', borderRadius: '12px' }],
-                  })) }
-                />
-                <Btn
-                  label="updateImage(top-a → 200px)"
-                  onClick={ () => safeCall('update', () => bridge().updateImage({ id: 'top-a', attrs: { width: 200 } })) }
-                />
-                <Btn
-                  label="removeImage(top-b)"
-                  onClick={ () => safeCall('remove', () => bridge().removeImage({ id: 'top-b' })) }
-                />
-                <Btn
-                  label="getImageAttrs(top-a)"
-                  onClick={ () => show('getImageAttrs(top-a)', bridge().getImageAttrs('top-a')) }
-                />
-              </Section>
+                <Section title="Cursor / Selection">
+                  <Btn label="getTextCursorPosition" onClick={ () => show('cursor', bridge().getTextCursorPosition()) } />
+                  <Btn label="getSelectedText" onClick={ () => show('selected', bridge().getSelectedText()) } />
+                  <Btn label="focus" onClick={ () => bridge().focus() } />
+                </Section>
 
-              <Section title="Cursor / Selection">
-                <Btn label="getTextCursorPosition" onClick={ () => show('cursor', bridge().getTextCursorPosition()) } />
-                <Btn label="getSelectedText" onClick={ () => show('selected', bridge().getSelectedText()) } />
-                <Btn label="focus" onClick={ () => bridge().focus() } />
-              </Section>
+                <Section title="Editor state">
+                  <Btn label="isEditable" onClick={ () => show('isEditable', bridge().isEditable()) } />
+                  <Btn label="setEditable(false)" onClick={ () => bridge().setEditable(false) } />
+                  <Btn label="setEditable(true)" onClick={ () => bridge().setEditable(true) } />
+                  <Btn label="isEmpty" onClick={ () => show('isEmpty', bridge().isEmpty()) } />
+                  <Btn label="undo" onClick={ () => bridge().undo() } />
+                  <Btn label="redo" onClick={ () => bridge().redo() } />
+                </Section>
 
-              <Section title="Editor state">
-                <Btn label="isEditable" onClick={ () => show('isEditable', bridge().isEditable()) } />
-                <Btn label="setEditable(false)" onClick={ () => bridge().setEditable(false) } />
-                <Btn label="setEditable(true)" onClick={ () => bridge().setEditable(true) } />
-                <Btn label="isEmpty" onClick={ () => show('isEmpty', bridge().isEmpty()) } />
-                <Btn label="undo" onClick={ () => bridge().undo() } />
-                <Btn label="redo" onClick={ () => bridge().redo() } />
-              </Section>
+                <Section title="Text Direction">
+                  <Btn label="RTL" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('rtl')) } />
+                  <Btn label="LTR" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('ltr')) } />
+                  <Btn label="Auto" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('auto')) } />
+                </Section>
 
-              <Section title="Text Direction">
-                <Btn label="RTL" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('rtl')) } />
-                <Btn label="LTR" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('ltr')) } />
-                <Btn label="Auto" onClick={ () => safeCall('setTextDirection', () => bridge().setTextDirection('auto')) } />
-              </Section>
+                <Section title="Layout">
+                  <Btn label="setBottomMargin(160)" onClick={ () => bridge().setBottomMargin(160) } />
+                  <Btn label="setBottomMargin(0)" onClick={ () => bridge().setBottomMargin(0) } />
+                </Section>
 
-              <Section title="Layout">
-                <Btn label="setBottomMargin(160)" onClick={ () => bridge().setBottomMargin(160) } />
-                <Btn label="setBottomMargin(0)" onClick={ () => bridge().setBottomMargin(0) } />
-              </Section>
+                <Section title="Typography">
+                  <Btn
+                    label="Large text"
+                    onClick={ () => safeCall('setTypography/large', () => bridge().setTypography({
+                      heading1: { fontSize: '22px', fontWeight: '700' },
+                      heading2: { fontSize: '20px', fontWeight: '700' },
+                      heading3: { fontSize: '19px' },
+                      paragraph: { fontSize: '18px', lineHeight: '2' },
+                      list: { fontSize: '18px' },
+                      code: { fontSize: '14px' },
+                      inlineCode: { fontSize: '16px' },
+                      blockquote: { fontSize: '18px' },
+                    })) }
+                  />
+                  <Btn
+                    label="Small text"
+                    onClick={ () => safeCall('setTypography/small', () => bridge().setTypography({
+                      heading1: { fontSize: '16px' },
+                      heading2: { fontSize: '15px' },
+                      heading3: { fontSize: '14px' },
+                      paragraph: { fontSize: '13px', lineHeight: '1.6' },
+                      list: { fontSize: '13px' },
+                      code: { fontSize: '11px' },
+                    })) }
+                  />
+                  <Btn
+                    label="Reset"
+                    onClick={ () => safeCall('setTypography/reset', () => bridge().setTypography({})) }
+                  />
+                </Section>
+              </div>
 
-              <Section title="Typography">
-                <Btn
-                  label="大号（老年模式）"
-                  onClick={ () => safeCall('setTypography/large', () => bridge().setTypography({
-                    heading1: { fontSize: '22px', fontWeight: '700' },
-                    heading2: { fontSize: '20px', fontWeight: '700' },
-                    heading3: { fontSize: '19px' },
-                    paragraph: { fontSize: '18px', lineHeight: '2' },
-                    list: { fontSize: '18px' },
-                    code: { fontSize: '14px' },
-                    inlineCode: { fontSize: '16px' },
-                    blockquote: { fontSize: '18px' },
-                  })) }
-                />
-                <Btn
-                  label="小号"
-                  onClick={ () => safeCall('setTypography/small', () => bridge().setTypography({
-                    heading1: { fontSize: '16px' },
-                    heading2: { fontSize: '15px' },
-                    heading3: { fontSize: '14px' },
-                    paragraph: { fontSize: '13px', lineHeight: '1.6' },
-                    list: { fontSize: '13px' },
-                    code: { fontSize: '11px' },
-                  })) }
-                />
-                <Btn
-                  label="重置默认"
-                  onClick={ () => safeCall('setTypography/reset', () => bridge().setTypography({})) }
-                />
-              </Section>
-
-              <div style={ { padding: 8, borderTop: '1px solid #333' } }>
-                <div style={ { fontSize: 11, color: '#9aa', marginBottom: 4 } }>Output</div>
+              <div className="shrink-0 border-t border-border bg-background px-4 py-3">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text3">Output</div>
+                  <button
+                    className="h-7 rounded-md border border-border bg-background2 px-2 text-[11px] font-medium text-text2 transition-colors hover:bg-background3"
+                    type="button"
+                    onClick={ () => setOutput('') }
+                  >
+                    Clear
+                  </button>
+                </div>
                 <pre
-                  style={ {
-                    background: '#0b1221',
-                    color: '#cbd5e1',
-                    padding: 6,
-                    maxHeight: 200,
-                    overflow: 'auto',
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-all',
-                    margin: 0,
-                    fontSize: 11,
-                  } }
+                  className="m-0 max-h-[30dvh] min-h-24 overflow-auto rounded-md border border-border bg-background2 p-3 font-mono text-[11px] leading-5 text-text2 whitespace-pre-wrap break-all"
                 >
                   { output || '(点按钮触发；getX 类方法会把结果打在这里，其余写到控制台)' }
                 </pre>
               </div>
             </>
           ) }
-    </div>
+    </aside>
   )
+}
+
+type SectionProps = {
+  /** 分组标题 */
+  title: string
+  /** 分组内容 */
+  children: ReactNode
+}
+
+type BtnProps = {
+  /** 按钮文案 */
+  label: string
+  /** 点击动作 */
+  onClick: () => void
 }

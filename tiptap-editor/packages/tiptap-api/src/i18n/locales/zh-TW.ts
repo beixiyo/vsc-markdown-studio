@@ -71,9 +71,6 @@ export const zhTW: Translations = {
     open: '在新視窗開啟',
     remove: '移除連結',
   },
-  speaker: {
-    speaker: '說話人 {{number}}',
-  },
   comment: {
     commentPanel: '評論面板',
     addComment: '新增評論',

@@ -509,7 +509,7 @@
       "content": [
         {
           "type": "text",
-          "text": "自定义说话人节点"
+          "text": "自定义扩展示例"
         }
       ]
     },
@@ -520,20 +520,8 @@
       },
       "content": [
         {
-          "type": "speaker",
-          "attrs": {
-            "originalLabel": "2"
-          }
-        },
-        {
           "type": "text",
-          "text": " This speaker should be localized as 'Speaker 3' or '说话人 3'.\n"
-        },
-        {
-          "type": "speaker",
-          "attrs": {
-            "originalLabel": "1"
-          }
+          "text": "This paragraph is rendered as normal Markdown text and can be used to verify extension compatibility.\n"
         }
       ]
     },
