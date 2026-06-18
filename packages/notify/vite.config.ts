@@ -15,8 +15,7 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', '@blocknote/core'],
+      external: ['react', 'react-dom'],
     },
   },
 })
-

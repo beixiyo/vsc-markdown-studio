@@ -1,7 +1,4 @@
 packages:
   - 'packages/*'
-  - '!packages/markdown-mobile' # 暂不打包 Webview 编辑器
-  - '!packages/markdown-studio' # 暂不打包 Webview 编辑器
   - '!packages/vsc-markdown-studio' # 暂不打包 VSCode 插件
-  #  - 'blocknote/**'
   - 'tiptap-editor/**'

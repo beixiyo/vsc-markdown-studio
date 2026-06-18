@@ -1,6 +1,5 @@
 /**
  * 渐变样式类型集合
- * 与历史上的 `custom-blocknote-gradient-styles` 保持一致
  */
 export type GradientStyleType =
   | 'mysticPurpleBlue'

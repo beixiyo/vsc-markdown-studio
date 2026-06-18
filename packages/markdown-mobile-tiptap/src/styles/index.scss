@@ -1,7 +1,7 @@
 /** Tiptap 编辑器排版样式（直接复用 tiptap-editor 仓库内的 SCSS 模块） */
 @use '../../../../tiptap-editor/src/styles/tiptap/tiptap';
 
-/** 移动端字号覆盖：对齐旧版 markdown-mobile 的排版规范 */
+/** 移动端字号覆盖 */
 .tiptap.ProseMirror {
   p {
     font-size: 16.5px;

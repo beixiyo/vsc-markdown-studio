@@ -3,7 +3,6 @@ import type { GradientStyleType } from 'tiptap-nodes/gradient-highlight'
 import { createMarkdownOperate, getEditorHTML, getEditorJson, setEditorHTML, setEditorMarkdown } from 'tiptap-api'
 import { isGradientType } from 'tiptap-nodes/gradient-highlight'
 
-/** BlockNote 风格的 style key → Tiptap mark 名映射（只处理真正能落到 mark 的 key） */
 const STYLE_KEY_TO_MARK: Record<string, string> = {
   bold: 'bold',
   italic: 'italic',
@@ -35,7 +34,6 @@ export type TextCursorPosition = {
 }
 
 /**
- * 将 BlockNote 风格的 `{ key: value }` 展开为一组 `(markName, attrs)` 对
  * - `{ bold: true }` → `('bold', undefined)`
  * - `{ gradient: 'mysticPurpleBlue' }` → `('highlight', { color: 'mysticPurpleBlue' })`
  */
