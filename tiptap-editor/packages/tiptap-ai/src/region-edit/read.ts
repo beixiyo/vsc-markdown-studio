@@ -4,7 +4,7 @@
 
 import type { Editor } from '@tiptap/core'
 import type { ReadBlocksOptions, ReadBlocksResult, RegionBlock } from './types'
-import { isBlockLossy, serializeBlockHtml, serializeBlockMarkdown } from './content'
+import { isBlockLossy, serializeBlockHtml, serializeBlockMarkdown } from 'tiptap-utils'
 import { buildBlockIndex } from './hash'
 
 /**

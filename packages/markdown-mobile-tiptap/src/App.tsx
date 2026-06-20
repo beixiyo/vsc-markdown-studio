@@ -3,7 +3,9 @@ import { EditorContent } from '@tiptap/react'
 import { notifyNative } from 'notify'
 import { lazy, Suspense, useMemo, useRef } from 'react'
 import { RegionEdit } from 'tiptap-ai'
+import { BlockId } from 'tiptap-diff'
 import { useDefaultEditor } from 'tiptap-editor-core'
+import { useBlockSyncBridge } from './hooks/useBlockSyncBridge'
 import { useNotifyChange } from './hooks/useNotify'
 import { useSetupMDBridge } from './hooks/useSetupMDBridge'
 
@@ -66,12 +68,16 @@ export default function App() {
   const extensions = useMemo(() => [
     /** AI 区域编辑（hash 锚点协议）预览装饰 */
     RegionEdit.configure(),
+    /** 块级 id-diff 同步：给顶层块挂稳定 id（不进 markdown，仅进 PM state / getJSON） */
+    BlockId.configure(),
   ], [])
 
   const editor = useDefaultEditor({ extensions, image: imageOptions, placeholder: false })
 
   useSetupMDBridge(editor, editorElRef)
   useNotifyChange(editor, editorElRef)
+  /** 块级增量上报：变更经 contentDiff 事件发出，原生回执走 MDBridge.sync */
+  useBlockSyncBridge(editor)
 
   const isDev = import.meta.env.DEV
   const editorClass = isDev
