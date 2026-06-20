@@ -7,6 +7,7 @@ import { AI, RegionEdit } from 'tiptap-ai'
 
 import { useAutoSave, useIsBreakpoint, useWindowSize } from 'tiptap-api/react'
 import { CommentMark, CommentStore } from 'tiptap-comment'
+import { BlockId } from 'tiptap-diff'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 import { MermaidNode } from 'tiptap-mermaid'
 
@@ -54,6 +55,8 @@ export const Editor = memo<EditorProps>(({
       AI.configure(),
       /** 区域编辑（hash 锚点协议）装饰扩展 */
       RegionEdit.configure(),
+      /** 块级 id-diff 同步：给顶层块挂稳定 id（块同步测试面板依赖它） */
+      BlockId.configure(),
       /** Slash / Suggestion 扩展 */
       SuggestionTrigger.configure(),
       /** Mermaid 图表节点扩展 */

@@ -7,12 +7,13 @@ import { useLatestCallback } from 'hooks'
 import { FlaskConical, X } from 'lucide-react'
 import { memo, useState } from 'react'
 import { cn } from 'utils'
+import { BlockSyncPanel } from '../block-sync-panel'
 import { MarkdownIOPanel } from '../markdown-io-panel'
 import { RegionEditPanel } from '../region-edit-panel'
 import { GeneralTestSection } from './general-test-section'
 import { ImageTestSection } from './image-test-section'
 
-type TestTab = 'general' | 'image' | 'region' | 'markdown'
+type TestTab = 'general' | 'image' | 'region' | 'markdown' | 'sync'
 
 /**
  * Playground 测试面板：右侧可收起的抽屉，收纳所有测试功能
@@ -101,9 +102,16 @@ export const TestPanel = memo<TestPanelProps>((props) => {
                 label: 'MD I/O',
                 children: <MarkdownIOPanel editor={ editor } />,
               },
+              {
+                value: 'sync',
+                label: '块同步',
+                children: <BlockSyncPanel editor={ editor } />,
+              },
             ].map(item => ({
               ...item,
-              children: <div className="p-4">{ item.children }</div>,
+              // h-full：让每个面板撑满抽屉高度（Tabs 是滑动容器、外层 overflow 被裁剪，
+              /** 各面板需自行用 flex + overflow-auto 管理内部滚动） */
+              children: <div className="h-full p-4">{ item.children }</div>,
             })) }
           />
         </Drawer>

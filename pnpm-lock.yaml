@@ -237,6 +237,9 @@ importers:
       tiptap-api:
         specifier: workspace:*
         version: link:../../tiptap-editor/packages/tiptap-api
+      tiptap-diff:
+        specifier: workspace:*
+        version: link:../../tiptap-editor/packages/tiptap-diff
       tiptap-editor-core:
         specifier: workspace:*
         version: link:../../tiptap-editor/packages/tiptap-editor-core
@@ -363,6 +366,9 @@ importers:
       tiptap-comps:
         specifier: workspace:*
         version: link:packages/tiptap-comps
+      tiptap-diff:
+        specifier: workspace:*
+        version: link:packages/tiptap-diff
       tiptap-editor-core:
         specifier: workspace:*
         version: link:packages/tiptap-editor-core
@@ -479,6 +485,9 @@ importers:
       react-dom:
         specifier: ^19.2.4
         version: 19.2.7(react@19.2.7)
+      tiptap-diff:
+        specifier: workspace:^
+        version: link:../tiptap-diff
       tiptap-utils:
         specifier: workspace:^
         version: link:../tiptap-utils
@@ -584,6 +593,43 @@ importers:
       '@tiptap/markdown':
         specifier: 3.26.0
         version: 3.26.0(@tiptap/core@3.26.0(@tiptap/pm@3.26.0))(@tiptap/pm@3.26.0)
+      '@vitejs/plugin-react':
+        specifier: ^6.0.1
+        version: 6.0.2(babel-plugin-react-compiler@1.0.0)(vite@8.0.16(@types/node@24.13.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
+      vite:
+        specifier: ^8.0.7
+        version: 8.0.16(@types/node@24.13.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
+
+  tiptap-editor/packages/tiptap-diff:
+    dependencies:
+      '@tiptap/core':
+        specifier: 3.26.0
+        version: 3.26.0(@tiptap/pm@3.26.0)
+      '@tiptap/markdown':
+        specifier: 3.26.0
+        version: 3.26.0(@tiptap/core@3.26.0(@tiptap/pm@3.26.0))(@tiptap/pm@3.26.0)
+      '@tiptap/pm':
+        specifier: 3.26.0
+        version: 3.26.0
+      '@tiptap/react':
+        specifier: 3.26.0
+        version: 3.26.0(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.0(@tiptap/pm@3.26.0))(@tiptap/pm@3.26.0)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@tiptap/starter-kit':
+        specifier: 3.26.0
+        version: 3.26.0
+      nanoid:
+        specifier: ^5.1.7
+        version: 5.1.11
+      react:
+        specifier: ^19.2.4
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.4
+        version: 19.2.7(react@19.2.7)
+      tiptap-utils:
+        specifier: workspace:^
+        version: link:../tiptap-utils
+    devDependencies:
       '@vitejs/plugin-react':
         specifier: ^6.0.1
         version: 6.0.2(babel-plugin-react-compiler@1.0.0)(vite@8.0.16(@types/node@24.13.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
@@ -859,6 +905,9 @@ importers:
 
   tiptap-editor/packages/tiptap-utils:
     dependencies:
+      '@tiptap/markdown':
+        specifier: 3.26.0
+        version: 3.26.0(@tiptap/core@3.26.0(@tiptap/pm@3.26.0))(@tiptap/pm@3.26.0)
       '@tiptap/pm':
         specifier: 3.26.0
         version: 3.26.0

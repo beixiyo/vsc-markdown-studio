@@ -3,10 +3,12 @@ import { EditorContent } from '@tiptap/react'
 import { notifyNative } from 'notify'
 import { useMemo, useRef } from 'react'
 import { RegionEdit } from 'tiptap-ai'
+import { BlockId } from 'tiptap-diff'
 import { useDefaultEditor } from 'tiptap-editor-core'
 import { CtxRefNode, SummaryBoundaryNode } from 'tiptap-nodes/ctx-ref'
 import { type SpeakerAttributes, SpeakerNode } from 'tiptap-nodes/speaker'
 import DevPanel from './__dev__/DevPanel'
+import { useBlockSyncBridge } from './hooks/useBlockSyncBridge'
 import { useNotifyChange } from './hooks/useNotify'
 import { useSetupMDBridge } from './hooks/useSetupMDBridge'
 import { speakerAttrsToNativePayload } from './speaker'
@@ -70,6 +72,8 @@ export default function App() {
   const extensions = useMemo(() => [
     /** AI 区域编辑（hash 锚点协议）预览装饰 */
     RegionEdit.configure(),
+    /** 块级 id-diff 同步：给顶层块挂稳定 id（不进 markdown，仅进 PM state / getJSON） */
+    BlockId.configure(),
     SpeakerNode.configure({
       speakerMap: {},
       onClick: (attrs: SpeakerAttributes) => {
@@ -85,6 +89,8 @@ export default function App() {
 
   useSetupMDBridge(editor, editorElRef)
   useNotifyChange(editor, editorElRef)
+  /** 块级增量上报：变更经 contentDiff 事件发出，原生回执走 MDBridge.sync */
+  useBlockSyncBridge(editor)
 
   return (
     <>

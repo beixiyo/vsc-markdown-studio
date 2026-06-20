@@ -162,7 +162,6 @@ export function createRegionEdit(editor: Editor, options?: RegionEditOptions): R
 
 export { RegionOpError } from './apply'
 export { RegionEdit } from './extension'
-export { fnv1a64, hashBlock } from './hash'
 export { REGION_CLASSES } from './preview'
 export { REGION_EDIT_PROTOCOL_VERSION } from './read'
 export type * from './types'

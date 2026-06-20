@@ -11,8 +11,9 @@ import type { Node as PMNode } from '@tiptap/pm/model'
 import type { Transaction } from '@tiptap/pm/state'
 import type { BlockEntry } from './hash'
 import type { RegionErrorCode, RegionOperation, RegionOperationResult } from './types'
+import { hashBlock } from 'tiptap-utils'
 import { parseContentToNodes } from './content'
-import { findBlock, hashBlock } from './hash'
+import { findBlock } from './hash'
 
 /** 带协议错误码的操作异常 */
 export class RegionOpError extends Error {
@@ -241,7 +242,7 @@ function totalSize(nodes: PMNode[]): number {
 }
 
 function toNewHash(nodes: PMNode[]): string | string[] {
-  const hashes = nodes.map(hashBlock)
+  const hashes = nodes.map(node => hashBlock(node))
   return hashes.length === 1
     ? hashes[0]
     : hashes

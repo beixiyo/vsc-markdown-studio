@@ -31,6 +31,7 @@
     "styles": "workspace:*",
     "tiptap-ai": "workspace:*",
     "tiptap-api": "workspace:*",
+    "tiptap-diff": "workspace:*",
     "tiptap-editor-core": "workspace:*",
     "tiptap-nodes": "workspace:*"
   }

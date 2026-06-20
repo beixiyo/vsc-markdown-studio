@@ -14,8 +14,6 @@ export { AI } from './extension'
 export { createPreviewController } from './PreviewController'
 export {
   createRegionEdit,
-  fnv1a64,
-  hashBlock,
   REGION_CLASSES,
   RegionEdit,
   RegionOpError,

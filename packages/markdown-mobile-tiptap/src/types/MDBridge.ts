@@ -90,8 +90,8 @@ export type MDBridge = TiptapOperate & {
   /**
    * 动态调整排版样式（字号、行高、字重等）
    *
-   * 只传需要覆盖的字段，未传的保持默认值。
-   * 传空对象 `{}` 可重置为默认排版。
+   * 只传需要覆盖的字段，未传的保持默认值
+   * 传空对象 `{}` 可重置为默认排版
    *
    * @example
    * ```ts
@@ -128,6 +128,28 @@ export type MDBridge = TiptapOperate & {
     reject: () => void
     /** 当前状态 */
     getState: () => RegionEditState
+  }
+
+  /**
+   * 块级 id-diff 增量同步（编辑器 → 后端）
+   *
+   * web 端在内容变更时按块算出增量，经 `notify` 的 `contentDiff` 事件上报；
+   * 原生侧把载荷转发后端，再用下列方法把结果回执给 web（推进版本 / 要求重推）
+   * 由 `useBlockSyncBridge` 注入，未启用时为 undefined
+   */
+  sync?: {
+    /** 立即计算并发送增量（force=true 即使无变化也发） */
+    flush: (force?: boolean) => void
+    /** 整篇全量重推（首次 / 兜底） */
+    pushFull: () => void
+    /** 原生回执：推进 baseVersion（无回执传输下由原生在后端 ack 后调用） */
+    ack: (version: number) => void
+    /** 原生要求整篇重推（版本不符 / 校验和漂移时） */
+    requestResync: (version?: number) => void
+    /** 当前 baseVersion */
+    getBaseVersion: () => number
+    /** 客户端 id */
+    getClientId: () => string
   }
 }
 

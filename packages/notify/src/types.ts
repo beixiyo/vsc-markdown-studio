@@ -28,6 +28,8 @@ export type NativeEvent =
   | 'aiEditStateChanged'
   /** AI 区域编辑冲突：用户编辑了预览/流式区域，会话已终止 */
   | 'aiEditConflict'
+  /** 内容块级增量（BlockSyncPayload）：替代全量 contentChanged 上报，仅传变化块 */
+  | 'contentDiff'
 
 /** iOS WKWebView 注入对象 */
 export interface Webkit {

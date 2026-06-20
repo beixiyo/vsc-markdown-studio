@@ -1,8 +1,8 @@
 {
-  "name": "tiptap-api",
+  "type": "module",
+  "name": "tiptap-diff",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,40 +16,28 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       }
-    },
-    "./react": {
-      "require": {
-        "types": "./dist/react/index.d.ts",
-        "default": "./dist/react/index.cjs"
-      },
-      "import": {
-        "types": "./dist/react/index.d.ts",
-        "default": "./dist/react/index.js"
-      }
     }
   },
   "files": [
     "dist"
   ],
-  "peerDependencies": {
-    "@tiptap/core": "3.26.0",
-    "@tiptap/markdown": "3.26.0",
-    "@tiptap/pm": "3.26.0",
-    "@tiptap/react": "3.26.0",
-    "@tiptap/starter-kit": "3.26.0",
-    "i18n": "workspace:*",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
-  },
   "scripts": {
     "build": "vite build",
     "lint": "eslint ./src --fix --quiet",
     "test": "vitest run",
     "test:watch": "vitest"
   },
+  "peerDependencies": {
+    "@tiptap/core": "3.26.0",
+    "@tiptap/markdown": "3.26.0",
+    "@tiptap/pm": "3.26.0",
+    "@tiptap/react": "3.26.0",
+    "@tiptap/starter-kit": "3.26.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
   "dependencies": {
-    "hooks": "workspace:^",
-    "tiptap-diff": "workspace:^",
+    "nanoid": "^5.1.7",
     "tiptap-utils": "workspace:^"
   },
   "devDependencies": {
