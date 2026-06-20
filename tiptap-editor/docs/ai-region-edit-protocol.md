@@ -337,7 +337,7 @@ sequenceDiagram
 |------|------|------|
 | 寻址层 | `tiptap-editor/packages/tiptap-api/src/operate/aiOperations.ts`（新增） | hash 生成、`readBlocks`、target → `{from, to}` 解析、操作分发 |
 | 渲染层 | `tiptap-editor/packages/tiptap-ai/src/TiptapEditorBridge.ts`（小改） | `SelectionPayload` 支持外部注入 range（结构已预留） |
-| 桥接层 | `packages/markdown-mobile-tiptap/src/hooks/useSetupMDBridge.ts`（新增 `aiEdit` 命名空间） | 暴露本协议全部 API + 事件回调 |
+| 桥接层 | `packages/markdown-mobile/src/hooks/useSetupMDBridge.ts`（新增 `aiEdit` 命名空间） | 暴露本协议全部 API + 事件回调 |
 | 类型契约 | `tiptap-editor/packages/tiptap-api/src/operate/aiOperations.types.ts`（新增） | 本协议的 TS 类型，三方共享的唯一真实来源 |
 
 ---

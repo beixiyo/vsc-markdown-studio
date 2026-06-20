@@ -185,8 +185,8 @@ type RegionErrorCode =
 
 ## 4. 测试与示例
 
-- 协议行为：`packages/markdown-mobile-tiptap/src/__tests__/ai-edit.test.ts`（15 项）
-- 能力边界（自定义节点写入 / 老文档自举 / 精确落点 / 多轮替换 / 三通道）：`packages/markdown-mobile-tiptap/src/__tests__/region-edit-capability.test.ts`
+- 协议行为：`tiptap-editor/packages/tiptap-region/src/__tests__/ai-edit.test.ts`（15 项）
+- 能力边界（自定义节点写入 / 老文档自举 / 精确落点 / 多轮替换 / 三通道）：`tiptap-editor/packages/tiptap-region/src/__tests__/region-edit-capability.test.ts`
 - 肉眼演示：mobile dev 页 DevPanel「AI edit」区（直接追加 / 假流式按钮）
 
 ---

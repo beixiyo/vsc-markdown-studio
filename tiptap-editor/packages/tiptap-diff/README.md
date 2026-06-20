@@ -50,7 +50,7 @@ useBlockSync({
 
 ### 移动端 WebView
 
-已在 `markdown-mobile-tiptap` 接好：`App.tsx` 注册 `BlockId`，`useBlockSyncBridge` 把增量经
+已在 `markdown-mobile` 接好：`App.tsx` 注册 `BlockId`，`useBlockSyncBridge` 把增量经
 `notifyNative('contentDiff', payload)` 发给原生（单向，乐观提交）。原生侧：
 
 ```ts

@@ -178,7 +178,7 @@ importers:
         specifier: ^19.2.4
         version: 19.2.7
 
-  packages/markdown-mobile-tiptap:
+  packages/markdown-mobile:
     dependencies:
       '@tiptap/core':
         specifier: 3.26.0
