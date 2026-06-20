@@ -2,11 +2,17 @@
  * 工具函数统一导出
  */
 
+/** 顶层块序列化 / lossy 检测（region-edit 与 block-sync 共用） */
+export * from './block-serialize'
+
 /** 日期处理相关 */
 export * from './date'
 
 /** 编辑器相关 */
 export * from './editor'
+
+/** 块 hash 基元（region-edit 与 block-sync 共用） */
+export * from './hash'
 
 /** 节点操作相关 */
 export * from './node'
