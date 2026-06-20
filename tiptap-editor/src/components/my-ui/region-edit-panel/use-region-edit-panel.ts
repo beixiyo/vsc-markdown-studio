@@ -5,10 +5,10 @@ import type {
   RegionEditState,
   RegionOperationResult,
   StreamOpType,
-} from 'tiptap-ai'
+} from 'tiptap-region'
 import { useLatestCallback } from 'hooks'
 import { useEffect, useState } from 'react'
-import { createRegionEdit } from 'tiptap-ai'
+import { createRegionEdit } from 'tiptap-region'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 

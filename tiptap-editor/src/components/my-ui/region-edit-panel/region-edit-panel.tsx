@@ -1,7 +1,7 @@
 'use client'
 
 import type { Editor } from '@tiptap/react'
-import type { RegionEditState } from 'tiptap-ai'
+import type { RegionEditState } from 'tiptap-region'
 import { Button, Textarea } from 'comps'
 import { memo } from 'react'
 import { cn } from 'utils'

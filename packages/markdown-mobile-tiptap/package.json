@@ -33,6 +33,7 @@
     "tiptap-api": "workspace:*",
     "tiptap-diff": "workspace:*",
     "tiptap-editor-core": "workspace:*",
-    "tiptap-nodes": "workspace:*"
+    "tiptap-nodes": "workspace:*",
+    "tiptap-region": "workspace:*"
   }
 }

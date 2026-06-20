@@ -11,8 +11,8 @@ import type { Transaction } from '@tiptap/pm/state'
 import type { BeginStreamPayload, RegionContentFormat } from './types'
 import { rafThrottle } from '@jl-org/tool'
 import { closeHistory } from '@tiptap/pm/history'
-import { AI_META } from '../constants'
 import { RegionOpError } from './apply'
+import { REGION_META } from './constants'
 import { parseContentToNodes } from './content'
 import { clearRegionDecorations, setRegionDecorations } from './decorations'
 import { findBlock } from './hash'
@@ -80,8 +80,8 @@ export function createStreamSession(editor: Editor): StreamSession {
     const { from, to } = state.range
     const tr = editor.state.tr
       .replaceWith(from, to, nodes)
-      .setMeta(AI_META.SKIP_HISTORY, false)
-      .setMeta(AI_META.INTERNAL, true)
+      .setMeta(REGION_META.SKIP_HISTORY, false)
+      .setMeta(REGION_META.INTERNAL, true)
     editor.view.dispatch(tr)
 
     const newTo = from + nodes.reduce((sum, node) => sum + node.nodeSize, 0)
@@ -110,8 +110,8 @@ export function createStreamSession(editor: Editor): StreamSession {
       return
     }
 
-    tr.setMeta(AI_META.SKIP_HISTORY, false)
-      .setMeta(AI_META.INTERNAL, true)
+    tr.setMeta(REGION_META.SKIP_HISTORY, false)
+      .setMeta(REGION_META.INTERNAL, true)
     editor.view.dispatch(tr)
   }
 
@@ -232,7 +232,7 @@ export function createStreamSession(editor: Editor): StreamSession {
             : from
           const tr = editor.state.tr
             .replaceWith(from, to, nodes)
-            .setMeta(AI_META.INTERNAL, true)
+            .setMeta(REGION_META.INTERNAL, true)
           /** 显式关闭历史分组，让本次流式修改独立成一条 undo 记录 */
           closeHistory(tr)
           editor.view.dispatch(tr)

@@ -3,7 +3,7 @@ import type { RefObject } from 'react'
 import type { MDBridge, TypographyConfig } from '../types/MDBridge'
 import { notifyNative } from 'notify'
 import { useEffect } from 'react'
-import { createRegionEdit } from 'tiptap-ai'
+import { createRegionEdit } from 'tiptap-region'
 import { createTiptapOperate } from '../operate/create'
 import { getImageAttrsById, removeImageById, setImage, updateImageById } from '../operate/image'
 

@@ -2,15 +2,16 @@
 
 import type { EditorProps } from './types'
 import { memo, useEffect, useRef, useState } from 'react'
-import { AI, RegionEdit } from 'tiptap-ai'
+import { AI } from 'tiptap-ai'
 
 import { useAutoSave, useIsBreakpoint, useWindowSize } from 'tiptap-api/react'
 import { CommentMark, CommentStore } from 'tiptap-comment'
 import { BlockId } from 'tiptap-diff'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 import { MermaidNode } from 'tiptap-mermaid'
-
 import { ImageUploadNode } from 'tiptap-nodes'
+
+import { RegionEdit } from 'tiptap-region'
 import { SuggestionTrigger } from 'tiptap-trigger'
 import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-utils'
 import content from './data/content.json' with { type: 'json' }

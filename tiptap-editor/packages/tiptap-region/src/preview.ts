@@ -13,7 +13,7 @@ import type { Step } from '@tiptap/pm/transform'
 import type { BuiltOperations } from './apply'
 import { closeHistory } from '@tiptap/pm/history'
 import { Mapping } from '@tiptap/pm/transform'
-import { AI_META } from '../constants'
+import { REGION_META } from './constants'
 import { clearRegionDecorations, getRegionDecorationRanges, setRegionDecorations } from './decorations'
 
 /** 预览高亮样式（与选区 AI 保持一致的视觉语言） */
@@ -68,8 +68,8 @@ export function createApplyPreviewSession(editor: Editor): ApplyPreviewSession {
       return false
     }
 
-    tr.setMeta(AI_META.SKIP_HISTORY, false)
-      .setMeta(AI_META.INTERNAL, true)
+    tr.setMeta(REGION_META.SKIP_HISTORY, false)
+      .setMeta(REGION_META.INTERNAL, true)
     editor.view.dispatch(tr)
     return true
   }
@@ -83,8 +83,8 @@ export function createApplyPreviewSession(editor: Editor): ApplyPreviewSession {
       externalMapping = null
 
       built.tr
-        .setMeta(AI_META.SKIP_HISTORY, false)
-        .setMeta(AI_META.INTERNAL, true)
+        .setMeta(REGION_META.SKIP_HISTORY, false)
+        .setMeta(REGION_META.INTERNAL, true)
       editor.view.dispatch(built.tr)
 
       setRegionDecorations(editor, built.decoRanges, REGION_CLASSES.PREVIEW)
@@ -112,7 +112,7 @@ export function createApplyPreviewSession(editor: Editor): ApplyPreviewSession {
         if (ok) {
           /** 显式关闭历史分组，让本次 AI 修改独立成一条 undo 记录，不与用户此前输入合并 */
           closeHistory(tr)
-          tr.setMeta(AI_META.INTERNAL, true)
+          tr.setMeta(REGION_META.INTERNAL, true)
           editor.view.dispatch(tr)
         }
       }

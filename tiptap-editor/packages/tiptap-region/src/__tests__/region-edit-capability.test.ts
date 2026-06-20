@@ -9,8 +9,8 @@
  * 内容通道：markdown（含 `![alt](src)` 图片语法）/ html / json（ProseMirror JSON，无损首选）
  */
 
-import { createRegionEdit, RegionEdit } from 'tiptap-ai'
 import { describe, expect, it } from 'vitest'
+import { createRegionEdit, RegionEdit } from '../index'
 import { makeEditor } from './helpers'
 
 function setup(markdown = '# 原有文档\n\n这是一篇完全没有任何注释标记的旧文档') {

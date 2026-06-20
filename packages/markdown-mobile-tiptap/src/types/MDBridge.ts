@@ -1,4 +1,5 @@
 import type { Editor } from '@tiptap/core'
+import type { ImageAttrs } from 'tiptap-nodes/image'
 import type {
   ApplyPayload,
   ApplyResult,
@@ -7,8 +8,7 @@ import type {
   ReadBlocksOptions,
   ReadBlocksResult,
   RegionEditState,
-} from 'tiptap-ai'
-import type { ImageAttrs } from 'tiptap-nodes/image'
+} from 'tiptap-region'
 import type { TiptapOperate } from '../operate'
 import type { SetImagePayload } from '../operate/image'
 

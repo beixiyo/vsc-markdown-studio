@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
         'tiptap-api/react': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-api/src/react/index.ts', import.meta.url)),
         'tiptap-api': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-api/src/index.ts', import.meta.url)),
         'tiptap-diff': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-diff/src/index.ts', import.meta.url)),
+        'tiptap-region': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-region/src/index.ts', import.meta.url)),
         'i18n/react': fileURLToPath(new URL('../i18n/src/react/index.ts', import.meta.url)),
         'tiptap-nodes/gradient-highlight': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/gradient-highlight/index.ts', import.meta.url)),
         'tiptap-nodes/code-block': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/code-block/index.ts', import.meta.url)),

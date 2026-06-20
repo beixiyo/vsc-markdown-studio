@@ -8,7 +8,7 @@
 import type { Editor } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
-import { AI_META } from '../constants'
+import { REGION_META } from './constants'
 
 export const REGION_DECORATION_KEY = new PluginKey<DecorationSet>('region-edit-decoration')
 
@@ -49,7 +49,7 @@ export function setRegionDecorations(editor: Editor, ranges: DecoRange[], classN
 
   const tr = editor.state.tr
     .setMeta(REGION_DECORATION_KEY, DecorationSet.create(editor.state.doc, decorations))
-    .setMeta(AI_META.INTERNAL, true)
+    .setMeta(REGION_META.INTERNAL, true)
   editor.view.dispatch(tr)
 }
 
@@ -62,7 +62,7 @@ export function clearRegionDecorations(editor: Editor) {
 
   const tr = editor.state.tr
     .setMeta(REGION_DECORATION_KEY, DecorationSet.empty)
-    .setMeta(AI_META.INTERNAL, true)
+    .setMeta(REGION_META.INTERNAL, true)
   editor.view.dispatch(tr)
 }
 

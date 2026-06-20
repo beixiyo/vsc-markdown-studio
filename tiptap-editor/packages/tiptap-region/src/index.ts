@@ -1,5 +1,7 @@
 /**
- * AI 区域编辑（Hash 锚点协议）门面
+ * 区域编辑（Hash 锚点协议）门面 —— 外部系统（AI / 协同 / 服务端自动化）→ 编辑器 的写入通道
+ *
+ * 与 `tiptap-diff`（编辑器 → 后端，稳定 id 增量上报）互为反向，二者共享 `tiptap-utils` 的块序列化/hash 基元。
  *
  * 协议文档：tiptap-editor/docs/ai-region-edit-protocol.md
  *
@@ -24,8 +26,8 @@ import type {
   RegionEditOptions,
   RegionEditState,
 } from './types'
-import { AI_META } from '../constants'
 import { buildOperationsTransaction } from './apply'
+import { REGION_META } from './constants'
 import { createApplyPreviewSession } from './preview'
 import { readBlocks } from './read'
 import { createStreamSession } from './stream'
@@ -72,7 +74,7 @@ export function createRegionEdit(editor: Editor, options?: RegionEditOptions): R
     if (transaction.docChanged) {
       docVersion += 1
     }
-    if (transaction.getMeta(AI_META.INTERNAL) || !transaction.docChanged) {
+    if (transaction.getMeta(REGION_META.INTERNAL) || !transaction.docChanged) {
       return
     }
 
@@ -116,7 +118,7 @@ export function createRegionEdit(editor: Editor, options?: RegionEditOptions): R
         setState('preview')
       }
       else {
-        built.tr.setMeta(AI_META.INTERNAL, true)
+        built.tr.setMeta(REGION_META.INTERNAL, true)
         editor.view.dispatch(built.tr)
       }
 

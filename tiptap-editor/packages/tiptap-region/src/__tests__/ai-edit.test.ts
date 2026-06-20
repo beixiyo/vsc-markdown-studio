@@ -4,8 +4,8 @@
  * 协议文档：tiptap-editor/docs/ai-region-edit-protocol.md
  */
 
-import { createRegionEdit, RegionEdit } from 'tiptap-ai'
 import { describe, expect, it } from 'vitest'
+import { createRegionEdit, RegionEdit } from '../index'
 import { makeEditor } from './helpers'
 
 const BASE_MD = [

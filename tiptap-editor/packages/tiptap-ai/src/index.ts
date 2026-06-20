@@ -13,32 +13,6 @@ export {
 export { AI } from './extension'
 export { createPreviewController } from './PreviewController'
 export {
-  createRegionEdit,
-  REGION_CLASSES,
-  RegionEdit,
-  RegionOpError,
-} from './region-edit'
-export type {
-  ApplyOptions,
-  ApplyPayload,
-  ApplyResult,
-  BeginStreamPayload,
-  BeginStreamResult,
-  ReadBlocksOptions,
-  ReadBlocksResult,
-  RegionBlock,
-  RegionContent,
-  RegionContentFormat,
-  RegionEditController,
-  RegionEditOptions,
-  RegionEditState,
-  RegionErrorCode,
-  RegionOperation,
-  RegionOperationResult,
-  RegionOpType,
-  StreamOpType,
-} from './region-edit'
-export {
   createTiptapEditorBridge,
   getTiptapCursorPayload,
   getTiptapSelectionPayload,
