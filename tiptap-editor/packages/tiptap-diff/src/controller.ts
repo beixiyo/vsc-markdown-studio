@@ -64,6 +64,16 @@ export interface BlockSyncController {
   ack: (version: number) => void
   /** native 侧要求整篇重推 */
   requestResync: (version?: number) => void
+  /**
+   * 暂停同步：丢弃待发的防抖任务，期间所有 `update` 不再调度 flush
+   *
+   * 用于「外部预览态」—— 如 tiptap-region 的 preview / streaming 会把未采纳的内容
+   * 临时写进 doc；暂停可避免把这些中间态推到后端。与 region 的 `onStateChange` 配合：
+   * 进入 preview/streaming 时 `pause()`，回到 idle 时 `resume()`
+   */
+  pause: () => void
+  /** 恢复同步：调度一次防抖 flush，把暂停期间累积的「已提交」状态同步出去 */
+  resume: () => void
   /** 设置 baseVersion（不触发同步） */
   setBaseVersion: (version: number) => void
   getBaseVersion: () => number
@@ -89,6 +99,8 @@ export function createBlockSync(editor: Editor, options: BlockSyncOptions): Bloc
   let pendingFlush = false
   let pendingForce = false
   let destroyed = false
+  /** 外部预览态门控：暂停期间不调度、不发送（见 pause/resume） */
+  let paused = false
   /**
    * 带外（out-of-band）版本控制纪元：ack / requestResync / snapshotBaseline / setBaseVersion
    * 每次调用 +1。flush 发送前快照当前纪元，await 回来若纪元已变，说明期间有带外控制接管了
@@ -105,6 +117,9 @@ export function createBlockSync(editor: Editor, options: BlockSyncOptions): Bloc
   }, debounceMs)
 
   const handleUpdate = () => {
+    /** 暂停期间（外部预览态）不调度，待 resume 后再统一同步已提交状态 */
+    if (paused)
+      return
     debouncedFlush.schedule()
   }
 
@@ -118,7 +133,7 @@ export function createBlockSync(editor: Editor, options: BlockSyncOptions): Bloc
   }
 
   async function flush(force = false): Promise<void> {
-    if (destroyed)
+    if (destroyed || paused)
       return
 
     /** 已有一次发送在途：标记待办，待回执后合并补发，避免乱序 */
@@ -221,6 +236,24 @@ export function createBlockSync(editor: Editor, options: BlockSyncOptions): Bloc
       controlEpoch += 1
       baseVersion = version
     },
+
+    pause() {
+      paused = true
+      /** 丢掉在途的防抖任务，避免预览态被 timer 推送出去 */
+      debouncedFlush.cancel()
+    },
+
+    resume() {
+      if (!paused)
+        return
+      paused = false
+      /**
+       * 走防抖而非立即 flush：preview→streaming 之间会有一瞬 idle（rejectActive 触发），
+       * 若立即发会把转场中间态推出去；调度后被随即的 pause 取消，只有稳定停在 idle 才真发
+       */
+      debouncedFlush.schedule()
+    },
+
     getBaseVersion: () => baseVersion,
     getClientId: () => clientId,
 

@@ -370,6 +370,85 @@ describe('createBlockSync controller', () => {
   })
 })
 
+describe('pause/resume 门控（外部预览态）', () => {
+  /** 模拟 region-edit accept：暂停期间的编辑不发，恢复后只补发一次最终态 */
+  it('pause 期间多次编辑不发送，resume 后合并为一次', async () => {
+    vi.useFakeTimers()
+    const editor = setup(paras('a'))
+    const sent: BlockSyncPayload[] = []
+    const sync = createBlockSync(editor, {
+      debounceMs: 200,
+      onDiff: (p) => {
+        sent.push(p)
+        return { status: 'ack', version: p.baseVersion + 1 }
+      },
+    })
+    cleanups.push(() => sync.destroy())
+    sync.snapshotBaseline(0)
+
+    sync.pause()
+    editor.commands.insertContentAt(blockInnerStart(editor, 0), 'Z')
+    editor.commands.insertContentAt(blockInnerStart(editor, 0), 'Y')
+    await vi.advanceTimersByTimeAsync(300)
+    expect(sent).toHaveLength(0) // 暂停期间防抖不调度
+
+    sync.resume()
+    await vi.advanceTimersByTimeAsync(300)
+    expect(sent).toHaveLength(1) // 恢复后只发一次
+    expect(sent[0].ops).toHaveLength(1) // 同一块两次编辑合并为一条 upsert
+  })
+
+  /** 模拟 region-edit reject：预览内容被还原，doc 回到基线 → 无增量可发 */
+  it('pause 期间编辑后又还原（reject），resume 不发送', async () => {
+    vi.useFakeTimers()
+    const editor = setup(paras('a'))
+    const sent: BlockSyncPayload[] = []
+    const sync = createBlockSync(editor, {
+      debounceMs: 200,
+      onDiff: (p) => {
+        sent.push(p)
+        return { status: 'ack', version: p.baseVersion + 1 }
+      },
+    })
+    cleanups.push(() => sync.destroy())
+    sync.snapshotBaseline(0)
+
+    sync.pause()
+    editor.commands.insertContentAt(1, 'Z') // 预览内容 'Za'
+    editor.commands.deleteRange({ from: 1, to: 2 }) // 还原回 'a'
+    sync.resume()
+    await vi.advanceTimersByTimeAsync(300)
+    expect(sent).toHaveLength(0) // 与基线一致 → 无 diff
+  })
+
+  /** 模拟 preview→streaming 转场的瞬时 idle：resume 紧接 pause，不应把中间态发出去 */
+  it('转场瞬时 resume 被随即 pause 取消，稳定 idle 后才发', async () => {
+    vi.useFakeTimers()
+    const editor = setup(paras('a'))
+    const sent: BlockSyncPayload[] = []
+    const sync = createBlockSync(editor, {
+      debounceMs: 200,
+      onDiff: (p) => {
+        sent.push(p)
+        return { status: 'ack', version: p.baseVersion + 1 }
+      },
+    })
+    cleanups.push(() => sync.destroy())
+    sync.snapshotBaseline(0)
+
+    sync.pause()
+    editor.commands.insertContentAt(blockInnerStart(editor, 0), 'Z')
+    sync.resume() // 瞬时 idle：调度防抖
+    sync.pause() // 立即又进 streaming：取消调度
+    await vi.advanceTimersByTimeAsync(300)
+    expect(sent).toHaveLength(0) // 中间态没被发出去
+
+    sync.resume() // 稳定停在 idle（accept）
+    await vi.advanceTimersByTimeAsync(300)
+    expect(sent).toHaveLength(1)
+  })
+})
+
 describe('blockId 生成器健壮性', () => {
   it('generateId 返回重复值时仍保证块 id 唯一', () => {
     const editor = setup(paras('a', 'b', 'c'), BlockId.configure({ generateId: () => 'dup' }))

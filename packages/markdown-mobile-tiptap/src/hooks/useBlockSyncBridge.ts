@@ -23,6 +23,11 @@ export function useBlockSyncBridge(editor: Editor | null, options?: { debounceMs
 
     const controller = createBlockSync(editor, {
       debounceMs: options?.debounceMs ?? 500,
+      /**
+       * lossy 块降级用 JSON 而非默认 html：要让 blockId 跨重载稳定、且自定义节点/富属性
+       * （图片宽高、渐变高亮等）逐字节无损地存回后端，必须用整块 PM JSON；html 对富节点有损
+       */
+      lossyFormat: 'json',
       onDiff: payload => notifyNative('contentDiff', payload),
     })
 
@@ -38,6 +43,8 @@ export function useBlockSyncBridge(editor: Editor | null, options?: { debounceMs
         requestResync: version => controller.requestResync(version),
         getBaseVersion: () => controller.getBaseVersion(),
         getClientId: () => controller.getClientId(),
+        pause: () => controller.pause(),
+        resume: () => controller.resume(),
       }
     }
     else {

@@ -74,8 +74,10 @@ export function useBlockSync(options: UseBlockSyncOptions): UseBlockSyncResult {
   const requestResync = useLatestCallback((version?: number) => controllerRef.current?.requestResync(version))
   const getBaseVersion = useLatestCallback(() => controllerRef.current?.getBaseVersion() ?? 0)
   const getClientId = useLatestCallback(() => controllerRef.current?.getClientId() ?? '')
+  const pause = useLatestCallback(() => controllerRef.current?.pause())
+  const resume = useLatestCallback(() => controllerRef.current?.resume())
 
-  return { flush, pushFull, ack, requestResync, getBaseVersion, getClientId }
+  return { flush, pushFull, ack, requestResync, getBaseVersion, getClientId, pause, resume }
 }
 
 export interface UseBlockSyncOptions extends Omit<BlockSyncOptions, 'onDiff' | 'onError'> {
@@ -105,4 +107,8 @@ export interface UseBlockSyncResult {
   requestResync: (version?: number) => void
   getBaseVersion: () => number
   getClientId: () => string
+  /** 暂停同步（外部预览态期间，如 region-edit preview/streaming） */
+  pause: () => void
+  /** 恢复同步并补发已提交状态 */
+  resume: () => void
 }

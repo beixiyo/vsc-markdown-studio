@@ -66,9 +66,22 @@ export function useSetupMDBridge(
 
     const base = createTiptapOperate(editor)
 
-    /** AI 区域编辑控制器：状态与冲突经 notify 上报原生 */
+    /**
+     * AI 区域编辑控制器：状态与冲突经 notify 上报原生
+     *
+     * 同时门控块级增量同步：preview/streaming 期间会把未采纳的内容临时写进 doc，
+     * 暂停 blockSync 避免脏中间态被推后端；回到 idle（accept 落盘 / reject 还原）再恢复，
+     * 此时 blockSync 只会同步「已采纳的最终状态」。`window.MDBridge.sync` 由 useBlockSyncBridge
+     * 在本 hook 之后注入，运行时状态变更触发时它已就绪
+     */
     const regionEdit = createRegionEdit(editor, {
-      onStateChange: state => notifyNative('aiEditStateChanged', { state }),
+      onStateChange: (state) => {
+        notifyNative('aiEditStateChanged', { state })
+        if (state === 'idle')
+          window.MDBridge?.sync?.resume()
+        else
+          window.MDBridge?.sync?.pause()
+      },
       onConflict: info => notifyNative('aiEditConflict', info),
     })
 

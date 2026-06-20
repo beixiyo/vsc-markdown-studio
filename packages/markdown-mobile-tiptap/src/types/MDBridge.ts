@@ -138,5 +138,9 @@ export type MDBridge = TiptapOperate & {
     getBaseVersion: () => number
     /** 客户端 id */
     getClientId: () => string
+    /** 暂停增量上报（AI 区域编辑预览/流式期间，避免把未采纳的中间态推后端） */
+    pause: () => void
+    /** 恢复增量上报并补发已采纳的最终状态 */
+    resume: () => void
   }
 }
