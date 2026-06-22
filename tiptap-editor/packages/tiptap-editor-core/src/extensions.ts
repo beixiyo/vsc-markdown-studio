@@ -1,6 +1,7 @@
 import type { PlaceholderOptions } from '@tiptap/extension-placeholder'
 import type { HoverContextHighlightOptions } from 'tiptap-hover'
 import type { ImageOptions } from 'tiptap-nodes/image'
+import type { MobileKeyboardGuardOptions } from './mobile-keyboard-guard'
 import { TaskItem, TaskList } from '@tiptap/extension-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Subscript } from '@tiptap/extension-subscript'
@@ -16,6 +17,7 @@ import { HoverContextHighlight } from 'tiptap-hover'
 import { CodeBlock } from 'tiptap-nodes/code-block'
 import { GradientHighlight } from 'tiptap-nodes/gradient-highlight'
 import { ImageNode } from 'tiptap-nodes/image'
+import { MobileKeyboardGuard } from './mobile-keyboard-guard'
 
 /** `false` 禁用该扩展，对象则作为 `.configure()` 的参数覆盖默认值 */
 export type ExtensionToggle<T = Record<string, unknown>> = false | Partial<T>
@@ -34,10 +36,12 @@ export interface CreateExtensionsOptions {
   hover?: ExtensionToggle<HoverContextHighlightOptions>
   /** Placeholder 扩展：为空节点显示占位符 */
   placeholder?: ExtensionToggle<PlaceholderOptions>
+  /** 移动端非文本交互键盘守卫（点 checkbox / 图片不弹软键盘），默认启用 */
+  mobileKeyboardGuard?: ExtensionToggle<MobileKeyboardGuardOptions>
 }
 
 export function createExtensions(options: CreateExtensionsOptions = {}) {
-  const { selection, hover, placeholder } = options
+  const { selection, hover, placeholder, mobileKeyboardGuard } = options
   const i18n = getI18n()
 
   return [
@@ -146,6 +150,11 @@ export function createExtensions(options: CreateExtensionsOptions = {}) {
           emptyNodeClass: 'is-empty',
           ...placeholder,
         })]
+      : []),
+
+    /** 移动端非文本交互键盘守卫（点 checkbox / 图片不弹软键盘） */
+    ...(mobileKeyboardGuard !== false
+      ? [MobileKeyboardGuard.configure(mobileKeyboardGuard || {})]
       : []),
   ]
 }

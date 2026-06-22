@@ -16,6 +16,7 @@ export function useDefaultEditor(options: UseDefaultEditorOptions) {
     selection,
     hover,
     placeholder,
+    mobileKeyboardGuard,
     textDirection,
     ...restOptions
   } = options
@@ -23,10 +24,10 @@ export function useDefaultEditor(options: UseDefaultEditorOptions) {
   const stableExts = useStable(userExtensions)
   const stableImage = useStable(image)
   const extensions = useMemo(() => [
-    ...createExtensions({ image, selection, hover, placeholder }),
+    ...createExtensions({ image, selection, hover, placeholder, mobileKeyboardGuard }),
     ...(userExtensions || []),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [stableExts, stableImage, selection, hover, placeholder])
+  ], [stableExts, stableImage, selection, hover, placeholder, mobileKeyboardGuard])
 
   const {
     attributes,

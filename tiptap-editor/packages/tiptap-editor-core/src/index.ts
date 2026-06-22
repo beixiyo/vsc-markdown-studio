@@ -1,5 +1,6 @@
 export * from './extensions'
 export * from './hooks'
+export * from './mobile-keyboard-guard'
 export * from './tiptap-editor'
 export * from './types'
 export * from './utils'

@@ -97,6 +97,10 @@ function formatBlock(block: MarkdownBlock): string {
 
 ![示例图片](https://picsum.photos/seed/fixture/600/300)
 
+离线可点图片，用于验证「点击图片不应唤起键盘」，无需联网：
+
+![离线测试图](data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='600'%20height='200'%3E%3Crect%20width='100%25'%20height='100%25'%20fill='%234f8cff'/%3E%3Ctext%20x='50%25'%20y='50%25'%20fill='white'%20font-size='28'%20text-anchor='middle'%20dominant-baseline='middle'%3Etap%20me%20offline%3C/text%3E%3C/svg%3E)
+
 ---
 
 *以上内容用于开发环境排版样式对照*
