@@ -1,7 +1,7 @@
 /**
  * AI 区域编辑协议（Hash 锚点）类型定义
  *
- * 协议文档：tiptap-editor/docs/ai-region-edit-protocol.md
+ * 协议文档：tiptap-editor/packages/tiptap-region/README.md
  * hash 是 web 端生成的不透明令牌，外部（移动端 / 算法侧）只透传引用，不参与计算
  */
 

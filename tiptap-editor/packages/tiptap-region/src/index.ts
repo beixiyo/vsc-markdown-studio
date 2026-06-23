@@ -3,7 +3,7 @@
  *
  * 与 `tiptap-diff`（编辑器 → 后端，稳定 id 增量上报）互为反向，二者共享 `tiptap-utils` 的块序列化/hash 基元。
  *
- * 协议文档：tiptap-editor/docs/ai-region-edit-protocol.md
+ * 协议文档：tiptap-editor/packages/tiptap-region/README.md
  *
  * 用法：
  * ```ts

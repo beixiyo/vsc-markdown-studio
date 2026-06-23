@@ -1,7 +1,7 @@
 /**
  * AI 区域编辑（hash 锚点协议）端到端测试
  *
- * 协议文档：tiptap-editor/docs/ai-region-edit-protocol.md
+ * 协议文档：tiptap-editor/packages/tiptap-region/README.md
  */
 
 import { describe, expect, it } from 'vitest'

@@ -94,7 +94,7 @@ export type MDBridge = TiptapOperate & {
   /**
    * AI 区域编辑（hash 锚点协议）
    *
-   * 协议文档：tiptap-editor/docs/ai-region-edit-protocol.md
+   * 协议文档：tiptap-editor/packages/tiptap-region/README.md
    * 流程：readBlocks 取锚点 → applyOperations 批量应用 / 流式三件套 → accept / reject
    *
    * web → 原生事件：`aiEditStateChanged`（idle / streaming / preview）、`aiEditConflict`
