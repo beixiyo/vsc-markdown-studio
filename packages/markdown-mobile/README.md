@@ -2,9 +2,45 @@
 
 给 iOS / Android 开发看的。本文是移动端 WebView 接入总入口，具体插件能力以插件文档为准
 
+## Bridge 能力总览
+
+Native 在 `mdBridgeReady` 之后通过 `window.MDBridge` 调用 WebView 能力。完整类型以 [MDBridge.ts](src/types/MDBridge.ts) 为准
+
+| 能力 | 方法 | 说明 |
+|------|------|------|
+| 内容读写 | `getMarkdown` / `setMarkdown` / `getHTML` / `setHTML` / `getJSON` / `setContent` | 正文内容读写 |
+| 只读控制 | `isEditable` / `setEditable` | `setEditable(false)` 进入只读，`setEditable(true)` 恢复编辑 |
+| 光标与选区 | `getTextCursorPosition` / `setTextCursorPosition` / `getSelection` / `setSelection` / `getSelectedText` / `focus` | 读取和设置光标、选区 |
+| 滚动定位 | `scrollToRange` / `scrollToRangeSelection` / `scrollToText` / `selectAndScrollToText` / `scrollToMark` | 滚到文档位置、文本或 mark；底层实现见 [scroll.ts](../../tiptap-editor/packages/tiptap-api/src/operate/scroll.ts) |
+| 图片 | `setImage` / `updateImage` / `removeImage` / `getImageAttrs` | 图片插入、更新、删除和按 id 读取 |
+| 排版与方向 | `setTypography` / `setTextDirection` / `setBottomMargin` | 字号行高、RTL/LTR、键盘底部留白 |
+| AI 区域编辑 | `aiEdit.readBlocks` / `aiEdit.applyOperations` / `aiEdit.beginStream` / `aiEdit.pushChunk` / `aiEdit.endStream` / `aiEdit.accept` / `aiEdit.reject` | Hash 锚点区域编辑，协议见 [tiptap-region](../../tiptap-editor/packages/tiptap-region/README.md) |
+| 块级增量同步 | `sync.flush` / `sync.pushFull` / `sync.ack` / `sync.requestResync` / `sync.pause` / `sync.resume` | 编辑器到后端的块级 id-diff 同步回执能力 |
+
+滚动示例：
+
+```js
+// 滚到 ProseMirror 文档位置
+MDBridge.scrollToRange(12, { behavior: 'smooth', block: 'center' })
+
+// 查找文本并滚动，不改变选区
+MDBridge.scrollToText('待办事项', { behavior: 'auto', block: 'nearest' })
+
+// 查找文本、选中并滚动
+MDBridge.selectAndScrollToText('会议结论')
+```
+
+只读示例：
+
+```js
+MDBridge.setEditable(false)
+MDBridge.isEditable()
+MDBridge.setEditable(true)
+```
+
 ## 图片能力
 
-图片插入、样式控制、id 生命周期、事件回调、老接口迁移方式见 [ImageNode 图片插件文档](../../tiptap-editor/packages/tiptap-nodes/src/image/README.md)
+图片插入、样式控制、id 生命周期和事件回调见 [ImageNode 图片插件文档](../../tiptap-editor/packages/tiptap-nodes/src/image/README.md)
 
 ## 内容变更事件
 
@@ -78,17 +114,3 @@ MDBridge.setTextDirection('auto')
 ### 建议接入方式
 
 Native 侧根据用户语言设置或文档语言，在 `mdBridgeReady` 之后调一次即可。切换语言时再次调用，实时生效
-
----
-
-## 迁移检查清单
-
-- [ ] `setImagesWithURL` / `setHeaderImagesWithURL` / `setFooterImagesWithURL` 三个调用点全部改为 `setImage({ at, images })`
-- [ ] `images` 里每项都传入 `{ src, id }`（id 用你们本地已有的资源标识）
-- [ ] 监听 `imageInserted` 事件，保存回传的 `ids`（尤其是没传 id 的场景）
-- [ ] 视觉要和以前一致 → 显式加 `preset: 'block'`（或不传，默认就是）
-- [ ] 新的表情 / 行内图场景 → 用 `preset: 'inline'`
-- [ ] 图片事件（点击、加载、删除、属性变化）→ 按 id 匹配你们本地状态
-- [ ] 需要编辑图片 → 调 `updateImage` / `removeImage`，传 id
-- [ ] 需要 RTL 支持 → 在 `mdBridgeReady` 后调 `setTextDirection('rtl')` 或 `'auto'`
-- [ ] 监听 `contentChanged` 时按 `context.shouldPersist` 判断是否保存，避免把 Native 自己下发的内容反向写回

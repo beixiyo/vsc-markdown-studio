@@ -277,6 +277,7 @@ export default function DevPanel() {
                   <Btn label="getTextCursorPosition" onClick={ () => show('cursor', bridge().getTextCursorPosition()) } />
                   <Btn label="getSelectedText" onClick={ () => show('selected', bridge().getSelectedText()) } />
                   <Btn label="focus" onClick={ () => bridge().focus() } />
+                  <Btn label="scrollToRange(1)" onClick={ () => show('scrollToRange', bridge().scrollToRange(1)) } />
                 </Section>
 
                 <Section title="Editor state">

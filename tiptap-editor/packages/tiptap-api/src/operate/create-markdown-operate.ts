@@ -4,6 +4,7 @@ import { getEditorHTML, getEditorMarkdown, setEditorContent, setEditorHTML, setE
 import { getTextCursorPosition, setTextCursorPosition } from './cursor'
 import { redo, undo } from './history'
 import { createLink, getSelectedLinkUrl } from './link'
+import { scrollToMark, scrollToRange, scrollToRangeSelection, scrollToText, selectAndScrollToText } from './scroll'
 import { getSelectedText, getSelectionRange, setSelectionRange } from './selection'
 import { focusEditor, isEditable, isEmptyDoc, setEditableState } from './state'
 import { insertText } from './text'
@@ -88,6 +89,30 @@ export function createMarkdownOperate(editor: Editor | null) {
      * 设置选区
      */
     setSelection: (from: number, to: number) => setSelectionRange(editor, from, to),
+
+    // ======================
+    /** 滚动定位 */
+    // ======================
+    /**
+     * 滚动到文档位置
+     */
+    scrollToRange: (pos: number, options?: Parameters<typeof scrollToRange>[2]) => scrollToRange(editor, pos, options),
+    /**
+     * 滚动到文档范围
+     */
+    scrollToRangeSelection: (from: number, to: number, options?: Parameters<typeof scrollToRangeSelection>[3]) => scrollToRangeSelection(editor, from, to, options),
+    /**
+     * 滚动到指定 mark
+     */
+    scrollToMark: (markId: string, markType?: Parameters<typeof scrollToMark>[2], options?: Parameters<typeof scrollToMark>[3]) => scrollToMark(editor, markId, markType, options),
+    /**
+     * 滚动到指定文本
+     */
+    scrollToText: (searchText: string, options?: Parameters<typeof scrollToText>[2], caseSensitive?: boolean) => scrollToText(editor, searchText, options, caseSensitive),
+    /**
+     * 选中并滚动到指定文本
+     */
+    selectAndScrollToText: (searchText: string, options?: Parameters<typeof selectAndScrollToText>[2], caseSensitive?: boolean) => selectAndScrollToText(editor, searchText, options, caseSensitive),
 
     // ======================
     /** 编辑器状态 */

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createTiptapOperate, resolveBlockTypeString } from '../operate/create'
 import { makeEditor } from './helpers'
 
@@ -37,6 +37,20 @@ describe('createTiptapOperate', () => {
     editor.commands.setTextSelection({ from: 1, to: 6 })
     const op = createTiptapOperate(editor)
     expect(op.getSelectedText()).toBe('hello')
+    cleanup()
+  })
+
+  it('scrollToRange 暴露滚动定位能力', () => {
+    const scrollIntoView = vi.fn()
+    Element.prototype.scrollIntoView = scrollIntoView
+
+    const { editor, cleanup } = makeEditor('<p>hello world</p>')
+    const op = createTiptapOperate(editor)
+    const result = op.scrollToRange(3, { behavior: 'auto' })
+
+    expect(result).toBe(true)
+    expect(editor.state.selection.from).toBe(3)
+    expect(scrollIntoView).toHaveBeenCalled()
     cleanup()
   })
 
