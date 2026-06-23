@@ -1,4 +1,4 @@
-import type { Editor } from '@tiptap/core'
+import type { Content, Editor } from '@tiptap/core'
 import type { RefObject } from 'react'
 import type { MDBridge, TypographyConfig } from '../types/MDBridge'
 import { notifyNative } from 'notify'
@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { createRegionEdit } from 'tiptap-region'
 import { createTiptapOperate } from '../operate/create'
 import { getImageAttrsById, removeImageById, setImage, updateImageById } from '../operate/image'
+import { type ContentChangeReason, withContentChangeContext } from './contentChangeContext'
 
 const TYPOGRAPHY_SELECTOR: Record<string, string> = {
   heading1: '.tiptap.ProseMirror h1',
@@ -51,6 +52,18 @@ function applyTypography(config: TypographyConfig) {
   el.textContent = rules.join('\n')
 }
 
+function withNativeContentChange<T>(
+  reason: ContentChangeReason,
+  shouldPersist: boolean,
+  run: () => T,
+): T {
+  return withContentChangeContext({
+    source: 'native',
+    reason,
+    shouldPersist,
+  }, run)
+}
+
 /**
  * 注入 `window.MDBridge` 并派发 `mdBridgeReady`
  * @param editor tiptap 编辑器实例
@@ -88,9 +101,12 @@ export function useSetupMDBridge(
     const bridge: MDBridge = {
       ...base,
       _editor: editor,
-      setImage: payload => setImage(editor, payload),
-      updateImage: ({ id, attrs }) => updateImageById(editor, id, attrs),
-      removeImage: ({ id }) => removeImageById(editor, id),
+      setContent: (content: Content) => withNativeContentChange('set-content', false, () => base.setContent(content)),
+      setHTML: (html: string) => withNativeContentChange('set-html', false, () => base.setHTML(html)),
+      setMarkdown: (markdown: string) => withNativeContentChange('set-markdown', false, () => base.setMarkdown(markdown)),
+      setImage: payload => withNativeContentChange('set-image', true, () => setImage(editor, payload)),
+      updateImage: ({ id, attrs }) => withNativeContentChange('update-image', true, () => updateImageById(editor, id, attrs)),
+      removeImage: ({ id }) => withNativeContentChange('remove-image', true, () => removeImageById(editor, id)),
       getImageAttrs: id => getImageAttrsById(editor, id),
 
       /** 写入容器 paddingBottom；非有限数视为 0 */
@@ -115,12 +131,12 @@ export function useSetupMDBridge(
 
       aiEdit: {
         readBlocks: options => regionEdit.readBlocks(options),
-        applyOperations: payload => regionEdit.applyOperations(payload),
-        beginStream: payload => regionEdit.beginStream(payload),
-        pushChunk: (streamId, delta) => regionEdit.pushChunk(streamId, delta),
-        endStream: streamId => regionEdit.endStream(streamId),
-        accept: () => regionEdit.accept(),
-        reject: () => regionEdit.reject(),
+        applyOperations: payload => withNativeContentChange('ai-edit-apply', !payload.options?.preview, () => regionEdit.applyOperations(payload)),
+        beginStream: payload => withNativeContentChange('ai-edit-stream', false, () => regionEdit.beginStream(payload)),
+        pushChunk: (streamId, delta) => withNativeContentChange('ai-edit-stream', false, () => regionEdit.pushChunk(streamId, delta)),
+        endStream: streamId => withNativeContentChange('ai-edit-stream', false, () => regionEdit.endStream(streamId)),
+        accept: () => withNativeContentChange('ai-edit-accept', true, () => regionEdit.accept()),
+        reject: () => withNativeContentChange('ai-edit-reject', false, () => regionEdit.reject()),
         getState: () => regionEdit.getState(),
       },
     }

@@ -1,9 +1,14 @@
-import type { Editor } from '@tiptap/core'
+import type { Editor, EditorEvents } from '@tiptap/core'
 import { debounce } from '@jl-org/tool'
 import { notifyNative } from 'notify'
 import { type RefObject, useEffect, useRef } from 'react'
 import { getEditorMarkdown } from 'tiptap-api'
 import { resolveBlockTypeString } from '../operate/create'
+import {
+  createContentChangedPayload,
+  DEFAULT_CONTENT_CHANGE_CONTEXT,
+  getActiveContentChangeContext,
+} from './contentChangeContext'
 
 /**
  * 订阅编辑器变化并广播给 Native
@@ -15,6 +20,8 @@ export function useNotifyChange(
   editor: Editor | null,
   editorElRef: RefObject<HTMLDivElement | null>,
 ) {
+  const pendingContextRef = useRef(DEFAULT_CONTENT_CHANGE_CONTEXT)
+
   useEffect(() => {
     if (!editor)
       return
@@ -22,13 +29,25 @@ export function useNotifyChange(
     const sendChange = debounce(() => {
       const markdown = getEditorMarkdown(editor) ?? ''
       const cleaned = markdown.replace(/!\[[^\]]*\]\(https?:\/\/\S{1,999}\)/g, '')
-      notifyNative('contentChanged', cleaned)
+      notifyNative('contentChanged', createContentChangedPayload(cleaned, pendingContextRef.current))
       notifyNative('blockTypeChanged', resolveBlockTypeString(editor))
+      pendingContextRef.current = DEFAULT_CONTENT_CHANGE_CONTEXT
     })
 
-    editor.on('update', sendChange)
+    const onUpdate = (event: EditorEvents['update']) => {
+      const docChanged = event.transaction.docChanged
+        || event.appendedTransactions.some(tr => tr.docChanged)
+
+      if (!docChanged)
+        return
+
+      pendingContextRef.current = getActiveContentChangeContext()
+      sendChange()
+    }
+
+    editor.on('update', onUpdate)
     return () => {
-      editor.off('update', sendChange)
+      editor.off('update', onUpdate)
     }
   }, [editor])
 
