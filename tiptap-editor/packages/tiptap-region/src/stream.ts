@@ -8,7 +8,7 @@
 import type { Editor } from '@tiptap/core'
 import type { Node as PMNode } from '@tiptap/pm/model'
 import type { Transaction } from '@tiptap/pm/state'
-import type { BeginStreamPayload, RegionContentFormat } from './types'
+import type { BeginStreamPayload, RegionAcceptOptions, RegionContentFormat, RegionLoadingFrameConfig } from './types'
 import { rafThrottle } from '@jl-org/tool'
 import { closeHistory } from '@tiptap/pm/history'
 import { RegionOpError } from './apply'
@@ -16,6 +16,7 @@ import { REGION_META } from './constants'
 import { parseContentToNodes } from './content'
 import { clearRegionDecorations, setRegionDecorations } from './decorations'
 import { findBlock } from './hash'
+import { clearRegionLoadingFrame, setRegionLoadingFrame, selectRegionRange } from './loading-frame'
 import { REGION_CLASSES } from './preview'
 
 type StreamMode = 'replace' | 'insert'
@@ -30,15 +31,16 @@ type StreamState = {
   /** replace 模式下被替换块的原始 JSON，用于还原 */
   originalJSON: Record<string, any> | null
   accumulated: string
+  loadingFrame: NormalizedLoadingFrame | null
 }
 
 export type StreamSession = {
   isActive: () => boolean
   getPhase: () => 'streaming' | 'preview' | null
-  begin: (payload: BeginStreamPayload) => string
+  begin: (payload: BeginStreamPayload) => { streamId: string, loadingFrameId?: string }
   push: (streamId: string, delta: string) => void
   end: (streamId: string) => void
-  accept: () => void
+  accept: (options?: RegionAcceptOptions) => void
   reject: () => void
   /** 冲突时放弃会话：清除装饰但不动文档 */
   abandon: () => void
@@ -84,9 +86,10 @@ export function createStreamSession(editor: Editor): StreamSession {
       .setMeta(REGION_META.INTERNAL, true)
     editor.view.dispatch(tr)
 
-    const newTo = from + nodes.reduce((sum, node) => sum + node.nodeSize, 0)
+    const newTo = from + totalSize(nodes)
     state.range = { from, to: newTo }
     setRegionDecorations(editor, [state.range], REGION_CLASSES.STREAMING)
+    updateLoadingFrame(state, true)
   }
 
   /** rAF 节流：一帧内无论收到多少 chunk 只渲染一次（非浏览器环境自动降级 ~16ms setTimeout） */
@@ -120,6 +123,17 @@ export function createStreamSession(editor: Editor): StreamSession {
       throw new RegionOpError('STREAM_NOT_FOUND')
     }
     return state
+  }
+
+  const updateLoadingFrame = (current: StreamState, loading: boolean) => {
+    if (!current.loadingFrame)
+      return
+
+    setRegionLoadingFrame(editor, {
+      id: current.loadingFrame.id,
+      range: current.range,
+      loading,
+    })
   }
 
   return {
@@ -179,6 +193,7 @@ export function createStreamSession(editor: Editor): StreamSession {
         range,
         originalJSON,
         accumulated: '',
+        loadingFrame: normalizeLoadingFrame(payload.loadingFrame, `rs-${streamCounter}`),
       }
       state = next
 
@@ -186,8 +201,14 @@ export function createStreamSession(editor: Editor): StreamSession {
       if (mode === 'replace') {
         setRegionDecorations(editor, [range], REGION_CLASSES.STREAMING)
       }
+      updateLoadingFrame(next, true)
 
-      return next.id
+      return {
+        streamId: next.id,
+        ...(next.loadingFrame
+          ? { loadingFrameId: next.loadingFrame.id }
+          : {}),
+      }
     },
 
     push(streamId, delta) {
@@ -206,14 +227,18 @@ export function createStreamSession(editor: Editor): StreamSession {
       if (state) {
         state.phase = 'preview'
         setRegionDecorations(editor, [state.range], REGION_CLASSES.PREVIEW)
+        updateLoadingFrame(state, false)
       }
     },
 
-    accept() {
+    accept(options = {}) {
       if (!state)
         return
 
       clearRegionDecorations(editor)
+      const loadingFrame = state.loadingFrame
+      const loadingFrameId = options.loadingFrameId ?? loadingFrame?.id
+      const shouldSelect = options.select ?? loadingFrame?.selectOnAccept ?? false
 
       /**
        * 「还原 → 带历史重放」：让本次流式修改成为一条干净的 undo 记录
@@ -221,6 +246,7 @@ export function createStreamSession(editor: Editor): StreamSession {
       const finalValue = state.accumulated
       const { format, mode, originalJSON } = state
       const from = state.range.from
+      let finalRange: { from: number, to: number } | null = null
 
       revertSilently()
 
@@ -236,10 +262,29 @@ export function createStreamSession(editor: Editor): StreamSession {
           /** 显式关闭历史分组，让本次流式修改独立成一条 undo 记录 */
           closeHistory(tr)
           editor.view.dispatch(tr)
+          finalRange = { from, to: from + totalSize(nodes) }
         }
         catch {
           /** 重放失败极罕见（内容已在预览中渲染过），保持还原后的状态 */
         }
+      }
+
+      if (loadingFrameId) {
+        if (finalRange) {
+          setRegionLoadingFrame(editor, {
+            id: loadingFrameId,
+            range: finalRange,
+            loading: false,
+          })
+        }
+        clearRegionLoadingFrame(editor, loadingFrameId, {
+          select: shouldSelect,
+          behavior: options.behavior,
+          block: options.block,
+        })
+      }
+      else if (shouldSelect && finalRange) {
+        selectRegionRange(editor, finalRange, options)
       }
 
       reset()
@@ -249,6 +294,9 @@ export function createStreamSession(editor: Editor): StreamSession {
       if (!state)
         return
       clearRegionDecorations(editor)
+      if (state.loadingFrame) {
+        clearRegionLoadingFrame(editor, state.loadingFrame.id)
+      }
       revertSilently()
       reset()
     },
@@ -257,6 +305,9 @@ export function createStreamSession(editor: Editor): StreamSession {
       if (!state)
         return
       clearRegionDecorations(editor)
+      if (state.loadingFrame) {
+        clearRegionLoadingFrame(editor, state.loadingFrame.id)
+      }
       reset()
     },
 
@@ -285,4 +336,30 @@ export function createStreamSession(editor: Editor): StreamSession {
       return null
     },
   }
+}
+
+function normalizeLoadingFrame(
+  input: BeginStreamPayload['loadingFrame'],
+  fallbackId: string,
+): NormalizedLoadingFrame | null {
+  if (!input)
+    return null
+
+  const config: RegionLoadingFrameConfig = typeof input === 'string'
+    ? { id: input }
+    : input
+
+  return {
+    id: config.id || fallbackId,
+    selectOnAccept: config.selectOnAccept ?? false,
+  }
+}
+
+function totalSize(nodes: PMNode[]): number {
+  return nodes.reduce((sum, node) => sum + node.nodeSize, 0)
+}
+
+type NormalizedLoadingFrame = {
+  id: string
+  selectOnAccept: boolean
 }

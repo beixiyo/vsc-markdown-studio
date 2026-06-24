@@ -41,6 +41,8 @@ const regionEdit = createRegionEdit(editor, {
 
 编辑器需要注册 `RegionEdit` 扩展，并接入 `@tiptap/markdown`。移动端入口由 `packages/markdown-mobile/src/hooks/useSetupMDBridge.ts` 挂到 `window.MDBridge.aiEdit`
 
+样式由 `tiptap-region` 包维护：根入口已导入 `index.css`，包也导出了 `tiptap-region/index.css` 供宿主显式引入。宿主侧不应复制 loading 外框 CSS
+
 ## 读取块
 
 `readBlocks(options?)` 读取文档顶层块列表。任何文档，包括没有历史标记的旧文档，都可以立即读取并获得锚点
@@ -180,10 +182,12 @@ MDBridge.aiEdit.accept()
 
 ```ts
 type RegionEditController = {
-  beginStream: (payload: BeginStreamPayload) => { streamId: string }
+  beginStream: (payload: BeginStreamPayload) => { streamId: string, loadingFrameId?: string }
   pushChunk: (streamId: string, delta: string) => void
   endStream: (streamId: string) => void
-  accept: () => void
+  showLoadingFrame: (payload: RegionLoadingFramePayload) => void
+  hideLoadingFrame: (id: string, options?: RegionLoadingFrameHideOptions) => boolean
+  accept: (options?: RegionAcceptOptions) => void
   reject: () => void
 }
 
@@ -191,10 +195,49 @@ type BeginStreamPayload = {
   target: string
   op: 'replace' | 'insertBefore' | 'insertAfter' | 'append' | 'prepend'
   format?: RegionContentFormat
+  loadingFrame?: string | {
+    id: string
+    selectOnAccept?: boolean
+  }
 }
 ```
 
 同时只允许一个流式会话。新会话开启前，未决的旧会话会自动回滚
+
+### loading 外框
+
+流式加载态可以绑定一个临时 UI 外框。外框只存在于 Decoration，不进入 Markdown / HTML / JSON 内容
+
+```ts
+const { streamId } = MDBridge.aiEdit.beginStream({
+  target: 'doc',
+  op: 'append',
+  loadingFrame: {
+    id: 'follow-up-loading',
+    selectOnAccept: true,
+  },
+})
+
+MDBridge.aiEdit.pushChunk(streamId, '生成中的文本')
+MDBridge.aiEdit.endStream(streamId)
+MDBridge.aiEdit.accept()
+```
+
+也可以手动控制：
+
+```ts
+MDBridge.aiEdit.showLoadingFrame({
+  id: 'follow-up-loading',
+  target: 'doc',
+  op: 'append',
+})
+
+MDBridge.aiEdit.hideLoadingFrame('follow-up-loading', { select: true })
+```
+
+- `id` 是外部控制句柄，用来隐藏对应 loading 外框
+- 空 range 会渲染一个只有三点 loading 的占位框；流式内容出现后，外框自动 remap 到生成内容
+- `selectOnAccept: true` 会在 `accept()` 后选中本次生成文本，并滚动到可见区域
 
 性能约定：
 

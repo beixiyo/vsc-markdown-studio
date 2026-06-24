@@ -32,6 +32,14 @@ export default defineConfig({
         ]
         return allDeps.some(dep => id === dep || id.startsWith(`${dep}/`)) || id.includes('@tiptap/')
       },
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.names && assetInfo.names.some(name => name.endsWith('.css'))) {
+            return 'index.css'
+          }
+          return '[name][extname]'
+        },
+      },
     },
   },
 })

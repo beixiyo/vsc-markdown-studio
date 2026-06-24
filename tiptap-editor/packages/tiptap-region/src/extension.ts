@@ -1,5 +1,6 @@
 import { Extension } from '@tiptap/core'
 import { createRegionEditDecorationPlugin } from './decorations'
+import { createRegionLoadingFramePlugin } from './loading-frame'
 
 /**
  * 区域编辑扩展：注册预览装饰插件
@@ -10,6 +11,9 @@ export const RegionEdit = Extension.create({
   name: 'regionEdit',
 
   addProseMirrorPlugins() {
-    return [createRegionEditDecorationPlugin()]
+    return [
+      createRegionEditDecorationPlugin(),
+      createRegionLoadingFramePlugin(),
+    ]
   },
 })

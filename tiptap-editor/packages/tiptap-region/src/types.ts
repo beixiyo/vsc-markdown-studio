@@ -141,10 +141,18 @@ export type BeginStreamPayload = {
   op: StreamOpType
   /** 流式内容的格式 @default 'markdown' */
   format?: RegionContentFormat
+  /**
+   * 流式 loading 外框配置。
+   *
+   * 传字符串时视为外框 id；传对象时可控制结束采纳后的选中行为。
+   */
+  loadingFrame?: string | RegionLoadingFrameConfig
 }
 
 export type BeginStreamResult = {
   streamId: string
+  /** 本次流式绑定的 loading 外框 id；未启用外框时为空 */
+  loadingFrameId?: string
 }
 
 /** 控制器状态机 */
@@ -155,4 +163,104 @@ export type RegionEditOptions = {
   onStateChange?: (state: RegionEditState) => void
   /** 冲突回调：预览 / 流式期间用户编辑了目标区域，session 已自动回滚 */
   onConflict?: (info: { streamId?: string }) => void
+}
+
+/**
+ * loading 外框配置
+ */
+export type RegionLoadingFrameConfig = {
+  /** 外部可控 id；后续用这个 id 隐藏外框 */
+  id: string
+  /**
+   * 采纳流式内容后是否选中新生成文本。
+   * @default false
+   */
+  selectOnAccept?: boolean
+}
+
+/**
+ * 手动显示 loading 外框的载荷
+ */
+export type RegionLoadingFramePayload = {
+  /** 外部可控 id；后续用这个 id 隐藏外框 */
+  id: string
+  /** 块 hash 或 "doc" */
+  target: string
+  /** 外框挂载位置，语义与 beginStream 的 op 一致 */
+  op: StreamOpType
+}
+
+/**
+ * loading 外框内部状态
+ */
+export type RegionLoadingFrameState = {
+  /** 外部可控 id */
+  id: string
+  /** 当前外框覆盖范围；空 range 会渲染占位 loading 框 */
+  range: { from: number, to: number }
+  /**
+   * 是否展示三点 loading。
+   * @default true
+   */
+  loading?: boolean
+}
+
+/**
+ * 选中 / 滚动选项
+ */
+export type RegionSelectionOptions = {
+  /**
+   * 滚动行为。
+   * @default 'smooth'
+   */
+  behavior?: ScrollBehavior
+  /**
+   * 目标在视口中的位置。
+   * @default 'center'
+   */
+  block?: ScrollLogicalPosition
+}
+
+/**
+ * 隐藏 loading 外框选项
+ */
+export type RegionLoadingFrameHideOptions = RegionSelectionOptions & {
+  /**
+   * 隐藏后是否选中外框覆盖文本。
+   * @default false
+   */
+  select?: boolean
+}
+
+/**
+ * 采纳预览 / 流式内容选项
+ */
+export type RegionAcceptOptions = RegionSelectionOptions & {
+  /**
+   * 采纳后是否选中新生成文本。
+   * @default false
+   */
+  select?: boolean
+  /** 指定需要同步隐藏的 loading 外框 id */
+  loadingFrameId?: string
+}
+
+/**
+ * 区域编辑控制器。
+ *
+ * 对外提供读取块、预览写入、流式写入、loading 外框、采纳 / 拒绝等能力。
+ */
+export type RegionEditController = {
+  getState: () => RegionEditState
+  getDocVersion: () => number
+  readBlocks: (options?: ReadBlocksOptions) => ReadBlocksResult
+  applyOperations: (payload: ApplyPayload) => ApplyResult
+  beginStream: (payload: BeginStreamPayload) => BeginStreamResult
+  pushChunk: (streamId: string, delta: string) => void
+  endStream: (streamId: string) => void
+  showLoadingFrame: (payload: RegionLoadingFramePayload) => void
+  hideLoadingFrame: (id: string, options?: RegionLoadingFrameHideOptions) => boolean
+  accept: (options?: RegionAcceptOptions) => void
+  reject: () => void
+  destroy: () => void
 }
