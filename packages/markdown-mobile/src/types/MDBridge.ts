@@ -58,19 +58,19 @@ export type MDBridge = TiptapOperate & {
    *
    * 调用方式与完整图片属性见 [tiptap-editor/packages/tiptap-nodes/src/image/README.md](../../../../tiptap-editor/packages/tiptap-nodes/src/image/README.md)
    */
-  setImage: (payload: SetImagePayload) => Promise<void>
+  setImage: (payload: SetImagePayload) => void
 
   /**
    * 按 id 更新图片属性（局部合并）
    * @returns 命中返回 true，未找到返回 false
    */
-  updateImage: (payload: { id: string, attrs: Partial<ImageAttrs> }) => Promise<boolean>
+  updateImage: (payload: { id: string, attrs: Partial<ImageAttrs> }) => boolean
 
   /**
    * 按 id 删除图片
    * @returns 命中返回 true，未找到返回 false
    */
-  removeImage: (payload: { id: string }) => Promise<boolean>
+  removeImage: (payload: { id: string }) => boolean
 
   /**
    * 按 id 同步读取图片完整 attrs（按需拉全量，事件不再携带 attrs）

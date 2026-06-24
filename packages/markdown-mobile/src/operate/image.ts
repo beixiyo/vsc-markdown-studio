@@ -156,7 +156,7 @@ function insertAtCursor(editor: Editor, nodes: JSONContent[]) {
  *
  * 成功触发 `imageInserted`，失败触发 `imageInsertError`
  */
-export async function setImage(editor: Editor, payload: SetImagePayload): Promise<void> {
+export function setImage(editor: Editor, payload: SetImagePayload): void {
   const { at, images, preset = 'block' } = payload
   const list = Array.isArray(images)
     ? images.filter(i => i && typeof i.src === 'string' && i.src.length > 0)
@@ -222,11 +222,11 @@ export function getImageAttrsById(editor: Editor, id: string): ImageAttrs | null
 /**
  * 按 id 更新图片属性（局部合并，未传字段保持原值）
  */
-export async function updateImageById(
+export function updateImageById(
   editor: Editor,
   id: string,
   patch: Partial<ImageAttrs>,
-): Promise<boolean> {
+): boolean {
   const pos = findImagePosById(editor, id)
   if (pos === null)
     return false
@@ -245,7 +245,7 @@ export async function updateImageById(
 /**
  * 按 id 删除图片节点
  */
-export async function removeImageById(editor: Editor, id: string): Promise<boolean> {
+export function removeImageById(editor: Editor, id: string): boolean {
   const pos = findImagePosById(editor, id)
   if (pos === null)
     return false
