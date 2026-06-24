@@ -52,6 +52,15 @@ const STREAM_MARKDOWN = [
   '- 支持预览后 accept',
 ].join('\n')
 
+const LOADING_FRAME_MANUAL_ID = 'dev-loading-frame-manual'
+const LOADING_FRAME_STREAM_ID = 'dev-loading-frame-stream'
+const LOADING_FRAME_STREAM_CONTENT = [
+  '## Follow-up actions',
+  '',
+  '- It shifts users from simply reading to actively engaging with content.',
+  '- Next step: review the generated action list and assign owners.',
+].join('\n')
+
 const IMG_URLS = [
   'https://picsum.photos/seed/a/200/120',
   'https://picsum.photos/seed/b/200/120',
@@ -191,6 +200,78 @@ export default function DevPanel() {
                   <Btn label="accept" onClick={ () => safeCall('aiEdit.accept', () => bridge().aiEdit.accept()) } />
                   <Btn label="reject" onClick={ () => safeCall('aiEdit.reject', () => bridge().aiEdit.reject()) } />
                   <Btn label="getState" onClick={ () => show('aiEdit.getState', bridge().aiEdit.getState()) } />
+                </Section>
+
+
+                <Section title="AI loading frame（渐变外框 + 三点 loading）">
+                  <Btn
+                    label="① show placeholder(doc append)"
+                    onClick={ () => safeCall('loadingFrame/show placeholder', () => {
+                      bridge().aiEdit.showLoadingFrame({
+                        id: LOADING_FRAME_MANUAL_ID,
+                        target: 'doc',
+                        op: 'append',
+                      })
+                      show('loadingFrame', `已显示空占位 loading 外框：${LOADING_FRAME_MANUAL_ID}`)
+                    }) }
+                  />
+                  <Btn
+                    label="② wrap first paragraph"
+                    onClick={ () => safeCall('loadingFrame/wrap paragraph', () => {
+                      const { blocks } = bridge().aiEdit.readBlocks()
+                      const target = blocks.find(block => block.type === 'paragraph') ?? blocks[0]
+                      if (!target) {
+                        show('loadingFrame', '未找到可包裹的块')
+                        return
+                      }
+
+                      bridge().aiEdit.showLoadingFrame({
+                        id: LOADING_FRAME_MANUAL_ID,
+                        target: target.hash,
+                        op: 'replace',
+                      })
+                      show('loadingFrame', `已包裹块：${target.markdown.slice(0, 80)}`)
+                    }) }
+                  />
+                  <Btn
+                    label="③ hide + select"
+                    onClick={ () => safeCall('loadingFrame/hide select', () => {
+                      const ok = bridge().aiEdit.hideLoadingFrame(LOADING_FRAME_MANUAL_ID, {
+                        select: true,
+                        behavior: 'smooth',
+                        block: 'center',
+                      })
+                      show('loadingFrame', ok
+                        ? `已隐藏并尝试选中：${LOADING_FRAME_MANUAL_ID}`
+                        : `未找到：${LOADING_FRAME_MANUAL_ID}`)
+                    }) }
+                  />
+                  <Btn
+                    label="④ stream append + selectOnAccept"
+                    onClick={ () => {
+                      const { streamId, loadingFrameId } = bridge().aiEdit.beginStream({
+                        target: 'doc',
+                        op: 'append',
+                        format: 'markdown',
+                        loadingFrame: {
+                          id: LOADING_FRAME_STREAM_ID,
+                          selectOnAccept: true,
+                        },
+                      })
+                      let pos = 0
+                      const timer = setInterval(() => {
+                        if (pos >= LOADING_FRAME_STREAM_CONTENT.length) {
+                          clearInterval(timer)
+                          bridge().aiEdit.endStream(streamId)
+                          bridge().aiEdit.accept()
+                          show('loadingFrame stream', `完成：${loadingFrameId} 已清理，生成文本已选中`)
+                          return
+                        }
+                        bridge().aiEdit.pushChunk(streamId, LOADING_FRAME_STREAM_CONTENT.slice(pos, pos + 8))
+                        pos += 8
+                      }, 60)
+                    } }
+                  />
                 </Section>
 
                 <Section title="Block commands">

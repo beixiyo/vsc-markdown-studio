@@ -7,7 +7,10 @@ import type {
   BeginStreamResult,
   ReadBlocksOptions,
   ReadBlocksResult,
+  RegionAcceptOptions,
   RegionEditState,
+  RegionLoadingFrameHideOptions,
+  RegionLoadingFramePayload,
 } from 'tiptap-region'
 import type { TiptapOperate } from '../operate'
 import type { SetImagePayload } from '../operate/image'
@@ -110,8 +113,12 @@ export type MDBridge = TiptapOperate & {
     pushChunk: (streamId: string, delta: string) => void
     /** 结束流，进入预览态 */
     endStream: (streamId: string) => void
+    /** 显示一个可通过 id 清理的 loading 外框 */
+    showLoadingFrame: (payload: RegionLoadingFramePayload) => void
+    /** 按 id 隐藏 loading 外框，可选中并滚动到外框文本 */
+    hideLoadingFrame: (id: string, options?: RegionLoadingFrameHideOptions) => boolean
     /** 采纳当前预览（写入 undo 历史） */
-    accept: () => void
+    accept: (options?: RegionAcceptOptions) => void
     /** 放弃当前预览，还原原内容 */
     reject: () => void
     /** 当前状态 */
