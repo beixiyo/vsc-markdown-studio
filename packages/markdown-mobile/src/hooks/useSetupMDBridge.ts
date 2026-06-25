@@ -120,6 +120,17 @@ export function useSetupMDBridge(
         el.style.paddingBottom = `${v}px`
       },
 
+      /**
+       * 覆盖 --content-px：body 横向 padding 与流式 loading 框破出量同步联动；非有限数视为 0
+       * 写在 :root 上（变量定义处），契约见 styles/index.scss
+       */
+      setContentPadding: (px: number) => {
+        const v = Number.isFinite(px)
+          ? Math.max(0, Number(px))
+          : 0
+        document.documentElement.style.setProperty('--content-px', `${v}px`)
+      },
+
       setTextDirection: (direction: 'ltr' | 'rtl' | 'auto') => {
         editor.setOptions({ textDirection: direction })
         document.documentElement.setAttribute('dir', direction === 'auto'

@@ -34,3 +34,26 @@
 
 /** Tiptap 节点扩展所需 CSS（image-upload / code-block） */
 @import 'tiptap-nodes/index.css';
+
+/**
+ * 内容左右安全间距 —— 单一来源 --content-px 驱动
+ *
+ * body 加横向 padding 让正文不贴屏幕边；流式 loading-frame 再用
+ * ::after 的 left/right: calc(-1 * var(--content-px)) 破出此 padding，满屏铺底
+ *
+ * Native 想运行时调间距：覆盖 --content-px 即可（padding 与破出量同步联动），例如
+ *   document.documentElement.style.setProperty('--content-px', '20px')
+ * 注意：要覆盖变量、而非直接改 body.style.padding，否则破出量不跟随会错位
+ *
+ * overflow-x: clip 作为生产侧亚像素溢出安全网（生产 !isDev 不经过 dev 的 <main>，
+ * 全链路本无 overflow-x 守护）；clip 不创建滚动容器、不破坏 sticky / 编程滚动 /
+ * 纵向滚动，且代码块、表格各自内部 overflow:auto 不受外层 clip 影响
+ */
+:root {
+  --content-px: 16px;
+}
+
+body {
+  padding-inline: var(--content-px);
+  overflow-x: clip;
+}

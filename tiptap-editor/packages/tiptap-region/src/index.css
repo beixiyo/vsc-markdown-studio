@@ -1,10 +1,40 @@
+/**
+ * 流式 loading 外框：用绝对定位伪元素（::after）画满屏铺底的渐变卡片，
+ * block 自身盒模型完全不动 —— 列表 padding-inline-start、blockquote padding 等
+ * 固有内边距与缩进均保留，仅靠 padding-block 提供纵向呼吸
+ *
+ * 为何用 ::after 而非 ::before：
+ *   blockquote::before 已被引用样式占用（左侧竖线，见 _blockquote.scss），
+ *   同元素同伪元素会互相覆盖；::after 在这些块级元素上无人占用，安全
+ *
+ * 几何前提：本框到 body 之间的祖先（EditorContent 包裹层、.tiptap.ProseMirror）
+ * 均无横向 padding / border —— 否则伪元素 -P 顶不到屏幕边，需换其它 full-bleed 机制
+ * 未定义 --content-px 的宿主：伪元素 inset fallback 退回 0（不破出、不溢出，沿用旧契约）
+ *
+ * 承重不变量（改动前必读）：
+ *   base ::after 只允许 border-left + border-right，禁止加 border-top / border-bottom / border-radius，
+ *   middle 与 before-tail 正是靠这条「无上下边框」天然形成上下贯通、流入 tail 的开口卡片，
+ *   一旦给 base 伪元素加上下边框，每个内部块边界都会出现接缝
+ */
 .tiptap.ProseMirror .region-loading-frame {
-  box-sizing: border-box;
+  position: relative;
+  z-index: 0; /* 建立层叠上下文，约束伪元素 z-index:-1 不穿到页面背景之后 */
   margin-top: 0 !important;
   margin-bottom: 0 !important;
-  padding: 8px 12px;
-  border-right: 1px solid transparent;
+  padding-block: 8px; /* 仅纵向呼吸；横向不动 -> 列表缩进保留 */
+}
+
+.tiptap.ProseMirror .region-loading-frame::after {
+  content: "";
+  position: absolute;
+  z-index: -1; /* 落在 block 自身背景之上、行内文字之下 */
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * var(--content-px, 0px));
+  right: calc(-1 * var(--content-px, 0px)); /* 破出 P 到屏幕边 */
+  pointer-events: none; /* 文字选择 / caret / 点击穿透到真实内容 */
   border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
   background:
     linear-gradient(rgb(var(--background)), rgb(var(--background))) padding-box,
     linear-gradient(105deg, rgb(var(--brand) / 0.55), rgb(215 154 255 / 0.62), rgb(111 141 255 / 0.45)) border-box;
@@ -13,49 +43,46 @@
 .tiptap.ProseMirror .region-loading-frame--single {
   margin-top: 10px !important;
   margin-bottom: 10px !important;
-  border: 1px solid transparent;
+}
+
+.tiptap.ProseMirror .region-loading-frame--single::after {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
   border-radius: 8px;
 }
 
 .tiptap.ProseMirror .region-loading-frame--first {
   margin-top: 10px !important;
+}
+
+.tiptap.ProseMirror .region-loading-frame--first::after {
   border-top: 1px solid transparent;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
 
-.tiptap.ProseMirror .region-loading-frame--middle {
-  border-top: 0;
-  border-bottom: 0;
-  border-radius: 0;
-}
-
 .tiptap.ProseMirror .region-loading-frame--last {
   margin-bottom: 10px !important;
+}
+
+.tiptap.ProseMirror .region-loading-frame--last::after {
   border-bottom: 1px solid transparent;
-  border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
-.tiptap.ProseMirror .region-loading-frame--before-tail {
-  border-bottom: 0;
-  border-radius: 0;
-}
-
-.tiptap.ProseMirror .region-loading-frame--first + .region-loading-frame,
-.tiptap.ProseMirror .region-loading-frame--middle + .region-loading-frame,
-.tiptap.ProseMirror .region-loading-frame--before-tail + .region-loading-frame-tail {
-  margin-top: 0 !important;
-}
+/* --middle / --before-tail 无需任何规则：base ::after 已只有左右边框、无上下边框 / 圆角 */
+/* 相邻 margin-top:0 规则已移除：base 的 margin-top:0!important 已覆盖所有 frame block */
 
 .tiptap.ProseMirror .region-loading-frame-placeholder,
 .tiptap.ProseMirror .region-loading-frame-tail {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  width: 100%;
+  /** width:auto（非 100%）才能被下方负 margin 撑满破出；固定宽只会平移、右侧溢出 */
+  width: auto;
   min-height: 34px;
-  padding: 8px 12px 10px;
+  padding: 8px var(--content-px, 12px) 10px;
   border: 1px solid transparent;
   background:
     linear-gradient(rgb(var(--background)), rgb(var(--background))) padding-box,
@@ -64,12 +91,12 @@
 
 .tiptap.ProseMirror .region-loading-frame-placeholder {
   min-height: 44px;
-  margin: 10px 0;
+  margin: 10px calc(-1 * var(--content-px, 0px));
   border-radius: 8px;
 }
 
 .tiptap.ProseMirror .region-loading-frame-tail {
-  margin: 0 0 10px;
+  margin: 0 calc(-1 * var(--content-px, 0px)) 10px;
   border-top: 0;
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;

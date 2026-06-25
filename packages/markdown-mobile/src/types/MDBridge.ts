@@ -48,6 +48,17 @@ export type MDBridge = TiptapOperate & {
   setBottomMargin: (px: number) => void
 
   /**
+   * 设置内容左右安全间距（px）
+   *
+   * 覆盖 CSS 变量 `--content-px`：正文的 body 横向 padding 与
+   * 流式 loading 外框的满屏破出量会同步联动（改这一个值两边一起变）。
+   * 默认 16px，传 0 即贴屏幕边。
+   *
+   * @param px 像素值；非有限数视为 0
+   */
+  setContentPadding: (px: number) => void
+
+  /**
    * 设置文本方向（RTL / LTR / 自动检测）
    * @param direction `'rtl'` 右到左 | `'ltr'` 左到右 | `'auto'` 按内容自动判定
    */

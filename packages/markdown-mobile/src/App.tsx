@@ -94,8 +94,8 @@ export default function App() {
 
   return (
     <>
-      <main className="min-h-dvh overflow-x-hidden bg-background lg:bg-background2 lg:pr-[420px]">
-        <div className="mx-auto min-h-dvh w-full max-w-3xl bg-background px-4 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+      <main className="min-h-dvh bg-background lg:bg-background2 lg:pr-[420px]">
+        <div className="mx-auto min-h-dvh w-full max-w-3xl bg-background py-6 sm:py-8 lg:py-10">
           { editorContent }
         </div>
       </main>
