@@ -1,15 +1,17 @@
 /**
- * 流式 loading 外框：用绝对定位伪元素（::after）画满屏铺底的渐变卡片，
+ * 流式 loading 外框：用绝对定位伪元素（::after）画一张内缩渐变卡片，
  * block 自身盒模型完全不动 —— 列表 padding-inline-start、blockquote padding 等
  * 固有内边距与缩进均保留，仅靠 padding-block 提供纵向呼吸
+ *
+ * 横向几何：框对齐内容边（::after left/right:0、placeholder/tail 无横向负 margin），
+ *   不向屏幕边破出。正文本就有 body padding-inline:--content-px 的左右安全间距，
+ *   框落在这条内容边上，左右边框因此始终离屏幕边 --content-px、在任意宽度的 WebView 上都看得见。
+ *   （旧版曾 left/right:calc(-1*--content-px) 满屏铺到屏幕边，导致左右边框贴物理边看不见，已废弃；
+ *    iOS 满屏 WebView 实测 cardRect.left=0 / 边框落在 x=0，正是此原因）
  *
  * 为何用 ::after 而非 ::before：
  *   blockquote::before 已被引用样式占用（左侧竖线，见 _blockquote.scss），
  *   同元素同伪元素会互相覆盖；::after 在这些块级元素上无人占用，安全
- *
- * 几何前提：本框到 body 之间的祖先（EditorContent 包裹层、.tiptap.ProseMirror）
- * 均无横向 padding / border —— 否则伪元素 -P 顶不到屏幕边，需换其它 full-bleed 机制
- * 未定义 --content-px 的宿主：伪元素 inset fallback 退回 0（不破出、不溢出，沿用旧契约）
  *
  * 承重不变量（改动前必读）：
  *   base ::after 只允许 border-left + border-right，禁止加 border-top / border-bottom / border-radius，
@@ -30,8 +32,8 @@
   z-index: -1; /* 落在 block 自身背景之上、行内文字之下 */
   top: 0;
   bottom: 0;
-  left: calc(-1 * var(--content-px, 0px));
-  right: calc(-1 * var(--content-px, 0px)); /* 破出 P 到屏幕边 */
+  left: 0;
+  right: 0; /* 内缩对齐内容边：左右边框离屏幕 --content-px，满屏 WebView 也看得见 */
   pointer-events: none; /* 文字选择 / caret / 点击穿透到真实内容 */
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
@@ -79,10 +81,10 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  /** width:auto（非 100%）才能被下方负 margin 撑满破出；固定宽只会平移、右侧溢出 */
+  /** width:auto 跟随容器（内容区）宽度；卡片不再向屏幕边破出 */
   width: auto;
   min-height: 34px;
-  padding: 8px var(--content-px, 12px) 10px;
+  padding: 8px 12px 10px;
   border: 1px solid transparent;
   background:
     linear-gradient(rgb(var(--background)), rgb(var(--background))) padding-box,
@@ -91,12 +93,12 @@
 
 .tiptap.ProseMirror .region-loading-frame-placeholder {
   min-height: 44px;
-  margin: 10px calc(-1 * var(--content-px, 0px));
+  margin: 10px 0;
   border-radius: 8px;
 }
 
 .tiptap.ProseMirror .region-loading-frame-tail {
-  margin: 0 calc(-1 * var(--content-px, 0px)) 10px;
+  margin: 0 0 10px;
   border-top: 0;
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;

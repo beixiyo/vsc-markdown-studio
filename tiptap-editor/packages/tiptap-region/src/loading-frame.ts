@@ -236,7 +236,7 @@ function createDot(index: number): HTMLElement {
 
 function frameAttrs(frame: RegionLoadingFrameState, role: RegionLoadingFrameRole) {
   return {
-    class: `region-loading-frame region-loading-frame--${role}`,
+    'class': `region-loading-frame region-loading-frame--${role}`,
     'data-region-loading-frame': frame.id,
   }
 }
@@ -246,16 +246,22 @@ function resolveFrameRole(
   count: number,
   hasTail: boolean,
 ): RegionLoadingFrameRole {
-  if (count === 1)
+  if (count === 1) {
+    /**
+     * 单块 + tail：本块即框顶，用 first 拿上边框 + 上圆角，下边敞开交给 tail 收口；
+     *  before-tail 无上下边框，会让框顶豁口（上面有文字时看不到边框）
+     */
     return hasTail
-      ? 'before-tail'
+      ? 'first'
       : 'single'
+  }
   if (index === 0)
     return 'first'
-  if (index === count - 1)
+  if (index === count - 1) {
     return hasTail
       ? 'before-tail'
       : 'last'
+  }
   return 'middle'
 }
 
