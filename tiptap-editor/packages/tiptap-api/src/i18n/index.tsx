@@ -9,7 +9,7 @@ import type { I18nProviderProps } from 'i18n/react'
 import { deepMerge } from '@jl-org/tool'
 import { getI18n } from 'i18n'
 import { I18nProvider } from 'i18n/react'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { tiptapEditorResources } from './resources'
 
 /** 导出 tiptap-editor 特定的 i18n 功能 */
@@ -70,28 +70,29 @@ export function TiptapI18nProvider({
   children,
   resources,
   languageToLocale,
+  defaultLanguage,
   ...props
 }: TiptapI18nProviderProps) {
-  const globalI18n = useMemo(() => {
-    const res = resources
+  const globalI18n = useMemo(() => getI18n(), [])
+
+  const mergedResources = useMemo(() => {
+    return resources
       ? deepMerge(tiptapEditorResources, resources)
       : tiptapEditorResources
+  }, [resources])
 
-    /** 立即同步到全局单例，确保非 React 组件在初始化时就能拿到资源 */
-    const i18n = getI18n()
-    i18n.mergeResources(res, true)
+  useEffect(() => {
+    globalI18n.mergeResources(mergedResources, true)
     if (languageToLocale) {
-      i18n.setLanguageToLocale(languageToLocale)
+      globalI18n.setLanguageToLocale(languageToLocale)
     }
-    if (props.defaultLanguage) {
-      i18n.changeLanguage(props.defaultLanguage)
+    if (defaultLanguage) {
+      globalI18n.changeLanguage(defaultLanguage)
     }
-
-    return i18n
-  }, [resources, props.defaultLanguage, languageToLocale])
+  }, [globalI18n, mergedResources, languageToLocale, defaultLanguage])
 
   return (
-    <I18nProvider { ...props } instance={ globalI18n }>
+    <I18nProvider { ...props } defaultLanguage={ defaultLanguage } instance={ globalI18n }>
       { children }
     </I18nProvider>
   )
