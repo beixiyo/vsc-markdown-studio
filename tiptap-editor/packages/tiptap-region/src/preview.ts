@@ -19,7 +19,7 @@ import { clearRegionDecorations, getRegionDecorationRanges, setRegionDecorations
 /** 预览高亮样式（与选区 AI 保持一致的视觉语言） */
 export const REGION_CLASSES = {
   PREVIEW: 'bg-linear-to-r from-amber-400/20 to-emerald-500/20 border-b-2 border-amber-400/50 rounded-sm region-edit-preview',
-  STREAMING: 'bg-linear-to-r from-blue-500/15 to-purple-600/15 border-b-2 border-blue-500/40 region-edit-streaming',
+  STREAMING: 'bg-linear-to-r from-blue-500/15 to-purple-600/15 region-edit-streaming',
 }
 
 export type ApplyPreviewSession = {
