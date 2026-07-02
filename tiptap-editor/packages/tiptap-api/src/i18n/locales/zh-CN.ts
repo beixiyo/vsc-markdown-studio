@@ -95,6 +95,7 @@ export const zhCN: Translations = {
     locate: '定位',
     edit: '编辑',
     reply: '回复',
+    submit: '提交',
     submitTooltip: '提交 (Ctrl/Cmd + Enter)',
     submitHint: 'Ctrl/Cmd + Enter 提交，Esc 取消',
     markResolved: '标记为已解决',

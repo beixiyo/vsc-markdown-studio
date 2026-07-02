@@ -95,6 +95,7 @@ export const enUS: Translations = {
     locate: 'Locate',
     edit: 'Edit',
     reply: 'Reply',
+    submit: 'Submit',
     submitTooltip: 'Create (Ctrl/Cmd + Enter)',
     submitHint: 'Ctrl/Cmd + Enter to submit, Esc to cancel',
     markResolved: 'Mark as resolved',

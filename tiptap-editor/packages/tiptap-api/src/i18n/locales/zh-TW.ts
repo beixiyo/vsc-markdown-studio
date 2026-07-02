@@ -95,6 +95,7 @@ export const zhTW: Translations = {
     locate: '定位',
     edit: '編輯',
     reply: '回覆',
+    submit: '提交',
     submitTooltip: '提交 (Ctrl/Cmd + Enter)',
     submitHint: 'Ctrl/Cmd + Enter 提交，Esc 取消',
     markResolved: '標記為已解決',

@@ -95,6 +95,7 @@ export const ja: Translations = {
     locate: '位置へ移動',
     edit: '編集',
     reply: '返信',
+    submit: '送信',
     submitTooltip: '送信 (Ctrl/Cmd + Enter)',
     submitHint: 'Ctrl/Cmd + Enter で送信、Esc でキャンセル',
     markResolved: '解決済みにする',
