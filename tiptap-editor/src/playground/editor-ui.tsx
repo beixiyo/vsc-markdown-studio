@@ -1,12 +1,13 @@
+import type { SearchPopoverRef } from 'tiptap-comps'
 import type { EditorUIProps } from './types'
 import { useCurrentEditor } from '@tiptap/react'
 
 import { Toolbar } from 'comps'
 import { useLatestCallback } from 'hooks'
-import { memo, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { AIActionPanel, AIButton, useAI } from 'tiptap-ai/react'
 import { CommentButton, CommentSidebar, InlineCommentPopover, useCommentSync, useInlineCommentPopover } from 'tiptap-comment/react'
-import { BlockActionMenu, EditorLinkHover, MarkButton, SelectToolbar, TableControls } from 'tiptap-comps'
+import { BlockActionMenu, EditorLinkHover, MarkButton, SearchPopover, SelectToolbar, TableControls } from 'tiptap-comps'
 import { HoverTooltip } from 'tiptap-hover/react'
 import { SuggestionMenu } from 'tiptap-trigger/react'
 import { TestPanel } from '@/components/my-ui/test-panel'
@@ -30,6 +31,7 @@ export const EditorUI = memo<EditorUIProps>(({
   showHeaderToolbar = false,
 }) => {
   const { editor } = useCurrentEditor()
+  const searchPopoverRef = useRef<SearchPopoverRef>(null)
   const { aiOrchestrator, aiController } = useAiSetup()
   const [commentSidebarOpen, setCommentSidebarOpen] = useState(false)
   const [activeCommentId, setActiveCommentId] = useState<string | null>(null)
@@ -66,6 +68,24 @@ export const EditorUI = memo<EditorUIProps>(({
     handleInsertTrigger('在光标处插入')
   })
 
+  useEffect(() => {
+    if (!showHeaderToolbar || !editor) {
+      return
+    }
+
+    const handleFindShortcut = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 'f') {
+        return
+      }
+
+      event.preventDefault()
+      searchPopoverRef.current?.open()
+    }
+
+    window.addEventListener('keydown', handleFindShortcut)
+    return () => window.removeEventListener('keydown', handleFindShortcut)
+  }, [editor, showHeaderToolbar])
+
   const {
     inlineComment,
     inlineThread,
@@ -95,6 +115,7 @@ export const EditorUI = memo<EditorUIProps>(({
           toolbarRef={ toolbarRef }
         >
           <Toolbar.Group>
+            <SearchPopover ref={ searchPopoverRef } editor={ editor } />
             { commentStore && (
               <CommentSidebar
                 commentStore={ commentStore }

@@ -1,5 +1,3 @@
-import './index.css'
-
 export { RegionOpError } from './apply'
 export { createRegionEdit } from './controller'
 export { RegionEdit } from './extension'

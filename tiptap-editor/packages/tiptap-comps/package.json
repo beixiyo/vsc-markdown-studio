@@ -38,6 +38,7 @@
     "styles": "workspace:*",
     "tiptap-api": "workspace:*",
     "tiptap-hover": "workspace:*",
+    "tiptap-search": "workspace:*",
     "tiptap-utils": "workspace:*",
     "utils": "workspace:*"
   },

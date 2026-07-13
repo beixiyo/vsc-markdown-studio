@@ -9,6 +9,7 @@ import type { Editor } from '@tiptap/core'
 import type { Node as PMNode } from '@tiptap/pm/model'
 import type { DecoRange } from './decorations'
 import type {
+  RegionLoadingFrameClasses,
   RegionLoadingFrameHideOptions,
   RegionLoadingFrameState,
   RegionSelectionOptions,
@@ -22,7 +23,7 @@ export const REGION_LOADING_FRAME_KEY = new PluginKey<DecorationSet>('region-loa
 /**
  * 创建 loading 外框插件
  */
-export function createRegionLoadingFramePlugin() {
+export function createRegionLoadingFramePlugin(classes: RegionLoadingFrameClasses = {}) {
   return new Plugin<DecorationSet>({
     key: REGION_LOADING_FRAME_KEY,
     state: {
@@ -37,7 +38,7 @@ export function createRegionLoadingFramePlugin() {
         switch (meta.type) {
           case 'set': {
             const withoutCurrent = removeFrame(mapped, meta.frame.id)
-            return withoutCurrent.add(tr.doc, buildFrameDecorations(tr.doc, meta.frame))
+            return withoutCurrent.add(tr.doc, buildFrameDecorations(tr.doc, meta.frame, classes))
           }
           case 'remove':
             return removeFrame(mapped, meta.id)
@@ -149,7 +150,7 @@ export function selectRegionRange(
   return true
 }
 
-function buildFrameDecorations(doc: PMNode, frame: RegionLoadingFrameState): Decoration[] {
+function buildFrameDecorations(doc: PMNode, frame: RegionLoadingFrameState, classes: RegionLoadingFrameClasses): Decoration[] {
   const range = normalizeRange(doc, frame.range)
   if (!range)
     return []
@@ -158,7 +159,7 @@ function buildFrameDecorations(doc: PMNode, frame: RegionLoadingFrameState): Dec
     return [
       Decoration.widget(
         range.from,
-        () => createLoadingShell(frame, 'placeholder'),
+        () => createLoadingShell(frame, 'placeholder', classes),
         { id: frame.id, kind: 'placeholder', key: `${frame.id}:placeholder`, side: 1 },
       ),
     ]
@@ -170,7 +171,7 @@ function buildFrameDecorations(doc: PMNode, frame: RegionLoadingFrameState): Dec
       Decoration.inline(
         range.from,
         range.to,
-        frameAttrs(frame, 'single'),
+        frameAttrs(frame, 'single', classes),
         { id: frame.id, kind: 'inline', key: `${frame.id}:inline` },
       ),
     ]
@@ -182,7 +183,7 @@ function buildFrameDecorations(doc: PMNode, frame: RegionLoadingFrameState): Dec
     return Decoration.node(
       block.from,
       block.to,
-      frameAttrs(frame, role),
+      frameAttrs(frame, role, classes),
       { id: frame.id, kind: 'node', key: `${frame.id}:node:${block.from}` },
     )
   })
@@ -191,7 +192,7 @@ function buildFrameDecorations(doc: PMNode, frame: RegionLoadingFrameState): Dec
     decorations.push(
       Decoration.widget(
         range.to,
-        () => createLoadingShell(frame, 'tail'),
+        () => createLoadingShell(frame, 'tail', classes),
         { id: frame.id, kind: 'tail', key: `${frame.id}:tail`, side: 1 },
       ),
     )
@@ -212,34 +213,43 @@ function getTopLevelBlocks(doc: PMNode, range: DecoRange): TopLevelBlock[] {
   return blocks
 }
 
-function createLoadingShell(frame: RegionLoadingFrameState, variant: 'placeholder' | 'tail'): HTMLElement {
+function createLoadingShell(frame: RegionLoadingFrameState, variant: 'placeholder' | 'tail', classes: RegionLoadingFrameClasses): HTMLElement {
   const shell = document.createElement('div')
-  shell.className = `region-loading-frame-${variant}`
+  shell.className = joinClasses(classes.shell, classes[variant])
   shell.dataset.regionLoadingFrame = frame.id
+  shell.dataset.regionLoadingFrameRole = variant
   shell.contentEditable = 'false'
   shell.setAttribute('aria-hidden', 'true')
 
   const dots = document.createElement('span')
-  dots.className = 'region-loading-frame-dots'
-  dots.append(createDot(0), createDot(1), createDot(2))
+  dots.className = classes.dots || ''
+  dots.append(createDot(0, classes), createDot(1, classes), createDot(2, classes))
   shell.appendChild(dots)
 
   return shell
 }
 
-function createDot(index: number): HTMLElement {
+function createDot(index: number, classes: RegionLoadingFrameClasses): HTMLElement {
   const dot = document.createElement('span')
-  dot.className = 'region-loading-frame-dot'
-  dot.style.animationDelay = `${index * 120}ms`
+  dot.className = joinClasses(classes.dot, classes.dotVariants?.[index])
   return dot
 }
 
-function frameAttrs(frame: RegionLoadingFrameState, role: RegionLoadingFrameRole) {
+function frameAttrs(frame: RegionLoadingFrameState, role: RegionLoadingFrameRole, classes: RegionLoadingFrameClasses) {
   return {
-    'class': `region-loading-frame region-loading-frame--${role}`,
+    'class': joinClasses(classes.frame, classes[roleClassKey[role]]),
     'data-region-loading-frame': frame.id,
+    'data-region-loading-frame-role': role,
   }
 }
+
+function joinClasses(...classes: Array<string | undefined>) {
+  return classes.filter(Boolean).join(' ')
+}
+
+const roleClassKey = {
+  'single': 'single', 'first': 'first', 'middle': 'middle', 'last': 'last', 'before-tail': 'beforeTail',
+} as const satisfies Record<RegionLoadingFrameRole, keyof RegionLoadingFrameClasses>
 
 function resolveFrameRole(
   index: number,

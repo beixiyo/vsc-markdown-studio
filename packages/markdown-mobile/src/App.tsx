@@ -8,6 +8,7 @@ import { RegionEdit } from 'tiptap-region'
 import { useBlockSyncBridge } from './hooks/useBlockSyncBridge'
 import { useNotifyChange } from './hooks/useNotify'
 import { useSetupMDBridge } from './hooks/useSetupMDBridge'
+import { REGION_LOADING_FRAME_CLASSES } from './styles/region-loading-frame'
 
 /**
  * 图片节点的事件回调：统一打到 Native
@@ -67,7 +68,7 @@ export default function App() {
 
   const extensions = useMemo(() => [
     /** AI 区域编辑（hash 锚点协议）预览装饰 */
-    RegionEdit.configure(),
+    RegionEdit.configure({ loadingFrameClasses: REGION_LOADING_FRAME_CLASSES }),
     /** 块级 id-diff 同步：给顶层块挂稳定 id（不进 markdown，仅进 PM state / getJSON） */
     BlockId.configure(),
   ], [])

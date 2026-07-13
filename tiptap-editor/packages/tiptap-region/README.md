@@ -41,7 +41,7 @@ const regionEdit = createRegionEdit(editor, {
 
 编辑器需要注册 `RegionEdit` 扩展，并接入 `@tiptap/markdown`。移动端入口由 `packages/markdown-mobile/src/hooks/useSetupMDBridge.ts` 挂到 `window.MDBridge.aiEdit`
 
-样式由 `tiptap-region` 包维护：根入口已导入 `index.css`，包也导出了 `tiptap-region/index.css` 供宿主显式引入。宿主侧不应复制 loading 外框 CSS
+loading 外框是 headless 的，扩展不携带 CSS。宿主通过 `RegionEdit.configure({ loadingFrameClasses })` 传入可被 Tailwind 静态扫描的完整类名
 
 ## 读取块
 

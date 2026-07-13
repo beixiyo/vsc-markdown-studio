@@ -1,3 +1,4 @@
+import type { RegionEditExtensionOptions } from './types'
 import { Extension } from '@tiptap/core'
 import { createRegionEditDecorationPlugin } from './decorations'
 import { createRegionLoadingFramePlugin } from './loading-frame'
@@ -7,13 +8,17 @@ import { createRegionLoadingFramePlugin } from './loading-frame'
  *
  * 与选区 AI 的 `AI` 扩展相互独立，可同时启用
  */
-export const RegionEdit = Extension.create({
+export const RegionEdit = Extension.create<RegionEditExtensionOptions>({
   name: 'regionEdit',
+
+  addOptions() {
+    return { loadingFrameClasses: {} }
+  },
 
   addProseMirrorPlugins() {
     return [
       createRegionEditDecorationPlugin(),
-      createRegionLoadingFramePlugin(),
+      createRegionLoadingFramePlugin(this.options.loadingFrameClasses),
     ]
   },
 })

@@ -70,6 +70,13 @@ export type TiptapEditorTranslations = {
     open: string
     remove: string
   }
+  search: {
+    search: string
+    searchText: string
+    previousResult: string
+    nextResult: string
+    close: string
+  }
   comment: {
     commentPanel: string
     addComment: string

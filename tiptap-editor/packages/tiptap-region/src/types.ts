@@ -165,6 +165,28 @@ export type RegionEditOptions = {
   onConflict?: (info: { streamId?: string }) => void
 }
 
+/** RegionEdit 扩展的视觉类名，由宿主在注册扩展时传入 */
+export type RegionEditExtensionOptions = {
+  /** loading 外框各部分的 Tailwind 类名 @default {} */
+  loadingFrameClasses?: RegionLoadingFrameClasses
+}
+
+/** loading 外框各部分的 Tailwind 类名 */
+export type RegionLoadingFrameClasses = {
+  frame?: string
+  single?: string
+  first?: string
+  middle?: string
+  last?: string
+  beforeTail?: string
+  shell?: string
+  placeholder?: string
+  tail?: string
+  dots?: string
+  dot?: string
+  dotVariants?: readonly string[]
+}
+
 /**
  * loading 外框配置
  */

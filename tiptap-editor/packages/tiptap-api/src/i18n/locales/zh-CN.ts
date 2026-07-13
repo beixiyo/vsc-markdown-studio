@@ -71,6 +71,13 @@ export const zhCN: Translations = {
     open: '在新窗口打开',
     remove: '移除链接',
   },
+  search: {
+    search: '搜索',
+    searchText: '搜索文本',
+    previousResult: '上一个匹配项',
+    nextResult: '下一个匹配项',
+    close: '关闭搜索',
+  },
   comment: {
     commentPanel: '评论面板',
     addComment: '添加评论',

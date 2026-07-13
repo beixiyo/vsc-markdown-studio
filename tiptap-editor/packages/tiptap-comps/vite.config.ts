@@ -35,6 +35,9 @@ export default defineConfig({
         if (/\.(css|scss|sass|less)$/.test(id)) {
           return false
         }
+        if (id === 'tiptap-search' || id.startsWith('tiptap-search/')) {
+          return true
+        }
         const allDeps = [
           ...Object.keys(pkg.peerDependencies || {}),
           ...Object.keys(basePkg.dependencies || {}),

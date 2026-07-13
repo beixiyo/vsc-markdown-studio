@@ -32,6 +32,9 @@
       "tiptap-api/*": [
         "../tiptap-api/src/*"
       ],
+      "tiptap-search": [
+        "../tiptap-search/src/index.ts"
+      ],
       "tiptap-utils": [
         "../tiptap-utils/src/index.ts"
       ]

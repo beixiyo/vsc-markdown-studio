@@ -71,6 +71,13 @@ export const zhTW: Translations = {
     open: '在新視窗開啟',
     remove: '移除連結',
   },
+  search: {
+    search: '搜尋',
+    searchText: '搜尋文字',
+    previousResult: '上一個符合項目',
+    nextResult: '下一個符合項目',
+    close: '關閉搜尋',
+  },
   comment: {
     commentPanel: '評論面板',
     addComment: '新增評論',

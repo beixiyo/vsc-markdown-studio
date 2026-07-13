@@ -64,6 +64,7 @@
     "tiptap-mermaid": "workspace:*",
     "tiptap-nodes": "workspace:*",
     "tiptap-region": "workspace:*",
+    "tiptap-search": "workspace:*",
     "tiptap-trigger": "workspace:*",
     "tiptap-utils": "workspace:*",
     "utils": "workspace:*",

@@ -71,6 +71,13 @@ export const enUS: Translations = {
     open: 'Open in new window',
     remove: 'Remove link',
   },
+  search: {
+    search: 'Search',
+    searchText: 'Search text',
+    previousResult: 'Previous result',
+    nextResult: 'Next result',
+    close: 'Close search',
+  },
   comment: {
     commentPanel: 'Comment Panel',
     addComment: 'Add Comment',

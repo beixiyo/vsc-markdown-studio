@@ -12,6 +12,8 @@ import { MermaidNode } from 'tiptap-mermaid'
 import { ImageUploadNode } from 'tiptap-nodes'
 
 import { RegionEdit } from 'tiptap-region'
+import { REGION_LOADING_FRAME_CLASSES } from './region-loading-frame'
+import { Search } from 'tiptap-search'
 import { SuggestionTrigger } from 'tiptap-trigger'
 import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-utils'
 import content from './data/content.json' with { type: 'json' }
@@ -52,7 +54,12 @@ export const Editor = memo<EditorProps>(({
       /** AI 预览装饰扩展 */
       AI.configure(),
       /** 区域编辑（hash 锚点协议）装饰扩展 */
-      RegionEdit.configure(),
+      RegionEdit.configure({ loadingFrameClasses: REGION_LOADING_FRAME_CLASSES }),
+      /** Headless 文本搜索；高亮样式由宿主通过 Tailwind 类控制 */
+      Search.configure({
+        matchClass: 'text-brand',
+        currentMatchClass: 'bg-brand !text-white',
+      }),
       /** 块级 id-diff 同步：给顶层块挂稳定 id（块同步测试面板依赖它） */
       BlockId.configure(),
       /** Slash / Suggestion 扩展 */

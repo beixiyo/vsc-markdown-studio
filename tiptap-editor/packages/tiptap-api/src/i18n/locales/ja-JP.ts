@@ -71,6 +71,13 @@ export const ja: Translations = {
     open: '新しいウィンドウで開く',
     remove: 'リンクを削除',
   },
+  search: {
+    search: '検索',
+    searchText: 'テキストを検索',
+    previousResult: '前の検索結果',
+    nextResult: '次の検索結果',
+    close: '検索を閉じる',
+  },
   comment: {
     commentPanel: 'コメントパネル',
     addComment: 'コメントを追加',
