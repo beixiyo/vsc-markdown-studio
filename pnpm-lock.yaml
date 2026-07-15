@@ -273,6 +273,9 @@ importers:
       marked:
         specifier: ^15.0.7
         version: 15.0.12
+      nanoid:
+        specifier: ^5.1.11
+        version: 5.1.11
       xss:
         specifier: ^1.0.15
         version: 1.0.15

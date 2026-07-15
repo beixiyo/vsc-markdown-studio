@@ -1,5 +1,6 @@
 import type { FileItem, UploadOptions } from '../types'
 import { useEffect, useRef, useState } from 'react'
+import { generateRandomId } from 'utils'
 
 /**
  * Custom hook for managing multiple file uploads with progress tracking and cancellation
@@ -31,7 +32,7 @@ export function useFileUpload(options: UploadOptions) {
     }
 
     const abortController = new AbortController()
-    const fileId = crypto.randomUUID()
+    const fileId = generateRandomId()
 
     const newFileItem: FileItem = {
       id: fileId,

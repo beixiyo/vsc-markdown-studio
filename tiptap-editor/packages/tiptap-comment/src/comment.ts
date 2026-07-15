@@ -10,6 +10,7 @@
 import type { Editor } from '@tiptap/react'
 import type { Comment, CommentAuthor, CommentStore } from './comment-store'
 import { hasSelectedText } from 'tiptap-api'
+import { generateRandomId } from 'utils'
 import { commentPluginKey, type CommentRange } from './plugin'
 
 /**
@@ -43,7 +44,7 @@ export interface UpdateCommentParams {
  * 创建评论
  *
  * 此函数会：
- * 1. 生成 commentId（格式：`comment-${crypto.randomUUID()}`）
+ * 1. 生成 commentId（格式：`comment-${generateRandomId()}`）
  * 2. 在文档选中范围添加 comment mark
  * 3. 创建 Comment 实体并存储到 Store
  * 4. Plugin state 的 ranges 会自动更新（通过 Plugin 的 apply 方法）
@@ -82,7 +83,7 @@ export function createComment(
   }
 
   /** 生成 commentId */
-  const commentId = `comment-${crypto.randomUUID()}`
+  const commentId = `comment-${generateRandomId()}`
 
   try {
     /** 在文档选中范围添加 comment mark */
@@ -367,7 +368,7 @@ export interface CreateReplyParams {
  *
  * 此函数会：
  * 1. 验证被回复的评论是否存在
- * 2. 生成 commentId（格式：`comment-${crypto.randomUUID()}`）
+ * 2. 生成 commentId（格式：`comment-${generateRandomId()}`）
  * 3. 在文档选中范围添加 comment mark（如果提供了选中范围）
  * 4. 创建回复评论实体并存储到 Store，自动填充回复相关字段：
  *    - `replyTo`: 被回复的评论 ID
@@ -411,7 +412,7 @@ export function createReply(
   }
 
   /** 生成 commentId */
-  const commentId = `comment-${crypto.randomUUID()}`
+  const commentId = `comment-${generateRandomId()}`
 
   try {
     /**

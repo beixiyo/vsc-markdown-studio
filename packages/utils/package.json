@@ -38,6 +38,7 @@
   "dependencies": {
     "xss": "^1.0.15",
     "marked": "^15.0.7",
+    "nanoid": "^5.1.11",
     "config": "workspace:*"
   }
 }
