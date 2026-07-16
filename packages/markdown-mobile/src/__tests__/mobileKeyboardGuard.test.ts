@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/core'
-import { MobileKeyboardGuard } from 'tiptap-editor-core/mobile-keyboard-guard'
+import { MobileKeyboardGuard } from 'tiptap-editor-core'
 import { describe, expect, it, vi } from 'vitest'
 import { makeEditor } from './helpers'
 

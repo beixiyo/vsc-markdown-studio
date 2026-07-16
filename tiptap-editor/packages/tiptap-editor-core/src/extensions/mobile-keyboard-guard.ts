@@ -3,7 +3,7 @@ import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 /**
- * 移动端「非文本交互」键盘守卫
+ * 移动端「非文本交互」键盘守卫扩展
  *
  * 点击编辑器内的非文本可交互元素时，移动端 WebView 会因 contenteditable 被聚焦而弹出软键盘
  * （甚至把可编辑根滚动到顶部）。本扩展按元素类型分别处置，且两条路径互不影响：

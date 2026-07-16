@@ -17,6 +17,7 @@ import { HoverContextHighlight } from 'tiptap-hover'
 import { CodeBlock } from 'tiptap-nodes/code-block'
 import { GradientHighlight } from 'tiptap-nodes/gradient-highlight'
 import { ImageNode } from 'tiptap-nodes/image'
+import { GfmOrderedList } from './gfm-ordered-list'
 import { MobileKeyboardGuard } from './mobile-keyboard-guard'
 
 /** `false` 禁用该扩展，对象则作为 `.configure()` 的参数覆盖默认值 */
@@ -48,6 +49,7 @@ export function createExtensions(options: CreateExtensionsOptions = {}) {
     // StarterKit：Tiptap 的基础扩展包，包含常用功能
     StarterKit.configure({
       codeBlock: false,
+      orderedList: false,
       /** 链接扩展配置 */
       link: {
         /** 点击链接自动打开 */
@@ -56,6 +58,9 @@ export function createExtensions(options: CreateExtensionsOptions = {}) {
         enableClickSelection: true,
       },
     }),
+
+    /** 有序列表：兼容 GFM 合法的四空格嵌套项 */
+    GfmOrderedList,
 
     /** 自定义代码块扩展：支持语言切换和语法高亮 */
     CodeBlock,

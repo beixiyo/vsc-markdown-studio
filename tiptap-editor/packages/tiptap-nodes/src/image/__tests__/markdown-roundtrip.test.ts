@@ -25,7 +25,7 @@ beforeAll(() => {
   editor = new Editor({
     element: el,
     extensions: [
-      StarterKit.configure({ codeBlock: false }), // 与 tiptap-editor-core/extensions.ts 一致
+      StarterKit.configure({ codeBlock: false }), // 与 tiptap-editor-core/extensions/create-extensions.ts 一致
       Markdown.configure({ markedOptions: { gfm: true, breaks: true } }),
       ImageNode,
     ],

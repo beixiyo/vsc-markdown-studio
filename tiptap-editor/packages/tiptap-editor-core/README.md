@@ -9,7 +9,7 @@
 | `createExtensions` | 工厂函数，返回预配置的扩展列表（StarterKit + Markdown + CodeBlock + Table + Image + TaskList 等） |
 | `useDefaultEditor` | 创建预配置的 tiptap editor 实例 |
 | `useMobileView` | 移动端视图状态管理 |
-| `TiptapEditorComponent` | 编辑器 React 入口组件 |
+| `TiptapEditor` | 编辑器 React 入口组件 |
 | `ClickHandlerRegistry` | 点击事件注册表 |
 
 ## 预设扩展

@@ -12,8 +12,7 @@ export default defineConfig({
       'tiptap-region': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-region/src/index.ts', import.meta.url)),
       'tiptap-nodes/gradient-highlight': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/gradient-highlight/index.ts', import.meta.url)),
       'tiptap-nodes/code-block': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-nodes/src/code-block/index.ts', import.meta.url)),
-      /** 仅测试用：直连 editor-core 源码中的键盘守卫，避免引入整桶 barrel */
-      'tiptap-editor-core/mobile-keyboard-guard': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-editor-core/src/mobile-keyboard-guard.ts', import.meta.url)),
+      'tiptap-editor-core': fileURLToPath(new URL('../../tiptap-editor/packages/tiptap-editor-core/src/index.ts', import.meta.url)),
     },
   },
   test: {
