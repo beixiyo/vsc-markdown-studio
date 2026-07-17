@@ -574,6 +574,35 @@
       ]
     },
     {
+      "type": "heading",
+      "attrs": { "textAlign": null, "level": 2 },
+      "content": [{ "type": "text", "text": "说话人标签演示 (Speaker)" }]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
+        { "type": "speaker", "attrs": { "originalLabel": "1", "name": "张三" } },
+        { "type": "text", "text": "：这一句演示原子节点。用 Cmd/Ctrl+F 搜「张三」，标签整体会被高亮——它没有文本子节点，靠 renderText 才被搜到。" }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
+        { "type": "speaker", "attrs": { "originalLabel": "2", "name": "李四" } },
+        { "type": "text", "text": "：点击任意标签，控制台会打印还原出的 attrs（onClick 回调）。" }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
+        { "type": "speaker", "attrs": { "originalLabel": "3" } },
+        { "type": "text", "text": "：这个标签没给名字，走 i18n 缺省名。切换语言时它会在「说话人 3 / Speaker 3 / 話者 3」之间实时变化。" }
+      ]
+    },
+    {
       "type": "paragraph",
       "attrs": { "textAlign": null }
     }

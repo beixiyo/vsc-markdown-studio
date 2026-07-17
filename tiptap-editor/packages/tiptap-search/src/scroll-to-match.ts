@@ -17,6 +17,11 @@ export function selectCurrentMatch(editor: Editor, options: SearchOptions) {
   editor.view.dispatch(transaction)
 
   const scrollToCurrentMatch = () => {
+    /** rAF 回调可能晚于编辑器销毁执行（如跳转后立刻卸载编辑器），此时访问 view 会抛错 */
+    if (editor.isDestroyed) {
+      return
+    }
+
     const currentMatch = editor.view.dom.querySelector<HTMLElement>('[data-search-match="current"]')
     const target = currentMatch ?? getElementAtPosition(editor, match.from)
     target?.scrollIntoView?.({

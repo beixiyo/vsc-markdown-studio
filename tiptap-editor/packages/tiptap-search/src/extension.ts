@@ -28,6 +28,8 @@ export const Search = Extension.create<SearchOptions>({
       currentMatchClass: '',
       scrollBehavior: 'smooth',
       scrollBlock: 'center',
+      /** 默认不启用；宿主按需注入（如 leafTextFromRenderText 让 speaker 等原子节点可被搜索） */
+      leafText: undefined,
     }
   },
 

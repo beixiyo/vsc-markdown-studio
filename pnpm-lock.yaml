@@ -871,9 +871,18 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^6.0.1
         version: 6.0.2(babel-plugin-react-compiler@1.0.0)(vite@8.0.16(@types/node@24.13.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
+      jsdom:
+        specifier: 25.0.1
+        version: 25.0.1
+      tiptap-search:
+        specifier: workspace:*
+        version: link:../tiptap-search
       vite:
         specifier: ^8.0.7
         version: 8.0.16(@types/node@24.13.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
+      vitest:
+        specifier: ^2.1.9
+        version: 2.1.9(@types/node@24.13.1)(jsdom@25.0.1)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)
 
   tiptap-editor/packages/tiptap-region:
     dependencies:

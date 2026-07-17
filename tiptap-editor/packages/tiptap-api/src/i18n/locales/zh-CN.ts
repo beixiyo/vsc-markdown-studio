@@ -78,6 +78,9 @@ export const zhCN: Translations = {
     nextResult: '下一个匹配项',
     close: '关闭搜索',
   },
+  speaker: {
+    speaker: '说话人 {{number}}',
+  },
   comment: {
     commentPanel: '评论面板',
     addComment: '添加评论',

@@ -78,6 +78,9 @@ export const zhTW: Translations = {
     nextResult: '下一個符合項目',
     close: '關閉搜尋',
   },
+  speaker: {
+    speaker: '說話人 {{number}}',
+  },
   comment: {
     commentPanel: '評論面板',
     addComment: '新增評論',

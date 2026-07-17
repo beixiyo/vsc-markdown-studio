@@ -9,15 +9,15 @@ import { CommentMark, CommentStore } from 'tiptap-comment'
 import { BlockId } from 'tiptap-diff'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 import { MermaidNode } from 'tiptap-mermaid'
-import { ImageUploadNode } from 'tiptap-nodes'
+import { ImageUploadNode, SpeakerNode } from 'tiptap-nodes'
 
 import { RegionEdit } from 'tiptap-region'
-import { REGION_LOADING_FRAME_CLASSES } from './region-loading-frame'
-import { Search } from 'tiptap-search'
+import { leafTextFromRenderText, Search } from 'tiptap-search'
 import { SuggestionTrigger } from 'tiptap-trigger'
 import { handleImageUpload, MAX_FILE_SIZE } from 'tiptap-utils'
 import content from './data/content.json' with { type: 'json' }
 import { EditorUI } from './editor-ui'
+import { REGION_LOADING_FRAME_CLASSES } from './region-loading-frame'
 
 /**
  * 演示版编辑器：集成所有 UI 能力，适合快速体验
@@ -59,6 +59,19 @@ export const Editor = memo<EditorProps>(({
       Search.configure({
         matchClass: 'text-brand',
         currentMatchClass: 'bg-brand !text-white',
+        /** 让 speaker 等原子节点的展示文本（renderText）也能被 Cmd+F 搜到 */
+        leafText: leafTextFromRenderText,
+      }),
+      /**
+       * 说话人标签（示例原子节点）：演示「atom ⇄ renderText ⇄ 搜索」
+       * speaker:1/2 已给名字，speaker:3 留空以展示 i18n 缺省名随语言切换刷新
+       */
+      SpeakerNode.configure({
+        speakerMap: {
+          1: { name: '张三' },
+          2: { name: '李四' },
+        },
+        onClick: attrs => console.warn('[speaker] clicked:', attrs),
       }),
       /** 块级 id-diff 同步：给顶层块挂稳定 id（块同步测试面板依赖它） */
       BlockId.configure(),

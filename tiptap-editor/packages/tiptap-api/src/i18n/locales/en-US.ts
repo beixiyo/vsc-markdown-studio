@@ -78,6 +78,9 @@ export const enUS: Translations = {
     nextResult: 'Next result',
     close: 'Close search',
   },
+  speaker: {
+    speaker: 'Speaker {{number}}',
+  },
   comment: {
     commentPanel: 'Comment Panel',
     addComment: 'Add Comment',

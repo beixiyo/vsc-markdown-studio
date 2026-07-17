@@ -78,6 +78,9 @@ export const ja: Translations = {
     nextResult: '次の検索結果',
     close: '検索を閉じる',
   },
+  speaker: {
+    speaker: '話者 {{number}}',
+  },
   comment: {
     commentPanel: 'コメントパネル',
     addComment: 'コメントを追加',

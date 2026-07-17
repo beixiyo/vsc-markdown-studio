@@ -77,6 +77,9 @@ export type TiptapEditorTranslations = {
     nextResult: string
     close: string
   }
+  speaker: {
+    speaker: string
+  }
   comment: {
     commentPanel: string
     addComment: string

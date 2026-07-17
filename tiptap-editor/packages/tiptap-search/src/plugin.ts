@@ -18,7 +18,9 @@ export function createSearchPlugin(options: SearchOptions) {
           return nextState
         }
 
-        const matches = findTextMatches(newState.doc, nextState.query, nextState.caseSensitive)
+        const matches = findTextMatches(newState.doc, nextState.query, nextState.caseSensitive, {
+          leafText: options.leafText,
+        })
 
         return {
           ...nextState,
@@ -49,8 +51,12 @@ export function createSearchPlugin(options: SearchOptions) {
               match.from,
               match.to,
               {
-                ...(className ? { class: className } : {}),
-                'data-search-match': isCurrent ? 'current' : 'match',
+                ...(className
+                  ? { class: className }
+                  : {}),
+                'data-search-match': isCurrent
+                  ? 'current'
+                  : 'match',
               },
             )
           }),

@@ -66,6 +66,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.1",
-    "vite": "^8.0.7"
+    "jsdom": "25.0.1",
+    "tiptap-search": "workspace:*",
+    "vite": "^8.0.7",
+    "vitest": "^2.1.9"
   }
 }
