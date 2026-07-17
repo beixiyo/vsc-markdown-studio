@@ -603,6 +603,45 @@
       ]
     },
     {
+      "type": "heading",
+      "attrs": { "textAlign": null, "level": 2 },
+      "content": [{ "type": "text", "text": "上下文引用锚点演示 (CtxRef)" }]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
+        { "type": "text", "text": "句末那个小旗帜是不可见数据锚点：" },
+        { "type": "text", "marks": [{ "type": "bold" }, { "type": "italic" }], "text": "这句话被标注为重点。" },
+        { "type": "ctxRef", "attrs": { "refType": "mark", "refId": "18504" } },
+        { "type": "text", "text": " 这条是笔记锚点：" },
+        { "type": "text", "marks": [{ "type": "bold" }, { "type": "italic" }], "text": "这句被采纳进总结。" },
+        { "type": "ctxRef", "attrs": { "refType": "note", "refId": "1" } }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
+        { "type": "text", "text": "下面两个是真实节点（不是代码演示）：未知类型 speaker 不在内置词表，仍被消费成 ctxRef 节点、回落笔记图标 →" },
+        { "type": "ctxRef", "attrs": { "refType": "speaker", "refId": "9" } },
+        { "type": "text", "text": "；这句里还藏了一个普通注释（HtmlCommentNode，不可见但存在）→" },
+        { "type": "htmlComment", "attrs": { "raw": "<!--todo: revisit-->" } },
+        { "type": "text", "text": " 两者都不会让文档崩。" }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
+        { "type": "text", "text": "点击图标，控制台打印 refType/refId 与紧邻的加粗斜体句；用 getText / 复制都取不到这些锚点（renderText 为空），但保存后 markdown 里的 " },
+        { "type": "text", "marks": [{ "type": "code" }], "text": "<!--ctx-ref:mark:18504-->" },
+        { "type": "text", "text": "、" },
+        { "type": "text", "marks": [{ "type": "code" }], "text": "<!--todo: revisit-->" },
+        { "type": "text", "text": " 原样还原。可在控制台用 window.__editor 跑 getMarkdown → setMarkdown 验证往返。" }
+      ]
+    },
+    {
       "type": "paragraph",
       "attrs": { "textAlign": null }
     }

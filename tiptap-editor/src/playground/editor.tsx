@@ -9,7 +9,7 @@ import { CommentMark, CommentStore } from 'tiptap-comment'
 import { BlockId } from 'tiptap-diff'
 import { TiptapEditor, useDefaultEditor, useMobileView } from 'tiptap-editor-core'
 import { MermaidNode } from 'tiptap-mermaid'
-import { ImageUploadNode, SpeakerNode } from 'tiptap-nodes'
+import { CtxRefNode, HtmlCommentNode, ImageUploadNode, SpeakerNode } from 'tiptap-nodes'
 
 import { RegionEdit } from 'tiptap-region'
 import { leafTextFromRenderText, Search } from 'tiptap-search'
@@ -73,6 +73,18 @@ export const Editor = memo<EditorProps>(({
         },
         onClick: attrs => console.warn('[speaker] clicked:', attrs),
       }),
+      /**
+       * 上下文引用锚点（示例原子节点）：演示「HTML comment marker ⇄ atom ⇄ 无损往返」
+       * 点击小圆点，控制台会打印 refType/refId 与紧邻的加粗斜体句
+       */
+      CtxRefNode.configure({
+        onClick: payload => console.warn('[ctx-ref] clicked:', payload),
+      }),
+      /**
+       * 注释兜底节点：把「非」ctx-ref 的行内 <!--...--> 也吞成不可见 atom，
+       * 否则通用 HTML 解析会产出非法 doc、后续 transaction 崩文档（与 ctx-ref 配套）
+       */
+      HtmlCommentNode.configure(),
       /** 块级 id-diff 同步：给顶层块挂稳定 id（块同步测试面板依赖它） */
       BlockId.configure(),
       /** Slash / Suggestion 扩展 */
