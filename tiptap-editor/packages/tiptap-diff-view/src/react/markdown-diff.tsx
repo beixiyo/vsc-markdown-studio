@@ -216,7 +216,7 @@ LineNumber.displayName = 'LineNumber'
 
 const LineContent = memo<LineProps>(({ line }) => (
   <code
-    className="min-w-0 whitespace-pre-wrap break-words px-4 leading-[1.7] text-text [overflow-wrap:anywhere]"
+    className="min-w-0 whitespace-pre-wrap wrap-break-word px-4 leading-[1.7] text-text"
     style={ getLineStyle(line) }
   >
     { line?.segments
