@@ -1,6 +1,7 @@
 import type {
   Language,
 } from 'tiptap-api/react'
+import type { MarkdownDiffPlaygroundProps } from '@/playground/diff/markdown-diff-playground'
 import { Button } from 'comps'
 import { lazy, useState } from 'react'
 import {
@@ -9,6 +10,7 @@ import {
   useI18n,
 } from 'tiptap-api/react'
 import { CollaborationSplitPane } from '@/playground/collaboration/split-pane'
+import { MarkdownDiffPlayground } from '@/playground/diff/markdown-diff-playground'
 import { Editor } from '@/playground/editor'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 
@@ -17,7 +19,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher'
  */
 function AppContent() {
   const { i18n: i18nInstance } = useI18n()
-  const [mode, setMode] = useState<'editor' | 'collaboration'>('editor')
+  const [mode, setMode] = useState<'editor' | 'collaboration' | 'diff'>('editor')
 
   /** 暴露全局函数到 window 对象，方便在控制台测试 */
   if (typeof window !== 'undefined') {
@@ -36,8 +38,8 @@ function AppContent() {
   }
 
   return (
-    <div className="h-screen">
-      <div className="flex gap-2 items-center justify-between px-4 py-2 border-b border-border">
+    <div className="flex h-screen min-h-0 flex-col">
+      <div className="flex shrink-0 gap-2 items-center justify-between px-4 py-2 border-b border-border">
         <div className="flex gap-2">
           <Button
             size="sm"
@@ -71,16 +73,54 @@ function AppContent() {
           >
             协同编辑
           </Button>
+          <Button
+            size="sm"
+            onClick={ () => setMode('diff') }
+            data-active-state={ mode === 'diff'
+              ? 'on'
+              : 'off' }
+            variant={ mode === 'diff'
+              ? 'primary'
+              : 'default' }
+            data-appearance="emphasized"
+            className="px-4 py-2 text-sm"
+          >
+            Markdown Diff
+          </Button>
         </div>
         <LanguageSwitcher />
       </div>
 
-      { mode === 'editor'
-        ? <Editor readonly={ false } />
-        : <CollaborationSplitPane /> }
+      <div className="min-h-0 flex-1 overflow-auto">
+        { mode === 'editor' && <Editor readonly={ false } /> }
+        { mode === 'collaboration' && <CollaborationSplitPane /> }
+        { mode === 'diff' && <MarkdownDiffPlayground { ...MARKDOWN_DIFF_CONFIG } /> }
+      </div>
     </div>
   )
 }
+
+const MARKDOWN_DIFF_CONFIG = {
+  splitViewMinWidth: 960,
+  colors: {
+    light: {
+      addLine: '#ebf5ec',
+      addText: '#c6e4ca',
+      deleteLine: '#fdedec',
+      deleteText: '#f7c7c5',
+      addMarker: '#34c759',
+      deleteMarker: '#ff565e',
+    },
+    dark: {
+      addLine: '#323c33',
+      addText: '#3e5633',
+      deleteLine: '#2d1615',
+      deleteText: '#621d21',
+      addMarker: '#34c759',
+      deleteMarker: '#ff565e',
+    },
+  },
+} satisfies MarkdownDiffPlaygroundProps
 
 const DevAgentation = import.meta.env.DEV
   ? lazy(() => import('agentation').then(m => ({ default: m.Agentation })))

@@ -375,6 +375,9 @@ importers:
       tiptap-diff:
         specifier: workspace:*
         version: link:packages/tiptap-diff
+      tiptap-diff-view:
+        specifier: workspace:*
+        version: link:packages/tiptap-diff-view
       tiptap-editor-core:
         specifier: workspace:*
         version: link:packages/tiptap-editor-core
@@ -645,6 +648,28 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^6.0.1
         version: 6.0.2(babel-plugin-react-compiler@1.0.0)(vite@8.0.16(@types/node@24.13.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
+      vite:
+        specifier: ^8.0.7
+        version: 8.0.16(@types/node@24.13.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
+
+  tiptap-editor/packages/tiptap-diff-view:
+    dependencies:
+      diff:
+        specifier: 9.0.0
+        version: 9.0.0
+      hooks:
+        specifier: workspace:^
+        version: link:../../../packages/hooks
+      i18n:
+        specifier: workspace:*
+        version: link:../../../packages/i18n
+      react:
+        specifier: ^19.2.4
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.4
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
       vite:
         specifier: ^8.0.7
         version: 8.0.16(@types/node@24.13.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
@@ -3318,6 +3343,10 @@ packages:
 
   diff@8.0.4:
     resolution: {integrity: sha512-DPi0FmjiSU5EvQV0++GFDOJ9ASQUVFh5kD+OzOnYdi7n3Wpm9hWWGfB/O2blfHcMVTL5WkQXSnRiK9makhrcnw==}
+    engines: {node: '>=0.3.1'}
+
+  diff@9.0.0:
+    resolution: {integrity: sha512-svtcdpS8CgJyqAjEQIXdb3OjhFVVYjzGAPO8WGCmRbrml64SPw/jJD4GoE98aR7r25A0XcgrK3F02yw9R/vhQw==}
     engines: {node: '>=0.3.1'}
 
   dompurify@3.4.8:
@@ -8008,6 +8037,8 @@ snapshots:
   diff-sequences@27.5.1: {}
 
   diff@8.0.4: {}
+
+  diff@9.0.0: {}
 
   dompurify@3.4.8:
     optionalDependencies:

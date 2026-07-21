@@ -1,0 +1,60 @@
+{
+  "name": "tiptap-diff-view",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./react": {
+      "require": {
+        "types": "./dist/react/index.d.ts",
+        "default": "./dist/react/index.cjs"
+      },
+      "import": {
+        "types": "./dist/react/index.d.ts",
+        "default": "./dist/react/index.js"
+      }
+    },
+    "./i18n": {
+      "require": {
+        "types": "./dist/i18n/index.d.ts",
+        "default": "./dist/i18n/index.cjs"
+      },
+      "import": {
+        "types": "./dist/i18n/index.d.ts",
+        "default": "./dist/i18n/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint ./src --fix --quiet"
+  },
+  "dependencies": {
+    "diff": "9.0.0",
+    "hooks": "workspace:^"
+  },
+  "peerDependencies": {
+    "i18n": "workspace:*",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "vite": "^8.0.7"
+  }
+}
