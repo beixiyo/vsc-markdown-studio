@@ -26,6 +26,40 @@ function ctxRefIconSvg(refType: string): string {
   return CTX_REF_ICON_SVG[refType] ?? CTX_REF_ICON_SVG.note
 }
 
+/** 底板型角标的边长 */
+const BADGE_SIZE = '28px'
+
+/**
+ * 锚点默认外观：note 一类占 28×28 圆角方块，mark 只是行内小图标
+ *
+ * 定高 28px 而非跟随 1em——生产版这里还要放图片缩略图，两者在同一行混排，
+ * 尺寸不一致就会高低不齐。对齐一律靠 `verticalAlign`，不做基线微调：
+ * 按 1em 行内图算出的偏移量在定高元素上会明显偏下
+ *
+ * 只给几何不给背景：图标本身已是完整可读的视觉，垫灰底反而与图标描边打架，
+ * 底色属于设计系统，由宿主自行补
+ */
+function applyCtxRefAnchorStyle(dom: HTMLElement, refType: string): void {
+  const s = dom.style
+  s.display = 'inline-flex'
+  s.alignItems = 'center'
+  s.justifyContent = 'center'
+  s.verticalAlign = 'middle'
+  s.lineHeight = '0'
+  s.cursor = 'pointer'
+
+  /** mark 属裸图标档，只要行内间距，套底板反而喧宾夺主 */
+  if (refType === 'mark') {
+    s.margin = '0 7px'
+    return
+  }
+
+  s.margin = '0 4px'
+  s.width = BADGE_SIZE
+  s.height = BADGE_SIZE
+  s.borderRadius = '8px'
+}
+
 /**
  * 取 marker 前紧邻的加粗斜体句（随点击回调一并抛出）
  *
@@ -137,8 +171,8 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
         `tiptap-ctx-ref--${node.attrs.refType}`,
         options.className ?? '',
       ].filter(Boolean).join(' ')
-      /** 无 CSS 依赖的默认外观：一张内联小图标，锚在斜体旁、鼠标可点 */
-      dom.style.cssText = 'display:inline-flex;align-items:center;vertical-align:middle;margin:0 1px 0 3px;line-height:0;cursor:pointer;'
+      /** 无 CSS 依赖的默认外观：锚在斜体旁、鼠标可点 */
+      applyCtxRefAnchorStyle(dom, node.attrs.refType)
       dom.innerHTML = ctxRefIconSvg(node.attrs.refType)
       dom.title = `${node.attrs.refType}:${node.attrs.refId}`
 
