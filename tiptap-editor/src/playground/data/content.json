@@ -623,6 +623,24 @@
       "type": "paragraph",
       "attrs": { "textAlign": null },
       "content": [
+        { "type": "text", "marks": [{ "type": "bold" }, { "type": "italic" }], "text": "相邻的图片与重点引用之间不应叠加双份间距。" },
+        { "type": "ctxRef", "attrs": { "refType": "image", "refId": "101" } },
+        { "type": "ctxRef", "attrs": { "refType": "mark", "refId": "mark_adjacent" } }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
+        { "type": "text", "marks": [{ "type": "bold" }, { "type": "italic" }], "text": "Note 后的原始空格由节点保存，但不应叠加到图标右边距。" },
+        { "type": "ctxRef", "attrs": { "refType": "note", "refId": "2", "trailingWhitespace": " " } },
+        { "type": "text", "text": "后续正文从这里开始。" }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": { "textAlign": null },
+      "content": [
         { "type": "text", "text": "下面两个是真实节点（不是代码演示）：未知类型 speaker 不在内置词表，仍被消费成 ctxRef 节点、回落笔记图标 →" },
         { "type": "ctxRef", "attrs": { "refType": "speaker", "refId": "9" } },
         { "type": "text", "text": "；这句里还藏了一个普通注释（HtmlCommentNode，不可见但存在）→" },

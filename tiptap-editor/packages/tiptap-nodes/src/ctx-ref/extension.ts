@@ -1,69 +1,35 @@
+/**
+ * HTML comment marker 兼容层：把 `<!--...-->` marker 升格为真实文档节点
+ *
+ * 背景：ProseMirror 的 DOMParser 不解析 comment 节点，`<!--ctx-ref:...-->` 这类
+ * marker 经编辑器 roundtrip 会被静默丢弃。本模块通过 @tiptap/markdown 的
+ * markdownTokenizer 在词法层把 marker 解析为不可见的 atom 节点，序列化时原样还原，
+ * 保证「加载 → 编辑 → 保存」全程 marker 不丢、不变形
+ *
+ * - `CtxRefNode`：`<!--ctx-ref:{type}:{id}-->` → 行内数据锚点（携带 data 属性与点击事件；
+ *   默认渲染内置图标，可经 `options.icons` 覆盖或传 `false` / `null` 关闭）
+ */
+
+import type { CommandProps, Editor, NodeViewRendererProps } from '@tiptap/core'
 import type { Node as PMNode } from '@tiptap/pm/model'
 import type { EditorView } from '@tiptap/pm/view'
-import type { CtxRefOptions } from './types'
+import type { CtxRefIconContext, CtxRefIconRenderer, CtxRefImageItem, CtxRefOptions, CtxRefStorage, CtxRefType, KnownCtxRefType } from './types'
 import { mergeAttributes, Node } from '@tiptap/core'
 import { Plugin } from '@tiptap/pm/state'
+import { builtinCtxRefIcons } from './builtin-icons'
 import {
   CTX_REF_START,
   CTX_REF_TOKEN,
+  isClickableCtxRefType,
   parseCtxRefMarkdownToken,
   renderCtxRefMarker,
   tokenizeCtxRefMarkdown,
 } from './rules'
 
 /**
- * 内置小图标（inline SVG，无外部 CSS / 图标库依赖）
- *
- * 示例只给两类默认外观：mark → 旗帜，note → 笔记；未知类型回落到 note。
- * 生产版是一整套可外部接管的图标工厂，示例刻意只留这一张最小映射
- */
-const CTX_REF_ICON_SVG: Record<string, string> = {
-  mark: `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.34961 1.98271C2.34961 1.33283 2.96879 0.877713 3.57422 1.04131L3.69434 1.08232L11.2412 4.19268C12.1675 4.57443 12.1462 5.89295 11.208 6.24443L3.65039 9.07549V12.4993C3.6503 12.8582 3.35893 13.1497 3 13.1497C2.64107 13.1497 2.3497 12.8582 2.34961 12.4993V1.98271Z" fill="#FAD541"/></svg>`,
-  note: `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.1338 4.38379L12.2041 4.28125C12.2321 4.26444 12.3616 4.28424 12.6592 4.49707C12.9577 4.71059 12.9742 4.80942 12.9453 4.83203L12.8994 4.89941C13.0133 5.01947 13.0216 5.08297 13.0195 5.12109L12.8232 5.38477L10.7432 8.39551L8.63379 11.4238C8.17427 11.9149 7.15617 12.8316 6.83203 12.624C6.50788 12.4164 7.08767 11.152 7.41797 10.5459L11.8125 4.26953H11.8838L12.1338 4.38379ZM6.3125 4.3623C6.67109 4.36267 6.96177 4.65308 6.96191 5.01172C6.96169 5.37029 6.67104 5.66174 6.3125 5.66211H1.75C1.39115 5.66211 1.09983 5.37051 1.09961 5.01172C1.09975 4.65286 1.3911 4.3623 1.75 4.3623H6.3125ZM8.91895 1.40039C9.27774 1.40061 9.56934 1.69193 9.56934 2.05078C9.56911 2.40944 9.27761 2.70095 8.91895 2.70117H1.75C1.39115 2.70117 1.09983 2.40958 1.09961 2.05078C1.09961 1.6918 1.39101 1.40039 1.75 1.40039H8.91895Z" fill="currentColor" fill-opacity="0.6"/></svg>`,
-}
-
-function ctxRefIconSvg(refType: string): string {
-  return CTX_REF_ICON_SVG[refType] ?? CTX_REF_ICON_SVG.note
-}
-
-/** 底板型角标的边长 */
-const BADGE_SIZE = '28px'
-
-/**
- * 锚点默认外观：note 一类占 28×28 圆角方块，mark 只是行内小图标
- *
- * 定高 28px 而非跟随 1em——生产版这里还要放图片缩略图，两者在同一行混排，
- * 尺寸不一致就会高低不齐。对齐一律靠 `verticalAlign`，不做基线微调：
- * 按 1em 行内图算出的偏移量在定高元素上会明显偏下
- *
- * 只给几何不给背景：图标本身已是完整可读的视觉，垫灰底反而与图标描边打架，
- * 底色属于设计系统，由宿主自行补
- */
-function applyCtxRefAnchorStyle(dom: HTMLElement, refType: string): void {
-  const s = dom.style
-  s.display = 'inline-flex'
-  s.alignItems = 'center'
-  s.justifyContent = 'center'
-  s.verticalAlign = 'middle'
-  s.lineHeight = '0'
-  s.cursor = 'pointer'
-
-  /** mark 属裸图标档，只要行内间距，套底板反而喧宾夺主 */
-  if (refType === 'mark') {
-    s.margin = '0 7px'
-    return
-  }
-
-  s.margin = '0 4px'
-  s.width = BADGE_SIZE
-  s.height = BADGE_SIZE
-  s.borderRadius = '8px'
-}
-
-/**
  * 取 marker 前紧邻的加粗斜体句（随点击回调一并抛出）
  *
- * 约定：与引用对应的一句话以 `***加粗斜体***` 紧邻 marker 之前，
+ * 约定：与引用对应的一句话以 ***加粗斜体*** 紧邻 marker 之前。
  * 向前收集同段内连续的 bold + italic 文本
  */
 function getLeadingSentence(doc: PMNode, pos: number): string {
@@ -88,21 +54,8 @@ function getLeadingSentence(doc: PMNode, pos: number): string {
   }
 }
 
-/**
- * CtxRef 上下文引用锚点（示例节点）
- *
- * markdown 里的 `<!--ctx-ref:{type}:{id}-->` 会被解析成一个行内**原子节点**，
- * 作为「不可见数据锚点」把总结里的一句话关联到某个资源（mark / note / …）。
- * 教学目标见同目录 README，核心三件事：
- * 1. 词法层消费 marker（含未知类型）——否则通用 HTML 解析会产出非法 doc 致崩溃
- * 2. `renderMarkdown` 原样吐回 marker——保证「加载 → 编辑 → 保存」往返幂等、锚点不丢
- * 3. `renderText` 返回 ''——锚点不进入纯文本 / 搜索（与 speaker 示例正相反）
- *
- * 相比业务生产版，示例刻意去掉了内置图标库、流式动效、图标工厂契约，
- * 只渲染一个简单可点的小圆点
- */
 export const CtxRefNode = Node.create<CtxRefOptions>({
-  name: CTX_REF_TOKEN,
+  name: 'ctxRef',
   inline: true,
   group: 'inline',
   atom: true,
@@ -113,6 +66,20 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
     return {
       onClick: undefined,
       className: undefined,
+      icons: undefined,
+    }
+  },
+
+  /**
+   * `image` 角标的 URL 表（refId → url），由 `setCtxRefImages` 写入
+   *
+   * 放 storage 而非 options：options 在扩展注册时就固化，而 URL 往往晚于编辑器
+   * 构造才到达（原生推送 / 接口返回）。storage 可在运行时改写，内置图标工厂
+   * 每次重绘都读最新值
+   */
+  addStorage() {
+    return {
+      imageUrls: new Map<string, string>(),
     }
   },
 
@@ -128,6 +95,31 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
         parseHTML: element => element.getAttribute('data-ctx-id'),
         renderHTML: attrs => ({ 'data-ctx-id': attrs.refId }),
       },
+      /**
+       * 流式替换态（图标渲染为动效）。纯运行时 UI 状态：
+       * 不进 HTML / Markdown（`rendered: false`），不参与 marker 往返，
+       * 仅由 `setCtxRefStreaming` 命令在编辑器内临时切换
+       */
+      streaming: {
+        default: false,
+        rendered: false,
+      },
+      /**
+       * 图标重绘计数器。同为纯运行时 UI 状态（`rendered: false`）
+       *
+       * 存在的理由：图标工厂只在 NodeView 创建 / attrs 变化时跑，工厂闭包里的外部
+       * 数据源（如「refId → 图片 URL」映射表）晚于内容到达时，已渲染的角标不会自己
+       * 重画。`refreshCtxRefIcons` 递增此值即可精确触发重绘，无需重建文档
+       */
+      iconVersion: {
+        default: 0,
+        rendered: false,
+      },
+      /** marker 后的横向空白：渲染时隐藏，序列化 Markdown 时原样还原 */
+      trailingWhitespace: {
+        default: '',
+        rendered: false,
+      },
     }
   },
 
@@ -135,7 +127,6 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
     return [{ tag: 'span[data-ctx-ref]' }]
   },
 
-  /** getHTML / 复制 HTML 通道：产出带 data 属性的纯 span（图标只在 NodeView 实时渲染） */
   renderHTML({ node, HTMLAttributes }) {
     return [
       'span',
@@ -149,36 +140,104 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
     ]
   },
 
-  /** marker 不进入纯文本提取结果（getText / 搜索都读不到，保持不可见） */
+  /** marker 不进入纯文本提取结果 */
   renderText() {
     return ''
   },
 
   /**
-   * 编辑器内实时渲染：把锚点升格为一个可见、可点的小图标
-   * （生产版在这里挂图标库 / 流式动效；示例只给最小可交互形态）
+   * 编辑器内的实时渲染：把锚点升格为可见图标挂载点
+   *
+   * - 默认渲染内置图标；`options.icons[refType]` 传函数则自定义，传 `false` / `null` 则不渲染
+   * - `streaming` 变化时重新调用工厂，实现「静态图标 ⇄ 流式动效」切换
+   *
+   * 注：`renderHTML` 仅产出带 data 属性的纯 span，供 getHTML / 复制 / HTML 通道往返；
+   * 图标只在 NodeView 实时渲染，不写入序列化结果
    */
   addNodeView() {
     const options = this.options
-
-    return ({ node }) => {
+    return ({ node, editor, getPos }: NodeViewRendererProps) => {
       const dom = document.createElement('span')
       dom.setAttribute('contenteditable', 'false')
-      dom.setAttribute('data-ctx-ref', node.attrs.refType)
-      dom.setAttribute('data-ctx-id', node.attrs.refId)
-      dom.className = [
-        'tiptap-ctx-ref',
-        `tiptap-ctx-ref--${node.attrs.refType}`,
-        options.className ?? '',
-      ].filter(Boolean).join(' ')
-      /** 无 CSS 依赖的默认外观：锚在斜体旁、鼠标可点 */
-      applyCtxRefAnchorStyle(dom, node.attrs.refType)
-      dom.innerHTML = ctxRefIconSvg(node.attrs.refType)
-      dom.title = `${node.attrs.refType}:${node.attrs.refId}`
+
+      let current = node.attrs as { refType: CtxRefType, refId: string, streaming: boolean, iconVersion: number }
+
+      const resolvePos = () => (typeof getPos === 'function'
+        ? getPos()
+        : undefined)
+
+      const render = () => {
+        dom.replaceChildren()
+
+        const pos = resolvePos()
+        const previousIsCtxRef = pos !== undefined
+          && editor.state.doc.resolve(pos).nodeBefore?.type.name === 'ctxRef'
+        const iconMargin = current.refType === 'note' || current.refType === 'image'
+          ? 8
+          : 7
+        dom.style.marginLeft = previousIsCtxRef
+          ? `-${iconMargin}px`
+          : ''
+
+        dom.setAttribute('data-ctx-ref', current.refType)
+        dom.setAttribute('data-ctx-id', current.refId)
+        if (current.streaming)
+          dom.setAttribute('data-streaming', '')
+        else
+          dom.removeAttribute('data-streaming')
+
+        dom.className = [
+          'tiptap-ctx-ref',
+          `tiptap-ctx-ref--${current.refType}`,
+          current.streaming
+            ? 'tiptap-ctx-ref--streaming'
+            : '',
+          options.className ?? '',
+        ].filter(Boolean).join(' ')
+
+        const configured = options.icons?.[current.refType]
+        /** undefined → 内置默认；false / null → 不渲染；函数 → 自定义；未知类型无内置图标 → 不渲染 */
+        const builtin = builtinCtxRefIcons[current.refType as KnownCtxRefType] as CtxRefIconRenderer | undefined
+        const renderer = configured === undefined
+          ? builtin
+          : configured
+
+        if (renderer) {
+          /** ctx.defaultIcon 让自定义工厂能取到内置图标做二次加工（包装 / 样式 / 绑事件） */
+          const ctx: CtxRefIconContext = {
+            refType: current.refType,
+            refId: current.refId,
+            streaming: current.streaming,
+            editor: editor as Editor,
+            getPos: resolvePos,
+            defaultIcon: () => builtin?.(ctx) ?? null,
+          }
+          const iconEl = renderer(ctx)
+          if (iconEl)
+            dom.appendChild(iconEl)
+        }
+      }
+
+      render()
 
       return {
         dom,
-        /** atom 节点内部 DOM 自管，忽略 PM 的 DOM 变更观测 */
+        update: (newNode) => {
+          if (newNode.type.name !== 'ctxRef')
+            return false
+          const prev = current
+          current = newNode.attrs as typeof current
+          if (
+            prev.refType !== current.refType
+            || prev.refId !== current.refId
+            || prev.streaming !== current.streaming
+            || prev.iconVersion !== current.iconVersion
+          ) {
+            render()
+          }
+          return true
+        },
+        /** atom 节点内部 DOM 由工厂托管，忽略 PM 的 DOM 变更观测 */
         ignoreMutation: () => true,
         /** 不拦截事件，交给 onClick 的 ProseMirror 插件统一处理 */
         stopEvent: () => false,
@@ -192,15 +251,143 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
     name: CTX_REF_TOKEN,
     level: 'inline',
     start: CTX_REF_START,
-    tokenize: (src: string) => tokenizeCtxRefMarkdown(src),
+    tokenize: (src: string) => {
+      return tokenizeCtxRefMarkdown(src)
+    },
   },
 
-  parseMarkdown: token => parseCtxRefMarkdownToken(token),
+  parseMarkdown: (token) => {
+    return parseCtxRefMarkdownToken(token)
+  },
 
-  /** 原样还原 comment marker，两侧不补字符，保证 parse → serialize 往返幂等 */
-  renderMarkdown: node => renderCtxRefMarker(node.attrs),
+  /**
+   * 原样还原 comment marker
+   * 两侧不补任何字符，保证 parse → serialize 往返幂等
+   */
+  renderMarkdown: (node) => {
+    return renderCtxRefMarker(node.attrs) + (node.attrs?.trailingWhitespace ?? '')
+  },
 
-  /** 点击锚点回调：从 DOM 还原 attrs + 紧邻加粗斜体句，交给宿主 */
+  addCommands() {
+    return {
+      /**
+       * 切换匹配 refId 的 ctx-ref 节点的流式态（图标随之在「静态 ⇄ 动效」间切换）
+       *
+       * - 同一 refId 的多个节点会一并切换；可选 `refType` 进一步收窄
+       * - 走 `addToHistory: false`，不污染 undo 栈（流式是临时 UI 态，不应被撤销）
+       * - 无匹配节点时返回 `false`
+       */
+      setCtxRefStreaming: (
+        target: string | { refId: string, refType?: CtxRefType },
+        streaming: boolean,
+      ) => ({ tr, state, dispatch }: CommandProps) => {
+        const refId = typeof target === 'string'
+          ? target
+          : target.refId
+        const refType = typeof target === 'string'
+          ? undefined
+          : target.refType
+
+        let matched = false
+        state.doc.descendants((node, pos) => {
+          if (
+            node.type.name === 'ctxRef'
+            && node.attrs.refId === refId
+            && (refType == null || node.attrs.refType === refType)
+          ) {
+            tr.setNodeMarkup(pos, undefined, { ...node.attrs, streaming })
+            matched = true
+          }
+        })
+
+        if (matched && dispatch) {
+          tr.setMeta('addToHistory', false)
+          dispatch(tr)
+        }
+        return matched
+      },
+
+      /**
+       * 写入 `image` 角标的 URL 表，并立刻重绘图片角标
+       *
+       * marker 里只有 `<!--ctx-ref:image:{id}-->`，URL 由业务侧提供（接口返回 /
+       * 原生推送）。命中的角标渲染为缩略图，未命中的保持内置占位图标
+       *
+       * - **全量覆盖**而非增量合并：图片被删除时重推一次即可生效
+       * - `id` 统一按字符串存，传数字会被转换（marker 里的 refId 永远是字符串）
+       * - 调用时机不限，晚于内容设置也会重绘已渲染的占位角标
+       * - 表内条目数读 `editor.storage.ctxRef.imageUrls.size`
+       */
+      setCtxRefImages: (list: CtxRefImageItem[]) => (props: CommandProps) => {
+        const urls = props.editor.storage.ctxRef.imageUrls
+        urls.clear()
+
+        for (const item of Array.isArray(list)
+          ? list
+          : []) {
+          const id = item?.id == null
+            ? ''
+            : String(item.id)
+
+          if (id && item?.url)
+            urls.set(id, item.url)
+        }
+
+        /**
+         * 必须用 `props.commands` 而不是 `props.editor.commands`
+         *
+         * 后者会基于当前 state 另开一个事务并立即 dispatch，与外层这个 `tr` 同源，
+         * 谁先落地另一个就成了陈旧事务，ProseMirror 抛
+         * `RangeError: Applying a mismatched transaction`。
+         * `props.commands` 复用同一个 `tr`，写表与重绘合并成一次 dispatch
+         *
+         * 文档尚未设置时没有 marker，刷新返回 false，但表已写入，属正常路径
+         */
+        props.commands.refreshCtxRefIcons({ refType: 'image' })
+        return true
+      },
+
+      /**
+       * 强制重跑图标工厂，重绘匹配的 ctx-ref 角标
+       *
+       * 用于「工厂依赖的外部数据源晚于内容到达」：图标工厂只在 NodeView 创建 /
+       * attrs 变化时执行，映射表（如 refId → 图片 URL）后到时，已渲染的角标仍是
+       * 占位态。此命令递增运行时 `iconVersion`，触发 NodeView 重绘
+       *
+       * - 不传 target 刷新全部；传 `refType` / `refId` 收窄范围
+       * - 走 `addToHistory: false`，不污染 undo 栈，也不动光标与选区
+       * - 相比 `setMarkdown` 重建文档，代价小得多且不打断正在编辑的用户
+       * - 无匹配节点时返回 `false`
+       */
+      refreshCtxRefIcons: (
+        target?: { refType?: CtxRefType, refId?: string },
+      ) => ({ tr, state, dispatch }: CommandProps) => {
+        const { refType, refId } = target ?? {}
+
+        let matched = false
+        state.doc.descendants((node, pos) => {
+          if (
+            node.type.name === 'ctxRef'
+            && (refType == null || node.attrs.refType === refType)
+            && (refId == null || node.attrs.refId === refId)
+          ) {
+            tr.setNodeMarkup(pos, undefined, {
+              ...node.attrs,
+              iconVersion: (node.attrs.iconVersion ?? 0) + 1,
+            })
+            matched = true
+          }
+        })
+
+        if (matched && dispatch) {
+          tr.setMeta('addToHistory', false)
+          dispatch(tr)
+        }
+        return matched
+      },
+    }
+  },
+
   addProseMirrorPlugins() {
     const onClick = this.options.onClick
     if (!onClick) {
@@ -218,9 +405,15 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
                 return false
               }
 
+              const refType = el.getAttribute('data-ctx-ref')
+              /** 内置 marker 均触发回调；载荷带 refType，由调用方按类型决定行为 */
+              if (!isClickableCtxRefType(refType)) {
+                return false
+              }
+
               const pos = view.posAtDOM(el, 0)
               onClick({
-                refType: el.getAttribute('data-ctx-ref') ?? '',
+                refType,
                 refId: el.getAttribute('data-ctx-id') ?? '',
                 sentence: getLeadingSentence(view.state.doc, pos),
               }, event)
@@ -233,3 +426,25 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
     ]
   },
 })
+
+declare module '@tiptap/core' {
+  interface Storage {
+    ctxRef: CtxRefStorage
+  }
+
+  interface Commands<ReturnType> {
+    ctxRef: {
+      /** 切换匹配 refId（可选 refType）的 ctx-ref 节点的流式态 */
+      setCtxRefStreaming: (
+        target: string | { refId: string, refType?: CtxRefType },
+        streaming: boolean,
+      ) => ReturnType
+      /** 全量覆盖 image 角标的 URL 表并立刻重绘 */
+      setCtxRefImages: (list: CtxRefImageItem[]) => ReturnType
+      /** 重跑图标工厂重绘角标；不传 target 刷新全部，可按 refType / refId 收窄 */
+      refreshCtxRefIcons: (
+        target?: { refType?: CtxRefType, refId?: string },
+      ) => ReturnType
+    }
+  }
+}

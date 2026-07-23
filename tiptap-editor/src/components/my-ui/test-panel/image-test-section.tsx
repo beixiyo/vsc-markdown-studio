@@ -2,7 +2,7 @@
 
 import type { Editor } from '@tiptap/react'
 import { Button } from 'comps'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
 import { TestSection } from './test-section'
 
@@ -19,6 +19,11 @@ const SAMPLES = {
   fallback: 'https://picsum.photos/seed/fallback/120/80',
   thumbnail: 'https://picsum.photos/seed/a/20/12',
 }
+
+const CTX_REF_IMAGES = [
+  { id: '101', url: 'https://picsum.photos/seed/ctx-ref-image-a/160/160' },
+  { id: '101', url: 'https://picsum.photos/seed/ctx-ref-image-b/160/160' },
+] as const
 
 type Preset = {
   label: string
@@ -70,6 +75,7 @@ const UPDATE_ACTIONS: { label: string, patch: Record<string, any> | ((e: Editor)
 
 export const ImageTestSection = memo<ImageTestSectionProps>(({ editor: providedEditor }) => {
   const { editor } = useTiptapEditor(providedEditor)
+  const [ctxRefStatus, setCtxRefStatus] = useState<CtxRefImageStatus>('未设置')
 
   const insert = (preset: Preset) => {
     if (!editor)
@@ -88,8 +94,26 @@ export const ImageTestSection = memo<ImageTestSectionProps>(({ editor: providedE
     console.log('[ImageTest] updateImage', action.label, patch)
   }
 
+  const setCtxRefImage = (index: 0 | 1) => {
+    editor?.commands.setCtxRefImages([CTX_REF_IMAGES[index]])
+    setCtxRefStatus(index === 0
+      ? '图片 A'
+      : '图片 B')
+  }
+
+  const clearCtxRefImages = () => {
+    editor?.commands.setCtxRefImages([])
+    setCtxRefStatus('已清空')
+  }
+
   return (
     <div className="flex flex-col gap-4">
+      <TestSection title={ `ctx-ref image:101 · ${ctxRefStatus}` }>
+        <TinyBtn onClick={ () => setCtxRefImage(0) }>设置图片</TinyBtn>
+        <TinyBtn onClick={ () => setCtxRefImage(1) }>换一张</TinyBtn>
+        <TinyBtn onClick={ clearCtxRefImages }>清空</TinyBtn>
+      </TestSection>
+
       <TestSection title="Inline 插入">
         { INLINE_PRESETS.map(p => (
           <TinyBtn key={ p.label } onClick={ () => insert(p) }>{ p.label }</TinyBtn>
@@ -151,3 +175,5 @@ export type ImageTestSectionProps = {
   /** 可选的编辑器实例，不提供则从上下文获取 */
   editor?: Editor | null
 }
+
+type CtxRefImageStatus = '未设置' | '图片 A' | '图片 B' | '已清空'
