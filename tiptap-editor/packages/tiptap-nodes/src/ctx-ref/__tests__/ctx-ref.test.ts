@@ -84,7 +84,8 @@ describe('ctx-ref', () => {
 
   it('renderText 为空，锚点不进纯文本', () => {
     const editor = createEditor()
-    setMarkdown(editor, '***Hello.***<!--ctx-ref:note:1-->')
+    setMarkdown(editor, '***A much longer sentence.***<!--ctx-ref:mark:old-->')
+    setMarkdown(editor, 'Hello.<!--ctx-ref:note:1-->')
     expect(editor.getText()).not.toContain('ctx-ref')
     expect(editor.getText()).toContain('Hello.')
     editor.destroy()

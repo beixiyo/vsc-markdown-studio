@@ -171,6 +171,8 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
 
         const pos = resolvePos()
         const previousIsCtxRef = pos !== undefined
+          && pos >= 0
+          && pos <= editor.state.doc.content.size
           && editor.state.doc.resolve(pos).nodeBefore?.type.name === 'ctxRef'
         const iconMargin = current.refType === 'note' || current.refType === 'image'
           ? 8
