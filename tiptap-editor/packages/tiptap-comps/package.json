@@ -52,7 +52,8 @@
   },
   "scripts": {
     "build": "vite build",
-    "lint": "eslint ./src --fix --quiet"
+    "lint": "eslint ./src --quiet",
+    "lint:fix": "eslint ./src --fix --quiet"
   },
   "devDependencies": {
     "@tiptap/markdown": "3.26.0",

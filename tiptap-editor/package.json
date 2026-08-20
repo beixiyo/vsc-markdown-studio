@@ -25,7 +25,8 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "lint": "eslint ./src --fix --quiet"
+    "lint": "eslint ./src --quiet",
+    "lint:fix": "eslint ./src --fix --quiet"
   },
   "dependencies": {
     "@hocuspocus/provider": "^2.15.0",

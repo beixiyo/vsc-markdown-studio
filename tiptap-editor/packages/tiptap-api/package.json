@@ -43,7 +43,8 @@
   },
   "scripts": {
     "build": "vite build",
-    "lint": "eslint ./src --fix --quiet",
+    "lint": "eslint ./src --quiet",
+    "lint:fix": "eslint ./src --fix --quiet",
     "test": "vitest run",
     "test:watch": "vitest"
   },
