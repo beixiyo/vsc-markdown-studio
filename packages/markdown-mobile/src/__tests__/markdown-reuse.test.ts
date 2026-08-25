@@ -1,4 +1,6 @@
 import { createMarkdownOperate } from 'tiptap-api'
+import { CtxRefNode, HtmlCommentNode } from 'tiptap-nodes/ctx-ref'
+import { SpeakerNode } from 'tiptap-nodes/speaker'
 import { describe, expect, it } from 'vitest'
 import { createTiptapOperate } from '../operate/create'
 import { makeEditor } from './helpers'
@@ -202,6 +204,56 @@ describe('getMarkdown 返回真正的 Markdown', () => {
     expect(result).toMatch(/1\.\s+one/)
     expect(result).toMatch(/2\.\s+two/)
     expect(result).toContain('> blockquote')
+    cleanup()
+  })
+
+  /**
+   * 回归 emphasis 与 code span 边界重叠时，marked 会优先生成 code token：
+   * speaker 无法进入自定义 tokenizer，末尾还会留下孤立星号。这里走 mobile
+   * 的真实 setMarkdown 入口，确保归一化后两个自定义节点及 marker 往返都完整
+   */
+  it('畸形强调边界中的 speaker 与 ctx-ref 可正确解析并往返', () => {
+    const input = [
+      '- **`**対象サイトは変更されたものの、[speaker:2]が提案した方針は維持されました。***`***<!--ctx-ref:mark:70576-->',
+      '- これに伴い、***[speaker:2]は参照画像を速やかに差し替えると述べました。***<!--ctx-ref:mark:70575-->',
+    ].join('\n')
+    const { editor, cleanup } = makeEditor('', [CtxRefNode, HtmlCommentNode, SpeakerNode])
+    const op = createTiptapOperate(editor)
+
+    op.setMarkdown(input)
+
+    const speakerLabels: string[] = []
+    const ctxRefs: Array<{ refType: string, refId: string }> = []
+    let firstSentenceMarks: string[] = []
+
+    editor.state.doc.descendants((node) => {
+      if (node.type.name === 'speaker')
+        speakerLabels.push(String(node.attrs.originalLabel))
+
+      if (node.type.name === 'ctxRef') {
+        ctxRefs.push({
+          refType: String(node.attrs.refType),
+          refId: String(node.attrs.refId),
+        })
+      }
+
+      if (node.isText && node.text?.startsWith('対象サイト'))
+        firstSentenceMarks = node.marks.map(mark => mark.type.name)
+    })
+
+    expect(speakerLabels).toEqual(['2', '2'])
+    expect(ctxRefs).toEqual([
+      { refType: 'mark', refId: '70576' },
+      { refType: 'mark', refId: '70575' },
+    ])
+    expect(firstSentenceMarks).toEqual(expect.arrayContaining(['bold', 'italic']))
+    expect(firstSentenceMarks).not.toContain('code')
+    expect(editor.getText()).not.toContain('*')
+
+    const roundtrip = op.getMarkdown()
+    expect(roundtrip).toContain('<!--ctx-ref:mark:70576-->')
+    expect(roundtrip).toContain('<!--ctx-ref:mark:70575-->')
+
     cleanup()
   })
 

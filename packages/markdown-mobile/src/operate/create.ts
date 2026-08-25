@@ -2,6 +2,7 @@ import type { Editor } from '@tiptap/core'
 import type { GradientStyleType } from 'tiptap-nodes/gradient-highlight'
 import { createMarkdownOperate, getEditorHTML, getEditorJson, setEditorHTML, setEditorMarkdown } from 'tiptap-api'
 import { isGradientType } from 'tiptap-nodes/gradient-highlight'
+import { normalizeMobileMarkdownInput } from '../markdown'
 
 const STYLE_KEY_TO_MARK: Record<string, string> = {
   bold: 'bold',
@@ -114,7 +115,7 @@ export function createTiptapOperate(editor: Editor) {
     getHTML: (): string => getEditorHTML(editor) ?? '',
     getMarkdown: (): string => base.getMarkdown() ?? '',
     setHTML: (html: string) => { setEditorHTML(editor, html) },
-    setMarkdown: (markdown: string) => { setEditorMarkdown(editor, markdown) },
+    setMarkdown: (markdown: string) => { setEditorMarkdown(editor, normalizeMobileMarkdownInput(markdown)) },
 
     // ====== 样式（Mobile 独有） ======
     getActiveStyles: (): Record<string, boolean | string> => {
