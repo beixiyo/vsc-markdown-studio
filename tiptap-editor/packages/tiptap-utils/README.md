@@ -1,6 +1,6 @@
 # tiptap-utils
 
-共享工具函数，无内部包依赖，是所有其他 tiptap-* 包的基础层。
+共享工具函数，无内部包依赖，是所有其他 tiptap-* 包的基础层
 
 ## 导出
 
@@ -14,4 +14,4 @@
 | **upload** | 文件上传辅助 |
 | **url** | URL 解析和验证 |
 | **date** | 日期格式化 |
-| **constants** | 共享常量（`SELECTION_TOOLBAR_KEEP_OPEN_ATTR` 等） |
+| **constants** | 共享 DOM 属性对象（`TIPTAP_DATA_ATTR`） |

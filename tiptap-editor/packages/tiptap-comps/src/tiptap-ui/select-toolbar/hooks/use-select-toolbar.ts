@@ -8,7 +8,9 @@ import type { UseSelectToolbarOptions } from '../types'
 import { getScrollParents } from 'hooks'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getSelectionRect, hasSelectedText, isSelectionOnlyLinkText } from 'tiptap-api'
-import { getEditorElement, SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { getEditorElement, TIPTAP_DATA_ATTR } from 'tiptap-utils'
+
+const selectionToolbarKeepOpenSelector = `[${TIPTAP_DATA_ATTR.selectionToolbarKeepOpen}="true"]`
 
 export function useSelectToolbar({
   editor,
@@ -125,7 +127,7 @@ export function useSelectToolbar({
 
     const handleFocusIn = (event: FocusEvent) => {
       const target = event.target as HTMLElement
-      const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
+      const keepOpenElement = target.closest(selectionToolbarKeepOpenSelector)
       if (keepOpenElement) {
         isInteractingRef.current = true
       }
@@ -137,7 +139,7 @@ export function useSelectToolbar({
     const handleMouseDown = (event: MouseEvent) => {
       isMouseDownRef.current = true
       const target = event.target as HTMLElement
-      const keepOpenElement = target.closest(`[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]`)
+      const keepOpenElement = target.closest(selectionToolbarKeepOpenSelector)
       if (keepOpenElement) {
         isInteractingRef.current = true
         return

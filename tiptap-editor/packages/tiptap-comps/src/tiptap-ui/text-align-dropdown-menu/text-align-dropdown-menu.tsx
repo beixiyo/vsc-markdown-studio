@@ -11,7 +11,7 @@ import {
 
 import { forwardRef, useCallback, useMemo, useRef } from 'react'
 import { useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { ChevronDownIcon } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
 import { ToolbarMenuItem } from '../menu-item'
@@ -98,7 +98,7 @@ export const TextAlignDropdownMenu = forwardRef<
       optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
       trigger={ trigger }
       triggerMode={ triggerMode }
-      dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
+      dropdownProps={ { [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } as any }
     />
   )
 })

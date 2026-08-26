@@ -2,7 +2,7 @@ import type { Editor } from '@tiptap/react'
 import { Button, Card, Separator } from 'comps'
 import { memo, useMemo, useRef } from 'react'
 import { useIsBreakpoint, useMarkLabels, useMenuNavigation } from 'tiptap-api/react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { BanIcon } from '../../icons'
 import { ColorHighlightButton } from '../color-highlight-button'
 import { useColorHighlight } from '../color-highlight-button/use-color-highlight'
@@ -32,7 +32,7 @@ export const ColorHighlightPopoverContent = memo(({
       if (!containerRef.current)
         return false
       const highlightedElement = containerRef.current.querySelector(
-        '[data-highlighted="true"]',
+        `[${TIPTAP_DATA_ATTR.highlighted}="true"]`,
       ) as HTMLElement
       if (highlightedElement)
         highlightedElement.click()
@@ -48,7 +48,7 @@ export const ColorHighlightPopoverContent = memo(({
       ref={ containerRef }
       tabIndex={ 0 }
       className="outline-none min-w-max"
-      { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+      { ...{ [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } }
       padding="none"
       bordered={ !isMobile }
       shadow={ isMobile
@@ -80,7 +80,7 @@ export const ColorHighlightPopoverContent = memo(({
             role="menuitem"
             variant="ghost"
             size="sm"
-            data-highlighted={ selectedIndex === colors.length }
+            { ...{ [TIPTAP_DATA_ATTR.highlighted]: selectedIndex === colors.length } }
           >
             <BanIcon className={ TIPTAP_UI_STYLES.icon } />
           </Button>

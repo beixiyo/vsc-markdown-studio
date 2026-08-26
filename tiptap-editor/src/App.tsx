@@ -9,6 +9,7 @@ import {
   TiptapI18nProvider,
   useI18n,
 } from 'tiptap-api/react'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { CollaborationSplitPane } from '@/playground/collaboration/split-pane'
 import { MarkdownDiffPlayground } from '@/playground/diff/markdown-diff-playground'
 import { Editor } from '@/playground/editor'
@@ -44,15 +45,17 @@ function AppContent() {
           <Button
             size="sm"
             onClick={ () => setMode('editor') }
-            data-active-state={ mode === 'editor'
-              ? 'on'
-              : 'off' }
+            { ...{
+              [TIPTAP_DATA_ATTR.activeState]: mode === 'editor'
+                ? 'on'
+                : 'off',
+              [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+            } }
             variant={
               mode === 'editor'
                 ? 'primary'
                 : 'default'
             }
-            data-appearance="emphasized"
             className="px-4 py-2 text-sm"
           >
             普通编辑器
@@ -60,15 +63,17 @@ function AppContent() {
           <Button
             size="sm"
             onClick={ () => setMode('collaboration') }
-            data-active-state={ mode === 'collaboration'
-              ? 'on'
-              : 'off' }
+            { ...{
+              [TIPTAP_DATA_ATTR.activeState]: mode === 'collaboration'
+                ? 'on'
+                : 'off',
+              [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+            } }
             variant={
               mode === 'collaboration'
                 ? 'primary'
                 : 'default'
             }
-            data-appearance="emphasized"
             className="px-4 py-2 text-sm"
           >
             协同编辑
@@ -76,13 +81,15 @@ function AppContent() {
           <Button
             size="sm"
             onClick={ () => setMode('diff') }
-            data-active-state={ mode === 'diff'
-              ? 'on'
-              : 'off' }
+            { ...{
+              [TIPTAP_DATA_ATTR.activeState]: mode === 'diff'
+                ? 'on'
+                : 'off',
+              [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+            } }
             variant={ mode === 'diff'
               ? 'primary'
               : 'default' }
-            data-appearance="emphasized"
             className="px-4 py-2 text-sm"
           >
             Markdown Diff

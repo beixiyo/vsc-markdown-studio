@@ -12,7 +12,7 @@ import {
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useBlockLabels, useHeadingLabels, useListLabels, useTiptapEditor, useToolbarLabels } from 'tiptap-api/react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 
 import {
   BlockquoteIcon,
@@ -185,7 +185,7 @@ export const TextFormatDropdownMenu = forwardRef<
         optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
         trigger={ trigger }
         triggerMode={ triggerMode }
-        dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } as any }
+        dropdownProps={ { [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } as any }
       />
     )
   },

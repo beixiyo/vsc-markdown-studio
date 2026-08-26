@@ -11,6 +11,7 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Button } from 'comps'
 import { memo, useCallback, useEffect, useState } from 'react'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 
 const colors = [
@@ -141,50 +142,60 @@ export const CollaborationEditor = memo<CollaborationEditorProps>(({ ydoc, provi
       <div className="flex gap-2 p-2 border-b border-border">
         <Button
           onClick={ () => editor.chain().focus().toggleBold().run() }
-          data-active-state={ editor.isActive('bold')
-            ? 'on'
-            : 'off' }
-          data-appearance="emphasized"
+          { ...{
+            [TIPTAP_DATA_ATTR.activeState]: editor.isActive('bold')
+              ? 'on'
+              : 'off',
+            [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+          } }
           className="px-3 py-1 text-sm"
         >
           Bold
         </Button>
         <Button
           onClick={ () => editor.chain().focus().toggleItalic().run() }
-          data-active-state={ editor.isActive('italic')
-            ? 'on'
-            : 'off' }
-          data-appearance="emphasized"
+          { ...{
+            [TIPTAP_DATA_ATTR.activeState]: editor.isActive('italic')
+              ? 'on'
+              : 'off',
+            [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+          } }
           className="px-3 py-1 text-sm"
         >
           Italic
         </Button>
         <Button
           onClick={ () => editor.chain().focus().toggleStrike().run() }
-          data-active-state={ editor.isActive('strike')
-            ? 'on'
-            : 'off' }
-          data-appearance="emphasized"
+          { ...{
+            [TIPTAP_DATA_ATTR.activeState]: editor.isActive('strike')
+              ? 'on'
+              : 'off',
+            [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+          } }
           className="px-3 py-1 text-sm"
         >
           Strike
         </Button>
         <Button
           onClick={ () => editor.chain().focus().toggleBulletList().run() }
-          data-active-state={ editor.isActive('bulletList')
-            ? 'on'
-            : 'off' }
-          data-appearance="emphasized"
+          { ...{
+            [TIPTAP_DATA_ATTR.activeState]: editor.isActive('bulletList')
+              ? 'on'
+              : 'off',
+            [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+          } }
           className="px-3 py-1 text-sm"
         >
           Bullet list
         </Button>
         <Button
           onClick={ () => editor.chain().focus().toggleCode().run() }
-          data-active-state={ editor.isActive('code')
-            ? 'on'
-            : 'off' }
-          data-appearance="emphasized"
+          { ...{
+            [TIPTAP_DATA_ATTR.activeState]: editor.isActive('code')
+              ? 'on'
+              : 'off',
+            [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+          } }
           className="px-3 py-1 text-sm"
         >
           Code

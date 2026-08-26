@@ -4,7 +4,7 @@ import type { SelectToolbarProps, SelectToolbarRef, SelectToolbarShouldShow } fr
 import { Popover } from 'comps'
 import { forwardRef, memo, useImperativeHandle } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { isNodeTypeSelected, SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { isNodeTypeSelected, TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { useSelectToolbar } from './hooks/use-select-toolbar'
 import { useEvent } from './hooks/useEvent'
@@ -53,10 +53,10 @@ const InnerSelectToolbar = forwardRef<SelectToolbarRef, SelectToolbarProps>((pro
       position={ (placement?.split('-')[0] as any) || 'top' }
       offset={ offsetDistance }
       virtualReferenceRect={ selectionRect }
-      clickOutsideIgnoreSelector={ `[${SELECTION_TOOLBAR_KEEP_OPEN_ATTR}="true"]` }
+      clickOutsideIgnoreSelector={ `[${TIPTAP_DATA_ATTR.selectionToolbarKeepOpen}="true"]` }
       content={
         <div
-          { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+          { ...{ [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } }
           className={ cn(
             'bn-toolbar flex items-center gap-1 px-1.5 py-1 max-w-[100vw] bg-background text-text2 rounded-lg shadow-lg z-50',
             className,

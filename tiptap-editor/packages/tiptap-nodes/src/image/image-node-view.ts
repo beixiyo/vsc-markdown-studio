@@ -1,6 +1,7 @@
 import type { Editor, NodeViewRendererProps } from '@tiptap/core'
 import type { NodeView } from '@tiptap/pm/view'
 import type { ImageAttrs, ImageOptions } from './types'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 
 /**
  * 骨架屏 className（Tailwind 需要能在源码中静态扫描到这串字面量）
@@ -224,11 +225,11 @@ export function createImageNodeView(options: ImageOptions) {
         return true
       },
       selectNode() {
-        img.setAttribute('data-selected', '')
+        img.setAttribute(TIPTAP_DATA_ATTR.image.selected, '')
         options.onSelect?.({ node, attrs: current, pos: resolvePos(), editor: editor as Editor })
       },
       deselectNode() {
-        img.removeAttribute('data-selected')
+        img.removeAttribute(TIPTAP_DATA_ATTR.image.selected)
         options.onDeselect?.({ node, attrs: current, pos: resolvePos(), editor: editor as Editor })
       },
       destroy() {

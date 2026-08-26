@@ -16,6 +16,7 @@ import type { EditorView } from '@tiptap/pm/view'
 import type { CtxRefIconContext, CtxRefIconRenderer, CtxRefImageItem, CtxRefOptions, CtxRefStorage, CtxRefType, KnownCtxRefType } from './types'
 import { mergeAttributes, Node } from '@tiptap/core'
 import { Plugin } from '@tiptap/pm/state'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { builtinCtxRefIcons } from './builtin-icons'
 import {
   CTX_REF_START,
@@ -29,7 +30,7 @@ import {
 /**
  * 取 marker 前紧邻的加粗斜体句（随点击回调一并抛出）
  *
- * 约定：与引用对应的一句话以 ***加粗斜体*** 紧邻 marker 之前。
+ * 约定：与引用对应的一句话以 ***加粗斜体*** 紧邻 marker 之前
  * 向前收集同段内连续的 bold + italic 文本
  */
 function getLeadingSentence(doc: PMNode, pos: number): string {
@@ -184,9 +185,9 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
         dom.setAttribute('data-ctx-ref', current.refType)
         dom.setAttribute('data-ctx-id', current.refId)
         if (current.streaming)
-          dom.setAttribute('data-streaming', '')
+          dom.setAttribute(TIPTAP_DATA_ATTR.ctxRef.streaming, '')
         else
-          dom.removeAttribute('data-streaming')
+          dom.removeAttribute(TIPTAP_DATA_ATTR.ctxRef.streaming)
 
         dom.className = [
           'tiptap-ctx-ref',
@@ -340,7 +341,7 @@ export const CtxRefNode = Node.create<CtxRefOptions>({
          *
          * 后者会基于当前 state 另开一个事务并立即 dispatch，与外层这个 `tr` 同源，
          * 谁先落地另一个就成了陈旧事务，ProseMirror 抛
-         * `RangeError: Applying a mismatched transaction`。
+         * `RangeError: Applying a mismatched transaction`
          * `props.commands` 复用同一个 `tr`，写表与重绘合并成一次 dispatch
          *
          * 文档尚未设置时没有 marker，刷新返回 false，但表已写入，属正常路径

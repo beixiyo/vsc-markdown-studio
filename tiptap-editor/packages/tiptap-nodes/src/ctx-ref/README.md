@@ -84,10 +84,12 @@ extensions: [
   `undefined` 把 marker 让给 `CtxRefNode`
 - 只覆盖**行内**注释；独占一行的注释走 marked 的 block 词法，结构合法（只是往返会丢），不在此处理
 
-## 示例的边界（与业务生产版的差异）
+## 运行时状态与文档协议
 
 示例刻意做了减法，移植前先了解生产版多出的部分：
 
 - **内置图标库**：生产版按 refType 渲染旗帜 / 笔记 / 图片角标 / 记录等整套 SVG，且外部可整体接管；示例内联两张（mark 旗帜、note 笔记，未知类型回落 note）
 - **图标工厂契约**：生产版允许外部按类型完全接管图标 DOM（`icons` 选项）；示例不支持
-- **流式动效**：生产版有 `setCtxRefStreaming` 命令切「静态 ⇄ 书写动画」；示例无
+- **流式动效**：`setCtxRefStreaming` 命令切换「静态 ⇄ 书写动画」，仅修改编辑器内运行时状态，不写入 Markdown
+
+流式状态会在编辑器 DOM 的锚点上挂载 `data-vv-ctx-ref-streaming`，可直接用于 CSS 动画或外部 DOM 查询；文档协议属性 `data-ctx-ref`、`data-ctx-id` 保持不变

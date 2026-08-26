@@ -5,6 +5,7 @@ import type React from 'react'
 import { debounce } from '@jl-org/tool'
 
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
+import { MERMAID_DATA_ATTR } from '../dataAttributes'
 
 interface UseMermaidTransformOptions {
   x: number
@@ -53,7 +54,7 @@ export function useMermaidTransform({
     if (
       target.closest('button')
       || target.closest('textarea')
-      || target.closest('[data-no-drag]')
+      || target.closest(`[${MERMAID_DATA_ATTR.noDrag}]`)
     ) {
       return
     }
@@ -135,7 +136,7 @@ export function useMermaidTransform({
         return
 
       /** 如果正在编辑，不触发缩放 */
-      if (containerRef.current.closest('[data-editing="true"]')) {
+      if (containerRef.current.closest(`[${MERMAID_DATA_ATTR.editing}="true"]`)) {
         return
       }
 

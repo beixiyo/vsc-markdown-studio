@@ -10,7 +10,7 @@ import {
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useCommentLabels, useTiptapEditor } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { CommentItem } from './components/comment-item'
 import { useComments } from './hooks'
@@ -134,7 +134,7 @@ export const CommentSidebar = memo(({
             'w-[340px] max-w-[calc(100vw-32px)] flex flex-col gap-0 p-0',
             className,
           ) }
-          { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+          { ...{ [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } }
         >
           <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
             <div className="flex items-center gap-2">

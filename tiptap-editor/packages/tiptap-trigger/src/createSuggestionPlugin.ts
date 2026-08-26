@@ -3,6 +3,7 @@ import type { EditorView } from '@tiptap/pm/view'
 import type { SuggestionPluginAPI, SuggestionState, SuggestionTriggerOptions } from './types'
 import { Plugin } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { TRIGGER_PLUGIN_KEY } from './constants'
 
 export function createSuggestionPlugin(): {
@@ -138,7 +139,7 @@ export function createSuggestionPlugin(): {
           }
 
           const dom = updatedView.dom.querySelector<HTMLElement>(
-            `[data-suggestion-decoration-id="${state.decorationId}"]`,
+            `[${TIPTAP_DATA_ATTR.suggestion.decorationId}="${state.decorationId}"]`,
           )
 
           if (!dom) {
@@ -239,7 +240,7 @@ export function createSuggestionPlugin(): {
           () => {
             const span = document.createElement('span')
             span.setAttribute(
-              'data-suggestion-decoration-id',
+              TIPTAP_DATA_ATTR.suggestion.decorationId,
               pluginState.decorationId ?? '',
             )
             span.style.position = 'relative'

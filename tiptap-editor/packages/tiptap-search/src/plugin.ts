@@ -1,6 +1,7 @@
 import type { SearchOptions, SearchState } from './types'
 import { Plugin } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { findTextMatches } from './search'
 import { applySearchAction, createEmptySearchState, searchPluginKey } from './search-state'
 
@@ -54,7 +55,7 @@ export function createSearchPlugin(options: SearchOptions) {
                 ...(className
                   ? { class: className }
                   : {}),
-                'data-search-match': isCurrent
+                [TIPTAP_DATA_ATTR.search.match]: isCurrent
                   ? 'current'
                   : 'match',
               },

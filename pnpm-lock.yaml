@@ -954,6 +954,9 @@ importers:
       '@tiptap/pm':
         specifier: 3.26.0
         version: 3.26.0
+      tiptap-utils:
+        specifier: workspace:*
+        version: link:../tiptap-utils
     devDependencies:
       '@tiptap/starter-kit':
         specifier: 3.26.0

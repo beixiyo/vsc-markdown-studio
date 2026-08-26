@@ -6,7 +6,7 @@ import { AnimateShow, SafePortal } from 'comps'
 import { getScrollParents, useFloatingPosition } from 'hooks'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useHoverDetection } from 'tiptap-hover/react'
-import { getEditorElement } from 'tiptap-utils'
+import { getEditorElement, TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { DragHandleIcon } from '../../icons'
 import { useBlockDrag } from './use-block-drag'
 
@@ -183,7 +183,7 @@ export const BlockActionMenu = memo<BlockActionMenuProps>(({
       >
         <div
           ref={ floatingRef }
-          data-block-action-menu="true"
+          { ...{ [TIPTAP_DATA_ATTR.blockActionMenu]: 'true' } }
           draggable="true"
           className="z-50 flex items-center justify-center w-5 h-6 cursor-grab active:cursor-grabbing text-text2 hover:bg-background2 hover:text-text rounded transition-all duration-200 ease-out"
           style={ floatingStyle }

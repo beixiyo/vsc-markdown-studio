@@ -8,7 +8,7 @@ import {
   Toolbar,
 } from 'comps'
 import { memo } from 'react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { MoreHorizontalIcon } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
 import {
@@ -51,7 +51,7 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
   const showUndoRedo = undo || redo
   const showMarks = bold || italic || strike || underline || highlight || link
   const showScripts = superscript || subscript
-  const MORE_CONTENT_KEEP_OPEN_ATTR = 'data-more-content-keep-open'
+  const moreContentKeepOpenSelector = `[${TIPTAP_DATA_ATTR.moreContentKeepOpen}="true"]`
 
   const renderMore = () => {
     if (!moreContent)
@@ -74,12 +74,15 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
           triggerMode="hover"
           options={ moreContent as CascaderOption[] }
           placement="bottom-start"
-          dropdownProps={ { [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true', [MORE_CONTENT_KEEP_OPEN_ATTR]: 'true' } as any }
+          dropdownProps={ {
+            [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true',
+            [TIPTAP_DATA_ATTR.moreContentKeepOpen]: 'true',
+          } as any }
           dropdownHeight={ 500 }
           optionClassName={ TIPTAP_UI_STYLES.cascaderOption }
           optionLabelClassName={ TIPTAP_UI_STYLES.moreContentOptionLabel }
           dropdownClassName="min-w-[140px]"
-          clickOutsideIgnoreSelector={ `[${MORE_CONTENT_KEEP_OPEN_ATTR}="true"]` }
+          clickOutsideIgnoreSelector={ moreContentKeepOpenSelector }
         />
       )
     }
@@ -90,7 +93,10 @@ export const SelectToolbarContent = memo<SelectToolbarContentProps>(({
         position="bottom"
         content={
           <div
-            { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true', [MORE_CONTENT_KEEP_OPEN_ATTR]: 'true' } }
+            { ...{
+              [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true',
+              [TIPTAP_DATA_ATTR.moreContentKeepOpen]: 'true',
+            } }
             className="min-w-[120px]"
           >
             { moreContent }

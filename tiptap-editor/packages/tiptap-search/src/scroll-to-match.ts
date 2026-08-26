@@ -1,6 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { SearchOptions } from './types'
 import { TextSelection } from '@tiptap/pm/state'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { getSearchState } from './search-state'
 
 /** 选中当前匹配项，并优先将其滚动到可视区域中心 */
@@ -22,7 +23,9 @@ export function selectCurrentMatch(editor: Editor, options: SearchOptions) {
       return
     }
 
-    const currentMatch = editor.view.dom.querySelector<HTMLElement>('[data-search-match="current"]')
+    const currentMatch = editor.view.dom.querySelector<HTMLElement>(
+      `[${TIPTAP_DATA_ATTR.search.match}="current"]`,
+    )
     const target = currentMatch ?? getElementAtPosition(editor, match.from)
     target?.scrollIntoView?.({
       behavior: options.scrollBehavior,

@@ -4,7 +4,7 @@ import type { FC, KeyboardEvent, RefObject } from 'react'
 
 import { Button, Input } from 'comps'
 import { useTiptapEditorT } from 'tiptap-api/react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import {
   CornerDownLeftIcon,
   ExternalLinkIcon,
@@ -33,7 +33,7 @@ export const LinkMain: FC<LinkMainProps> = ({
   return (
     <div
       className="min-w-max shadow-card border-none rounded-xl"
-      { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+      { ...{ [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } }
     >
       <div className="flex flex-row items-center gap-1 p-1.5">
         <Input

@@ -3,6 +3,7 @@ import { useEditorState } from '@tiptap/react'
 import { Popover } from 'comps'
 import { memo } from 'react'
 import { useMarkLabels, useTiptapEditor } from 'tiptap-api/react'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { HighlighterIcon } from '../../icons'
 import { useColorHighlight } from '../color-highlight-button'
 import { TIPTAP_UI_STYLES } from '../constants'
@@ -51,10 +52,12 @@ export const ColorHighlightPopover = memo(({
     >
       <ColorHighlightPopoverButton
         disabled={ !canColorHighlight }
-        data-active-state={ isActive
-          ? 'on'
-          : 'off' }
-        data-disabled={ !canColorHighlight }
+        { ...{
+          [TIPTAP_DATA_ATTR.activeState]: isActive
+            ? 'on'
+            : 'off',
+          [TIPTAP_DATA_ATTR.disabled]: !canColorHighlight,
+        } }
         aria-pressed={ isActive }
         aria-label={ label }
         tooltip={ label }

@@ -7,6 +7,7 @@ import { memo, useCallback } from 'react'
 import { useMermaidLabels } from 'tiptap-api/react'
 import { EditIcon } from 'tiptap-comps/icons'
 import { cn } from 'utils'
+import { MERMAID_DATA_ATTR } from './dataAttributes'
 import { useMermaidEditor } from './hooks/use-mermaid-editor'
 import { useMermaidRenderer } from './hooks/use-mermaid-renderer'
 import { useMermaidTransform } from './hooks/use-mermaid-transform'
@@ -76,7 +77,7 @@ export const MermaidNodeComponent = memo<NodeViewProps>(({ node, updateAttribute
       data-mermaid="true"
       ref={ containerRef }
       onMouseDown={ handleMouseDown }
-      data-editing={ isEditing }
+      { ...{ [MERMAID_DATA_ATTR.editing]: isEditing } }
     >
       {/** 编辑按钮工具栏（悬停时淡入） */ }
       { !isEditing && editor?.isEditable && (

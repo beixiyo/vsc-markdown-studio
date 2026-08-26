@@ -11,6 +11,7 @@
 import { Editor } from '@tiptap/core'
 import { Markdown } from '@tiptap/markdown'
 import { StarterKit } from '@tiptap/starter-kit'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { describe, expect, it, vi } from 'vitest'
 import { CtxRefNode } from '../extension'
 import { stripCtxRefMarkers } from '../rules'
@@ -113,6 +114,21 @@ describe('ctx-ref', () => {
       refId: '18504',
       sentence: 'I feel.',
     })
+    editor.destroy()
+  })
+
+  it('setCtxRefStreaming 只切换运行时 DOM 状态，不写入 Markdown', () => {
+    const editor = createEditor()
+    setMarkdown(editor, '内容<!--ctx-ref:note:1-->')
+
+    const anchor = () => editor.view.dom.querySelector<HTMLElement>('[data-ctx-ref="note"]')
+    expect(anchor()?.hasAttribute(TIPTAP_DATA_ATTR.ctxRef.streaming)).toBe(false)
+
+    expect(editor.commands.setCtxRefStreaming('1', true)).toBe(true)
+    expect(anchor()?.hasAttribute(TIPTAP_DATA_ATTR.ctxRef.streaming)).toBe(true)
+    expect(serialize(editor)).toContain('<!--ctx-ref:note:1-->')
+
+    expect(editor.commands.setCtxRefStreaming('missing', true)).toBe(false)
     editor.destroy()
   })
 })

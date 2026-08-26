@@ -11,6 +11,7 @@ import {
   useLanguage,
 } from 'tiptap-api/react'
 import { BanIcon, CornerDownLeftIcon, EditIcon, LocateIcon, TrashIcon } from 'tiptap-comps/icons'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { useCommentItemLogic } from '../hooks/use-comment-item-logic'
 import { CommentEditDialog } from './comment-edit-dialog'
@@ -120,9 +121,11 @@ export const CommentItem = memo(({
     <div
       className={ containerClass }
       data-comment-id={ comment.id }
-      data-active={ isActive
-        ? 'true'
-        : 'false' }
+      { ...{
+        [TIPTAP_DATA_ATTR.active]: isActive
+          ? 'true'
+          : 'false',
+      } }
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-0.5">

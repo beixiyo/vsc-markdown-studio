@@ -3,7 +3,7 @@ import { Button, Textarea } from 'comps'
 import { useT } from 'i18n/react'
 import { forwardRef, memo, useCallback, useImperativeHandle, useRef } from 'react'
 import { CornerDownLeftIcon } from 'tiptap-comps/icons'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 
 const InnerCommentMain = forwardRef<CommentMainRef, CommentMainProps>((props, ref) => {
@@ -53,7 +53,7 @@ const InnerCommentMain = forwardRef<CommentMainRef, CommentMainProps>((props, re
       ) }
       role="dialog"
       aria-label={ t('comment.addComment') }
-      { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+      { ...{ [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } }
     >
       <Textarea
         ref={ textareaRef }

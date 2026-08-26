@@ -3,6 +3,7 @@ import {
   Toolbar,
 } from 'comps'
 import { memo } from 'react'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { ArrowLeftIcon, HighlighterIcon, LinkIcon } from '../../icons'
 import { TIPTAP_UI_STYLES } from '../constants'
 import {
@@ -21,7 +22,7 @@ export const MobileToolbarContent = memo<MobileToolbarContentProps>((props) => {
   return (
     <>
       <Toolbar.Group>
-        <Button data-style="ghost" onClick={ onBack }>
+        <Button { ...{ [TIPTAP_DATA_ATTR.style]: 'ghost' } } onClick={ onBack }>
           <ArrowLeftIcon className={ TIPTAP_UI_STYLES.icon } />
           { type === 'highlighter'
             ? <HighlighterIcon className={ TIPTAP_UI_STYLES.iconHighlight } />

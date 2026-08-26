@@ -1,8 +1,8 @@
 /**
  * 区域流式 loading 外框装饰层
  *
- * 仅通过 Decoration 渲染临时 UI，不写入 ProseMirror 文档。
- * 外部用 id 控制显示 / 隐藏，DecorationSet 会随事务自动 remap。
+ * 仅通过 Decoration 渲染临时 UI，不写入 ProseMirror 文档
+ * 外部用 id 控制显示 / 隐藏，DecorationSet 会随事务自动 remap
  */
 
 import type { Editor } from '@tiptap/core'
@@ -16,6 +16,7 @@ import type {
 } from './types'
 import { Plugin, PluginKey, TextSelection } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { REGION_META } from './constants'
 
 export const REGION_LOADING_FRAME_KEY = new PluginKey<DecorationSet>('region-loading-frame')
@@ -216,8 +217,8 @@ function getTopLevelBlocks(doc: PMNode, range: DecoRange): TopLevelBlock[] {
 function createLoadingShell(frame: RegionLoadingFrameState, variant: 'placeholder' | 'tail', classes: RegionLoadingFrameClasses): HTMLElement {
   const shell = document.createElement('div')
   shell.className = joinClasses(classes.shell, classes[variant])
-  shell.dataset.regionLoadingFrame = frame.id
-  shell.dataset.regionLoadingFrameRole = variant
+  shell.setAttribute(TIPTAP_DATA_ATTR.region.loadingFrame, frame.id)
+  shell.setAttribute(TIPTAP_DATA_ATTR.region.loadingFrameRole, variant)
   shell.contentEditable = 'false'
   shell.setAttribute('aria-hidden', 'true')
 
@@ -237,9 +238,9 @@ function createDot(index: number, classes: RegionLoadingFrameClasses): HTMLEleme
 
 function frameAttrs(frame: RegionLoadingFrameState, role: RegionLoadingFrameRole, classes: RegionLoadingFrameClasses) {
   return {
-    'class': joinClasses(classes.frame, classes[roleClassKey[role]]),
-    'data-region-loading-frame': frame.id,
-    'data-region-loading-frame-role': role,
+    class: joinClasses(classes.frame, classes[roleClassKey[role]]),
+    [TIPTAP_DATA_ATTR.region.loadingFrame]: frame.id,
+    [TIPTAP_DATA_ATTR.region.loadingFrameRole]: role,
   }
 }
 
@@ -248,7 +249,11 @@ function joinClasses(...classes: Array<string | undefined>) {
 }
 
 const roleClassKey = {
-  'single': 'single', 'first': 'first', 'middle': 'middle', 'last': 'last', 'before-tail': 'beforeTail',
+  'single': 'single',
+  'first': 'first',
+  'middle': 'middle',
+  'last': 'last',
+  'before-tail': 'beforeTail',
 } as const satisfies Record<RegionLoadingFrameRole, keyof RegionLoadingFrameClasses>
 
 function resolveFrameRole(

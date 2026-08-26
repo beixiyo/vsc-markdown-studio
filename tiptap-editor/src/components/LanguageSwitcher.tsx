@@ -1,6 +1,7 @@
 import { Button } from 'comps'
 import { SUPPORTED_LANGUAGES } from 'tiptap-api'
 import { useLanguage } from 'tiptap-api/react'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 
 /**
  * 语言切换组件
@@ -18,15 +19,17 @@ export function LanguageSwitcher() {
           size="sm"
           key={ lang.value }
           onClick={ () => changeLanguage(lang.value) }
-          data-active-state={ language === lang.value
-            ? 'on'
-            : 'off' }
+          { ...{
+            [TIPTAP_DATA_ATTR.activeState]: language === lang.value
+              ? 'on'
+              : 'off',
+            [TIPTAP_DATA_ATTR.appearance]: 'emphasized',
+          } }
           variant={
             language === lang.value
               ? 'primary'
               : 'default'
           }
-          data-appearance="emphasized"
         >
           { lang.label }
         </Button>

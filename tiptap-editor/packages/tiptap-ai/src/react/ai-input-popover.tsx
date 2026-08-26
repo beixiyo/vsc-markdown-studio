@@ -2,7 +2,7 @@ import { Button, Popover, type PopoverRef, Textarea } from 'comps'
 import { useT } from 'i18n/react'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { SparklesIcon } from 'tiptap-comps/icons'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { AI_LABELS } from '../constants'
 
@@ -122,7 +122,7 @@ export const AIInputPopover = memo<AIInputPopoverProps>(
               'w-80 flex flex-col gap-3 p-3',
               className,
             ) }
-            { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+            { ...{ [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } }
           >
             <div className="flex items-center gap-2">
               <SparklesIcon className="h-4 w-4 text-brand" />

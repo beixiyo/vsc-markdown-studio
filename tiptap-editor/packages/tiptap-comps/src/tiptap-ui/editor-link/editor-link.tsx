@@ -7,6 +7,7 @@ import type { UseLinkPopoverConfig } from './use-link-popover'
 import { Popover } from 'comps'
 import { forwardRef, memo, useCallback, useRef } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { TIPTAP_UI_STYLES } from '../constants'
 import { EditorLinkPanel } from './editor-link-panel'
 import { LinkButton } from './link-button'
@@ -87,8 +88,12 @@ export const EditorLink = memo(forwardRef<HTMLButtonElement, EditorLinkProps>(({
     >
       <LinkButton
         disabled={ !canSet }
-        data-active-state={ isActive ? 'on' : 'off' }
-        data-disabled={ !canSet }
+        { ...{
+          [TIPTAP_DATA_ATTR.activeState]: isActive
+            ? 'on'
+            : 'off',
+          [TIPTAP_DATA_ATTR.disabled]: !canSet,
+        } }
         aria-label={ label }
         aria-pressed={ isActive }
         tooltip={ showTooltip

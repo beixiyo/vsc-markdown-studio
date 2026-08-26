@@ -2,7 +2,7 @@ import { mixColor } from '@jl-org/tool'
 import { Button } from 'comps'
 import { forwardRef, useCallback, useMemo } from 'react'
 import { useTiptapEditor } from 'tiptap-api/react'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { ColorHighlightShortcutBadge } from './color-highlight-shortcut-badge'
 import {
@@ -92,8 +92,10 @@ export const ColorHighlightButton = forwardRef<
       aria-pressed={ isActive }
       onClick={ handleClick }
       style={ buttonStyle }
-      { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
-      data-highlighted={ isActive }
+      { ...{
+        [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true',
+        [TIPTAP_DATA_ATTR.highlighted]: isActive,
+      } }
       ref={ ref }
       { ...buttonProps }
     >

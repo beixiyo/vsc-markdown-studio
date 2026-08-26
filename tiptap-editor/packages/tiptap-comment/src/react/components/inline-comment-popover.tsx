@@ -5,7 +5,7 @@ import { memo, useEffect, useMemo, useRef } from 'react'
 import { getSelectionRect } from 'tiptap-api'
 import { useCommentLabels } from 'tiptap-api/react'
 import { CloseIcon } from 'tiptap-comps/icons'
-import { SELECTION_TOOLBAR_KEEP_OPEN_ATTR } from 'tiptap-utils'
+import { TIPTAP_DATA_ATTR } from 'tiptap-utils'
 import { cn } from 'utils'
 import { CommentItem } from './comment-item'
 
@@ -147,7 +147,7 @@ export const InlineCommentPopover = memo((props: InlineCommentPopoverProps) => {
               style={ {
                 maxHeight: maxHeight.maxHeight,
               } }
-              { ...{ [SELECTION_TOOLBAR_KEEP_OPEN_ATTR]: 'true' } }
+              { ...{ [TIPTAP_DATA_ATTR.selectionToolbarKeepOpen]: 'true' } }
             >
               <div className="flex items-center justify-between border-b border-border/50 px-4 py-2.5">
                 <span className="text-[13px] font-medium text-text">{ labels.currentComment }</span>
